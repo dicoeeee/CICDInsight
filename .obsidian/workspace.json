@@ -1,0 +1,203 @@
+{
+  "main": {
+    "id": "bd258a5625f3a370",
+    "type": "split",
+    "children": [
+      {
+        "id": "27e886c12387de1e",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "142ed0162086cda1",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "90_report/seven-dimension-analysis.md",
+                "mode": "preview",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "seven-dimension-analysis"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "aa486b642a5f7630",
+    "type": "split",
+    "children": [
+      {
+        "id": "b37f53e13a341936",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "f192bfbf707d7191",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "文件列表"
+            }
+          },
+          {
+            "id": "ed0ced69b81f85da",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "搜索"
+            }
+          },
+          {
+            "id": "a81846b58e6918b3",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "书签"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 271.5
+  },
+  "right": {
+    "id": "919b90cf591ad83e",
+    "type": "split",
+    "children": [
+      {
+        "id": "16248c4fb55c58ae",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "7c4ddf9f9aa3a8b0",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "90_report/seven-dimension-analysis.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "seven-dimension-analysis 的反向链接列表"
+            }
+          },
+          {
+            "id": "f5231a57272dc706",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "90_report/seven-dimension-analysis.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "seven-dimension-analysis 的出链列表"
+            }
+          },
+          {
+            "id": "d2bb6736e8db8473",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "标签"
+            }
+          },
+          {
+            "id": "6872b63958e23615",
+            "type": "leaf",
+            "state": {
+              "type": "all-properties",
+              "state": {
+                "sortOrder": "frequency",
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-archive",
+              "title": "添加笔记属性"
+            }
+          },
+          {
+            "id": "d888a2ee75e87a47",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "90_report/seven-dimension-analysis.md",
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "seven-dimension-analysis 的大纲"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:打开快速切换": false,
+      "graph:查看关系图谱": false,
+      "canvas:新建白板": false,
+      "daily-notes:打开/创建今天的日记": false,
+      "templates:插入模板": false,
+      "command-palette:打开命令面板": false,
+      "bases:新建数据库": false
+    }
+  },
+  "active": "142ed0162086cda1",
+  "lastOpenFiles": [
+    "00_sources/agentic-cicd-source-landscape.md",
+    "90_report/seven-dimension-analysis.md",
+    "30_summaries/stages/README.md",
+    "10_summaries/tools/README.md",
+    "40_summaries/crosscutting/README.md",
+    "20_summaries/companies/README.md",
+    "00_sources/briefs/2026-github-agentic-workflows.md",
+    "未命名.base",
+    "00_sources/briefs/2026-tricentis-agentic-test-automation.md",
+    "00_sources/briefs/2026-uber-agent-identity.md",
+    "90_report/README.md",
+    "README.md",
+    "00_sources/briefs/2025-github-remote-mcp-server-ga.md",
+    "00_sources/briefs/2025-dora-state-ai-assisted-software-development.md"
+  ]
+}
