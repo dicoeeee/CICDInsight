@@ -15,10 +15,10 @@ audience:
 
 # Agent 技术在 CI/CD 中的应用与实践洞察
 
-**观察窗口：** 2025-07-01—2026-07-14，重点关注 2026 年  
-**趋势展望：** 2027—2028 年  
-**研究范围：** 编码完成后的代码评审、安全与测试、构建出包、制品与版本、环境与部署、发布、发布后验证与恢复  
-**证据基础：** 107 条一手资料，61 个深度 Source Brief；商业平台、大型公司内部实践、高影响力开源项目、原始研究与治理资料
+**观察窗口：** 2025-07-01—2026-07-14，重点关注 2026 年
+**趋势展望：** 2027—2028 年
+**研究范围：** 编码完成后的代码评审、安全与测试、构建出包、制品与版本、环境与部署、发布、发布后验证与恢复
+**证据基础：** 81 条核心一手资料，62 个深度 Source Brief；商业平台、大型公司内部实践、高影响力开源项目、原始研究与治理资料
 
 > [!abstract] 一句话结论
 > Agent 不会在未来两年替代 CI/CD；它会成为覆盖现有 CI/CD 之上的“推理与行动层”。确定性的流水线、测试、策略、制品和发布控制继续充当执行骨架与安全 Oracle，竞争重心转向上下文、受控工具、身份授权、反馈速度和可证明结果。
@@ -68,6 +68,8 @@ Agent 擅长开放式理解、假设生成和多步骤调查；编译器、测�
 这解释了不同公司的入口：GitHub/GitLab 以代码与 DevSecOps 数据面切入，AWS/Datadog 等以云拓扑和遥测切入，Atlassian 以工作项和知识切入，JFrog/Snyk/Tricentis 以供应链、安全和测试事实切入。2026-06，Microsoft 公开的内部迁移案例显示，其 CAP 组织在 6 个月内迁移超过 1,600 个仓库和 3,100 名开发者以获得 GitHub 的 Agentic 能力，同时仍可保留 Azure Boards/Pipelines，反映大型企业会为 Agent 上下文调整平台边界，而不是立即替换全部 ALM。[Microsoft 工程博客](https://devblogs.microsoft.com/devops/how-microsoft-is-migrating-repositories-to-github/)
 
 未来两年，模型能力会快速商品化，能够安全连接企业上下文、策略和动作的控制面更难复制。
+
+CLI-Anything 进一步显示，竞争面不只在“谁拥有更多现成 MCP”：缺少 Agent 接口的遗留和内部软件，也可以从源码/API 生成带测试、结构化输出和 Skill 的 CLI。它降低了长尾工具进入 Tool Plane 的门槛，但生成接口仍需逐项评审、签名、授权和沙箱运行，不能把接口可调用等同于生产可执行。参考 [[00_sources/briefs/2026-cli-anything|CLI-Anything Brief]]。
 
 ### 4. 最先成熟的是评审、CI 自愈和事故调查；最慢的是制品、版本与关键发布自治
 
@@ -123,6 +125,7 @@ DORA 2025 基于近 5,000 名技术人员和 100 多小时定性材料，发现 
 | 从 | 到 |
 |---|---|
 | 各工具为人提供 UI | 各平台同时提供 Agent 可调用 Tool/MCP/Skill |
+| 长尾软件依赖 GUI 或隐式操作知识 | 从源码/API 生成或手工建设可测试 CLI/Skill，再经过准入进入 Tool Catalog |
 | Pipeline 执行固定步骤 | Pipeline 同时承载 Agent 的隔离执行与反馈循环 |
 | 日志主要供人阅读 | 日志、历史、拓扑和证据结构化供 Agent 查询 |
 | 共享机器人账号 | Agent/任务身份、短期凭据和委托链 |
@@ -166,7 +169,7 @@ DORA 2025 基于近 5,000 名技术人员和 100 多小时定性材料，发现 
 
 - **AWS**：生产运维 GA，发布管理 Preview；以云拓扑、遥测、部署和身份为优势。
 - **Google Cloud**：Gemini Cloud Assist 覆盖应用生命周期，DORA 强调平台质量和反馈系统。
-- **Azure、Datadog、Dynatrace、PagerDuty、New Relic**：先强化调查和事件编排，再逐步开放自治动作。
+- **Azure、Datadog、CloudQ、HolmesGPT**：先强化调查和证据组织，再逐步开放受限动作。
 
 ### 专业工具：提供 Agent 不应自行制造的 Oracle
 
@@ -198,6 +201,7 @@ flowchart TB
   CTX --> C3["Artifact/SBOM/Policy"]
   CTX --> C4["Topology/Telemetry/Incident"]
 
+  IF["Interface Factory<br/>Source/API → CLI/Test/Skill"] --> GW
   RT --> GW["Tool Gateway / MCP / Skills"]
   GW --> RO["只读调查工具"]
   GW --> WR["受控写工具"]
@@ -266,6 +270,7 @@ flowchart TB
 - 是否能访问代码、Pipeline、测试、制品、策略、拓扑和事故上下文？
 - 数据是否实时、结构化、可追踪，并遵守原有权限？
 - 是否支持组织自有规范、Skill、知识库和服务目录？
+- 对缺少稳定 API/CLI 的内部工具，是否支持生成或建设机器接口，并保留来源、版本、测试和 Owner？
 
 ### 动作与治理
 
@@ -304,7 +309,7 @@ flowchart TB
 ### 高概率演进
 
 1. **Agent 成为 Pipeline 一等执行单元。** 主流代码仓、CI 和可观测平台都会提供 Agent Step、Tool Server 和审计。
-2. **Context/Tool Plane 成为平台核心。** MCP/Skills 从开发者自助连接走向企业注册、签名、授权和评测。
+2. **Context/Tool Plane 成为平台核心。** MCP/Skills 从开发者自助连接走向企业注册、签名、授权和评测；CLI/Skill 接口工厂将扩大可接入的长尾软件范围。
 3. **专业 Oracle 不会消失。** 测试、安全、制品、Policy 和 SLO 的确定性事实反而更重要。
 4. **CI 计算成为 Agent 生产力瓶颈。** 高频多轮验证推动 Runner、缓存、分片、环境和成本模型重构。
 5. **人员转向监督与系统设计。** 平台、QA、安全和 SRE 将共同运营 Agent 自治等级。
@@ -342,8 +347,11 @@ flowchart TB
 
 - [[90_report/seven-dimension-analysis|七维分析汇总报告]]
 - [[00_sources/README|L0 信息源与 Source Brief]]
-- [[00_sources/agentic-cicd-source-landscape|107 条一手资料景观]]
+- [[00_sources/agentic-cicd-source-landscape|81 条核心一手资料景观]]
+- [[00_sources/source-pruning-2026-07-14|信息源精简审计]]
+- [[05_case_library/README|实践案例库]]
 - [[10_summaries/tools/README|Agent 工具与技术栈总结]]
 - [[20_summaries/companies/README|公司维度总结]]
 - [[30_summaries/stages/README|八阶段总结]]
 - [[40_summaries/crosscutting/README|工具、流程、人员与治理变化]]
+- [[50_deepdives/README|专题深研索引]]

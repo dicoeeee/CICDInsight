@@ -7,19 +7,19 @@ tags:
   - research/agentic-cicd
   - synthesis/tools
 status: complete
-as_of: 2026-07-14
+as_of: 2026-07-15
 ---
 
 # Agentic CI/CD 的 Agent 工具与技术栈
 
 > [!summary] 核心判断
-> Tool 层不应再按代码仓、流水线、制品仓、部署平台划分——这些属于 [[30_summaries/stages/README|Stage 层]]和 [[20_summaries/companies/README|Company 层]]。Tool 层真正要回答的是：**Agent 如何获得知识、调用工具、执行任务并被治理**。2026 年的主流技术栈不是 MCP、CLI、Skill 或 Claude Code 四选一，而是将它们组合成“Agent Harness + 知识与规则 + 工具接口 + 隔离执行 + 治理控制面”。
+> Tool 层不应再按代码仓、流水线、制品仓、部署平台划分——这些属于 [[30_summaries/stages/README|Stage 层]]和 [[20_summaries/companies/README|Company 层]]。Tool 层真正要回答的是：**Agent 如何获得知识、生成或发现接口、调用工具、执行任务并被治理**。2026 年的主流技术栈不是 MCP、CLI、Skill 或 Claude Code 四选一，而是将它们组合成“Agent Harness + 知识与规则 + Agent 原生接口 + 隔离执行 + 治理控制面”。
 
 ## Tool、Stage、Company 三层边界
 
 | 报告层 | 回答的问题 | 典型分类 |
 |---|---|---|
-| Tool | Agent 用什么机制理解、扩展、执行和治理？ | MCP、CLI/API、Skills、Claude Code、OpenCode、Runner、沙箱、身份与评测 |
+| Tool | Agent 用什么机制理解、扩展、执行和治理？ | MCP、CLI/API、接口生成器、Skills、Claude Code、OpenCode、Runner、沙箱、身份与评测 |
 | Stage | Agent 改变了 CI/CD 的哪个环节？ | 代码检查、门禁、编译构建、制品、部署、发布、运行恢复 |
 | Company | 哪家公司正在提供和组合这些能力？ | GitHub、Harness、AWS、Google、Microsoft、GitLab 等 |
 
@@ -32,6 +32,8 @@ flowchart TB
   H["人类意图 / Issue / 事件"] --> A["Agent Harness<br/>Claude Code · Codex CLI · OpenCode · Gemini CLI · OpenHands"]
   K["知识与行为包<br/>Skills · Rules · AGENTS.md · Hooks"] --> A
   A --> I["工具接口<br/>CLI · API/SDK · MCP"]
+  S["软件能力源<br/>Source · Backend API"] --> G["Agent 原生接口生成<br/>CLI factory · Tests · SKILL.md"]
+  G --> I
   I --> R["隔离执行<br/>本地沙箱 · CI Runner · 远程任务"]
   R --> D["确定性 CI/CD 工具<br/>测试 · 构建 · 策略 · 制品 · 部署"]
   D --> E["Oracle 与证据<br/>测试结果 · Policy · Diff · Plan · 运行指标"]
@@ -64,6 +66,8 @@ GitHub Remote MCP 已采用 OAuth 2.1/PKCE、短期凭据和集中策略；Cloud
 
 采用 MCP 时应默认：收窄 Toolset、读权限优先、禁止 Token 透传、绑定目标受众、高危动作显式扩权，并把所有调用纳入审计。参考 [[00_sources/briefs/2025-github-remote-mcp-server-ga|GitHub Remote MCP]]、[[00_sources/briefs/2026-cloudsmith-mcp-artifact-management|Cloudsmith MCP]]、[[00_sources/briefs/2026-terraform-mcp-server|Terraform MCP]]。
 
+截至 2026-07-15，当前正式规范仍为 2025-11-25；2026-07-28 无状态核心和扩展框架仍是 Release Candidate。协议能力、企业授权扩展、Registry/Conformance 状态及迁移判断见 [[50_deepdives/mcp-protocol/90_report|MCP 深度报告]]。
+
 ## 2. CLI、API 与 SDK：Agent 的确定性执行底座
 
 CLI 并没有因为 MCP 出现而过时。相反，CLI 具有版本可锁定、参数可审查、退出码明确、容易放入 Runner、可重放和继承既有权限体系等特点，仍是 Agent 执行工程任务的主力接口。[Thoughtworks 2026 Technology Radar](https://www.thoughtworks.com/content/dam/thoughtworks/documents/radar/2026/04/tr_technology_radar_vol_34_en.pdf) 将“MCP by default”列为 Caution，核心并非否定 MCP，而是提醒团队：如果成熟 CLI 已能提供结构化输出与可预测错误，就不必为了协议统一而增加一层脆弱抽象。
@@ -79,6 +83,12 @@ CLI 并没有因为 MCP 出现而过时。相反，CLI 具有版本可锁定、�
 
 推荐的产品架构通常是：**API/SDK 作为能力源，CLI 作为稳定执行与调试面，MCP 作为跨 Agent 的适配层**。不应为了支持 MCP 重写核心逻辑，也不应让 MCP 绕开 CLI/API 已有的安全约束。
 
+CLI 的三种角色、十二类 Agent-ready 契约和直接 CLI/MCP Wrapper 的选择条件见 [[50_deepdives/cli-agent-interface/90_report|CLI 深度报告]]；逐项替代矩阵见 [[50_deepdives/cli-vs-mcp-decision-guide|CLI 与 MCP 决策指南]]。
+
+CLI-Anything 增加了一个值得单独跟踪的工具类别：**Agent 原生接口工厂**。它不是确定性生成器、新 Harness 或 CI/CD 平台，而是由宿主 Coding Agent 按 SOP 分析软件源码和后端 API，生成带结构化输出、测试、文档与 `SKILL.md` 的 CLI harness，再通过 CLI-Hub 供不同 Agent 搜索、安装和调用。v0.4.0 增加的 CLI-Matrix 是 capability/provider 策展和预检安装层，不是 Workflow Engine。对 CI/CD 的直接价值是把原本只适合 GUI 或缺少稳定命令面的测试、构建、制品、部署和运维工具，转成可版本化、可在 Runner 中复验的工具表面。
+
+这条路线同时提高了治理要求：生成成功不等于接口安全或语义完整。公共 CLI-Hub 的可变 Registry、默认分支安装和 Shell 安装路径不应直接成为生产信任根。企业必须审查命令覆盖、危险动作、错误码、幂等性和授权边界，并把生成的 CLI、依赖与 `SKILL.md` 当作供应链制品进行不可变版本锁定、真实后端测试、SBOM/签名/扫描和灰度。参考 [[00_sources/agentic-cicd-source-landscape#S81. CLI-Anything Agent-native interface generator|CLI-Anything L0]]、[[00_sources/briefs/2026-cli-anything|独立 Brief]] 与 [[50_deepdives/cli-anything/90_report|CLI-Anything 深度报告]]。
+
 ## 3. Skills、Rules、Instructions 与 Hooks：可复用的组织知识
 
 这组技术解决的不是“系统能做什么”，而是“Agent 应该如何正确地做”。它们容易与 MCP 混淆，但职责不同：
@@ -91,6 +101,8 @@ CLI 并没有因为 MCP 出现而过时。相反，CLI 具有版本可锁定、�
 | MCP | 暴露可调用工具与资源 | 查询仓库、运行 Plan、读取制品元数据 | Agent 在运行时选择调用 |
 
 在 CI/CD 中，Skill 可以把隐性 Runbook 变成版本化资产，例如“发布前必须验证哪些证据”“CI 失败先排查缓存还是依赖”“生产回滚要满足哪些前置条件”。但 Skill 本身只是给模型的内容和行为指引，不能充当 Policy-as-Code、审批或权限系统。
+
+CLI-Anything 生成的 `SKILL.md` 体现了另一种 Skill 来源：它可以由工具接口生成过程同步产出，而不只由人手写。这样能让命令、测试和使用说明共同演进，但也意味着 Skill 变更必须与 CLI 版本绑定，避免说明和实际权限面漂移。
 
 Skill 生态也带来新的供应链问题：恶意或被篡改的 Skill 可以诱导 Agent 读取机密、调用危险工具或绕过流程。企业需要像管理依赖包一样管理 Skill：来源准入、代码审查、版本锁定、签名、扫描、权限声明、运行时监控和快速撤回。参考 [[00_sources/briefs/2026-jfrog-skills-and-mcp|JFrog Skills/MCP]] 与 [[00_sources/briefs/2026-malicious-agent-skills-usenix|恶意 Agent Skills 研究]]。
 
@@ -106,7 +118,7 @@ Agent Harness 是把模型、上下文、工具循环、权限和工作区组织
 | [Gemini CLI](https://codelabs.developers.google.com/getting-started-gemini-cli-extensions) | Google 的开源终端 Agent 与扩展平台 | Extensions 可打包命令、上下文和 MCP Server；已有 DevOps 扩展 | Google Cloud 技术栈或希望用扩展封装内部平台能力 | 扩展质量与权限仍需企业治理；不应把自然语言结果直接视为门禁证据 |
 | [OpenHands](https://github.com/OpenHands/OpenHands) | 开源 Agent SDK、Runtime 与平台 | 可组合工具、远程执行和软件工程 Agent 能力 | 平台团队构建自有 Agent 服务或研究运行时 | 更接近开发底座；CI/CD 控制面和业务流程需自行建设 |
 
-对应 L0 资料：[[00_sources/agentic-cicd-source-landscape#S105. Claude Code CLI reference|Claude Code CLI]]、[[00_sources/agentic-cicd-source-landscape#S106. OpenAI Codex CLI|Codex CLI]]、[[00_sources/agentic-cicd-source-landscape#S107. OpenCode open-source coding Agent|OpenCode]]、[[00_sources/agentic-cicd-source-landscape#S30. Gemini CLI DevOps Extension|Gemini CLI DevOps Extension]] 与 [[00_sources/briefs/2026-openhands-agent-sdk|OpenHands SDK]]。
+对应 L0 资料：[[00_sources/agentic-cicd-source-landscape#S78. Claude Code CLI reference|Claude Code CLI]]、[[00_sources/agentic-cicd-source-landscape#S79. OpenAI Codex CLI|Codex CLI]]、[[00_sources/agentic-cicd-source-landscape#S80. OpenCode open-source coding Agent|OpenCode]]、[[00_sources/agentic-cicd-source-landscape#S19. Gemini CLI DevOps Extension|Gemini CLI DevOps Extension]] 与 [[00_sources/briefs/2026-openhands-agent-sdk|OpenHands SDK]]。
 
 另有 GitHub Coding Agent、GitLab Duo Agent Platform 等“平台原生 Agent”。它们的优势是天然拥有仓库、Issue、PR、Pipeline 和权限上下文，但模型与执行环境的可替换性通常低于独立 Harness。两类产品会长期共存：独立 Harness 负责跨系统任务，平台原生 Agent 负责在自有数据面中形成短闭环。
 
@@ -144,6 +156,7 @@ Uber 的短期单跳 Token 与 Actor Chain、Google Cloud 的 SPIFFE Agent Ident
 | 目标场景 | 推荐组合 | 原因 |
 |---|---|---|
 | 个人或小团队本地辅助 | Harness + 仓库 Rules/Skill + 成熟 CLI | 依赖少、反馈快，先复用已有工具链 |
+| 遗留/内部工具 Agent 化 | 源码/API + 接口生成器 + 生成 CLI/Skill + 测试 + 沙箱 | 先建立机器可读、可测试的能力面，再决定是否增加 MCP |
 | 企业仓库评审与修复 | Harness/平台 Agent + 远程 MCP + CI Runner + PR 出口 | 共享上下文和授权集中，所有写动作可审查 |
 | IaC 与部署变更 | Harness + 发布 Skill + Terraform CLI/MCP + Plan + Approval | 开放式规划与确定性部署边界分离 |
 | 跨平台 DevOps 自助 | Provider-agnostic Harness + 多个窄 Toolset MCP + Gateway | 降低客户端绑定，统一身份、策略和审计 |
@@ -155,7 +168,7 @@ Uber 的短期单跳 Token 与 Actor Chain、Google Cloud 的 SPIFFE Agent Ident
 
 1. Harness 是否支持非交互、可重放执行，还是只能作为开发者聊天工具？
 2. 模型、Provider、工具接口和执行环境能否独立替换，锁定发生在哪一层？
-3. CLI/API 是否已经满足需求；引入 MCP 带来的互操作和治理收益是否大于复杂度？
+3. CLI/API 是否已经满足需求；若缺少 Agent 友好接口，是手工建设还是使用接口生成器；引入 MCP 带来的互操作和治理收益是否大于复杂度？
 4. Skill、Rules 和 Hooks 的来源、版本、权限及变更是否可审计？
 5. 每个工具调用能否绑定任务身份、委托人、作用域和短期凭据？
 6. Agent 是否只能通过 PR、Plan、Safe Output 或 Approval 等受控出口产生变更？
@@ -166,8 +179,11 @@ Uber 的短期单跳 Token 与 Actor Chain、Google Cloud 的 SPIFFE Agent Ident
 
 ## 证据入口
 
-- [[00_sources/agentic-cicd-source-landscape|107 条一手资料景观]]
+- [[00_sources/agentic-cicd-source-landscape|81 条核心一手资料景观]]
 - [[00_sources/README|Source Brief 索引]]
 - [[20_summaries/companies/README|公司维度总结]]
 - [[30_summaries/stages/README|八阶段维度总结]]
 - [[40_summaries/crosscutting/README|工具、流程、人员与治理变化]]
+- [[50_deepdives/cli-agent-interface/README|CLI 专题]]
+- [[50_deepdives/mcp-protocol/README|MCP 专题]]
+- [[50_deepdives/cli-anything/README|CLI-Anything 专题]]

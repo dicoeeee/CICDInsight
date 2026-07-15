@@ -22,7 +22,9 @@ GitHub/GitLab 依赖全生命周期代码与 Pipeline 数据，AWS/Datadog 等�
 
 ### 2. 从固定 API 到 Agent Tool Layer
 
-MCP、Skills、Actions 和 Pipeline Agent Step 正把平台能力包装为 Agent 可发现、调用和组合的工具。工具接口需要比普通 API 多一层治理元数据：用途说明、输入风险、只读/写范围、前置条件、批准策略、成本、速率限制和结果证据。
+MCP、Skills、Actions 和 Pipeline Agent Step 正把平台能力包装为 Agent 可发现、调用和组合的工具。CLI-Anything 又增加了“接口工厂”路径：对有源码或后端 API、但缺少 Agent 友好命令面的软件，生成结构化 CLI、测试、文档和 `SKILL.md`，再供不同 Harness 调用。平台能力建设因此从“登记已有工具”扩展到“识别接口缺口、生成或手工建设接口、验证后入册”。
+
+工具接口需要比普通 API 多一层治理元数据：用途说明、输入风险、只读/写范围、前置条件、批准策略、成本、速率限制和结果证据。自动生成的 CLI/Skill 还要记录来源版本、生成模型/流程、测试覆盖、权限声明和制品签名，避免把长尾软件的隐含风险批量放大。
 
 工具数量不是目标。一个拥有数百个宽权限工具的 Agent 反而更难评测和治理。企业应提供经过审核的最小能力目录，并把生产动作与只读调查分离。
 
@@ -107,7 +109,7 @@ Qodo 的专业 Reviewer、AWS 的多 Agent 根因调查、GitLab Flow 和早期�
 
 ### 2. 平台工程与研发效能团队
 
-从“做一个门户和模板”转为“运营 Agent 工作环境”。新增职责包括上下文产品、Tool/MCP 目录、Agent Runtime、权限与预算、黄金评测集、回放、失败分类和自治等级运营。
+从“做一个门户和模板”转为“运营 Agent 工作环境”。新增职责包括上下文产品、Tool/MCP/CLI/Skill 目录、长尾工具接口改造、Agent Runtime、权限与预算、黄金评测集、回放、失败分类和自治等级运营。接口生成器可以降低接入成本，但平台团队仍需与工具 Owner、安全团队共同验收命令语义、危险动作和版本生命周期。
 
 高质量平台是 Agent 规模化的前提。DORA 研究提示，平台薄弱时，AI 可能提高产出同时恶化稳定性。参考 [[00_sources/briefs/2026-dora-platform-engineering-ai|DORA Platform Engineering]]。
 

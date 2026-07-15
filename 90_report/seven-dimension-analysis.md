@@ -17,9 +17,9 @@ audience:
 
 # Agentic CI/CD 七维分析汇总报告
 
-**观察窗口：** 2025-07-01—2026-07-14，重点关注 2026 年  
-**研究范围：** 编码完成后的代码评审、检查与门禁、构建出包、制品与版本、部署发布、发布后验证与恢复  
-**证据基础：** [[00_sources/agentic-cicd-source-landscape|107 条一手资料]]、[[00_sources/README|61 个深度 Source Brief]]
+**观察窗口：** 2025-07-01—2026-07-14，重点关注 2026 年
+**研究范围：** 编码完成后的代码评审、检查与门禁、构建出包、制品与版本、部署发布、发布后验证与恢复
+**证据基础：** [[00_sources/agentic-cicd-source-landscape|81 条核心一手资料]]、[[00_sources/README|62 个深度 Source Brief]]
 
 > [!abstract] 总结论
 > 2026 年 Agent 已经进入 CI/CD 的分析、变更生成和受控执行层，但行业成熟单位不是“一个平台”或“一个模型”，而是一个可以被独立评测和授权的**任务场景**。企业应以 Scenario 为连接键，同时判断它处于哪个 Stage、由哪些 Company 提供、依赖什么 Tool Stack、是否具有成熟度和价值证据、在什么运行架构与控制边界中执行，以及人员和流程如何承接责任。
@@ -73,10 +73,10 @@ flowchart LR
 | 厂商类型 | 代表公司或生态 | 主要优势 | 战略方向 | 企业使用方式 |
 |---|---|---|---|---|
 | 全生命周期研发平台 | GitHub、GitLab、Harness、Microsoft/Azure DevOps | 代码、PR、Pipeline、安全和权限处在同一数据面 | 将 Agent 编译或嵌入既有执行与治理平面 | 作为主入口，但保留专业 Oracle |
-| 云与可观测平台 | AWS、Google Cloud、Azure、Datadog、Dynatrace、PagerDuty、New Relic | 云拓扑、遥测、部署和事故历史 | 从只读调查向发布准备和受限恢复扩展 | 优先用于生产分析和预批准 Runbook |
+| 云与可观测平台 | AWS、Google Cloud、Azure、Datadog、CloudQ、HolmesGPT | 云拓扑、遥测、部署和事故历史 | 从只读调查向发布准备和受限恢复扩展 | 优先用于生产分析和预批准 Runbook |
 | 专业 Oracle 厂商 | Snyk、Sonar、Semgrep、Tricentis、JFrog、Cloudsmith、Sonatype | 安全、测试、制品和供应链的确定性事实 | 为通用 Agent 提供可信上下文、复验和受控动作 | 与全生命周期平台组合采购 |
 | 部署与变更平台 | Spacelift、Akuity、Octopus Deploy、ServiceNow | Policy、Plan、GitOps、Runbook、Change Context | 把自然语言入口接入既有审批和部署控制面 | 保持批准、签名和晋级权外置 |
-| 独立 Harness 与开源生态 | Claude Code、Codex CLI、OpenCode、Gemini CLI、OpenHands | 跨平台、终端入口、可组合或可自托管 | 成为跨系统任务执行层 | 由企业补齐身份、沙箱、审计和评测 |
+| 独立 Harness 与开源生态 | Claude Code、Codex CLI、OpenCode、Gemini CLI、OpenHands、CLI-Anything | 跨平台、终端入口、接口生成、可组合或可自托管 | Harness 成为跨系统执行层，接口工厂把长尾软件转成 Agent 工具面 | 由企业补齐接口验收、身份、沙箱、审计和评测 |
 
 大型公司内部实践比产品演示更一致：Microsoft、Spotify、Uber、Meta、Google SRE、WhatsApp 和 Atlassian 都没有一次性替换全部工具，而是通过 PR、Pipeline、MCP 或 Runbook 接入 Agent，并保留人工接管和确定性验证。竞争优势正由“模型更强”转向“拥有高质量上下文、可信动作接口和可证明结果”。完整分析见 [[20_summaries/companies/README|公司维度总结]]。
 
@@ -86,7 +86,7 @@ flowchart LR
 |---|---|---|---|
 | 知识与行为包 | 告诉 Agent 如何按组织方式工作 | Skills、Rules、`AGENTS.md`、Hooks | 是组织知识，不是权限或 Policy |
 | Agent Harness | 理解任务、规划并循环调用工具 | Claude Code、Codex CLI、OpenCode、Gemini CLI、OpenHands | 是执行外壳，不是完整 CI/CD 平台 |
-| 工具接口 | 暴露查询与行动能力 | CLI、API、SDK、MCP | CLI 是确定性底座，MCP 是跨 Agent 适配和治理协议 |
+| 工具接口 | 暴露查询与行动能力 | CLI、API、SDK、MCP、CLI/Skill 生成器 | CLI 是确定性底座，接口工厂补齐长尾软件，MCP 是跨 Agent 适配和治理协议 |
 | 执行承载 | 提供工作区、算力和隔离 | 本地终端、CI Runner、远程 Coding Agent、常驻服务 | 承载方式直接决定风险和自治上限 |
 | 治理控制面 | 管理身份、权限、审计、评测和预算 | Agent Identity、Gateway、Safe Output、Evals | 工具可调用不代表 Agent 获得行动授权 |
 
@@ -96,12 +96,13 @@ flowchart LR
 Agent Harness
 + 组织 Skills / Rules
 + CLI / API 能力底座
++ 对长尾软件按需生成并验证 CLI / Skill
 + 必要时增加 MCP 适配
 + 隔离 Runner 或任务沙箱
 + 身份、策略、审计与评测控制面
 ```
 
-企业不应把“是否支持 MCP”当作唯一选型标准。已有稳定 CLI 时应优先复用；多个 Harness 需要共享远程工具和集中授权时再引入 MCP；需要沉淀组织做法时使用 Skill；需要生产执行时必须增加外部控制面。完整分析见 [[10_summaries/tools/README|Agent 工具与技术栈总结]]。
+企业不应把“是否支持 MCP”当作唯一选型标准。已有稳定 CLI 时应优先复用；缺少机器接口的长尾软件可评估 CLI-Anything 一类接口生成器，但生成物必须重新测试和授权；多个 Harness 需要共享远程工具和集中授权时再引入 MCP；需要沉淀组织做法时使用 Skill；需要生产执行时必须增加外部控制面。完整分析见 [[10_summaries/tools/README|Agent 工具与技术栈总结]]。
 
 ## 五、Scenario：七个维度之间的连接键
 
@@ -115,6 +116,7 @@ Agent Harness
 | 测试生成与动态验证 | 3—4 | Tricentis、Harness、CircleCI、GitHub | Change Context + Test Agent + Deterministic Test Engine | 沙箱内 L3 | 中高价值；长期零回归和测试有效性仍需持续评测 |
 | 供应链与版本维护 | 2—5 | JFrog、Cloudsmith、Sonatype、GitHub | Package Intelligence + MCP/CLI + SBOM/Policy + PR | L1—L2 | 信息和修复价值明确；签名、晋级和版本授权仍保守 |
 | 跨仓维护与 Fix-forward | 1—5、8→1 | Spotify、Meta、Bloomberg、GitHub | Service Catalog + Repo Agent + CI + PR | L2 | 对大规模平台团队价值高；依赖机器可读标准路径和所有权数据 |
+| 遗留/内部工具 Agent 化 | 3—8 | HKUDS / CLI-Anything、企业内部平台 | Source/API + Interface Generator + CLI/Skill + Tests + Runner | 生成 L2；执行上限按权限另定 | 接入长尾工具潜力高；开源活跃但企业 CI/CD 效果证据仍薄，需逐工具验收 |
 | Pipeline/IaC/部署变更 | 4、6 | GitHub、Harness、Spacelift、Terraform、Akuity、Octopus | Skill + CLI/MCP + Plan + Policy + Approval | L2—L3 | 适合受控试点；必须限制环境、凭据和 Blast Radius |
 | Release Readiness 与变更管理 | 5—7 | AWS、ServiceNow、Octopus | Cross-repo Context + Evidence Pack + Approval | L1—L3 | 信息汇总价值高，公开生产执行证据仍少 |
 | 事故调查与受限恢复 | 8、8→1 | AWS、Azure、Datadog、CloudQ、HolmesGPT、Meta | Telemetry/Topology + SRE Agent + Runbook + SLO | 分析 L1—L2；动作 L3，局部 L4 | 只读调查已经成熟；自动恢复仅适合预批准低风险动作 |
@@ -175,6 +177,7 @@ flowchart TB
   SK["Skills / Rules / Runbooks"] --> RT
   CT["Context Plane<br/>Repo · Pipeline · Artifact · Topology"] --> RT
   RT --> GW["Tool Gateway<br/>CLI · API · MCP"]
+  IF["Interface Factory<br/>Source/API → CLI · Tests · Skill"] --> GW
   GW --> SB["隔离 Runner / Sandbox"]
   SB --> EX["确定性 CI/CD 执行层"]
   EX --> OR["外部 Oracle<br/>Test · Scan · Policy · Signature · SLO"]
@@ -215,7 +218,7 @@ flowchart TB
 | 开发者 | 查日志、机械修配置、重复补测试 | 写清意图与验收条件、审查 Agent 计划和证据 | 对代码和业务语义负责 |
 | Reviewer / 架构师 | 阅读所有低风险细节 | 处理高语境取舍、替代方案和长期维护 | 对关键设计和合并判断负责 |
 | QA / 测试 | 手工编写全部步骤 | 风险模型、测试 Oracle、未来/隐藏测试、Agent 评测集 | 对验证有效性负责 |
-| 平台/研发效能 | 维护模板和门户、响应重复工单 | Context/Tool Plane、Runtime、任务身份、预算和自治运营 | 对平台边界和开发体验负责 |
+| 平台/研发效能 | 维护模板和门户、响应重复工单 | Context/Tool Plane、长尾接口生成与验收、Runtime、任务身份、预算和自治运营 | 对平台边界和开发体验负责 |
 | 安全/IAM | 逐条分诊和共享机器人授权 | Agent 身份、委托链、工具供应链、动态授权和红队 | 对策略、例外和高风险权限负责 |
 | SRE/发布 | 跨工具收集状态、机械执行 Runbook | SLO、Runbook、渐进发布、恢复边界和异常接管 | 对事件指挥和生产风险负责 |
 | 工程管理者 | 追踪使用率、代码量和理论工时 | 管理系统效果、责任设计、平台瓶颈和风险收益 | 对自治范围和投资决策负责 |
@@ -240,7 +243,7 @@ flowchart TB
 2. **可验证性和可逆性决定自治上限。** 模型能力影响完成率，但外部 Oracle、隔离和回滚决定能否获得执行权。
 3. **平台质量是 Agent 收益的放大器。** 结构化上下文、可靠测试、可复现 Runner、清晰所有权和快速反馈不足时，Agent 会扩大重试、噪声和不稳定。
 4. **全生命周期平台与专业 Oracle 会组合共存。** GitHub/GitLab/Harness 提供上下文和流程骨架，安全、测试、制品、部署与可观测厂商提供不可由模型自行生成的事实。
-5. **MCP、CLI、Skill 和 Harness 不构成替代链。** CLI/API 是能力底座，MCP 提供互操作，Skill 沉淀组织方法，Harness 负责循环执行，控制面负责授权。
+5. **MCP、CLI、Skill、接口生成器和 Harness 不构成替代链。** CLI/API 是能力底座，接口生成器补齐长尾能力面，MCP 提供互操作，Skill 沉淀组织方法，Harness 负责循环执行，控制面负责授权。
 6. **近期主流是 L2 和 L3，不是全流程 L4。** 最现实的价值来自可审查变更、沙箱验证和批准后执行；关键发布、签名、策略修改和跨环境晋级继续由人和确定性系统控制。
 7. **人的工作向高语境与高责任环节集中。** 自动化程度上升不会消除责任，而会使意图、验收标准、风险边界、异常接管和效果评测更重要。
 
@@ -264,7 +267,7 @@ flowchart TB
 
 ## 十一、证据边界
 
-- 107 条来源以官方文档、第一方工程实践、开源仓库、规范和原始研究为主；厂商效果数据没有独立验证时不外推为行业结论。
+- 81 条核心来源以官方文档、第一方工程实践、开源仓库、规范和原始研究为主；厂商效果数据没有独立验证时不外推为行业结论。
 - GA 代表产品可用，不代表特定场景已经达到稳定 L3/L4。
 - 开源 Star 表示关注度，不代表安全、支持、长期维护或生产成熟度。
 - 发布、制品晋级和关键生产恢复的公开 L4 证据仍少，未来判断应持续更新。
@@ -273,9 +276,12 @@ flowchart TB
 ## 下钻入口
 
 - [[00_sources/README|L0 信息源与 Source Brief]]
-- [[00_sources/agentic-cicd-source-landscape|107 条一手资料景观]]
+- [[00_sources/agentic-cicd-source-landscape|81 条核心一手资料景观]]
+- [[00_sources/source-pruning-2026-07-14|信息源精简审计]]
+- [[05_case_library/README|实践案例库]]
 - [[10_summaries/tools/README|Agent 工具与技术栈总结]]
 - [[20_summaries/companies/README|公司维度总结]]
 - [[30_summaries/stages/README|八阶段维度总结]]
 - [[40_summaries/crosscutting/README|工具、流程、人员、治理和度量变化]]
+- [[50_deepdives/README|专题深研索引]]
 - [[90_report/README|原综合主报告与 18 个月路线]]

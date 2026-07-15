@@ -119,7 +119,7 @@ Tricentis、Harness、CircleCI、GitHub/GitLab 均覆盖部分能力。短循环
 
 ### 工具与流程变化
 
-编译器、构建器和打包器保持不变，新增的是结构化构建上下文和自愈循环。流水线日志需要从供人浏览的文本升级为 Agent 可查询事件；环境、缓存、依赖和 Artifact 元数据必须可复现。Agent 可以决定“下一步查什么”，不能模糊“实际执行了什么”。
+编译器、构建器和打包器保持不变，新增的是结构化构建上下文和自愈循环。流水线日志需要从供人浏览的文本升级为 Agent 可查询事件；环境、缓存、依赖和 Artifact 元数据必须可复现。CLI-Anything 代表的接口生成器还能把缺少稳定命令面的长尾构建/打包工具转成带 JSON、退出码、测试和 Skill 的 Agent 可调用接口。Agent 可以决定“下一步查什么”，不能模糊“实际执行了什么”。
 
 ### 人的能力变化
 
@@ -227,11 +227,17 @@ SRE 的重点从熟记查询语句转为定义可观测标准、Runbook、SLO、
 
 ### 证据与成熟度
 
-AWS Production Operations 已 GA，Azure Observability 分析 GA/自治 Preview，Datadog、PagerDuty、New Relic、Dynatrace 和 CloudQ 均有 2026 能力；HolmesGPT 等开源项目提供跨源调查。L1 分析较成熟，L3 动作增长，L4 只应限于已批准的低风险恢复。参考 [[00_sources/briefs/2026-aws-devops-agent-production-operations-ga|AWS DevOps Agent]]、[[00_sources/briefs/2026-holmesgpt-sre-agent|HolmesGPT]]、[[00_sources/briefs/2026-tencent-cloudq-devops-agent|CloudQ]]。
+AWS Production Operations 已 GA，Azure Observability 分析 GA/自治 Preview，Datadog 和 CloudQ 均有 2026 能力；HolmesGPT 等开源项目提供跨源调查。L1 分析较成熟，L3 动作增长，L4 只应限于已批准的低风险恢复。参考 [[00_sources/briefs/2026-aws-devops-agent-production-operations-ga|AWS DevOps Agent]]、[[00_sources/briefs/2026-holmesgpt-sre-agent|HolmesGPT]]、[[00_sources/briefs/2026-tencent-cloudq-devops-agent|CloudQ]]。
 
 ### 建议指标
 
 根因 Top-k 准确率、首次有用假设时间、MTTD/MTTR、无效工具调用、误操作、Runbook 成功率、人工接管率、恢复后二次故障率。
+
+## 跨阶段接口：长尾工具从“有人会用”变成“Agent 可调用”
+
+CLI-Anything 对八阶段的影响不是新增一个阶段，而是把测试器、构建工具、制品工具、部署客户端和运维软件的能力转成结构化 CLI/Skill，使其能被不同 Harness 在本地或 Runner 中组合。其最强价值位于阶段 3—6，也可延伸至发布和恢复。
+
+但生成接口不等于获得行动权。每个生成 CLI 都要经过命令覆盖和危险动作审查、单元与端到端测试、版本锁定、签名/扫描、最小权限与沙箱验证；涉及制品晋级、生产部署或恢复时，仍必须经过外部 Policy、Approval 和 Oracle。参考 [[00_sources/briefs/2026-cli-anything|CLI-Anything Brief]]。
 
 ## 跨阶段 Gate：Agent 不能自己定义“成功”
 

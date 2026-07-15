@@ -10,7 +10,7 @@ as_of: 2026-07-14
 # 信息源与 Source Brief
 
 > [!info] L0 证据层
-> [[00_sources/agentic-cicd-source-landscape|Agentic CI/CD source landscape]] 收录 107 条 2025-07-01—2026-07-14 一手资料。每条均包含组织、日期、URL、来源类型、能力状态、八阶段标签、工具类别、地域、关键事实、价值和置信度/局限，因此本身就是一组结构化 Brief。[[00_sources/incremental-source-research-2026-07-14|2026-07-14 增量研究记录]] 保留本轮 25 条增量选源的排重与选源依据；S105—S107 为本次 Tool 层重构补充的通用 Agent Harness 资料。下列 61 个独立 Source Brief（另加模板）对主报告引用频率较高的来源做了进一步展开。
+> [[00_sources/agentic-cicd-source-landscape|Agentic CI/CD source landscape]] 收录 81 条 2025-07-01—2026-07-14 核心一手资料。每条均包含组织、日期、URL、来源类型、能力状态、八阶段标签、工具类别、地域、关键事实、价值和置信度/局限，因此本身就是一组结构化 Brief。[[00_sources/source-pruning-2026-07-14|信息源精简审计]]记录从 107 条候选源缩减到 80 条核心源、再增补 CLI-Anything 形成当前 81 条核心源的过程；[[00_sources/incremental-source-research-2026-07-14|增量研究记录]]保留前期排重和选源过程。下列 62 个独立 Source Brief（另加模板）对高频主题做进一步展开，可能引用核心登记之外的补充材料。
 
 ## 证据口径
 
@@ -67,6 +67,10 @@ as_of: 2026-07-14
 - [[00_sources/briefs/2026-jenkins-ai-agent-plugin|Jenkins AI Agent Plugin]]
 - [[00_sources/briefs/2026-claude-code-github-action|Claude Code GitHub Action]]
 - [[00_sources/briefs/2026-openhands-agent-sdk|OpenHands Agent SDK]]
+
+## Agent 原生接口与 CLI
+
+- [[00_sources/briefs/2026-cli-anything|CLI-Anything：Agent 原生接口生成与 CLI-Hub]]
 
 ## 制品、部署与运行运维
 

@@ -28,7 +28,8 @@ as_of: 2026-07-14
 | Snyk / Semgrep / Sonar | 安全与质量修复 | 检测器 + Agent Fix/Workflow | L2—L3 | GA/预览因产品而异 | 确定性扫描器为 Agent 提供安全 Oracle |
 | JFrog / Cloudsmith / Sonatype | 制品与供应链上下文及有限行动 | Skills、MCP、可信包、版本情报、制品管理 | L1—L2 | Beta/Available 混合 | 争夺 Agent 的供应链事实与行动入口 |
 | Octopus Deploy / ServiceNow | 部署、发布与企业变更管理 | Agent App、Claude Agent Step、MCP、Change Workflow | L2—L3 | Available/Alpha 混合 | 把 Agent 延伸到 CD Step、Runbook 和 ITSM |
-| Datadog / PagerDuty / New Relic / Dynatrace | 发布后分析与响应 | SRE Agent、Agent Builder、事件编排 | L2—L3 | 多为 GA/预览混合 | 以遥测和事故上下文形成闭环 |
+| Datadog / HolmesGPT 等 | 发布后分析与响应 | SRE 调查、证据链、受限处置 | L2—L3 | 商业产品与活跃开源项目并存 | 以遥测和事故上下文形成闭环 |
+| HKUDS / CLI-Anything | Agent 原生工具接口 | CLI 生成、测试、`SKILL.md`、CLI-Hub | L1—L2 | 活跃开源；企业 CI/CD 证据早期 | 把遗留/内部软件转成跨 Harness 可调用能力面 |
 | 中国云与 DevOps 厂商 | 评审、CloudOps、研发 Agent | 云效 CodeReview、CloudQ、Comate、CodeArts | L1—L3 | 能力分散、公开证据不均 | 强调企业 IM、云资源和本地平台集成 |
 
 ## 1. GitHub：把 Agent 编译进 Actions
@@ -77,7 +78,7 @@ AWS 的天然优势是云资源、监控、部署和身份上下文；风险是�
 
 ## 6. Google Cloud 与 DORA：平台质量先于 Agent 数量
 
-Google Cloud 的公开能力分布在 Gemini Cloud Assist、Application Design Center、Gemini CLI DevOps Extension 和 SRE 实践中，覆盖应用设计、部署、排障、成本与优化。其价值更多来自 Google Cloud 资源和运维上下文，而 Cloud Build 本身仍是确定性容器构建执行器，不宜把传统构建产品包装成 Agent 创新。
+Google Cloud 的公开能力分布在 Gemini Cloud Assist、Gemini CLI DevOps Extension 和 SRE 实践中，覆盖部署、排障、成本与优化。其价值更多来自 Google Cloud 资源和运维上下文；DevOps Extension 调用的 Cloud Build 仍是确定性执行器，不宜把传统构建产品本身包装成 Agent 创新。
 
 DORA 的研究提供了更重要的组织结论：AI 使用与吞吐、产品表现正相关，但与交付稳定性仍呈负相关；高质量内部平台、测试、版本控制和快速反馈决定 AI 是否放大系统优势还是混乱。2026 年平台工程研究进一步强调高质量平台与 AI 的互补关系。
 
@@ -110,11 +111,17 @@ Buildkite 则保持可组合路线：Agent 可以通过 Skills/MCP 维护 Pipeli
 - Spacelift 让自然语言部署沿用相同 Policy/Approval 控制面。
 - Akuity 把 Argo CD/Kargo 实时状态、GitOps 操作和审计提供给 Agent。
 - Octopus 把 Agent 放入原生部署 Step，并通过 MCP/Runbook 连接发布诊断与恢复；ServiceNow 把 Agent 扩展到冲突、影响、窗口和 Change Request。
-- Datadog、Dynatrace、PagerDuty、New Relic 争夺生产遥测和事件响应的 Agent 入口。
+- Datadog 及 HolmesGPT 等开源 SRE Agent 争夺生产遥测、调查和事件响应入口。
 
 这类产品适合与全生命周期平台组合，而不是期待一个通用 Agent 取代领域 Oracle。采购时应验证数据是否可回流到统一审计与评测系统。
 
-## 10. 中国厂商：评审和 CloudOps 先行，端到端证据仍不足
+## 10. HKUDS / CLI-Anything：开源生态开始生产 Agent 原生接口
+
+CLI-Anything 不与 GitHub、Harness 或 GitLab 竞争流水线控制面，而是补齐另一个生态位置：分析软件源码与后端 API，生成带结构化输出、测试、文档和 `SKILL.md` 的 CLI harness，并通过 CLI-Hub 供 Claude Code、Codex、OpenCode 等 Agent 搜索和调用。这使缺少 Agent 接口的遗留或内部工具有机会进入测试、构建、制品、部署和运维链路。
+
+它的战略信号强于当前企业成熟度证据：接口生成可降低长尾工具接入成本，但生成物仍需要平台、安全和工具 Owner 共同审查；项目本身不提供任务身份、生产授权、外部 Policy 或发布 Oracle。开源 Star 和发布活跃度说明关注度，不证明大规模 CI/CD 效果。参考 [[00_sources/briefs/2026-cli-anything|CLI-Anything Brief]]。
+
+## 11. 中国厂商：评审和 CloudOps 先行，端到端证据仍不足
 
 中国样本呈现四条路线：
 
@@ -125,7 +132,7 @@ Buildkite 则保持可组合路线：Agent 可以通过 Skills/MCP 维护 Pipeli
 
 因此不能因为厂商拥有完整 DevOps 产品线，就推断其 Agent 已覆盖完整生命周期。中国企业评估还需特别关注私有化、数据出境、模型选择、审计留存和本地 IM/IAM 集成。参考 [[00_sources/briefs/2026-alibaba-yunxiao-ai-code-review|云效 AI CodeReview]]、[[00_sources/briefs/2026-tencent-cloudq-devops-agent|腾讯 CloudQ]]、[[00_sources/briefs/2026-baidu-comate-4-agent|百度 Comate 4.0]]、[[00_sources/briefs/2026-huawei-codearts-agent|华为 CodeArts Agent]]。
 
-## 11. 大型公司内部实践透露出的共同模式
+## 12. 大型公司内部实践透露出的共同模式
 
 Microsoft、WhatsApp、Spotify、Uber、Meta、Google SRE 和 Atlassian 的第一方实践虽不可直接横向比较，却有四个共同点：
 
@@ -146,7 +153,7 @@ WhatsCode 的 25 个月实践说明一键执行与接管修订可以长期并存
 
 ## 下钻入口
 
-- [[00_sources/agentic-cicd-source-landscape|107 条一手资料景观]]
+- [[00_sources/agentic-cicd-source-landscape|81 条核心一手资料景观]]
 - [[10_summaries/tools/README|Agent 工具与技术栈总结]]
 - [[30_summaries/stages/README|八阶段总结]]
 - [[40_summaries/crosscutting/README|横向变化总结]]
