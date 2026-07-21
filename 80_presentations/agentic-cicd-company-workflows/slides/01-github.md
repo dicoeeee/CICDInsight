@@ -52,6 +52,91 @@ GitHub 以 Workflow 为装配清单，把 Skill、Agent 与 MCP 编译成受控�
 → Threat Detection 与 Safe Output Job 决定哪些结果可以外化
 → 原 Actions Test / Scan / Ruleset / Environment 决定能否继续
 
+### 当前左右分栏版式判断
+
+左侧采用“工作流声明 → 声明转配置 → 工作流执行 → 结果输出”的四阶段结构总体合适，能够把设计时装配与运行时执行放进一条可读链路。但当前文案需要做四项调整，才能与实际机制和本页主张完全一致：
+
+1. **“声明转配置”改为“编译与加固”。** Compiler 不是普通格式转换，而是在生成 `.lock.yml` 时完成 Schema/Expression 校验、Job 构造、权限分段、依赖拓扑和 Action SHA 固定。
+2. **“Scheme 安全校验”改为“Schema / Expression 安全校验”。** `Schema` 是字段结构校验；GitHub Actions Expression Allowlist 是另一层表达式安全校验，建议在同一能力块中并列呈现。
+3. **“任务解析”改为“Job 构造与权限分段”。** Markdown Body 主要在运行时加载；编译期真正被固定的是 Pre-activation、Activation、Agent、Detection、Safe Output、Conclusion 等 Job 及其权限边界。
+4. **工作流执行阶段的“结果输出”改为“候选结果 Artifact”。** Agent 生成的 `agent_output.json`、Patch、Prompt、Usage 和 Firewall Log 还不是已批准结果；它们必须进入第四阶段检查和外化。
+
+另外，“实践/定时触发”应修正为“事件/定时/命令触发”；“工具权限配置”建议拆开理解为 **Tool/MCP 可见性** 与 **Token/Job Permission 授权**，避免把工具可调用误写成已经获得权限。
+
+### 左侧流程图建议定稿
+
+保持四个横向阶段，每个阶段控制在五个能力块以内：
+
+| 抽象阶段 | 建议顺序放置的能力块 | 阶段产物 |
+|---|---|---|
+| **1. 工作流声明** | 触发与条件定义 → 任务意图/成功标准 → Engine/Skill 选择 → Tool/MCP 与 Imports → Permission/Network/Safe Output 边界 | `workflow.md` |
+| **2. 编译与加固** | Parse + Schema/Expression 校验 → Imports 解析 → Job 构造/权限分段 → 依赖校验/拓扑排序 → SHA 固定与 YAML 生成 | `.lock.yml` |
+| **3. Actions 执行** | 事件/定时/命令触发 → Pre-activation 准入 → Activation 上下文与运行时装配 → Agent + Skill + Tool/MCP 执行 → 候选结果 Artifact | `agent_output.json` / Patch / Audit Log |
+| **4. 输出审查与外化** | Threat Detection → Safe Output Schema/清理 → 目标/类型/数量/Protected Files 限制 → Scoped Write Job → Conclusion 与原 CI/CD Gate | PR / Issue / Comment / Dispatch / Artifact |
+
+左侧可以再增加三类非流程块，但不应继续增加主节点：
+
+- **阶段带：** 在第 1—2 阶段上方标“设计时装配”，第 3—4 阶段上方标“Actions 运行时”。
+- **动态边界：** 主虚线框只框住 `Agent 理解/规划 → Skill 引导 → Tool/MCP 选择与调用 → 候选内容/Patch 生成`，标注“动态决策区”；Threat Detection 若使用默认 AI Engine，则另标为独立的“AI 安全判断点”。Artifact 上传、Safe Output 校验、写入和 Conclusion 保持为确定性 Actions 控制面。
+- **贯穿控制条：** 在流程底部横跨四阶段放置 `Version/Hash · Permission · Network/Sandbox · Budget/Timeout/Concurrency · Audit/Telemetry`，表示这些不是单一步骤，而是跨阶段治理边界。
+
+为了让 Skill、Agent、MCP 和 Actions 的出现位置一眼可见，可在阶段标题旁使用小型组件徽标，而不是再增加流程节点：
+
+| 阶段 | 组件徽标建议 |
+|---|---|
+| 工作流声明 | Task · Skill · Tool/MCP · Control |
+| 编译与加固 | Compiler · Actions |
+| Actions 执行 | Actions · Agent · Skill · MCP |
+| 输出审查与外化 | Artifact · Detection · Safe Output · Gate |
+
+### Agent 参与程度的颜色规则
+
+颜色用于表达“智能判断发生在哪里”，不用于区分 Agent 身份：
+
+| 颜色 | 语义 | 建议色值 |
+|---|---|---|
+| 灰蓝 | 无 Agent，确定性系统执行 | `#DCE6F1` |
+| 浅橙 | Agent 可参与或承担辅助判断 | `#FFE3A3` |
+| 深橙 | Agent 主导动态决策与内容生成 | `#F59E0B` |
+
+阶段和能力块的着色建议：
+
+- **工作流声明：** 阶段标题用浅橙并标“Agent 可参与”；`workflow.md` 仍作为静态、可评审的阶段产物呈现。
+- **编译与加固：** 所有能力块使用灰蓝，表示确定性 Compiler 行为。
+- **Actions 执行：** Trigger、Pre-activation、Activation 和 Artifact 上传使用灰蓝；Agent 规划、Skill 引导、Tool/MCP 动态选择和候选结果生成使用深橙。
+- **输出审查与外化：** Threat Detection 使用浅橙；Schema、清理、限制、API 写入和 Conclusion 使用灰蓝。
+
+PR/Issue 不能整体标成“非 Agent”或“Agent 主导”，建议使用双色框表达内容与副作用的分离：
+
+~~~text
+深橙：Agent 生成标题 / 正文 / Patch / 行动建议
+                 ↓
+灰蓝：Safe Output 校验并调用 GitHub API 创建 PR / Issue
+                 ↓
+灰蓝：Conclusion 汇总实际创建对象、状态、错误和用量
+~~~
+
+如果“总结”指业务洞察、分析报告或修复建议，其内容属于深橙的 Agent 产物；如果指 Actions Run Summary / Conclusion，则属于灰蓝的系统汇总。
+
+### 右侧技术点表格建议
+
+右侧不要重复左侧的步骤名称，建议使用“阶段 / 技术机制 / 固化对象与控制价值”三列：
+
+| 阶段 | 可放入 PPT 的技术点 | 固化对象与控制价值 |
+|---|---|---|
+| **工作流声明** | `.github/workflows/<name>.md`；YAML Frontmatter + Markdown Body；`on:` / `if:`；`engine:` / `skills:` / `imports:`；`tools:` / `mcp-servers:` / `mcp-scripts:`；`permissions:` / `network:` / `sandbox:` / `safe-outputs:`；确定性 `steps:` / `jobs:` | 把 Task、运行引擎、方法、工具面和治理边界放入同一个可版本化 Source；Tool 可见性不等于 Token 授权。 |
+| **编译与加固** | Frontmatter Parsing；Schema 与 Actions Expression Allowlist；Imports 确定性 BFS 解析与字段合并；Job Construction；`needs` 循环检查与拓扑排序；Action 固定到 Commit SHA；`actions-lock.json`；Metadata/Manifest/Hash；`.lock.yml` 生成 | 将声明变成可审查的标准 Actions Job Graph，并固定依赖、权限阶段和执行拓扑；不是把 Agent 的每一步推理编译成确定性脚本。 |
+| **Actions 执行** | Event/Schedule/Command；Pre-activation 的 Role、Deadline、Dedup 与 Command Gate；Activation 的上下文清理、Lock/凭据/预算检查和 Skill 安装；Agent Engine；MCP Gateway / Tool Allowlist；Sandbox / Firewall / Network Allowlist；Artifact Handoff | 动态推理只发生在只读 Agent Job 内；Actions 固定 Runner、`needs`、Timeout、Concurrency 和可观察边界。 |
+| **输出审查与外化** | `agent_output.json` / `aw.patch`；默认 Threat Detection 及可插拔扫描；Safe Output JSON Schema、文本清理、目标仓库、类型与次数限制；Protected Files；`staged` 预览；独立最小写权限 Job；Conclusion Summary | Agent 决定“建议写什么”，Safe Output 决定“是否允许以及如何写入”，Conclusion 汇总“实际执行了什么”；PR/Issue 创建后仍由 Required Checks、Ruleset、Review 和 Environment 决定是否继续。 |
+| **贯穿控制** | Strict Compile；Action/Container/Import/Skill Pin；Job Permission；Secret 隔离；AI Credits；Timeout/Concurrency；Artifact/Firewall Log；`gh aw logs` / `audit`；OpenTelemetry | 为 Preview 能力补上版本漂移、成本、权限、供应链和运行审计控制；这一行建议用浅色底，视觉上与四个主阶段区分。 |
+
+如果右侧空间有限，优先保留每行前三个高辨识度技术点：
+
+- 工作流声明：`Frontmatter + Markdown Body`、`Skill/Tool/MCP`、`Permission/Network/Safe Output`；
+- 编译与加固：`Schema/Expression Validation`、`Job Graph`、`SHA Pin + .lock.yml`；
+- Actions 执行：`Pre-activation/Activation`、`Agent + MCP Gateway`、`Sandbox/Artifact`；
+- 输出审查：`Threat Detection`、`Safe Output Schema`、`Scoped Write + Existing Gate`。
+
 ## 四、内容块一：Workflow Source 是装配清单
 
 `.github/workflows/<name>.md` 的真实结构只有两部分：`---` 包裹的 YAML Frontmatter，以及其后的 Markdown Body。下表按实际位置和顶层字段映射装配角色，不把概念角色伪装成同级 Schema 字段。
