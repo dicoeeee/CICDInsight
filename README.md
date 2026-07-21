@@ -18,6 +18,7 @@ as_of: 2026-07-15
 
 - [[90_report/seven-dimension-analysis|七维分析汇总报告]]：从 Stage、Company、Tool、Scenario、成熟度与价值、运行架构与控制边界、组织与工作流程七个维度形成统一判断。
 - [[90_report/README|主报告]]：决策结论、八阶段影响、参考架构、18 个月路线与 2027—2028 展望。
+- [[80_presentations/README|演示文稿层]]：管理 PPT 的叙事、页面文案、作业流表达和来源映射；最终渲染文件仍放在 `outputs/`。
 - [[00_sources/agentic-cicd-source-landscape|81 条核心一手资料景观]]：精简并增补后的 L0 来源与逐条 Brief。
 - [[00_sources/source-pruning-2026-07-14|信息源精简审计]]：从 107 条候选源缩减到 80 条核心源，并补入 CLI-Anything 后形成 81 条当前核心源的记录。
 - [[00_sources/README|深度 Source Brief 索引]]：62 个高频来源的独立分析。
@@ -74,6 +75,7 @@ as_of: 2026-07-15
 - [[30_summaries/stages/README|阶段维度总结]]：沿八个 CI/CD 阶段分析 Agent 介入方式。
 - [[40_summaries/crosscutting/README|横向变化总结]]：工具平台、工作流程、人员能力、治理与度量。
 - [[50_deepdives/README|专题深研层]]：对重点课题建立问题树、Claim—Evidence Matrix、案例比较、实验、Playbook 和专题报告。
+- [[80_presentations/README|演示文稿层]]：把跨公司、跨能力的研究结论改写为可比较的 PPT 叙事和单页作业流。
 - [[90_report/seven-dimension-analysis|七维分析汇总报告]]：以任务场景为连接键，将三个描述维度与四个企业决策维度汇总。
 - [[90_report/README|主报告]]：跨分类提炼趋势、成熟度、实践、风险和未来判断。
 
