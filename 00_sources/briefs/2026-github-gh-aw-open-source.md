@@ -4,7 +4,7 @@ source_id: github-gh-aw-repository-2026
 organization: GitHub
 source_type: source-code-repository
 published: null
-verified: 2026-07-14
+verified: 2026-07-15
 availability: open-source
 confidence: high
 geography:
@@ -48,7 +48,8 @@ tags:
 - 支持 Copilot、Claude、Codex 和 Gemini 等多种 Agent 引擎。
 - README 明确列出默认只读、Safe Outputs、沙箱、网络隔离、供应链固定和编译期校验。
 - Repository Topics 包含 CI、GitHub Actions、Codex 和 Claude Code。
-- 截至检索页面，项目具有大量提交和高频 Release；精确 Star 数需通过 GitHub API 另行记录。
+- 截至 2026-07-15，官方 Latest Release 指向 `v0.81.6`（2026-06-27）；项目按周或双周快速发布，生产使用宜固定版本。
+- 项目具有大量提交和高频 Release；精确 Star 数需通过 GitHub API 另行记录。
 
 ## CI/CD 相关性
 
@@ -61,6 +62,8 @@ tags:
 
 它不仅是产品案例，也是可检查实现的开源高影响力样本，适合研究 Agent 工作流如何与传统 Actions、安全边界和成本控制结合。
 
+详细的 Compiler、Lock File、Safe Outputs、Sandbox、复杂编排与 CI/CD 实践见 [[50_deepdives/github-agentic-workflows/90_report|GitHub Agentic Workflows 深度报告]]。
+
 ## 限制与待验证项
 
 - 处于快速迭代期，版本兼容和计费 Bug 已导致部分版本被退役。
@@ -69,4 +72,3 @@ tags:
 ## 可引用判断
 
 - Agentic Workflow 可以通过“自然语言源文件 + 编译后的确定性执行文件”同时获得可读性和安全加固。
-

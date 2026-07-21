@@ -62,6 +62,8 @@ GitHub 将 Agentic Workflows 定位为运行在 GitHub Actions 上的仓库级�
 
 这是“确定性 CI/CD 之外增加 Continuous AI 层”的代表模式，说明 Agent 任务可以自然语言化，但执行边界仍需要编译期策略和确定性控制。
 
+详细使用方法、技术架构、CI Doctor、多仓编排和 Release Readiness 实践见 [[50_deepdives/github-agentic-workflows/90_report|GitHub Agentic Workflows 深度报告]]。
+
 ## 限制与待验证项
 
 - 仍为公开预览，接口和计费可能变化。
@@ -70,4 +72,3 @@ GitHub 将 Agentic Workflows 定位为运行在 GitHub Actions 上的仓库级�
 ## 可引用判断
 
 - Agentic Workflow 并不等于取消确定性流水线，而是在流水线上增加能够理解上下文和提出行动的受控决策层。
-

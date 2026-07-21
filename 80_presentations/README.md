@@ -6,6 +6,7 @@ tags:
   - research/agentic-cicd
   - deliverable/presentation
 status: active
+as_of: 2026-07-21
 ---
 
 # Agentic CI/CD 演示文稿
@@ -22,6 +23,8 @@ status: active
 
 > [!important] 维护原则
 > PPT 不建立第二套事实源。页面文案可以持续改写，但每个关键判断都应链接回已有的研究笔记。
+
+补充洞察应先沉淀到 [[50_deepdives/README|专题深研层]]。当新洞察改变现有页面的主张、作业流、产品状态、自治或成熟度、控制边界、企业启示或来源映射时，可以同步修改相关 `slides/*.md` 与 Source Map；仅增加实现细节或旁支事实时，不必改动 Presentation。
 
 ## 当前演示项目
 

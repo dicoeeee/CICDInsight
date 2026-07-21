@@ -7,7 +7,7 @@ tags:
   - research/agentic-cicd
   - research/deep-dive
 status: active
-as_of: 2026-07-15
+as_of: 2026-07-21
 ---
 
 # Agentic CI/CD 专题深研
@@ -43,8 +43,11 @@ as_of: 2026-07-15
 | [[50_deepdives/mcp-protocol/README|MCP]] | 协议与工具连接层 | 本地/远程传输、Tool/Resource Schema、OAuth、Gateway、互操作和安全 | CLI 设计细节、Agent 推理能力 | complete |
 | [[50_deepdives/cli-agent-interface/README|CLI 与 Agent-ready Interface]] | 确定性执行接口 | 结构化输出、错误语义、非交互、幂等、版本、Runner 和任务身份 | MCP 企业协议治理、Skill 内容设计 | complete |
 | [[50_deepdives/cli-anything/README|CLI-Anything]] | Agent 原生接口生成项目 | 七阶段 SOP、CLI/测试/Skill、CLI-Hub、Preview、成熟度和 CI/CD 场景 | 全部 CLI 的设计理论、MCP 协议治理 | complete |
+| [[50_deepdives/github-agentic-workflows/README|GitHub Agentic Workflows]] | Agent Workflow 编译与 Actions 运行平台 | Markdown/Frontmatter、Compiler、Safe Outputs、Sandbox、复杂编排与 CI/CD 实践 | GitHub 全产品线、通用 Harness 模型能力比较 | complete |
+| [[50_deepdives/cicd-self-healing/README|CI/CD 问题自愈]] | 端到端问题恢复场景 | 失败分类、诊断、修复、独立验证、受控执行、观察、回退与学习闭环 | 通用传统 CI/CD、单一模型能力比较 | complete |
+| [[50_deepdives/harness-company/README|Harness 公司]] | 单一厂商/平台 | Harness Inc. 产品组合、Agent 应用、Knowledge Graph/MCP/Pipeline 原理、隔离与委托权限、案例、成熟度和采购落地 | 通用 Agent Harness 工程方法、所有 Agent Runtime 横向比较 | complete |
 | Skill / Rules / Hooks | 知识与行为资产 | 组织知识封装、发现与加载、版本、测试、供应链和生命周期 | Harness 推理架构、底层 CLI 实现 | proposed |
-| Agent / Harness / Runtime | 推理与运行主体 | 上下文、规划、工具循环、权限、沙箱、审批、评测和 Claude Code/Codex/OpenCode 等实现 | 单个协议或知识包的完整标准研究 | proposed |
+| 通用 Agent Harness / Runtime | 推理与运行主体 | 上下文、规划、工具循环、权限、沙箱、审批、评测和 Claude Code/Codex/OpenCode 等实现 | Harness Inc. 公司产品线、单个协议或知识包的完整标准研究 | proposed |
 
 CLI 与 MCP 仅在选型边界发生交叉，统一比较见 [[50_deepdives/cli-vs-mcp-decision-guide|CLI 与 MCP 可替代性决策指南]]，不将两者合并为一个专题。规范案例仍保存在 [[05_case_library/README|案例库]]，可被多个独立专题引用。
 
@@ -70,6 +73,13 @@ flowchart LR
 ```
 
 专题完成不是“写完一篇文章”，而是以下条件同时成立：关键 Claim 能下钻到证据、案例与实验不混写、重要反例已处理、结论置信度明确、需要回流的上层报告已经更新。
+
+## 增量洞察回流
+
+- 补充洞察默认进入最相关的专题目录，并按性质更新 `20_evidence-map.md`、`30_case-map.md`、`40_labs/`、`50_findings.md`、`60_playbook.md` 或 `90_report.md`，不能只在 PPT 中维护。
+- 新的一手证据先在 [[00_sources/README|信息源层]]保留 Source Brief 或可追溯入口，专题层负责 Claim、反例、置信度和企业含义。
+- 没有匹配专题且问题尚未形成完整研究范围时，先在本索引登记为 `proposed`；不要把不同研究维度强行合并。
+- 每次专题更新后评估其演示影响。如果它改变页面主张、作业流、产品状态、自治或成熟度、控制边界、企业启示或来源映射，可以同步到 [[80_presentations/README|演示文稿层]]；否则保留在 Deep Dive 即可。
 
 ## 规范
 

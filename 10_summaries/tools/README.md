@@ -7,7 +7,7 @@ tags:
   - research/agentic-cicd
   - synthesis/tools
 status: complete
-as_of: 2026-07-15
+as_of: 2026-07-16
 ---
 
 # Agentic CI/CD 的 Agent 工具与技术栈
@@ -66,6 +66,8 @@ GitHub Remote MCP 已采用 OAuth 2.1/PKCE、短期凭据和集中策略；Cloud
 
 采用 MCP 时应默认：收窄 Toolset、读权限优先、禁止 Token 透传、绑定目标受众、高危动作显式扩权，并把所有调用纳入审计。参考 [[00_sources/briefs/2025-github-remote-mcp-server-ga|GitHub Remote MCP]]、[[00_sources/briefs/2026-cloudsmith-mcp-artifact-management|Cloudsmith MCP]]、[[00_sources/briefs/2026-terraform-mcp-server|Terraform MCP]]。
 
+Anthropic Tool Search 与 Claude Code 展示了大规模 MCP Tool Catalog 的另一条演进路线：初始上下文只保留搜索工具和少数高频 Tool，其余 Schema 通过 Regex/BM25 检索后以 `tool_reference` 按需展开。这能降低“所有 Tool Definition 一次性进入 Prompt”的上下文税，但 `defer_loading`、`tool_reference` 是 Anthropic Host/API 层能力，不是 MCP Core；请求仍携带完整定义，搜索也会增加一次延迟。更重要的是，延迟加载只控制模型何时看到 Tool，不控制 Tool 是否有权执行。企业应先按任务身份与 Policy 裁剪 Enabled Toolset，再对低风险长尾 Tool 做渐进式加载；完整机制、CI/CD 分层策略与实验指标见 [[50_deepdives/mcp-protocol/90_report#三、Anthropic MCP 渐进式加载：Tool Search 与 Progressive Disclosure|MCP 渐进式加载分析]]。
+
 截至 2026-07-15，当前正式规范仍为 2025-11-25；2026-07-28 无状态核心和扩展框架仍是 Release Candidate。协议能力、企业授权扩展、Registry/Conformance 状态及迁移判断见 [[50_deepdives/mcp-protocol/90_report|MCP 深度报告]]。
 
 ## 2. CLI、API 与 SDK：Agent 的确定性执行底座
@@ -108,6 +110,9 @@ Skill 生态也带来新的供应链问题：恶意或被篡改的 Skill 可以�
 
 ## 4. Agent Harness：Claude Code、Codex CLI、OpenCode、Gemini CLI 与 OpenHands
 
+> [!important] 术语边界
+> 本节的 `Agent Harness` 是通用技术类别，指模型、上下文、工具循环和工作区的运行外壳；它不是 Harness Inc. 公司。Harness 公司的产品组合属于 [[20_summaries/companies/README#4. Harness：从 Pipeline 平台到 Agent 控制面|Company 层]]，其 Worker Agent Runtime、Knowledge Graph、MCP Gateway 和委托权限可以作为 Tool Stack 的平台原生实现案例，但不能与 Claude Code/OpenCode 这一类名称直接并列比较。
+
 Agent Harness 是把模型、上下文、工具循环、权限和工作区组织成可执行系统的“代理外壳”。比较这类工具时，不应只看模型基准分数，而应关注能否无交互运行、权限如何表达、是否支持 MCP/Skills、能否进入 Runner、日志是否可审计，以及模型和部署方式是否可替换。
 
 | Harness / Runtime | 主要定位 | 2026 年值得关注的能力 | 更适合的企业路径 | 主要边界 |
@@ -122,6 +127,8 @@ Agent Harness 是把模型、上下文、工具循环、权限和工作区组织
 
 另有 GitHub Coding Agent、GitLab Duo Agent Platform 等“平台原生 Agent”。它们的优势是天然拥有仓库、Issue、PR、Pipeline 和权限上下文，但模型与执行环境的可替换性通常低于独立 Harness。两类产品会长期共存：独立 Harness 负责跨系统任务，平台原生 Agent 负责在自有数据面中形成短闭环。
 
+Harness Inc. 是平台原生路线中结构较完整的案例：Knowledge Graph/HQL 负责已建模的跨模块查询，MCP/CLI/Skills 负责外部接口，Worker Agent 作为 Pipeline Step 运行，Scoped Token、Tool Intersection、OPA/Approval 和外部 Oracle 限制动作。这里的关键不是再增加一种协议，而是把上下文、行动、执行承载和治理放在同一控制面中。详见 [[50_deepdives/harness-company/90_report|Harness 公司深度报告]]。
+
 ## 5. 从终端 Agent 到 CI/CD Agent：执行承载的四种形态
 
 同一个 Harness 放在不同执行环境中，其风险和自治上限完全不同。
@@ -134,6 +141,8 @@ Agent Harness 是把模型、上下文、工具循环、权限和工作区组织
 | 常驻 Agent Service | 事件流、告警、计划任务 | 跨仓治理、运行调查、持续维护 | 可连接长周期上下文 | 多租户隔离、短期身份、熔断、审批和持续评测 |
 
 Claude Code Action、GitHub Agentic Workflows、Harness Worker Agent、Octopus Agent Step 与 Jenkins AI Agent Plugin 都是在把通用 Agent 变成可审计的流水线节点。决定其是否能进入生产的，不是 Agent 名称，而是它是否遵守 Runner 隔离、最小权限、受控输出和原有门禁。参考 [[00_sources/briefs/2026-claude-code-github-action|Claude Code Action]]、[[00_sources/briefs/2026-github-gh-aw-open-source|GitHub Agentic Workflows]]、[[00_sources/briefs/2026-harness-worker-agents|Harness Worker Agents]]、[[00_sources/briefs/2026-octopus-agentic-deployment|Octopus Agent Step]]。
+
+其中 GitHub Agentic Workflows 提供了最完整的开源“Agent Workflow Compiler”样本：YAML Frontmatter 声明 Trigger、Tool、Network、Budget 和 Safe Output，自然语言正文描述任务，`gh aw compile` 将其硬化为标准 Actions Lock File。运行时将只读 Agent、Threat Detection 与持写权限的 Safe Output 拆成独立 Job，并用 Artifact 传递待执行动作。其技术原理、CLI 使用、多仓编排和 CI/发布场景见 [[50_deepdives/github-agentic-workflows/90_report|专题报告]]。
 
 ## 6. 治理控制面：工具能力不等于行动权限
 
@@ -161,8 +170,11 @@ Uber 的短期单跳 Token 与 Actor Chain、Google Cloud 的 SPIFFE Agent Ident
 | IaC 与部署变更 | Harness + 发布 Skill + Terraform CLI/MCP + Plan + Approval | 开放式规划与确定性部署边界分离 |
 | 跨平台 DevOps 自助 | Provider-agnostic Harness + 多个窄 Toolset MCP + Gateway | 降低客户端绑定，统一身份、策略和审计 |
 | 生产运行与恢复 | 专业 SRE Agent + 实时观测工具 + 预批准 Runbook + 熔断 | 只在低爆炸半径和可回滚动作上提高自治 |
+| CI/CD 问题自愈 | Evidence API + 分类器 + Harness + CLI/MCP + 隔离 Runner + 外部 Oracle + PR/Runbook | “诊断—修复—验证—执行—回退”跨越多个工具层，不能由单一 Agent 或协议替代 |
 
 这里没有单一“最佳工具”。如果现有 CLI 足够稳定，应先让 Agent 使用 CLI；需要跨客户端共享和集中治理时再增加 MCP；需要沉淀组织做法时增加 Skills/Rules；需要持续、异步或事件驱动执行时选择合适 Harness 和运行承载；进入生产前必须补齐身份、沙箱、审计和评测。
+
+自愈尤其能说明 Tool 层与 Stage 层的区别：Stage 层描述 CI、部署或生产哪里失败；Tool 层则组合 Evidence Contract、Failure Classifier、Agent Harness、CLI/MCP、Runner、Policy、Oracle、Circuit Breaker 和 Audit。完整的 SH0—SH4 分级、失败路由和快慢双环见 [[50_deepdives/cicd-self-healing/90_report|CI/CD 问题自愈深度报告]]。
 
 ## 8. 选型检查表
 
@@ -187,3 +199,5 @@ Uber 的短期单跳 Token 与 Actor Chain、Google Cloud 的 SPIFFE Agent Ident
 - [[50_deepdives/cli-agent-interface/README|CLI 专题]]
 - [[50_deepdives/mcp-protocol/README|MCP 专题]]
 - [[50_deepdives/cli-anything/README|CLI-Anything 专题]]
+- [[50_deepdives/cicd-self-healing/README|CI/CD 问题自愈专题]]
+- [[50_deepdives/harness-company/README|Harness 公司专题]]

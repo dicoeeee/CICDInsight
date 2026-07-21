@@ -16,9 +16,10 @@ as_of: 2026-07-15
 | GitHub Toolset 精简 | Tool 配置、项目 Tool 合并、Scope 过滤 | 2025-12—2026-01 持续演进 | 23k/50% 是厂商自报的特定上下文结果 | Tool 数量本身是质量和成本问题 |
 | GitHub internal registry/allowlist | 企业批准目录和 Server 控制 | 2025-11 Public Preview；2026-02 控制平面部分 GA | MCP allowlist 仍为 Preview；本地执行治理较弱 | Registry 必须与身份、执行位置和签名共同工作 |
 | Official MCP Registry | Namespace 所有权验证、元数据、发布资产 | Preview | 目录出现不等于企业批准或安全 | 内部 Catalog 应叠加 Owner、风险和撤回状态 |
+| Anthropic Tool Search / Claude Code | `defer_loading`、Regex/BM25 搜索、`tool_reference` 按需展开 | Tool Search API 为 GA；MCP Connector 仍为 Beta；Claude Code 默认按需加载 | 属于 Anthropic Host/API 层，不是 MCP Core；优化上下文而非权限，并增加搜索延迟 | 先按任务身份裁剪 Enabled Toolset，再延迟加载低风险长尾 Tool |
 | Copilot CLI MCP 安装 | 在 Agent CLI 内搜索、安装和启停 MCP | 2026-06 GA 界面能力 | 便捷安装扩大本地代码执行与供应链风险 | 用户体验与企业治理需要同步设计 |
 | Copilot Extensions → MCP | GitHub 弃用旧 GitHub Apps 扩展路线 | 2025-09 官方迁移信号 | 只代表 GitHub 生态选择 | MCP 已成为主流 Agent 工具互操作方向之一 |
 
 ## 共性判断
 
-行业采用正在从“能否连接 Server”迁移到“哪些 Tool 对哪些任务身份可见、如何减少上下文、如何远程升级和撤回”。这说明 MCP 的竞争重点已经由连接协议上移到运营控制面。
+行业采用正在从“能否连接 Server”迁移到“哪些 Tool 对哪些任务身份可用、哪些 Schema 需要进入当前上下文、如何远程升级和撤回”。Anthropic 的实现进一步表明，“可执行 Toolset”与“当前可见 Tool Definition”正在成为两个独立控制面；MCP 的竞争重点已经由连接协议上移到检索质量与运营治理。

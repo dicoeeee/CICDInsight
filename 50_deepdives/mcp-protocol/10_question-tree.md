@@ -32,6 +32,9 @@ as_of: 2026-07-15
 ## Q4：企业扩展会遇到什么瓶颈
 
 - Tool 数量如何影响上下文、选择和权限？
+- 哪些 Tool 应常驻、按需检索或默认禁用？上下文可见性与执行授权如何分离？
+- Tool Search 的 Recall、搜索延迟、Prompt Cache 和 Description 投毒如何测量？
+- 延迟加载 Tool Definition 后，日志、SBOM 和测试结果的返回体如何继续裁剪？
 - Registry、Allowlist、Gateway、Owner 和撤回如何组合？
 - 本地 Server 与远程 Server 的供应链和身份风险有何不同？
 

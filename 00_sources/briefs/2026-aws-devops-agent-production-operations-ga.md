@@ -19,8 +19,7 @@ company_topics:
   - AWS
 autonomy_levels:
   - L1
-  - L3
-  - L4
+  - L2
 tags:
   - research/agentic-cicd
   - evidence/source-brief
@@ -34,6 +33,7 @@ tags:
 - 组织或项目：AWS
 - 发布日期：2026-03-31
 - 链接：[AWS What's New](https://aws.amazon.com/about-aws/whats-new/2026/03/aws-devops-agent-generally-available/)
+- 补充架构：[DevOps Agent + Kiro CLI 自动事件修复](https://aws.amazon.com/blogs/devops/automated-incident-remediation-with-aws-devops-agent-and-kiro-cli/)
 - 来源类型：官方发布公告
 - 能力状态：生产运维能力 GA
 
@@ -46,13 +46,14 @@ AWS 以应用拓扑为核心，把日志、可观测数据、代码、部署和�
 - AWS DevOps Agent 于 2026-03-31 从预览进入 GA。
 - 可调查 AWS、多云和本地环境中的应用事件，并使用可观测工具、Runbook、代码仓和 CI/CD 数据。
 - 能自动分诊事件、给出根因和缓解步骤，并从历史事件中提出预防性建议。
+- 官方 2026 年架构说明明确：DevOps Agent 生成 Mitigation Plan，但不代替操作员执行 Remediation；其写能力限于 Ticket 和 Support Case。
 - GA 增加自定义技能、跨环境调查、图表和报告等企业能力。
 
 ## CI/CD 相关性
 
 - 涉及阶段：发布后验证、事件响应、恢复和预防改进。
 - 工具类别：AIOps、SRE Agent、环境拓扑与可观测上下文。
-- 自主等级：L1、L3，部分受控调查与处理接近 L4。
+- 自主等级：L1—L2；自动启动调查不等于执行生产恢复。
 - 涉及角色：SRE、运维、平台工程师、开发者和事件指挥者。
 
 ## 对洞察的价值
@@ -63,8 +64,8 @@ AWS 以应用拓扑为核心，把日志、可观测数据、代码、部署和�
 
 - AWS 宣称可把 MTTR 从小时降到分钟，但公告没有提供可独立复核的跨客户实验设计。
 - 生产运维 GA 与发布管理预览必须分开描述。
+- 调查/建议能力应与客户另行编排 EventBridge、Lambda、SQS、CodeBuild、Kiro CLI，把 Mitigation Plan 转成代码 PR 并在人审后发布的组合方案分开描述。
 
 ## 可引用判断
 
-- 发布后 Agent 的能力上限取决于能否建立代码、部署、拓扑、遥测和历史事件之间的因果上下文。
-
+- 发布后 Agent 的调查上限取决于能否建立代码、部署、拓扑、遥测和历史事件之间的因果上下文；执行上限则由独立 Runbook、身份和审批控制。

@@ -5,7 +5,7 @@ organization: CircleCI
 source_type: official-product-blog
 published: 2026-01-28
 verified: 2026-07-14
-availability: ga
+availability: beta
 confidence: medium
 geography:
   - global
@@ -36,7 +36,7 @@ tags:
 - 发布日期：2026-01-28
 - 链接：[CircleCI Blog](https://circleci.com/blog/fix-bugs-faster-with-circlecis-chunk-ai-agent/)
 - 来源类型：官方产品实践文章
-- 能力状态：产品可配置使用；具体套餐和区域待核验
+- 能力状态：CircleCI 官方文档标记为 Beta；可配置使用，GA 后将成为付费能力
 
 ## 一句话结论
 
@@ -69,4 +69,3 @@ Chunk 把流水线历史、测试结果和失败模式作为 Agent 专有上下�
 ## 可引用判断
 
 - CI Agent 的核心竞争力之一是能否利用长期构建和测试历史，而非只处理一次失败输出。
-

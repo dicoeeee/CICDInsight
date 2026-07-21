@@ -4,7 +4,7 @@ tags:
   - research/agentic-cicd
   - synthesis/crosscutting
 status: complete
-as_of: 2026-07-14
+as_of: 2026-07-16
 ---
 
 # Agentic CI/CD 横向变化总结
@@ -20,6 +20,8 @@ as_of: 2026-07-14
 
 GitHub/GitLab 依赖全生命周期代码与 Pipeline 数据，AWS/Datadog 等依赖云拓扑与遥测，Atlassian 依赖工作项与知识上下文，JFrog/Snyk/Tricentis 等专业工具提供领域事实。由此产生新的平台竞争：谁能成为 Agent 的可信上下文入口，而不仅是谁拥有最终 UI。
 
+Harness 将这场竞争具体化为分层数据访问：已建模的跨 Pipeline、Service、Deployment、Security 查询优先走 Software Delivery Knowledge Graph/HQL，大日志先定位再裁剪，外部长尾系统走 MCP，写动作走受治理 Tool。这说明“上下文控制面”不是把所有 API 返回塞进 Prompt，而是显式管理 Schema、关系、权限、聚合和数据新鲜度。详见 [[50_deepdives/harness-company/90_report#5.1 Knowledge Graph + HQL：先建模，再让模型查询|Harness Knowledge Graph 分析]]。
+
 ### 2. 从固定 API 到 Agent Tool Layer
 
 MCP、Skills、Actions 和 Pipeline Agent Step 正把平台能力包装为 Agent 可发现、调用和组合的工具。CLI-Anything 又增加了“接口工厂”路径：对有源码或后端 API、但缺少 Agent 友好命令面的软件，生成结构化 CLI、测试、文档和 `SKILL.md`，再供不同 Harness 调用。平台能力建设因此从“登记已有工具”扩展到“识别接口缺口、生成或手工建设接口、验证后入册”。
@@ -27,6 +29,8 @@ MCP、Skills、Actions 和 Pipeline Agent Step 正把平台能力包装为 Agent
 工具接口需要比普通 API 多一层治理元数据：用途说明、输入风险、只读/写范围、前置条件、批准策略、成本、速率限制和结果证据。自动生成的 CLI/Skill 还要记录来源版本、生成模型/流程、测试覆盖、权限声明和制品签名，避免把长尾软件的隐含风险批量放大。
 
 工具数量不是目标。一个拥有数百个宽权限工具的 Agent 反而更难评测和治理。企业应提供经过审核的最小能力目录，并把生产动作与只读调查分离。
+
+Harness MCP 的少量通用 Verb + Resource Registry 是另一种渐进式能力面：`describe/schema` 按需加载领域字段，Toolset 先做粗裁剪，Registry 负责 API 细节。它减少 Tool Schema 的线性膨胀，但安全仍来自 RBAC、Scoped Token、MCP Gateway Tool Intersection 和外部 Policy，而不是 Tool Discovery 本身。参考 [[00_sources/briefs/2026-harness-ai-platform|Harness AI Platform]] 与 [[00_sources/briefs/2026-harness-worker-agent-security|Worker Agent 安全与身份]]。
 
 ### 3. 从 Pipeline Runner 到 Agent Feedback Infrastructure
 
@@ -39,6 +43,8 @@ MCP、Skills、Actions 和 Pipeline Agent Step 正把平台能力包装为 Agent
 GitHub Agentic Workflows 把自然语言 Markdown 编译为 Actions，Spacelift 将意图转为受同一 Policy 控制的部署，Harness 让 Agent 创建或修改 Pipeline。这代表一种新抽象：人描述目标与约束，Agent 生成执行计划，平台将其编译或映射到确定性执行对象。
 
 这个抽象只有在生成物可查看、可版本化、可复现、可审批时才安全。纯运行时自由发挥会削弱审计与变更控制。
+
+`gh-aw` 进一步说明“意图编译”不只是生成 YAML：Compiler 同时构造 Pre-activation、只读 Agent、Threat Detection、Safe Output 和 Conclusion 等权限阶段，固定 Action/Import，并将 Agent 请求的写动作先缓冲为 Artifact。这使平台评审对象从单一 Prompt 扩展为 Source、Lock、Job Graph、Tool/Network Policy 和 Safe Output Schema。复杂任务再通过 DeterministicOps 与 Orchestrator/Worker 拆分。详见 [[50_deepdives/github-agentic-workflows/90_report|GitHub Agentic Workflows 深度报告]]。
 
 ### 5. 新增 Agent 控制面
 
@@ -54,6 +60,8 @@ GitHub Agentic Workflows 把自然语言 Markdown 编译为 Actions，Spacelift 
 - Token、Runner、重试和外部服务成本治理。
 
 NIST 概念稿给出原则，Uber 的生产架构、Google Cloud Agent Identity 和 OpenID AuthZEN 草案则把原则进一步具体化：独立 Agent 身份、短期单跳凭据、完整委托链、网关策略与执行时重新授权。Agent 不能继续使用共享机器人账号，也不能把批准状态只保存在 Prompt 中。参考 [[00_sources/briefs/2026-uber-agent-identity|Uber Agent Identity]]、[[00_sources/briefs/2026-google-cloud-agent-identity|Google Cloud Agent Identity]] 与 [[00_sources/briefs/2026-openid-authzen-agent-authorization|OpenID AuthZEN]]。
+
+Harness 2026-07 的 Worker Agent 设计增加了一个可落地的产品样本：存在触发 Principal 时，单次 Token 只包含 `parent RBAC ∩ declared grant`，第三方工具再取 `connector.allowedTools ∩ agent.allowedTools`，每次调用记录 Agent、Run 与 Principal。与此同时，Image/Process/Secret/Network 四层隔离假设 Agent 已被攻陷。它补足了“身份可追责”和“运行时 Blast Radius”两个不同问题，但当前仍是第一方证据，且部分权限依赖 Feature Flag；Webhook/Schedule 等事件 Trigger 目前没有可继承的触发人 scoped token，必须另建身份与批准路径。
 
 ## 二、工作流程的变化
 
@@ -87,6 +95,8 @@ flowchart LR
 
 Agent 可以在 PR 前后、构建、发布和生产运行中持续吸收反馈，形成“发现 → 修复 → 验证 → 再观察”的循环。风险是无限重试、为通过测试而过拟合、成本失控和反复扰动生产。因此必须设置最大轮次、成本、时间、动作次数和异常停止条件。
 
+更稳健的实践是快慢双环：确定性快环只处理可识别的瞬态故障、重调度、停止或回退；Agent 慢环负责复现、根因与 Fix-forward。两者共享 Incident Lineage，但分开权限、预算和停止条件。若不先分类，Agent 可能对网络 503 修改业务代码，或用无限重跑掩盖真实缺陷。详见 [[50_deepdives/cicd-self-healing/90_report|CI/CD 问题自愈专题]]。
+
 ### 5. 从单 Agent 演示到专业 Agent 协同
 
 Qodo 的专业 Reviewer、AWS 的多 Agent 根因调查、GitLab Flow 和早期多 Agent 平台表明任务会按角色拆分。但更多 Agent 不天然更好：上下文重复、冲突、延迟和责任模糊会增加。Harness 从五个子 Agent 收敛为一个统一 Agent 是反向证据。企业应以任务边界和评测结果决定拆分，而非追求多 Agent 数量。
@@ -98,6 +108,8 @@ Qodo 的专业 Reviewer、AWS 的多 Agent 根因调查、GitLab Flow 和早期�
 - **Runbook/Approval**：适合生产动作、渐进发布和恢复。
 
 这三者能让 Agent 使用现有工程控制，而不是另建一套不可审计的“AI 流程”。
+
+Harness 的产品组合正好对应这三类边界：Code Quality/AutoFix 主要通过 PR；Worker Agent 进入 Pipeline；AI SRE 将动态 Scribe/RCA 与预定义 Runbook 分开。其经验不是让所有步骤 Agent 化，而是把概率推理嵌入可审批、可复验、可回退的确定性结构。
 
 ## 三、人员角色与能力的变化
 
@@ -140,6 +152,7 @@ Qodo 的专业 Reviewer、AWS 的多 Agent 根因调查、GitLab Flow 和早期�
 5. **高风险职责分离**：同一 Agent 不应同时修改规则、批准变更、执行和解释结果。
 6. **输入不可信**：代码、Issue、日志、网页、工具描述都可能包含间接提示注入。
 7. **可停止、可回退、可接管**：任何长循环都有预算和停止条件。
+8. **Oracle 独立且不可自改**：Agent 不得通过 Skip、Ignore、降阈值或替换测试集制造“伪绿灯”。
 
 ### 主要新增风险
 
@@ -166,11 +179,12 @@ METR 的早期研究提示 Monitor 与执行 Agent 能力差距会影响可监�
 - 节省的理论工时；
 - 开源 Star。
 
-### 建议四层指标
+### 建议五层指标
 
 | 层级 | 指标示例 | 回答的问题 |
 |---|---|---|
 | 任务质量 | 成功率、回归率、错误修复、人工拒绝、保留率 | Agent 是否真正完成任务？ |
+| 自愈质量 | Verified Repair Yield、无效重试、7/30 日复发、Gate 弱化、接管与回退成功 | 问题是否真正恢复且没有被掩盖？ |
 | 流程效果 | Lead Time、反馈时延、MTTR、变更失败率、评审负荷 | 是否改善交付系统？ |
 | 治理安全 | 越权、策略拦截、审计完整率、接管率、回滚率 | 是否在边界内运行？ |
 | 经济性 | 每成功任务 Token/Runner/人时、重试成本、平台成本 | 是否值得规模化？ |
@@ -218,3 +232,5 @@ M4 不是“所有 CI/CD 无人化”，而是企业能在多个明确场景中�
 - [[20_summaries/companies/README|公司维度总结]]
 - [[30_summaries/stages/README|阶段维度总结]]
 - [[00_sources/agentic-cicd-source-landscape|信息源景观]]
+- [[50_deepdives/cicd-self-healing/README|CI/CD 问题自愈专题]]
+- [[50_deepdives/harness-company/README|Harness 公司专题]]

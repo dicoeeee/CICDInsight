@@ -33,3 +33,15 @@ OAuth、短期 Token、集中策略、Registry 和 Allowlist 在远程多租户�
 ## F6：2026-07 RC 暴露了早期架构的规模化压力
 
 无状态核心、标准 HTTP 基础设施和扩展框架说明会话、负载均衡、演进兼容和能力膨胀已成为现实问题。由于正式规范尚未发布，企业现在应做迁移准备而非立即以 RC 为生产基线。
+
+## F7：渐进式加载属于上下文平面，不属于权限平面
+
+Anthropic `defer_loading` 决定 Tool Definition 何时进入 Claude 上下文，`enabled`/Allowlist/Policy 决定 Tool 是否存在并可执行。生产系统必须先裁剪 Enabled Toolset，再在低风险长尾能力中做搜索和延迟加载。
+
+## F8：Tool Catalog 正转变为可检索索引
+
+Tool 的 Name、Description、参数名和 Server Instructions 变成检索字段。接口设计不仅要“对人可读、对模型可调用”，还要具备稳定命名空间、任务关键词、风险元数据和可测试的 Search Recall。
+
+## F9：Definition 优化与 Result 优化必须分开
+
+Tool Search 减少定义 Token，却不解决日志、SBOM、测试结果和制品元数据的返回体膨胀。后者需要分页、字段投影、Resource Link、执行环境聚合和持久化产物。

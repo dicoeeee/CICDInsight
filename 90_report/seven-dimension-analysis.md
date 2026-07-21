@@ -8,7 +8,7 @@ tags:
   - report
   - synthesis/multidimensional
 status: complete
-as_of: 2026-07-14
+as_of: 2026-07-16
 audience:
   - CTO
   - 研发效能负责人
@@ -17,9 +17,9 @@ audience:
 
 # Agentic CI/CD 七维分析汇总报告
 
-**观察窗口：** 2025-07-01—2026-07-14，重点关注 2026 年
+**观察窗口：** 2025-07-01—2026-07-16，重点关注 2026 年
 **研究范围：** 编码完成后的代码评审、检查与门禁、构建出包、制品与版本、部署发布、发布后验证与恢复
-**证据基础：** [[00_sources/agentic-cicd-source-landscape|81 条核心一手资料]]、[[00_sources/README|62 个深度 Source Brief]]
+**证据基础：** [[00_sources/agentic-cicd-source-landscape|81 条核心一手资料]]、[[00_sources/README|68 个深度 Source Brief]]
 
 > [!abstract] 总结论
 > 2026 年 Agent 已经进入 CI/CD 的分析、变更生成和受控执行层，但行业成熟单位不是“一个平台”或“一个模型”，而是一个可以被独立评测和授权的**任务场景**。企业应以 Scenario 为连接键，同时判断它处于哪个 Stage、由哪些 Company 提供、依赖什么 Tool Stack、是否具有成熟度和价值证据、在什么运行架构与控制边界中执行，以及人员和流程如何承接责任。
@@ -32,7 +32,7 @@ audience:
 |---|---|---|---|
 | 描述 | Stage | Agent 改变了 CI/CD 的哪个环节？ | 评审、CI 修复和只读事故调查领先，关键发布自治最慢 |
 | 描述 | Company | 谁在提供和组合能力？ | 全生命周期平台争夺上下文，专业厂商提供 Oracle，云厂商从运行态向发布延伸 |
-| 描述 | Tool Stack | Agent 靠什么理解、扩展和执行？ | Harness、Skills、MCP/CLI、Runner 与控制面是组合关系，不是替代关系 |
+| 描述 | Tool Stack | Agent 靠什么理解、扩展和执行？ | Agent Harness、Skills、MCP/CLI、Runner 与控制面是组合关系，不是替代关系 |
 | 决策 | Scenario | Agent 实际完成什么端到端任务？ | 场景是落地、评测、授权和核算价值的最小单元 |
 | 决策 | 成熟度与价值 | 是否可靠、是否值得规模化？ | 必须联合判断自治、生产证据、质量、风险和单位成功成本 |
 | 决策 | 运行架构与控制边界 | 如何连接、在哪里运行、如何授权和验证？ | 动态推理必须运行在确定性执行、外部 Oracle 和可追责边界之内 |
@@ -80,7 +80,14 @@ flowchart LR
 
 大型公司内部实践比产品演示更一致：Microsoft、Spotify、Uber、Meta、Google SRE、WhatsApp 和 Atlassian 都没有一次性替换全部工具，而是通过 PR、Pipeline、MCP 或 Runbook 接入 Agent，并保留人工接管和确定性验证。竞争优势正由“模型更强”转向“拥有高质量上下文、可信动作接口和可证明结果”。完整分析见 [[20_summaries/companies/README|公司维度总结]]。
 
+GitHub Agentic Workflows 是这一方向最可检查的开源样本：把自然语言源文件编译成 Actions Lock，将只读 Agent、检测和写入拆为独立 Job，并用 Safe Outputs 表达类型化副作用；多仓复杂度则通过 Orchestrator/Worker 与 CentralRepoOps 拆分。其当前仍为 Public Preview，完整机制和实践见 [[50_deepdives/github-agentic-workflows/90_report|专题报告]]。
+
+Harness 公司是另一种平台原生样本：DevOps Agent 设计和操作交付对象，Worker Agent 进入 Pipeline，Knowledge Graph/HQL 处理结构化跨模块上下文，MCP/CLI/Skills 承担外部接口，Test/Security/SRE 专项 Agent 提供领域闭环，再由 RBAC、OPA、Approval、Scoped Token、隔离 Runtime 和 Audit 控制行动。其通用 Worker Agent 刚进入 GA，公开量化效果仍少，故近期定位仍是 L2 与受限 L3。完整分析见 [[50_deepdives/harness-company/90_report|Harness 公司专题]]。
+
 ## 四、Tool Stack：五层组合，而不是单项技术选边
+
+> [!important] 术语说明
+> 本节的 `Agent Harness` 是通用技术类别，不是 Harness Inc. 公司；后者属于 Company 维度。二者可以在一个场景中组合，但不能作为同一分类项比较。
 
 | 技术层 | 主要作用 | 代表形态 | 关键判断 |
 |---|---|---|---|
@@ -112,14 +119,14 @@ Agent Harness
 |---|---|---|---|---|---|
 | Agentic Code Review | 1—3 | GitHub、GitLab、Qodo、Atlassian、阿里云 | Repo Context + Rules/Skill + Reviewer/Judge + PR | L2 | 最成熟；适合规模化，但要管理误报和评审负荷 |
 | 安全与依赖修复 | 2—5 | Snyk、Sonar、Semgrep、GitHub、JFrog | Analyzer/SCA + Agent Fix + Test/Scan Oracle + PR | L2，局部 L3 | 价值高；适合高频漏洞和版本适配，不能自动接受所有修复 |
-| CI 失败诊断与自愈 | 3—4 | CircleCI、Harness、GitLab、GitHub、Buildkite | Logs/History + Harness + CLI/MCP + Runner + PR | L2—L3 | 高优先级；反馈快且容易验证，受 Runner 成本和可复现性限制 |
+| CI 失败诊断与自愈 | 3—4 | CircleCI、Harness、GitLab、GitHub、Nx、Buildkite | Evidence + 分类器 + Harness + CLI/MCP + Runner + 外部 Oracle + PR | L2—L3；PR 微域局部 L4 | 高优先级；必须区分诊断/PR/验证写回/闭环，受 Runner、可复现性和 Oracle 质量限制；见 [[50_deepdives/cicd-self-healing/90_report|专题]] |
 | 测试生成与动态验证 | 3—4 | Tricentis、Harness、CircleCI、GitHub | Change Context + Test Agent + Deterministic Test Engine | 沙箱内 L3 | 中高价值；长期零回归和测试有效性仍需持续评测 |
 | 供应链与版本维护 | 2—5 | JFrog、Cloudsmith、Sonatype、GitHub | Package Intelligence + MCP/CLI + SBOM/Policy + PR | L1—L2 | 信息和修复价值明确；签名、晋级和版本授权仍保守 |
 | 跨仓维护与 Fix-forward | 1—5、8→1 | Spotify、Meta、Bloomberg、GitHub | Service Catalog + Repo Agent + CI + PR | L2 | 对大规模平台团队价值高；依赖机器可读标准路径和所有权数据 |
 | 遗留/内部工具 Agent 化 | 3—8 | HKUDS / CLI-Anything、企业内部平台 | Source/API + Interface Generator + CLI/Skill + Tests + Runner | 生成 L2；执行上限按权限另定 | 接入长尾工具潜力高；开源活跃但企业 CI/CD 效果证据仍薄，需逐工具验收 |
 | Pipeline/IaC/部署变更 | 4、6 | GitHub、Harness、Spacelift、Terraform、Akuity、Octopus | Skill + CLI/MCP + Plan + Policy + Approval | L2—L3 | 适合受控试点；必须限制环境、凭据和 Blast Radius |
-| Release Readiness 与变更管理 | 5—7 | AWS、ServiceNow、Octopus | Cross-repo Context + Evidence Pack + Approval | L1—L3 | 信息汇总价值高，公开生产执行证据仍少 |
-| 事故调查与受限恢复 | 8、8→1 | AWS、Azure、Datadog、CloudQ、HolmesGPT、Meta | Telemetry/Topology + SRE Agent + Runbook + SLO | 分析 L1—L2；动作 L3，局部 L4 | 只读调查已经成熟；自动恢复仅适合预批准低风险动作 |
+| Release Readiness 与变更管理 | 5—7 | AWS、Harness、ServiceNow、Octopus | Cross-repo Context + Evidence Pack + Approval | L1—L3 | 信息汇总价值高，公开生产执行证据仍少 |
+| 事故调查与受限恢复 | 8、8→1 | AWS、Harness、Azure、Datadog、CloudQ、HolmesGPT、Meta | Telemetry/Topology + SRE Agent + Runbook + SLO | 分析 L1—L2；动作 L3，局部 L4 | 只读调查已经成熟；自动恢复仅适合预批准低风险动作 |
 
 ### 场景优先级
 
@@ -209,6 +216,8 @@ flowchart TB
 
 架构底线是：Agent 可以规划、解释和修复，但不能同时修改成功标准、批准自己的计划、执行高风险动作并解释结果。参考 [[00_sources/briefs/2026-uber-agent-identity|Uber Agent Identity]]、[[00_sources/briefs/2026-google-cloud-agent-identity|Google Cloud Agent Identity]]、[[00_sources/briefs/2026-openid-authzen-agent-authorization|OpenID AuthZEN]]。
 
+Harness Worker Agent 提供了一个可供验证的厂商实现：运行时把 Agent 当作已被攻陷的工作负载，使用 Image/Process/Secret/Network 四层隔离；存在触发 Principal 时，权限是其 RBAC 与 Agent Grant 的短期交集，第三方 MCP Tool 再做 Connector/Agent Allowlist 交集。它证明“委托身份”和“隔离执行”可以落到 Pipeline 产品，但当前证据主要来自厂商技术文，且部分权限受 Feature Flag 影响；事件 Trigger Run 当前不能继承触发人 scoped token，需要单独的身份与审批路径。参考 [[00_sources/briefs/2026-harness-worker-agent-security|Harness Worker Agent 安全与身份]]。
+
 ## 八、组织与工作流程：从执行步骤转向管理意图、证据和异常
 
 ### 角色变化
@@ -245,7 +254,8 @@ flowchart TB
 4. **全生命周期平台与专业 Oracle 会组合共存。** GitHub/GitLab/Harness 提供上下文和流程骨架，安全、测试、制品、部署与可观测厂商提供不可由模型自行生成的事实。
 5. **MCP、CLI、Skill、接口生成器和 Harness 不构成替代链。** CLI/API 是能力底座，接口生成器补齐长尾能力面，MCP 提供互操作，Skill 沉淀组织方法，Harness 负责循环执行，控制面负责授权。
 6. **近期主流是 L2 和 L3，不是全流程 L4。** 最现实的价值来自可审查变更、沙箱验证和批准后执行；关键发布、签名、策略修改和跨环境晋级继续由人和确定性系统控制。
-7. **人的工作向高语境与高责任环节集中。** 自动化程度上升不会消除责任，而会使意图、验收标准、风险边界、异常接管和效果评测更重要。
+7. **“自愈”必须按闭环与权限双重判级。** SH0—SH4 描述检测到回退是否完整，L0—L4 描述行动权；自动调查、创建 PR、验证写回和生产恢复不能混成同一个成熟度。
+8. **人的工作向高语境与高责任环节集中。** 自动化程度上升不会消除责任，而会使意图、验收标准、风险边界、异常接管和效果评测更重要。
 
 ## 十、企业采用建议
 
@@ -284,4 +294,6 @@ flowchart TB
 - [[30_summaries/stages/README|八阶段维度总结]]
 - [[40_summaries/crosscutting/README|工具、流程、人员、治理和度量变化]]
 - [[50_deepdives/README|专题深研索引]]
+- [[50_deepdives/cicd-self-healing/README|CI/CD 问题自愈深研]]
+- [[50_deepdives/harness-company/README|Harness 公司深研]]
 - [[90_report/README|原综合主报告与 18 个月路线]]

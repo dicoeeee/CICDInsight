@@ -4,7 +4,7 @@ tags:
   - research/agentic-cicd
   - synthesis/stages
 status: complete
-as_of: 2026-07-14
+as_of: 2026-07-16
 ---
 
 # Agentic CI/CD 八阶段维度总结
@@ -51,7 +51,7 @@ as_of: 2026-07-14
 
 ### 证据与成熟度
 
-GitHub Agentic Code Review 已出现 GA 能力，GitLab/Qodo/Atlassian/阿里云均有实际产品或大规模第一方实践。但研究显示 Agent 对业务上下文、知识传递和复杂取舍仍弱，故推荐上限是 L2。参考 [[00_sources/briefs/2026-human-ai-synergy-agentic-code-review|Human-AI Synergy]]、[[00_sources/briefs/2026-atlassian-rovo-code-review-study|Rovo Study]]、[[00_sources/briefs/2026-alibaba-yunxiao-ai-code-review|云效]]。
+GitHub Agentic Code Review 已出现 GA 能力，GitLab/Qodo/Atlassian/阿里云均有实际产品或大规模第一方实践；Harness 也将 Review、Coverage 和 AutoFix 分成专项 Agent，并以 Comment/PR 作为输出边界。但研究显示 Agent 对业务上下文、知识传递和复杂取舍仍弱，故推荐上限是 L2。参考 [[00_sources/briefs/2026-human-ai-synergy-agentic-code-review|Human-AI Synergy]]、[[00_sources/briefs/2026-atlassian-rovo-code-review-study|Rovo Study]]、[[00_sources/briefs/2026-harness-code-quality-agents|Harness Code Quality]] 与 [[00_sources/briefs/2026-alibaba-yunxiao-ai-code-review|云效]]。
 
 ### 建议指标
 
@@ -76,7 +76,7 @@ GitHub Agentic Code Review 已出现 GA 能力，GitLab/Qodo/Atlassian/阿里云
 
 ### 证据与成熟度
 
-L1 解释和 L2 修复已较成熟，部分产品能在受控流水线中复验并创建 MR/PR。GitHub Dependabot 告警到 Coding Agent Draft PR 是“确定性发现 + Agent 适配 + 测试复验”的明确样本。另一方面，USENIX 2026 已确认真实恶意 Agent Skills，说明 Skill/MCP 自身也必须进入门禁。L3 只适合自动生成修复分支、运行测试等可回滚动作；直接合并或发布仍不宜默认开放。参考 [[00_sources/briefs/2026-github-dependabot-agent-remediation|Dependabot Agent Remediation]] 与 [[00_sources/briefs/2026-malicious-agent-skills-usenix|Malicious Agent Skills]]。
+L1 解释和 L2 修复已较成熟，部分产品能在受控流水线中复验并创建 MR/PR。GitHub Dependabot 告警到 Coding Agent Draft PR 是“确定性发现 + Agent 适配 + 测试复验”的明确样本；Harness STO/SCS Remediation、Zero-day/Manifest/Library Agent 也采用 Analyzer/Policy 与 Agent 组合，而不应让模型替代扫描事实。另一方面，USENIX 2026 已确认真实恶意 Agent Skills，说明 Skill/MCP/Marketplace Agent 自身也必须进入门禁。L3 只适合自动生成修复分支、运行测试等可回滚动作；直接合并或发布仍不宜默认开放。参考 [[00_sources/briefs/2026-github-dependabot-agent-remediation|Dependabot Agent Remediation]]、[[00_sources/briefs/2026-harness-ai-platform|Harness AI Platform]] 与 [[00_sources/briefs/2026-malicious-agent-skills-usenix|Malicious Agent Skills]]。
 
 ### 建议指标
 
@@ -102,7 +102,7 @@ QA 从手写全部用例转向定义测试意图、风险模型、测试 Oracle�
 
 ### 证据与成熟度
 
-Tricentis、Harness、CircleCI、GitHub/GitLab 均覆盖部分能力。短循环内 L2—L3 已可落地，但 SWE-CI、SWE-EVO 表明长期零回归仍不足，不能把当次绿灯等同于长期可维护。参考 [[00_sources/briefs/2026-tricentis-agentic-test-automation|Tricentis]]、[[00_sources/briefs/2026-harness-code-quality-agents|Harness Code Quality]]、[[00_sources/briefs/2026-swe-ci-benchmark|SWE-CI]]。
+Tricentis、Harness、CircleCI、GitHub/GitLab 均覆盖部分能力。Harness AI Test Automation 已形成“自然语言意图 → 应用探索 → 可执行命令 → DOM/截图/语义断言 → 学习”的闭环，并有三个第一方量化案例；但完整模块的账户可获得性仍需核验。短循环内 L2—L3 已可落地，但 SWE-CI、SWE-EVO 表明长期零回归仍不足，不能把当次绿灯等同于长期可维护。还要区分 Locator Self-Heal 与产品缺陷修复：前者可以降低 UI 漂移造成的假失败，却可能选择了错误元素或隐藏真实变化，因此业务断言和关键路径必须独立验证。参考 [[00_sources/briefs/2026-tricentis-agentic-test-automation|Tricentis]]、[[00_sources/briefs/2026-harness-ai-test-automation|Harness AI Test]]、[[00_sources/briefs/2026-swe-ci-benchmark|SWE-CI]]。
 
 ### 建议指标
 
@@ -127,7 +127,13 @@ Tricentis、Harness、CircleCI、GitHub/GitLab 均覆盖部分能力。短循环
 
 ### 证据与成熟度
 
-CI 诊断和修复是较明确的 L2 场景，批准后重跑属于 L3。GitHub CI Doctor/Coach、CircleCI Chunk、Harness AutoFix、GitLab CI Expert 和 Nx Self-Healing CI 都提供证据；但跨语言、跨平台、硬件相关和非确定性构建仍难。参考 [[00_sources/briefs/2026-circleci-chunk-agent|CircleCI Chunk]]、[[00_sources/briefs/2026-githubnext-agentics-examples|GitHub Next Examples]]。
+CI 诊断和修复已从单一 L2 场景分化：GitHub CI Doctor、GitLab Fix Pipeline 和 CircleCI Chunk 的主要安全出口是诊断、Suggestion 或 PR；Harness CI Autofix 与 Nx Self-Healing CI 已展示“修复—重触发/重跑—写回分支”的 SH3 机制，Nx 还能按 Task 白名单 Auto-apply。它们仍不能被统称为全仓自治：Merge、完整 Required Checks 与生产发布继续外置，跨语言、跨平台、硬件相关和非确定性构建仍难。参考 [[00_sources/briefs/2026-circleci-chunk-agent|CircleCI Chunk]]、[[00_sources/briefs/2026-githubnext-agentics-examples|GitHub Next Examples]]、[[00_sources/briefs/2026-nx-self-healing-ci|Nx Self-Healing CI]]。
+
+成熟实践先用失败分类器把 Code、Flaky、Transient、Runner/Cache、External 和 Unknown 分流：瞬态故障进入有限重试/重调度快环，代码与配置进入 Agent 复现和 Fix-forward 慢环，Unknown 停止并接管。测试、扫描和 Policy 必须由 Agent 外部身份执行，禁止以 Skip、Ignore 或降阈值换取绿灯。完整方法见 [[50_deepdives/cicd-self-healing/90_report|CI/CD 问题自愈深度报告]]。
+
+GitHub Agentic Workflows 给出了可复用的复杂链路：确定性 Step 先收集并裁剪 Workflow Run、Job Log、Commit 和 Runner 信息；只读 Agent 做根因假设；结果通过 Diagnostic Issue 或 Fix PR Safe Output 外化；原 Required Checks 再次验证。多仓时再由 Orchestrator 派发每仓 Worker，而不是给单 Agent 全组织写权限。详见 [[50_deepdives/github-agentic-workflows/90_report#场景 1：CI Failure Diagnosis 与 Fix PR|CI Failure 实践]]。
+
+Harness 提供另一种平台原生组合：DevOps Agent 的 Error Analyzer 生成根因/修复建议，Code Quality AutoFix 通过分支/PR 交付，通用 Worker Agent 作为 Pipeline Step 承载开放式修复循环，而原 Build/Test/Scan/OPA 继续做 Oracle。Worker Runtime 的 Secret/Network 隔离和单次委托权限提高了 L3 的工程可行性，但不改变“禁止自动 Merge、禁止 Agent 弱化 Gate”的上限。见 [[50_deepdives/harness-company/90_report#5.4 Worker Runtime：假设 Agent 已被攻陷|Harness Runtime 原理]]。
 
 ### 建议指标
 
@@ -177,7 +183,7 @@ CI 诊断和修复是较明确的 L2 场景，批准后重跑属于 L3。GitHub 
 
 ### 证据与成熟度
 
-Spacelift、Harness、Akuity、Terraform MCP、Octopus Agent Step、Kubernetes MCP Server 和 kagent 展示 L2—L3。Terraform 将 Plan、批准后 Apply 和高危显式扩权分开；Octopus 已把 Agent 放进原生部署 Step，但仍为 Alpha。L4 仅适合预批准、低风险、可回滚操作。参考 [[00_sources/briefs/2026-terraform-mcp-server|Terraform MCP]]、[[00_sources/briefs/2026-octopus-agentic-deployment|Octopus]] 与 [[00_sources/briefs/2026-spacelift-intelligence|Spacelift]]。
+Spacelift、Harness、Akuity、Terraform MCP、Octopus Agent Step、Kubernetes MCP Server 和 kagent 展示 L2—L3。Terraform 将 Plan、批准后 Apply 和高危显式扩权分开；Octopus 已把 Agent 放进原生部署 Step，但仍为 Alpha。Harness Worker Agent 可在 CD/Custom Stage 的 Containerized Step Group 运行；存在 Principal 时，细粒度有效权限是触发人 RBAC 与 Agent Grant 的交集，第三方 Tool 再由 MCP Gateway 求交集。但这类权限仍需验证目标账户 Feature Flag，Webhook/Schedule/Artifact/Manifest 等 Trigger Run 当前也不能继承触发人 scoped token。L4 仅适合预批准、低风险、可回滚操作。参考 [[00_sources/briefs/2026-terraform-mcp-server|Terraform MCP]]、[[00_sources/briefs/2026-octopus-agentic-deployment|Octopus]]、[[00_sources/briefs/2026-spacelift-intelligence|Spacelift]] 与 [[00_sources/briefs/2026-harness-worker-agent-security|Harness Worker Security]]。
 
 ### 建议指标
 
@@ -204,6 +210,10 @@ Release Manager 与 SRE 从手工汇总状态转向定义风险模型、渐进�
 
 AWS Release Management 到 2026-06 仍为 Preview，Octopus 原生 Agent Step 为 Alpha；ServiceNow 已把 Agent 用于变更冲突、影响 CI/服务、发布窗口和 Change Request 准备，但没有自主批准证据。跨仓、跨环境、跨审批的 L4 证据仍非常少，近期上限应为 L3。参考 [[00_sources/briefs/2026-aws-devops-agent-release-management-preview|AWS Release Management]]、[[00_sources/briefs/2026-octopus-agentic-deployment|Octopus]] 与 [[00_sources/briefs/2026-servicenow-agentic-change-management|ServiceNow]]。
 
+GitHub Agentic Workflows 更适合置于发布执行之前：确定性 Job 汇集 Artifact Digest、SBOM、签名、测试、安全与事故证据，Agent 生成 Readiness Report 和回滚建议，Safe Output 更新 Release/Issue；真正 Deploy、Promote 与 Rollback 仍由 Environment Protection、Artifact Binding、Policy 和人工批准控制。参考 [[50_deepdives/github-agentic-workflows/90_report#场景 4：Release Readiness，而不是 Autonomous Release|Release Readiness 模式]]。
+
+Harness 的 FME Release Agent 目前更偏发布文档、实验结果和状态解释；Worker Agent 虽可接入发布 Pipeline，但生产动作仍应绑定具体制品、环境、OPA、Approval、SLO 和 Rollback。平台能力广度不能外推为 Release Manager 已被替代。见 [[50_deepdives/harness-company/90_report#六、沿 CI/CD 阶段的覆盖|Harness 阶段覆盖]]。
+
 ### 建议指标
 
 就绪评审遗漏率、审批准备时长、计划变更率、灰度异常发现时延、停止决策准确率、变更失败率、批准与实际执行一致率。
@@ -227,7 +237,7 @@ SRE 的重点从熟记查询语句转为定义可观测标准、Runbook、SLO、
 
 ### 证据与成熟度
 
-AWS Production Operations 已 GA，Azure Observability 分析 GA/自治 Preview，Datadog 和 CloudQ 均有 2026 能力；HolmesGPT 等开源项目提供跨源调查。L1 分析较成熟，L3 动作增长，L4 只应限于已批准的低风险恢复。参考 [[00_sources/briefs/2026-aws-devops-agent-production-operations-ga|AWS DevOps Agent]]、[[00_sources/briefs/2026-holmesgpt-sre-agent|HolmesGPT]]、[[00_sources/briefs/2026-tencent-cloudq-devops-agent|CloudQ]]。
+AWS Production Operations 已 GA，Azure Observability 分析 GA/自治 Preview，Datadog 和 CloudQ 均有 2026 能力；HolmesGPT、Akuity 等提供 PR 或 Runbook 动作面。Harness AI SRE 则用 Scribe 构建事故时间线、RCA Change Agent 关联 Deployment/PR/Change Event，再由预定义 Runbook 调用 Harness/Jenkins/GitHub Pipeline 或 Feature Flag；总览 GA 与细项 Support/Flag/EA 必须分开。必须区分调查与执行：AWS 官方明确其 DevOps Agent 生成 Mitigation Plan 但不代操作员执行 Remediation，因此是 L1—L2；真正 L3/局部 L4 来自另行批准的 Runbook、Tool Policy 和执行身份。生产恢复宜采用“快环恢复可用性 + 慢环根因/Fix-forward”，L4 只限预批准、幂等、可回退、低爆炸半径动作。参考 [[00_sources/briefs/2026-aws-devops-agent-production-operations-ga|AWS DevOps Agent]]、[[00_sources/briefs/2026-harness-ai-sre|Harness AI SRE]]、[[00_sources/briefs/2026-holmesgpt-sre-agent|HolmesGPT]] 与 [[00_sources/briefs/2026-akuity-agents-gitops-operations|Akuity]]；完整实践见 [[50_deepdives/cicd-self-healing/90_report|自愈专题]]。
 
 ### 建议指标
 
@@ -238,6 +248,8 @@ AWS Production Operations 已 GA，Azure Observability 分析 GA/自治 Preview�
 CLI-Anything 对八阶段的影响不是新增一个阶段，而是把测试器、构建工具、制品工具、部署客户端和运维软件的能力转成结构化 CLI/Skill，使其能被不同 Harness 在本地或 Runner 中组合。其最强价值位于阶段 3—6，也可延伸至发布和恢复。
 
 但生成接口不等于获得行动权。每个生成 CLI 都要经过命令覆盖和危险动作审查、单元与端到端测试、版本锁定、签名/扫描、最小权限与沙箱验证；涉及制品晋级、生产部署或恢复时，仍必须经过外部 Policy、Approval 和 Oracle。参考 [[00_sources/briefs/2026-cli-anything|CLI-Anything Brief]]。
+
+Harness 公司提供了一个跨阶段的平台化实现：Knowledge Graph/HQL 负责已建模的 Read/Query/Analyze，MCP 负责长尾工具与写动作，Worker Agent 在 Pipeline 内循环，RBAC/OPA/Approval/Scoped Token/Audit 收窄权限，Test/Scan/Signature/SLO 证明结果。其完整阶段矩阵见 [[50_deepdives/harness-company/90_report#六、沿 CI/CD 阶段的覆盖|Harness 八阶段覆盖]]。
 
 ## 跨阶段 Gate：Agent 不能自己定义“成功”
 
@@ -270,3 +282,4 @@ flowchart TD
 - [[20_summaries/companies/README|公司维度总结]]
 - [[40_summaries/crosscutting/README|横向变化总结]]
 - [[00_sources/agentic-cicd-source-landscape|信息源景观]]
+- [[50_deepdives/harness-company/README|Harness 公司专题]]

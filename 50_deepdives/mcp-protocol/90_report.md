@@ -77,7 +77,90 @@ Tools、Resources 和 Prompts 使 Server 不只暴露 RPC，也能提供日志�
 
 Registry、Allowlist、Gateway 和 Toolset 配置使平台团队能统一回答：Server 来自哪里、谁拥有、哪些 Agent 可见、如何升级/撤回、哪些 Tool 对哪些任务开放。协议不完成治理，但提供共同控制面。
 
-## 三、MCP 不能提供的能力
+## 三、Anthropic MCP 渐进式加载：Tool Search 与 Progressive Disclosure
+
+> [!important] 协议边界
+> “MCP 渐进式加载”不是 MCP 2025-11-25 核心规范中的标准字段。当前规范通过 `tools/list` 返回完整 Tool 定义，并支持分页和 `list_changed`；其中没有 `defer_loading` 或 `tool_reference`。Anthropic 的 Tool Search 是构建在 MCP Tool Catalog 之上的 Claude API/Claude Code 上层实现。MCP 是开放标准，不宜把这项实现称为“Anthropic MCP 标准协议”。
+
+### 1. 它解决什么问题
+
+传统 MCP Client 通常把所有 Tool Name、Description 和 JSON Schema 一次性放入模型上下文。随着 Server 和 Tool 增加，会同时产生：
+
+- **上下文膨胀：** Tool 定义在任务开始前就占用大量输入 Token；
+- **选择退化：** 名称和参数相似的 Tool 增加误选和错误参数；
+- **缓存抖动：** Tool 列表变化可能破坏稳定的 System Prompt 前缀；
+- **权限错觉：** 为了让 Tool “可见”而把过大的能力面同时暴露给模型。
+
+Anthropic 的 [Advanced Tool Use](https://www.anthropic.com/engineering/advanced-tool-use) 以五个 Server、58 个 Tool 为例，估算定义约占 55K Token；其内部测试称 Tool Search 通常可减少 85% 以上的 Tool 定义 Token，并改善大 Tool Library 上的选择准确率。它是厂商自报的内部结果，证明方向和机制，不应外推为所有模型、Server 或 CI/CD 任务的固定收益。
+
+### 2. Tool Search 的工作机制
+
+```mermaid
+flowchart LR
+  CAT["完整 Tool Catalog\nName · Description · Schema"] --> IDX["Regex / BM25 / Custom Search"]
+  BASE["初始上下文\nTool Search + 3—5 个常用 Tool"] --> Q["模型生成搜索 Query"]
+  Q --> IDX
+  IDX --> REF["最多 5 个 tool_reference"]
+  REF --> EXP["API 展开完整 Tool Definition"]
+  EXP --> CALL["模型选择并调用 Tool"]
+  POL["Allowlist · Identity · Approval"] -.独立约束.-> CALL
+```
+
+[Claude API Tool Search](https://platform.claude.com/docs/en/agents-and-tools/tool-use/tool-search-tool) 的具体流程是：
+
+1. 请求中加入 Regex 或 BM25 Tool Search；
+2. 将低频 Tool 标记为 `defer_loading: true`，至少保留 Tool Search 和少数高频 Tool 非延迟加载；
+3. 初始模型上下文只包含搜索工具和非延迟 Tool；
+4. 模型发起 `server_tool_use` 搜索，Anthropic 服务返回最多 5 个 `tool_reference`；
+5. API 将引用自动展开成完整 Tool 定义，再让模型生成常规 `tool_use`；
+6. Deferred Tool 在 System Prompt Cache Prefix 之外以内联方式加入，因此不破坏既有 Prompt Cache。
+
+Regex 版本使用正则模式，BM25 版本使用自然语言；也可以用 Embedding 等方式实现自定义搜索，并以 `tool_result` 返回 `tool_reference`。Tool Search 当前在 Claude API 为 GA；Tool 搜索本身不作为独立 Server Tool 计费，但真正展开的 Tool Definition 仍按输入 Token 计入。
+
+Anthropic 官方建议在 Tool 达到约 10 个、定义超过约 10K Token，或 Catalog 会继续增长/连接多个 MCP Server 时优先考虑搜索；小于 10 个且每个都高频的小 Toolset 通常没有必要。一个请求最多可标记 10,000 个 Deferred Tool，常用的 3—5 个 Tool 应保持前置加载。检索索引会使用 Tool Name、Description、参数名和参数说明，因此 Description 已从“帮助文本”变成召回质量与供应链安全的一部分。
+
+### 3. MCP Connector 与 Claude Code 的两种接入方式
+
+| 实现面 | 配置方式 | 当前状态与行为 | 关键限制 |
+|---|---|---|---|
+| Claude API 普通 Tool | 每个定义设置 `defer_loading: true` | Tool Search GA；请求仍携带所有完整定义，只有模型上下文按需展开 | 降低 Context，不降低完整请求 Payload；增加一次搜索延迟 |
+| Anthropic MCP Connector | `mcp_toolset.default_config.defer_loading`，可由 `configs` 单 Tool 覆盖 | Connector 仍使用 Beta Header；可整 Server 延迟、保留少数 Tool 常驻 | `enabled` 与 `defer_loading` 是两件事；当前 Connector 只连接 MCP Tools，不含 Resources/Prompts |
+| Claude Code | 默认启用 `ToolSearch`，只先加载 Tool Name 与 Server Instructions | MCP Tool Schema 按需进入上下文；可用 `ENABLE_TOOL_SEARCH` 调整 | 依赖模型和代理是否支持 `tool_reference`，非第一方 Base URL 等环境可能回退 |
+| Code Execution + MCP | 把 Tool 暴露为文件/代码 API，或增加 `search_tools` | 通过文件浏览/搜索按需读取定义，并在执行环境过滤中间结果 | 是 Anthropic 推荐架构模式，不是 MCP Core Protocol |
+
+[Anthropic MCP Connector](https://platform.claude.com/docs/en/agents-and-tools/mcp-connector) 将 `enabled` 和 `defer_loading` 分开：前者决定 Tool 是否可用，后者只决定何时进入模型上下文。企业不能用 `defer_loading` 代替 Allowlist；当前 Connector 也只支持 MCP Tool 调用，不应把它写成对 Resources、Prompts 或整个 MCP 能力面的渐进加载。
+
+[Claude Code MCP 文档](https://code.claude.com/docs/en/mcp#scale-with-mcp-tool-search) 当前提供四种策略：默认全部按需加载；`true` 强制全部延迟；`auto` 在 Tool Schema 不超过 Context Window 10% 时前置加载、超出部分延迟；`auto:N` 自定义阈值；`false` 完全关闭。小而高频的 Server 可设置 `alwaysLoad: true`。Server Instructions 和 Tool Description 各会被截断到 2KB，因此关键检索词和适用任务必须放在开头。
+
+### 4. 它没有解决什么
+
+| 未解决问题 | 原因 | 仍需控制 |
+|---|---|---|
+| Tool 授权 | Deferred Tool 被检索后仍可调用 | `enabled=false`、Allowlist、任务身份、对象级 Policy |
+| 高风险审批 | 搜索只改变可见时机 | PR/Plan/Approval、职责分离 |
+| Tool/Description 投毒 | 搜索排序依赖名称、描述和参数 | 来源准入、命名空间、元数据审查、恶意检索测试 |
+| Tool Result 膨胀 | 延迟加载只优化 Definition | 分页、Resource Link、结果裁剪、Code Execution、输出上限 |
+| Schema/行为漂移 | Catalog 与远程 Server 可动态变化 | 版本/Hash、`list_changed`、缓存 TTL、Contract Test |
+| 端到端成功 | 找到正确 Tool 不等于执行正确 | Test、Policy、Artifact、Signature、SLO Oracle |
+
+[Anthropic 的 Code Execution with MCP](https://www.anthropic.com/engineering/code-execution-with-mcp) 将“按需发现 Tool Definition”和“在执行环境过滤中间结果”视为两个连续优化。只做 Tool Search，仍可能把 10MB 日志、完整 SBOM 或大规模测试结果灌入模型上下文；CI/CD 还需结果分页、字段投影、聚合和持久化制品。
+
+### 5. 对 Agentic CI/CD 的四层 Tool 暴露模型
+
+| 层级 | 典型 Tool | 加载/授权策略 |
+|---|---|---|
+| Tier 0 常驻发现层 | `get_change_context`、`get_pipeline_status`、`search_tools`、只读目录 | 3—5 个高频、低风险 Tool 始终可见 |
+| Tier 1 按需能力层 | Lint、Test、Build Log、SBOM、Artifact、Telemetry 查询 | `defer_loading=true`，按 Stage/Service/Verb 命名和检索 |
+| Tier 2 受控行动层 | Create PR、Retry Build、Upload Candidate、Apply Nonprod | 任务身份 + Allowlist；可延迟加载，但仍需逐动作 Policy |
+| Tier 3 高风险层 | Production Deploy、Promote/Sign/Delete、改 Gate、恢复动作 | 默认 `enabled=false`；满足批准和环境条件后才临时启用，不能只靠延迟加载 |
+
+该模型的关键是把**上下文平面**和**权限平面**分开：渐进式加载决定模型何时看到 Schema，Policy 决定调用是否存在和能否执行。隐藏危险 Tool 只能减少误触机会，不能形成不可绕过的安全边界。
+
+### 6. 与 MCP 规范演进的关系
+
+当前稳定规范的 `tools/list`/分页是 Catalog 获取机制，不提供语义检索。2026-07-28 RC 新增的 `server/discover` 用于按需获取 Server Capability，`ttlMs`/`cacheScope` 用于缓存 List/Resource 结果；它们改善协议级发现和缓存，但截至观察日仍是 RC，也不等同于 Anthropic 的 Regex/BM25 Tool Search 或 `tool_reference` 上下文展开。
+
+## 四、MCP 不能提供的能力
 
 | 非能力 | 仍需什么 |
 |---|---|
@@ -91,7 +174,7 @@ Registry、Allowlist、Gateway 和 Toolset 配置使平台团队能统一回答�
 
 因此“Tool 可调用”既不等于“动作被授权”，也不等于“动作成功”。
 
-## 四、与 CLI 的替代边界
+## 五、与 CLI 的替代边界
 
 ### MCP 可以替代的部分
 
@@ -111,7 +194,7 @@ Registry、Allowlist、Gateway 和 Toolset 配置使平台团队能统一回答�
 
 如果只有一个 Harness、工具只在 Runner 内运行、现有 CLI 机器契约稳定、身份可由环境安全注入，且无需 Resource/Prompt/远程多租户/集中目录，直接 CLI 更简单。Thoughtworks 2026-04 的 [“MCP by default” Caution](https://www.thoughtworks.com/en-us/radar/techniques/mcp-by-default) 也指出协议会带来抽象成本和能力保真损失；这是架构经验，不是对 MCP 本身的否定。
 
-## 五、MCP 在八个 CI/CD 阶段的用法
+## 六、MCP 在八个 CI/CD 阶段的用法
 
 | 阶段 | 推荐 Tool/Resource | 风险控制 |
 |---|---|---|
@@ -126,7 +209,7 @@ Registry、Allowlist、Gateway 和 Toolset 配置使平台团队能统一回答�
 
 Resources 特别适合持续提供构建日志、制品和拓扑，Tools 适合明确动作；不要把所有数据访问都建成 Tool，也不要把所有高风险动作都暴露给默认 Toolset。
 
-## 六、2025H2—2026 的业界趋势
+## 七、2025H2—2026 的业界趋势
 
 ### 趋势 1：从本地连接走向远程服务
 
@@ -135,6 +218,8 @@ GitHub Remote MCP GA、OAuth 与企业策略说明市场正在把 MCP 从个人�
 ### 趋势 2：从 Server 数量竞争转向 Toolset 质量
 
 GitHub 在 2025-12 增加 Tool-specific configuration，并在 2026-01 合并 Projects Tool；官方更新称后者将 Tool-list context 减少约 23k tokens、约 50%。[原始更新](https://github.blog/changelog/2026-01-28-github-mcp-server-new-projects-tools-oauth-scope-filtering-and-new-features/) 是厂商自报的特定结果，但足以证明 Tool 爆炸已成为真实工程问题。
+
+Anthropic 的 Tool Search 和 Claude Code 默认渐进式加载进一步说明，Tool Catalog 正从“把所有 Schema 塞进 Prompt”转向“先加载能力地图，再检索 3—5 个相关 Tool”。下一阶段的竞争不只是 Server 数量，而是检索 Recall、Tool Description 质量、任务级 Toolset、缓存和权限过滤能否协同。
 
 ### 趋势 3：Registry 与 Agent Control Plane 上升
 
@@ -154,7 +239,7 @@ GitHub 在 2025-09 [弃用 Copilot Extensions 的 GitHub Apps 路线](https://gi
 
 企业集中授权扩展已经 Stable，而 OAuth Client Credentials 仍为 Draft；当前 Stable Core 的 stdio 仍主要从环境获得凭据。这意味着在无人流水线中，OIDC/Workload Identity、短期 Token、委托链和 Tool Policy 仍需由云/IAM/Gateway 方案补齐，不能仅凭“支持 MCP Authorization”判断生产就绪。
 
-## 七、安全与治理
+## 八、安全与治理
 
 [官方安全最佳实践](https://modelcontextprotocol.io/docs/tutorials/security/security_best_practices) 覆盖 Confused Deputy、Token Passthrough、OAuth Metadata SSRF、Session Hijacking、本地 Server 任意代码执行和 DNS Rebinding。把这些风险翻译为企业控制：
 
@@ -165,13 +250,16 @@ GitHub 在 2025-09 [弃用 Copilot Extensions 的 GitHub Apps 路线](https://gi
 - Server 做输入/输出校验、访问控制、速率和超时；
 - 高风险调用展示具体对象与影响，允许人拒绝；
 - Registry 发现与企业批准分离，发现不等于信任。
+- Tool Search 的检索可见性与 Tool 的执行授权分离；高风险 Tool 默认禁用，不能只设置 `defer_loading`；
+- 对 Tool Name、Description、Server Instructions 做来源审查和搜索投毒测试，记录实际命中的 `tool_reference`。
 
-## 八、推荐参考架构
+## 九、推荐参考架构
 
 ```mermaid
 flowchart LR
-  H["Agent Host / Harness"] --> G["MCP Gateway"]
-  G --> T["Task-scoped Toolset"]
+  H["Agent Host / Harness"] --> TS["Tool Search / Progressive Disclosure"]
+  TS --> G["MCP Gateway"]
+  G --> T["Task-scoped Enabled Toolset"]
   T --> S1["Remote MCP Server"]
   T --> S2["Local stdio Server"]
   S1 --> B["API / SDK / CLI / Backend"]
@@ -184,18 +272,18 @@ flowchart LR
 
 Gateway 不是强制组件，但当 Server 和 Agent 数量扩大后，它是实现身份映射、Tool 过滤、速率、审计和 Kill Switch 的自然位置。
 
-## 九、企业落地顺序
+## 十、企业落地顺序
 
 1. 从一个高价值共享服务和两种 Agent 客户端开始，不以 Server 数量为目标；
 2. 只开放读 Tool/Resource 和 Draft PR/Plan，建立任务成功与误调用基线；
 3. 给每个 Server 建 Owner、版本、风险、数据、权限、SLO、签名和撤回记录；
-4. 按 Scenario 动态裁剪 Toolset，测量 Token、选择错误和授权面；
+4. 按 Scenario 动态裁剪 Enabled Toolset，再对低风险长尾 Tool 做渐进式加载；测量检索 Recall@5、Token、选择错误、延迟和授权面；
 5. 引入任务身份和对象级 Policy，再试非生产写动作；
 6. 将 Test、Scan、Policy、Signature 和审批留在 MCP 外部强制执行；
 7. 正式 2026-07-28 规范发布后运行兼容测试，再决定迁移时间。
 
-## 十、最终判断
+## 十一、最终判断
 
-MCP 已经是重要的 Agent 工具互操作层，尤其适合远程共享、跨客户端和集中治理。它不是所有工具的默认包装，也不是生产自治的充分条件。企业最应投资的是小而清晰的 Toolset、任务身份、对象授权、Server 供应链、外部 Oracle 和可撤回运营，而不是连接最多的 Server。
+MCP 已经是重要的 Agent 工具互操作层，尤其适合远程共享、跨客户端和集中治理。Anthropic Tool Search 证明大 Tool Library 可以通过渐进式披露降低上下文税，但它是 Host/API 层实现，不是 MCP Core，也不是权限边界。企业最应投资的是可检索且小而清晰的 Tool Catalog、任务级 Enabled Toolset、任务身份、对象授权、Server 供应链、外部 Oracle 和可撤回运营，而不是连接最多的 Server。
 
 CLI 与 MCP 的逐项选择见 [[50_deepdives/cli-vs-mcp-decision-guide|决策指南]]。

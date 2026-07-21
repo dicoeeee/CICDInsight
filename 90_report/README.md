@@ -6,7 +6,7 @@ tags:
   - research/agentic-cicd
   - report
 status: complete
-as_of: 2026-07-14
+as_of: 2026-07-16
 audience:
   - CTO
   - 研发效能负责人
@@ -15,10 +15,10 @@ audience:
 
 # Agent 技术在 CI/CD 中的应用与实践洞察
 
-**观察窗口：** 2025-07-01—2026-07-14，重点关注 2026 年
+**观察窗口：** 2025-07-01—2026-07-16，重点关注 2026 年
 **趋势展望：** 2027—2028 年
 **研究范围：** 编码完成后的代码评审、安全与测试、构建出包、制品与版本、环境与部署、发布、发布后验证与恢复
-**证据基础：** 81 条核心一手资料，62 个深度 Source Brief；商业平台、大型公司内部实践、高影响力开源项目、原始研究与治理资料
+**证据基础：** 81 条核心一手资料，68 个深度 Source Brief；商业平台、大型公司内部实践、高影响力开源项目、原始研究与治理资料
 
 > [!abstract] 一句话结论
 > Agent 不会在未来两年替代 CI/CD；它会成为覆盖现有 CI/CD 之上的“推理与行动层”。确定性的流水线、测试、策略、制品和发布控制继续充当执行骨架与安全 Oracle，竞争重心转向上下文、受控工具、身份授权、反馈速度和可证明结果。
@@ -29,7 +29,9 @@ audience:
 
 最明确的变化是输出形态：从评论、摘要和问答，转为修复 PR、测试、Pipeline Patch、Policy、Release Readiness Review、Runbook 和经批准的运维动作。GitHub Agentic Workflows 将自然语言 Markdown 编译为标准 Actions，并使用只读默认、沙箱和 safe outputs 约束写入；到 2026-06 已从技术预览进入公开预览。[GitHub 官方公告](https://github.blog/changelog/2026-06-11-github-agentic-workflows-is-now-in-public-preview/)
 
-GitLab Duo Agent Platform 已在 18.8 宣布 GA，公开 Flow 覆盖 Code Review、Fix CI/CD 和 SAST 修复；Harness Worker Agents 作为 Pipeline Step 运行；AWS DevOps Agent 的生产运维能力已 GA，而发布管理仍是 Preview。[GitLab GA 公告](https://about.gitlab.com/press/releases/2026-01-15-gitlab-announces-duo-agent-platform-general-availability/)；[AWS GA 公告](https://aws.amazon.com/about-aws/whats-new/2026/03/aws-devops-agent-generally-available/)
+其实现比“Markdown 写 Workflow”更完整：Compiler 将 Frontmatter 约束转成 Pre-activation、Agent、Threat Detection 和 Safe Output 等独立 Actions Job；Agent 只生成 JSON/Patch Artifact，写 Token 只在受信的后置 Job 中出现。复杂任务通过 DeterministicOps、Orchestrator/Worker 和 CentralRepoOps 拆分，说明 Agentic CI/CD 正从单 Agent Step 走向“编译计划 + 权限阶段 + 类型化输出 + 外部 Oracle”。但该产品仍为 Public Preview，版本、成本和兼容性必须持续运营。详见 [[50_deepdives/github-agentic-workflows/90_report|GitHub Agentic Workflows 深度报告]]。
+
+GitLab Duo Agent Platform 已在 18.8 宣布 GA，公开 Flow 覆盖 Code Review、Fix CI/CD 和 SAST 修复；Harness 则把 DevOps Agent、Pipeline 内 Worker Agents、Knowledge Graph/HQL、MCP/CLI/Skills 及 Test/Security/SRE 专项 Agent 组合成软件交付控制面；AWS DevOps Agent 的生产运维能力已 GA，而发布管理仍是 Preview。[GitLab GA 公告](https://about.gitlab.com/press/releases/2026-01-15-gitlab-announces-duo-agent-platform-general-availability/)；[Harness AI 总览](https://developer.harness.io/docs/platform/harness-ai/overview/)；[AWS GA 公告](https://aws.amazon.com/about-aws/whats-new/2026/03/aws-devops-agent-generally-available/)
 
 因此，行业已跨过 L0/L1 演示期，但当前主流生产边界仍是 L2 可审查变更和 L3 批准后执行。跨关键生产发布的普遍 L4 没有足够证据。
 
@@ -69,11 +71,19 @@ Agent 擅长开放式理解、假设生成和多步骤调查；编译器、测�
 
 未来两年，模型能力会快速商品化，能够安全连接企业上下文、策略和动作的控制面更难复制。
 
+Harness 的实现把该趋势写得很清楚：已建模的 Read/Query/Analyze 优先使用 Software Delivery Knowledge Graph/HQL，长尾工具和写动作使用 MCP，Pipeline 负责确定性编排与 Gate。上下文、动作和执行并非同一层；把所有 API 暴露成 Tool 反而会增加选择、Join、权限和 Token 成本。完整架构见 [[50_deepdives/harness-company/90_report|Harness 公司深度报告]]。
+
 CLI-Anything 进一步显示，竞争面不只在“谁拥有更多现成 MCP”：缺少 Agent 接口的遗留和内部软件，也可以从源码/API 生成带测试、结构化输出和 Skill 的 CLI。它降低了长尾工具进入 Tool Plane 的门槛，但生成接口仍需逐项评审、签名、授权和沙箱运行，不能把接口可调用等同于生产可执行。参考 [[00_sources/briefs/2026-cli-anything|CLI-Anything Brief]]。
 
 ### 4. 最先成熟的是评审、CI 自愈和事故调查；最慢的是制品、版本与关键发布自治
 
 成熟度与三个条件正相关：上下文是否结构化、结果是否能被确定性验证、动作是否可逆且可隔离。PR 同时满足三者，所以代码评审和修复最成熟；CI 失败可由重跑验证，因而自愈进展很快；生产调查上下文丰富但动作风险大，所以“分析 GA、自治 Preview”很常见。
+
+但“自愈”必须拆成 SH0 感知、SH1 诊断、SH2 候选修复、SH3 隔离验证与受限写回、SH4 自动观察和回退。GitHub CI Doctor、GitLab Fix Pipeline 和 CircleCI Chunk 的主流边界是 SH1—SH2；Nx 和 Harness 已把失败任务复验、限次循环或 PR 分支写回做成 SH3，Nx 的白名单 Auto-apply 在 PR 微域可到局部 SH4。AWS DevOps Agent 虽能自动调查并生成 Mitigation Plan，但官方明确不代操作员执行 Remediation，不能归为生产 L4。完整分级、快慢双环和企业实施方法见 [[50_deepdives/cicd-self-healing/90_report|CI/CD 问题自愈深度报告]]。
+
+[CI-Repair-Bench](https://arxiv.org/abs/2604.27148) 又提供了必要校准：567 个真实 CI 故障中，最佳受测模型仅修复 18.9%。因此企业不应追求一个“通用自愈率”，而应按 Code、Flaky、Transient、Runner/Cache、Dependency/Config 和 Unknown 分类授权、分别评测。
+
+Harness 的公开效果也需要同样校准：通用 Worker Agent 的大型企业材料主要证明 4 天构建专项 Agent 和组织推广意向；较具体的量化数据来自 AI Test Automation 的三个第一方案例，不能外推成 Worker Agent 或整个 CI/CD 的平均自愈率。
 
 制品仓和发布平台的 Agent 行动面已经出现：Cloudsmith MCP 可查询漏洞、列举版本和管理制品；GitHub 可把 Dependabot 告警交给 Coding Agent 生成修复 Draft PR；Octopus 已把 Claude Agent 做成原生部署 Step；Terraform MCP 明确区分 Plan、批准后 Apply 与显式开放的自动批准/销毁。[Cloudsmith 官方更新](https://cloudsmith.com/changelog/manage-your-supply-chain-using-natural-language-with-mcp)；[GitHub 官方更新](https://github.blog/changelog/2026-04-07-dependabot-alerts-are-now-assignable-to-ai-agents-for-remediation/)；[Terraform MCP 参考](https://developer.hashicorp.com/terraform/mcp-server/reference)
 
@@ -93,6 +103,8 @@ NIST NCCoE 2026-02 的概念稿已将 Agent 身份、授权、审计、不可否
 
 OpenID AuthZEN 的 AARP/COAZ 已把批准、委托、风险证明和 MCP Tool 授权写成 Working Group Draft；它们不是最终标准，却明确了方向：Agent 被拒绝后应补齐前置条件并由外部 Policy 重新决策，而不是在 Prompt 中绕过限制。[OpenID Foundation](https://openid.net/openid-foundation-advances-authorization-for-the-agent-era-with-new-authzen-working-group-drafts/)
 
+Harness 2026-07 公布的 Worker Agent Runtime 提供了一个产品化对照：把 Agent 视为已被攻陷，使用硬化 Image、Agent/Broker/Egress 三用户隔离、Host-bound Secret Placeholder 和默认拒绝网络；存在触发 Principal 时，身份层让单次 Token 只获得该 Principal 权限与声明 Grant 的交集，MCP Tool 再做 Allowlist 交集并逐次归因。这些控制仍是第一方声明，细粒度权限还需验证目标账户 Feature Flag；Webhook/Schedule/Artifact/Manifest 等 Trigger Run 当前也不能继承触发人 scoped token，必须另建身份与审批模型。整体上仍比共享 Bot Token 或仅靠 Prompt Approval 更接近生产基线。参考 [[00_sources/briefs/2026-harness-worker-agent-security|Harness Worker Agent 安全与身份]]。
+
 近期治理基线应是：默认只读、每任务独立身份和短期凭据、少数受控写出口、职责分离、完整审计、预算/轮次上限、可停止可回退，以及在企业真实任务上的持续评测。
 
 ### 7. 衡量 Agentic CI/CD 必须从“生成量”转向“系统效果”
@@ -107,14 +119,14 @@ DORA 2025 基于近 5,000 名技术人员和 100 多小时定性材料，发现 
 
 | 阶段 | 当前主流应用 | 产品/实践信号 | 推荐自治上限 | 未来两年判断 |
 |---|---|---|---|---|
-| 1. 代码评审与质量 | 仓库级评审、专业 Reviewer、修复 PR | GitHub、GitLab、Qodo、Atlassian、云效 | L2 | 成为默认前置筛查，人聚焦高语境判断 |
-| 2. 静态/安全/依赖/合规 | 发现解释、根因、修复与复验 | Snyk、Sonar、Semgrep、GitLab | L2，局部 L3 | Analyzer + Agent 成为标准架构 |
+| 1. 代码评审与质量 | 仓库级评审、专业 Reviewer、修复 PR | GitHub、GitLab、Harness、Qodo、Atlassian、云效 | L2 | 成为默认前置筛查，人聚焦高语境判断 |
+| 2. 静态/安全/依赖/合规 | 发现解释、根因、修复与复验 | Snyk、Sonar、Semgrep、GitLab、Harness | L2，局部 L3 | Analyzer + Agent 成为标准架构 |
 | 3. 测试/门禁/风险 | 测试生成/选择、Coverage、动态验证 | Harness、Tricentis、CircleCI | L3 仅限沙箱验证 | CI 计算与反馈时延成为 Agent 瓶颈 |
-| 4. 编译/构建/出包 | 日志诊断、配置修复、自愈重跑 | CircleCI、Harness、GitHub、GitLab | L2—L3 | 高频反馈推动 Runner/缓存重构 |
-| 5. 制品/供应链/版本 | 可信包/策略查询、版本修复、有限制品操作 | JFrog、Cloudsmith、Sonatype、GitHub | L2 | 行动面已出现，晋级和签名仍保守 |
+| 4. 编译/构建/出包 | 分类、日志诊断、配置修复、原任务复验与有界重跑 | CircleCI、Harness、GitHub、GitLab、Nx | L2—L3；PR 微域局部 L4 | 高频反馈推动 Runner/缓存重构，Oracle 必须外置 |
+| 5. 制品/供应链/版本 | 可信包/策略查询、版本修复、有限制品操作 | JFrog、Cloudsmith、Sonatype、GitHub、Harness | L2 | 行动面已出现，晋级和签名仍保守 |
 | 6. 环境/IaC/部署 | 意图转 Plan、策略解释、原生 Agent Step、受控部署 | Terraform MCP、Octopus、Spacelift、Harness、Akuity | L3 | 自然语言成第二入口，但不绕过 Policy |
-| 7. 发布/审批/变更 | 就绪评审、依赖分析、变更冲突/窗口、批准后执行 | AWS、Octopus、ServiceNow | L3 | 受限执行增加，通用 L4 仍少 |
-| 8. 发布后验证/恢复 | 跨源调查、根因、Runbook、受限恢复 | AWS、Azure、Datadog、CloudQ、HolmesGPT | L3；局部 L4 | 分析快速普及，低风险恢复有限闭环 |
+| 7. 发布/审批/变更 | 就绪评审、依赖分析、变更冲突/窗口、批准后执行 | AWS、Harness、Octopus、ServiceNow | L3 | 受限执行增加，通用 L4 仍少 |
+| 8. 发布后验证/恢复 | 跨源调查、根因、Runbook、受限恢复 | AWS、Harness、Azure、Datadog、CloudQ、HolmesGPT、Akuity | 分析 L1—L2；批准动作 L3，局部 L4 | 分析快速普及，低风险恢复有限闭环 |
 
 完整阶段分析见 [[30_summaries/stages/README|八阶段维度总结]]。
 
@@ -161,7 +173,7 @@ DORA 2025 基于近 5,000 名技术人员和 100 多小时定性材料，发现 
 
 - **GitHub**：Agentic Workflow 编译到 Actions；代码、PR、Actions、安全和 MCP 形成统一入口。
 - **GitLab**：Duo Agent Platform GA，依靠 DevSecOps 全生命周期上下文、Self-Managed 和治理能力。
-- **Harness**：Agent 既作为 Pipeline Step 执行，也生成/修改 Pipeline、IaC 和 Policy。
+- **Harness**：从 Pipeline 产品扩展为 Agent 控制面；DevOps Agent 设计/操作平台，Worker Agent 在 Pipeline 内执行，Knowledge Graph/HQL 与 MCP 分别承担结构化理解和长尾行动，RBAC/OPA/Approval/Scoped Token/Audit 限定自治。详见 [[50_deepdives/harness-company/90_report|公司专题]]。
 - **Microsoft/Azure DevOps**：GitHub 承担新 Agent 能力，ADO 通过 Boards/Pipelines/MCP 混合保留。
 - **Octopus Deploy**：以 GitHub Agent App、MCP 和原生 Claude Agent Step 将部署状态、Runbook、发布步骤和审计连起来，但关键 Step 仍为 Alpha。
 
@@ -298,6 +310,7 @@ flowchart TB
 | Agent 通过共享身份执行 | 无法追责，权限长期扩散 | 每任务身份、短期 Token、委托链 |
 | PR/日志/工具描述提示注入 | 数据泄露或越权动作 | 输入不可信、工具白名单、网关、网络隔离 |
 | 为变绿而删除测试/弱化 Gate | 缺陷进入发布 | 规则保护、职责分离、隐藏/未来测试 |
+| Agent 修改自己的 Oracle | CI 变绿但问题未愈 | Validator 独立身份、禁止 Skip/Ignore/降阈值、完整 Gate 重跑 |
 | Agent 无限构建和重试 | CI 拥塞、成本失控 | 任务预算、最大轮次、熔断和升级 |
 | 模型更新后能力漂移 | 原有自治边界失效 | 版本固定、回归评测、自动降权 |
 | 多 Agent 冲突或责任模糊 | 重复动作、错误扩散 | 明确任务所有者、Judge/Policy、动作幂等 |
@@ -355,3 +368,4 @@ flowchart TB
 - [[30_summaries/stages/README|八阶段总结]]
 - [[40_summaries/crosscutting/README|工具、流程、人员与治理变化]]
 - [[50_deepdives/README|专题深研索引]]
+- [[50_deepdives/cicd-self-healing/README|CI/CD 问题自愈专题]]

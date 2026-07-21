@@ -6,7 +6,7 @@ tags:
   - research/agentic-cicd
   - research/2026
 status: complete
-as_of: 2026-07-15
+as_of: 2026-07-21
 ---
 
 # Agent 技术在 CI/CD 中的应用与实践洞察
@@ -21,12 +21,13 @@ as_of: 2026-07-15
 - [[80_presentations/README|演示文稿层]]：管理 PPT 的叙事、页面文案、作业流表达和来源映射；最终渲染文件仍放在 `outputs/`。
 - [[00_sources/agentic-cicd-source-landscape|81 条核心一手资料景观]]：精简并增补后的 L0 来源与逐条 Brief。
 - [[00_sources/source-pruning-2026-07-14|信息源精简审计]]：从 107 条候选源缩减到 80 条核心源，并补入 CLI-Anything 后形成 81 条当前核心源的记录。
-- [[00_sources/README|深度 Source Brief 索引]]：62 个高频来源的独立分析。
+- [[00_sources/README|深度 Source Brief 索引]]：68 个高频来源的独立分析。
 - [[00_sources/incremental-source-research-2026-07-14|本轮增量研究记录]]：25 条新增源的排重与选源依据。
 - [[05_case_library/README|实践案例库]]：把跨专题复用的外部实践整理成架构、流程、控制边界和证据强度明确的案例卡。
 - [[10_summaries/tools/README|Agent 工具与技术栈]]、[[20_summaries/companies/README|公司维度]]、[[30_summaries/stages/README|阶段维度]]、[[40_summaries/crosscutting/README|横向变化]]：主报告的四组中间证据。
 - [[50_deepdives/README|专题深研索引]]：问题树、证据矩阵、案例比较、可复现实验、Findings、Playbook 和专题报告。
-- [[50_deepdives/cli-agent-interface/90_report|CLI 深度报告]]、[[50_deepdives/mcp-protocol/90_report|MCP 深度报告]]、[[50_deepdives/cli-anything/90_report|CLI-Anything 项目深度报告]]：三个独立研究维度；跨维度选型见 [[50_deepdives/cli-vs-mcp-decision-guide|CLI 与 MCP 决策指南]]。
+- [[60_tutorials/README|配置与实践教程]]：用最小 YAML/Frontmatter 示例解释关键字段、默认值、风险、常见错误和验证方法。
+- [[50_deepdives/cli-agent-interface/90_report|CLI 深度报告]]、[[50_deepdives/mcp-protocol/90_report|MCP 深度报告]]、[[50_deepdives/cli-anything/90_report|CLI-Anything 项目深度报告]]、[[50_deepdives/github-agentic-workflows/90_report|GitHub Agentic Workflows 深度报告]]、[[50_deepdives/cicd-self-healing/90_report|CI/CD 问题自愈深度报告]]、[[50_deepdives/harness-company/90_report|Harness 公司深度报告]]：分别研究执行接口、协议、接口生成项目、Agent Workflow 平台、端到端自愈场景与 Harness Inc. 的产品/架构/实践；跨 CLI/MCP 选型见 [[50_deepdives/cli-vs-mcp-decision-guide|决策指南]]。
 
 ## 研究边界
 
@@ -75,9 +76,18 @@ as_of: 2026-07-15
 - [[30_summaries/stages/README|阶段维度总结]]：沿八个 CI/CD 阶段分析 Agent 介入方式。
 - [[40_summaries/crosscutting/README|横向变化总结]]：工具平台、工作流程、人员能力、治理与度量。
 - [[50_deepdives/README|专题深研层]]：对重点课题建立问题树、Claim—Evidence Matrix、案例比较、实验、Playbook 和专题报告。
+- [[60_tutorials/README|配置与实践教程层]]：不重复完整原理，提供可复制的配置、逐字段解释、常见错误和最小验证步骤。
 - [[80_presentations/README|演示文稿层]]：把跨公司、跨能力的研究结论改写为可比较的 PPT 叙事和单页作业流。
 - [[90_report/seven-dimension-analysis|七维分析汇总报告]]：以任务场景为连接键，将三个描述维度与四个企业决策维度汇总。
 - [[90_report/README|主报告]]：跨分类提炼趋势、成熟度、实践、风险和未来判断。
+
+## 增量洞察维护
+
+- 新增或刷新洞察时，默认补充到最相关的 [[50_deepdives/README|专题深研]]；若使用了新的外部证据，同时在 [[00_sources/README|信息源层]]保留可追溯来源。
+- 完成 Deep Dive 更新后，再判断是否影响现有 Presentation。若它改变页面主张、作业流、产品状态、自治或成熟度判断、控制边界、企业启示或来源映射，可同步更新 [[80_presentations/README|演示文稿层]]。
+- 只增加实现细节或旁支事实、且不改变演示结论时，可以不更新 Presentation。PPT 不建立第二套事实源，新增页面判断必须回链到 Deep Dive、分类总结或 Source Brief。
+- Git 采用单分支协作：所有变更直接进入 `main`；需要提交或推送时直接操作 `main`，不新建额外分支，也不创建 Pull Request。
+- 面向后续 Agent 的完整执行规则见 `AGENTS.md`。
 
 ## 证据规则
 

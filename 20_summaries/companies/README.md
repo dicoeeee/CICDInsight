@@ -4,7 +4,7 @@ tags:
   - research/agentic-cicd
   - synthesis/companies
 status: complete
-as_of: 2026-07-14
+as_of: 2026-07-16
 ---
 
 # Agentic CI/CD 公司维度总结
@@ -19,11 +19,12 @@ as_of: 2026-07-14
 | GitHub | 代码仓、评审、Actions、MCP | Agentic Workflows、Agentic Code Review、GitHub MCP | L3 | Workflows 公开预览；Code Review/MCP 有 GA 能力 | 用 Actions 作为确定性执行与政策底座 |
 | Microsoft / Azure DevOps | 混合研发平台、可观测 | GitHub Agent + ADO MCP/Boards/Pipelines；Azure Observability Agent | L3 | 混合 GA/预览 | GitHub 承载最新 Agent，ADO 保留存量流程 |
 | GitLab | 一体化 DevSecOps | Duo Agent Platform、Review/Fix CI/SAST Flow、Orbit | L3 | 核心平台 GA；部分 Flow/Orbit 预览 | 以全生命周期上下文和治理做差异化 |
-| Harness | Pipeline 内 Agent | Worker Agents、Code Quality/AutoFix、DevOps Agent | L3 | 多项已文档化可用，状态按模块区分 | Agent 是 Pipeline Step，也能设计 Pipeline |
-| AWS | 生产运维与发布 | DevOps Agent Production Operations、Release Management | L3，受限 L4 方向 | 生产运维 GA；发布 Preview | 以云拓扑、遥测和跨账号环境上下文取胜 |
+| Harness | 跨软件交付 Agent 控制面 | DevOps Agent、Worker Agents、Knowledge Graph/HQL、MCP/CLI/Skills、Test/Security/SRE 专项 Agent | L3 | 多项 GA；账户可获得性与细项 Flag 需分开核验 | Agent 是受治理 Pipeline Step，平台同时提供上下文、委托权限与 Oracle |
+| AWS | 生产运维与发布 | DevOps Agent Production Operations、Release Management | 调查/计划 L1—L2；组合执行另算 | 生产运维 GA；发布 Preview | 以云拓扑、遥测和跨账号环境上下文取胜，当前不代操作员执行修复 |
 | Google Cloud / DORA | 云应用生命周期与组织能力 | Gemini Cloud Assist、SRE 实践、DORA | L3 | 多项 GA/预览混合 | 强调平台质量是 AI 收益放大器 |
 | Atlassian | 工作协作、代码评审、Pipeline | Rovo Dev Reviewer、Bitbucket Agentic Pipelines | L2—L3 | Reviewer 已 GA；Pipeline 按来源状态区分 | 把 Jira/知识/代码上下文与流程连接 |
-| CircleCI | CI 失败和验证基础设施 | Chunk、Agentic Validation | L2—L3 | 新产品/能力，成效多为厂商自述 | CI 从 Job Runner 变成 Agent Feedback Infra |
+| CircleCI | CI 失败和验证基础设施 | Chunk、Agentic Validation | L2—L3 | Chunk 当前 Beta，成效多为厂商自述 | CI 从 Job Runner 变成 Agent Feedback Infra |
+| Nx | Build Graph 与任务级自愈 | Self-Healing CI、Auto-apply Suggestion | PR 域 L2—L3 | Nx Cloud 已文档化可用 | 以 Project Graph、Task 白名单和原任务复验收窄自治 |
 | Buildkite | 可组合 CI 与 Agent 执行 | Skills/MCP、Agent in Pipeline | L3 | 文档化实践 | 保持开放模型和可组合 Runner 控制 |
 | Snyk / Semgrep / Sonar | 安全与质量修复 | 检测器 + Agent Fix/Workflow | L2—L3 | GA/预览因产品而异 | 确定性扫描器为 Agent 提供安全 Oracle |
 | JFrog / Cloudsmith / Sonatype | 制品与供应链上下文及有限行动 | Skills、MCP、可信包、版本情报、制品管理 | L1—L2 | Beta/Available 混合 | 争夺 Agent 的供应链事实与行动入口 |
@@ -36,9 +37,13 @@ as_of: 2026-07-14
 
 GitHub 的核心做法不是发明一套与 CI 平行的新执行系统，而是让自然语言 Agentic Workflow 编译成标准 GitHub Actions。Agent 在沙箱内读取仓库和 Actions 上下文，通过 MCP 调用工具，写操作则由 safe outputs、受限 Token 和既有策略出口控制。到 2026-06，Agentic Workflows 从 Technical Preview 进入 Public Preview；Copilot Code Review 的 Agentic Architecture 则已面向符合条件的计划提供 GA 能力。
 
+更具体地看，`.md` 只是源文件，编译后的 `.lock.yml` 才是 Actions 实际执行物。Compiler 会校验 Frontmatter/Expression、解析 Import 和 Job Dependency、固定 Action SHA，并生成 Pre-activation、Activation、Agent、Threat Detection、Safe Output 和 Conclusion 等不同权限阶段。Agent Job 默认只读，输出先缓冲为 JSON/Patch Artifact，独立检测通过后才由持有最小写 Token 的 Job 创建 Issue、Comment 或 PR。这种“模型提出动作、受信阶段外化副作用”的权限设计比模型本身更具行业参考价值。
+
+复杂场景已经从单 Workflow 扩展到 DeterministicOps、Orchestrator/Worker、Side Repo 和 CentralRepoOps：确定性 Step 先收集日志/测试/发布证据，Agent 进行归因与排序，Worker 按仓库和风险独立执行，原 CI/Policy/Environment Approval 决定是否合并或发布。当前最合适的是 CI Doctor、维护 PR、跨仓升级准备和 Release Readiness，而非让 Agent 直接持有生产发布权。
+
 其战略优势是：代码、PR、Actions、安全告警和 Release 处在同一数据面；远程 GitHub MCP Server 已 GA，使这些能力成为通用 Agent 可调用接口。弱点是高价值生产动作仍受 Preview 成熟度、企业配置和许可证边界影响，公开材料尚缺跨企业的独立交付效果。
 
-对企业的启示：Agent Workflow 最好编译或落到既有可审计执行系统，而不是直接让模型持有脚本和长期凭据。参考 [[00_sources/briefs/2026-github-agentic-workflows|GitHub Agentic Workflows]]、[[00_sources/briefs/2026-github-gh-aw-open-source|gh-aw]]、[[00_sources/briefs/2025-github-remote-mcp-server-ga|GitHub MCP Server]]。
+对企业的启示：Agent Workflow 最好编译或落到既有可审计执行系统，而不是直接让模型持有脚本和长期凭据。完整使用流程、编译原理、安全边界和复杂案例见 [[50_deepdives/github-agentic-workflows/90_report|GitHub Agentic Workflows 深度报告]]；一手入口包括 [[00_sources/briefs/2026-github-agentic-workflows|产品文档]]、[[00_sources/briefs/2026-github-gh-aw-open-source|gh-aw]] 与 [[00_sources/briefs/2025-github-remote-mcp-server-ga|GitHub MCP Server]]。
 
 ## 2. Microsoft 与 Azure DevOps：以混合平台迁移获得 Agent 能力
 
@@ -56,21 +61,29 @@ GitLab 的差异化不是单个 Agent，而是把需求、代码、Pipeline、�
 
 对大型企业而言，GitLab 提供的关键选择是：用统一数据面减少 Agent 上下文拼接成本，并支持 Self-Managed/BYOM；相应风险是平台锁定与 Preview 功能成熟度。参考 [[00_sources/briefs/2026-gitlab-duo-agent-platform|GitLab Duo Agent Platform]]。
 
-## 4. Harness：Agent 成为 Pipeline 的一等步骤
+## 4. Harness：从 Pipeline 平台到 Agent 控制面
 
-Harness 的产品组合覆盖三个方向：
+Harness 公司的 2026 产品组合已经不能只用“Pipeline 内 Agent”概括，而应分成六层：Harness UI/IDE/MCP/CLI/Skills 入口；DevOps Agent、Worker Agents 和专项 Agent；Software Delivery Knowledge Graph/HQL 上下文；Harness/第三方 MCP Tool；Pipeline/Delegate/Cloud 或客户 Kubernetes Runtime；以及 RBAC、OPA、Approval、Scoped Token、Audit 和 Test/Scan/SLO 证明层。
 
-- Worker Agents 可直接在 CI/CD、IaCM、STO、SCS 或自定义 Pipeline 中运行指令、模型和 MCP 工具。
-- Code Quality Agents 包括 Review、Coverage 和 AutoFix，其中 AutoFix 能诊断 CI、生成修复、验证并提交 PR。
-- DevOps Agent 可创建或修改 Steps、Stages、Pipelines、IaC Pipeline 和 OPA Rego 策略。
+三类 Agent 的职责不同：
 
-这一组合说明 Agent 既进入“执行面”，也进入“设计面”。Harness 还把原先多个子 Agent 收敛为统一 Agent，反映实际产品更重视稳定上下文与任务路由，而不只是多 Agent 数量。其优势是 Pipeline、Policy、安全和审批原生；局限是模型与供应商管理方式较封闭，效果数据多为厂商测试。
+- **DevOps Agent** 在 Harness UI 中创建/修改 Pipeline、Service、Environment、Connector、Secret、OPA 和 GitOps 资源，使用 Harness Managed Model，不支持 BYOM。
+- **Worker Agents** 由 Instructions、Model Connector 和可选 MCP 构成，作为 `Agent` Step 进入 CI、CD、IaCM、STO、SCS 和 Custom Stage；支持 Managed 或客户 Anthropic/OpenAI Connector，并可运行在 Harness Cloud 或客户 Kubernetes。
+- **专项 Agent** 分布在 Code Quality、AI Test、Security、FME 和 AI SRE，分别产生 PR、Test Result、Remediation、RCA Theory 或 Runbook Input，不能假设都使用同一 Runtime。
 
-适合的企业落地方式是先在非生产 Pipeline 让 Worker Agent 做诊断、生成 Patch 和验证，再逐级开放经过批准的动作。参考 [[00_sources/briefs/2026-harness-worker-agents|Worker Agents]]、[[00_sources/briefs/2026-harness-code-quality-agents|Code Quality Agents]]、[[00_sources/briefs/2026-harness-ai-devops-agent|DevOps Agent]]。
+Harness 的架构分工值得关注：Knowledge Graph/HQL 优先处理已建模的跨模块 Read/Query/Analyze；MCP 处理长尾系统和 Create/Update/Execute；Pipeline 负责顺序、并行、预算、Approval、Failure Strategy 和 Rollback；外部 Test、Scanner、Policy、Signature 与 SLO 定义结果是否正确。Pipeline 没有被 Agent 取代，而是成为概率决策的确定性控制结构。
+
+2026-07 公布的 Worker Runtime 安全模型从“假设 Agent 已被攻陷”出发：硬化 Image，分离 Agent/Broker/Egress 三个非特权用户，用 Host-bound Placeholder 隔离 Secret，并默认拒绝非授权网络。存在触发 Principal 时，有效访问被限制为该 Principal RBAC 与 Agent 声明 Grant 的交集，第三方工具再取 Connector 与 Agent Allowlist 的交集，每个 Tool Call 保留委托人与 Run Attribution。这比共享 Bot Token 更接近生产架构，但厂商红队仍需客户独立复现，细粒度 Token Injection 也必须确认目标账户 Feature Flag；当前 Webhook/Schedule/Artifact/Manifest 等 Trigger Run 还不能继承触发人 scoped token，必须单独设计身份和审批。
+
+成熟度需要分三栏看：AI 总览将 Agents、DevOps Agent、MCP、AI Scribe 和 AI Test Copilot 等列为 GA，但完整 AI Test、Scribe、Hosted MCP、Investigator Pipeline 和 Scoped Permission 仍存在 Sales、Support、EA 或 Feature Flag 条件；通用 Worker Agent 客户材料多是采用信号，量化案例主要集中在 AI Test Automation，且仍为 Harness 第一方发布。
+
+因此近期适合的企业落地是 L2 可审查变更与批准后/非生产 L3：只读 MCP Diagnosis、DevOps Agent 生成 YAML/OPA 草案、AutoFix Draft PR、AI Test + 独立业务断言、Scribe/RCA + 预定义 Runbook。暂不应让 Community Agent、共享管理员 Token 或开放 Shell 直接完成 Merge、Artifact Promote、Production Deploy/Destroy。完整产品、技术原理、案例、采购问题和试点方案见 [[50_deepdives/harness-company/90_report|Harness 公司深度报告]] 与 [[50_deepdives/harness-company/60_playbook|落地 Playbook]]；证据入口见 [[00_sources/briefs/2026-harness-ai-platform|平台总览]]、[[00_sources/briefs/2026-harness-worker-agents|Worker Agents]]、[[00_sources/briefs/2026-harness-worker-agent-security|安全与身份]]、[[00_sources/briefs/2026-harness-ai-test-automation|AI Test]] 和 [[00_sources/briefs/2026-harness-ai-sre|AI SRE]]。
 
 ## 5. AWS：从生产根因分析向发布决策扩展
 
 AWS DevOps Agent 的 Production Operations 于 2026-03-31 GA，核心是关联服务拓扑、遥测、代码、部署和事故信息，进行根因调查和提出行动。2026-06 发布的 Release Management 则仍为 Preview，聚焦 Release Readiness Review、跨仓依赖和自治发布测试。
+
+需要校准“Autonomous”一词：AWS 官方架构明确说明 DevOps Agent 生成 Mitigation Plan，但不代替操作员执行 Remediation；其写能力限于 Ticket 和 Support Case。2026-07 的官方参考架构另用 EventBridge、Lambda、SQS、CodeBuild 和 Kiro CLI 把计划转成代码 PR，人工批准后才发布。这是系统级 SH3 组合，不能反推 AWS DevOps Agent 本体已经达到生产 L4。
 
 两者不能混为一谈：生产运维分析已进入 GA，而跨发布准备和执行的自治仍在试验。AWS 在 2026 年持续增加 Custom Agents、MCP/A2A、Memory、Pipeline Topology、反馈/准确率指标、Scoped Token、安全检查和 Agent Asset API，说明其目标是形成云端 DevOps Agent 控制面。
 
@@ -99,6 +112,8 @@ CircleCI Chunk 把代码、构建历史、测试结果和失败模式组合起�
 Buildkite 则保持可组合路线：Agent 可以通过 Skills/MCP 维护 Pipeline，也可作为受控 Pipeline Step 运行，使用既有日志、Artifact 和 Policy。其优势是开放和 Runner 控制，代价是企业需要自己组装更多治理能力。
 
 参考 [[00_sources/briefs/2026-circleci-chunk-agent|CircleCI Chunk]]、[[00_sources/briefs/2026-circleci-agentic-validation-infrastructure|Agentic Validation Infrastructure]] 与 [[00_sources/briefs/2026-buildkite-ai-agents-in-pipelines|Buildkite]]。
+
+Nx 从另一个方向把自治压缩到 Task：Project Graph 和 Task Metadata 提供上下文，原失败 Task 负责复验，Eligible/Never-fix Pattern、Protected Branch 和 `SELF_HEALING.md` 约束修改范围，Auto-apply 只对选定 PR Task 开放。这比“给 Agent 整仓写权”更适合企业复制。参考 [[00_sources/briefs/2026-nx-self-healing-ci|Nx Self-Healing CI]]。
 
 ## 9. 专业安全、测试、制品与部署厂商
 
@@ -157,3 +172,5 @@ WhatsCode 的 25 个月实践说明一键执行与接管修订可以长期并存
 - [[10_summaries/tools/README|Agent 工具与技术栈总结]]
 - [[30_summaries/stages/README|八阶段总结]]
 - [[40_summaries/crosscutting/README|横向变化总结]]
+- [[50_deepdives/cicd-self-healing/README|CI/CD 问题自愈专题]]
+- [[50_deepdives/harness-company/README|Harness 公司专题]]

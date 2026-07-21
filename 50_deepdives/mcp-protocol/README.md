@@ -35,6 +35,7 @@ refresh_after: 2026-07-29
 3. Tool 数量会带来上下文税、选择错误和授权面膨胀；Toolset 收敛比 Server 数量更重要。
 4. MCP 可以替代客户端对 CLI/API 的重复适配，却不会替代后台真实能力、业务授权和外部验证。
 5. 2026-07 候选规范转向无状态核心、扩展框架和更标准的 HTTP 基础设施，说明早期会话式协议正在为企业规模化重构；其最终内容仍需正式发布后复核。
+6. Anthropic Tool Search/Claude Code 已实现 MCP Tool 渐进式加载，但 `defer_loading` 与 `tool_reference` 属于 Anthropic Host/API 层，不是 MCP Core；上下文可见性也不能替代 Tool 授权。
 
 ## 专题导航
 
@@ -49,6 +50,7 @@ refresh_after: 2026-07-29
 | Playbook | 完成 | [[50_deepdives/mcp-protocol/60_playbook|企业 Playbook]] |
 | Report | 完成 | [[50_deepdives/mcp-protocol/90_report|专题报告]] |
 | Research Notes | 完成 | [[50_deepdives/mcp-protocol/research-evidence|一手资料笔记]] |
+| Progressive Loading | 完成 | [[50_deepdives/mcp-protocol/progressive-loading-research|Anthropic 渐进式加载证据]] |
 
 ## 与其他专题的边界
 

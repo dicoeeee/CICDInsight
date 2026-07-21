@@ -4,7 +4,7 @@ source_id: harness-code-quality-agents-2026-07-02
 organization: Harness
 source_type: official-docs
 published: 2026-07-02
-verified: 2026-07-14
+verified: 2026-07-16
 availability: ga
 confidence: high
 geography:
@@ -49,6 +49,7 @@ Harness 用三个专业 Agent 把 PR 评审、测试生成和 CI 失败修复连
 - Code Coverage Agent 生成测试来提升覆盖率，并以 PR 或报告交付。
 - AutoFix Agent 分析 CI 失败与代码变更，生成修复、验证构建并创建 PR。
 - 三类 Agent 都运行在流水线触发链路中，输出由开发者审查和合并。
+- 这三个专项 Agent 不应自动假设与通用 Worker Agent 使用完全相同的 Runtime、模型和权限实现，采购时需分别核验。
 
 ## CI/CD 相关性
 
@@ -65,8 +66,8 @@ Harness 用三个专业 Agent 把 PR 评审、测试生成和 CI 失败修复连
 
 - 缺少不同语言、仓库规模和失败类型下的独立成功率数据。
 - “自动修复”最终仍通过 PR 交付，不等于无人值守合并。
+- Agent 不应修改或跳过用来证明其修复成功的原始 CI Gate。
 
 ## 可引用判断
 
 - CI 自愈的现实形态通常不是直接修改主分支，而是让 Agent 诊断、修复、重跑验证并提交可审查变更。
-

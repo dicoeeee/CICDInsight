@@ -163,16 +163,16 @@ CI/CD stages use the agreed eight-stage model:
 #### S10. Worker Agents
 
 - **Organization / project:** Harness Autonomous Worker Agents
-- **Publication / update date:** 2026-07-08
+- **Publication / update date:** 2026-07-09; rechecked 2026-07-16
 - **URL:** https://developer.harness.io/docs/platform/harness-ai/harness-agents/
 - **Source type:** Official product documentation
-- **Availability status:** Available to accounts with AI Agents enabled; access may require administrator/support enablement
+- **Availability status:** Listed as generally available; account access and fine-grained permissions may still require administrator/support enablement or feature flags
 - **Relevant CI/CD stages:** 1-8
 - **Tool category:** CI/CD pipeline, agent runtime, MCP and governance
 - **Geography:** United States / global service
-- **Key facts:** Reusable agents combine instructions, a model connector and optional MCP servers, then run as an `Agent` step in CI, CD, IaC, security testing, supply-chain security or custom stages. Execution is containerized in an isolated VM on Harness Cloud or customer Kubernetes; definitions are versioned separately from pipeline references.
+- **Key facts:** Reusable agents combine instructions, a model connector and optional MCP servers, then run as an `Agent` step in CI, CD, IaC, security testing, supply-chain security or custom stages. Execution is containerized in an isolated VM on Harness Cloud or customer Kubernetes; definitions are versioned separately from pipeline references. Managed or customer Anthropic/OpenAI connectors are supported. Runtime access is a short-lived subset of the triggering principal's RBAC and declared Agent grant; third-party tool access is further intersected at the MCP gateway.
 - **Why it matters:** Direct evidence that an agent can now be a typed, governed pipeline step across the entire delivery lifecycle.
-- **Confidence / limitations:** **High** for documented operation. Account enablement means availability is not identical to unrestricted GA access.
+- **Confidence / limitations:** **High** for documented operation and **medium-high** for the first-party isolation/authorization design. Fine-grained token injection is feature-flagged, the security replay is not independently replicated, and GA is not identical to unrestricted account availability or proven production autonomy.
 
 #### S11. Harness Code Quality Agents
 
@@ -184,7 +184,7 @@ CI/CD stages use the agreed eight-stage model:
 - **Relevant CI/CD stages:** 1, 2, 3, 4
 - **Tool category:** Code review, testing and CI failure remediation
 - **Geography:** United States / global service
-- **Key facts:** Code Review posts PR feedback; Code Coverage generates tests and a PR; AutoFix analyzes build failures and proposes changes through a PR. The review flow includes prompt generation, iterative model review and comment posting.
+- **Key facts:** Code Review posts PR feedback; Code Coverage generates tests and a PR; AutoFix analyzes build failures, proposes changes, reruns verification and delivers a PR. These specialized flows use PR and the original CI as human and deterministic boundaries; their model/runtime/permission implementation should not be inferred to be identical to generic Worker Agents.
 - **Why it matters:** Covers three recurring human bottlenecks—review, coverage and broken builds—with a common PR-based human-control boundary.
 - **Confidence / limitations:** **High** for workflow. The page supplies no comparative accuracy, acceptance-rate or failure-rate data.
 
@@ -194,11 +194,11 @@ CI/CD stages use the agreed eight-stage model:
 - **Publication / update date:** 2026-07-06
 - **URL:** https://developer.harness.io/docs/ai-test-automation/get-started/overview/
 - **Source type:** Official product documentation
-- **Availability status:** Limited / contact Harness to enable
+- **Availability status:** AI Test Copilot is listed as GA in the Harness AI overview, while the full AI Test Automation module remains controlled / contact Harness to enable
 - **Relevant CI/CD stages:** 3, 7, 8
 - **Tool category:** End-to-end testing, multi-agent execution and self-healing tests
 - **Geography:** United States / global service
-- **Key facts:** Natural-language tests are interpreted against a dynamic UI; specialized navigation and date agents orchestrate execution. The product documents self-healing and CI/CD integration.
+- **Key facts:** Natural-language intent is decomposed into executable browser/API actions and checked with DOM, screenshot, visual and semantic assertions. The product documents self-healing selectors, isolated Kubernetes execution and CI/CD integration. First-party cases report maintenance, failure-rate and test-authoring improvements, but are not independent benchmarks.
 - **Why it matters:** Shows test authoring and maintenance moving from scripted selectors to intent-driven, multi-agent execution.
 - **Confidence / limitations:** **High** for design and access requirement; production scale and test reliability are not quantified.
 
