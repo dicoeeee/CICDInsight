@@ -7,13 +7,13 @@ status: draft
 slide: 1
 content_status: archived
 visual_status: pending
-as_of: 2026-07-20
+as_of: 2026-07-21
 ---
 
 # GitHub 以 Workflow 为装配清单，把 Skill、Agent 与 MCP 编译成受控的 Actions 作业
 
 > [!abstract] 页面唯一主张
-> GitHub Agentic Workflows 的关键不只是让 Coding Agent 在 Actions 中运行，而是用 Workflow Source 显式声明 Task、Engine、Skill、Tool/MCP 和控制边界，再由 Compiler 把它们生成可审查、分阶段授权的 Actions 执行计划。
+> GitHub Agentic Workflows 的关键不只是让 Coding Agent 在 Actions 中运行，而是用 Workflow Source 显式声明 Task、Engine、Skill、Tool/MCP 和控制边界，再由 Compiler 把它们生成可审查、分阶段授权的 Actions 执行计划。固定 Actions 不只是承载环境，还是包住动态推理的流程骨架和最终复验 Oracle。
 
 ## 一、页面沟通任务
 
@@ -41,13 +41,15 @@ GitHub 以 Workflow 为装配清单，把 Skill、Agent 与 MCP 编译成受控�
 
 ## 三、页面论证链
 
-`Workflow.md` 能力声明
+固定 Actions Event / `workflow_run`
+→ `Workflow.md` 能力声明
 → Compiler 解析、校验、固定与分阶段授权
 → `.lock.yml` 受控 Actions 执行计划
 → Activation 安装 Skill、准备上下文和运行环境
 → Agent Engine 按 Skill 工作并通过 GitHub Tools / MCP 调用能力
 → Candidate Output 被缓冲为 Artifact
 → Threat Detection 与 Safe Output Job 决定哪些结果可以外化
+→ 原 Actions Test / Scan / Ruleset / Environment 决定能否继续
 
 ## 四、内容块一：Workflow Source 是装配清单
 
@@ -129,6 +131,19 @@ Scoped Write Job
 
 这一块证明“受控的 Actions 作业”：真正的外部副作用由受信 Job 外化，而不是由主 Agent 直接执行。
 
+### 与固定 GitHub Actions CI/CD 的三层关系
+
+| 关系层 | 固定 Actions 提供什么 | Agentic Workflow 增加什么 |
+|---|---|---|
+| 编译层 | Event、Runner、Job、`needs`、Permission、Artifact 和执行拓扑 | 把 Task、Agent、Skill、MCP 与输出边界编译成传统 `.lock.yml` |
+| 运行层 | 确定性 Step/Job 在 Agent 前后收集事实、过滤触发和执行固定逻辑 | 在受限 Agent Job 内处理难以预先枚举的归纳、假设和 Tool 选择 |
+| 反馈层 | 原 CI、Ruleset、Environment 与人工批准复验并放行 | 通过 Artifact、PR 或受控 Dispatch 提交候选结果 |
+
+> [!important] 页面关系句
+> **流程拓扑固定，局部判断动态，最终放行确定。** GitHub 不是用 Agent 替换 Actions，而是在固定 Actions 骨架中加入一个有输入、预算、工具和出口边界的动态决策段。
+
+页面讲解需补充一个安全边界：自定义 `steps:` / `jobs:` 仍按标准 Actions 安全模型运行，并不自动继承 Agent Firewall；需要分别审查 Action、Shell、Secret、Permission 与 Runner。
+
 ## 八、组件角色结论
 
 | 组件 | 一句话角色 | 不能误解为 |
@@ -136,13 +151,13 @@ Scoped Write Job
 | Skill | 定义“怎么做” | 权限、Policy 或执行授权 |
 | Agent | 决定“下一步做什么” | 成功标准或最终批准者 |
 | MCP / Tool | 提供“能调用什么” | 自动获得外部系统写权限 |
-| Actions | 控制“何时、何地、以什么权限运行” | 被自然语言流程取代的旧系统 |
+| Actions | 固定流程拓扑，控制何时、何地、以什么权限运行，并复验结果 | 被自然语言流程取代的旧系统 |
 | Safe Output | 决定“哪些候选结果可以改变外部状态” | 对 Agent 输出无条件放行 |
 | Oracle / Gate | 证明“结果是否正确、是否可以继续” | Agent 的自我评价 |
 
 建议把以下结论放在页面底部：
 
-> Skill 定义方法，Agent 动态决策，MCP 扩展能力面；Actions 与 Safe Output 掌握触发、执行和外部写入边界。
+> Skill 定义方法，Agent 动态决策，MCP 扩展能力面；Actions 固定流程骨架并复验结果，Safe Output 掌握外部写入边界。
 
 ## 九、必须明确区分的相邻概念
 
@@ -187,7 +202,7 @@ Scoped Write Job
 
 ## 十一、页底三条洞察
 
-- **核心差异化：** GitHub 用 Compiler 把 Agent、Skill、MCP 和权限边界一起落到既有 Actions 执行图，而不是另建一套平行 AI 流程。
+- **核心差异化：** GitHub 用 Compiler 把 Agent、Skill、MCP 和权限边界一起落到既有 Actions 执行图；动态推理成为固定流程中的受控一段，而不是另建平行 AI Pipeline。
 - **企业启示：** Agent 平台的关键不是 Tool 数量，而是能力能否被声明、固定、分阶段授权并由外部 Gate 复验。
 - **当前边界：** Agentic Workflows 仍处于 Public Preview；关键合并、制品晋级和生产发布不能仅凭 Agent 与 Safe Output 自动放行。
 
@@ -215,6 +230,7 @@ Scoped Write Job
 
 - [[20_summaries/companies/README#1. GitHub：把 Agent 编译进 Actions|GitHub 公司总结]]
 - [[50_deepdives/github-agentic-workflows/90_report|GitHub Agentic Workflows 深研]]
+- [[50_deepdives/github-agentic-workflows/fixed-actions-relationship-research|Agentic Workflow 与固定 Actions 关系证据]]
 - [[50_deepdives/github-agentic-workflows/20_evidence-map|GitHub Agentic Workflows 证据矩阵]]
 - [[50_deepdives/github-agentic-workflows/60_playbook|GitHub Agentic Workflows 企业 Playbook]]
 - [[60_tutorials/github-agentic-workflows-config|GitHub Agentic Workflows 配置速查]]
@@ -228,5 +244,10 @@ Scoped Write Job
 - [About Workflows](https://github.github.com/gh-aw/introduction/overview/)
 - [Frontmatter Reference](https://github.github.com/gh-aw/reference/frontmatter/)
 - [Security Architecture](https://github.github.com/gh-aw/introduction/architecture/)
+- [Compilation Process](https://github.github.com/gh-aw/reference/compilation-process/)
+- [DeterministicOps](https://github.github.com/gh-aw/patterns/deterministic-ops/)
+- [Custom Steps and Jobs](https://github.github.com/gh-aw/reference/steps-jobs/)
+- [Triggers](https://github.github.com/gh-aw/reference/triggers/)
+- [Triggering CI](https://github.github.com/gh-aw/reference/triggering-ci/)
 - [Safe Outputs](https://github.github.com/gh-aw/reference/safe-outputs/)
 - [Public Preview Announcement](https://github.blog/changelog/2026-06-11-github-agentic-workflows-is-now-in-public-preview/)
