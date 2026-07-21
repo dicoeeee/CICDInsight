@@ -14,7 +14,7 @@ status: draft
 | 页码 | 横向维度 | 页面主张 | 状态 |
 |---|---|---|---|
 | 01 | GitHub | 以 Workflow 为装配清单，把 Skill、Agent 与 MCP 编译成受控的 Actions 作业 | 内容分析已归档、待视觉设计 |
-| 02 | Harness | 用上下文图谱、Agent、Pipeline 与 Oracle 形成 After-Code 控制面 | 待讨论 |
+| 02 | Harness CI | 把 Agent 插入 CI Pipeline，但把成功标准留给原始 Gate | 内容分析已归档、待视觉设计 |
 | 03 | GitLab | 依靠统一 DevSecOps 数据面组织 Review、Fix CI 和安全修复 Flow | 待讨论 |
 | 04 | AWS | 先把生产事故和发布信号变成调查与 Mitigation Plan，再由人决定行动 | 待讨论 |
 | 05 | CI 自愈能力 | 成熟闭环不是“重跑”，而是失败分类、受控修复、原任务复验与 PR 交付 | 待讨论 |
