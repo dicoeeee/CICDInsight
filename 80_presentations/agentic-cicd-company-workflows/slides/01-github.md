@@ -54,18 +54,24 @@ GitHub 以 Workflow 为装配清单，把 Skill、Agent 与 MCP 编译成受控�
 
 ## 四、内容块一：Workflow Source 是装配清单
 
-`.github/workflows/<name>.md` 不是只有自然语言 Prompt，而是由机器约束的 Frontmatter 与面向 Agent 的 Markdown Body 组成。
+`.github/workflows/<name>.md` 的真实结构只有两部分：`---` 包裹的 YAML Frontmatter，以及其后的 Markdown Body。下表按实际位置和顶层字段映射装配角色，不把概念角色伪装成同级 Schema 字段。
 
-| 声明项 | 在装配中的职责 | 页面建议用语 |
+| `workflow.md` 实际位置或字段 | 真实声明内容 | 在装配中的角色 |
 |---|---|---|
-| Markdown Body / Task | 描述目标、证据、工作方法、禁止项、输出和成功条件 | 定义“要完成什么” |
-| `engine:` | 选择 Copilot、Claude、Codex、Gemini 等 Agent Engine | 选择“由谁推理” |
-| `skills:` / Imports | 安装运行时 Skill，或复用共享 Prompt、Tool、MCP 与配置 | 注入“按什么方法工作” |
-| `tools:` / MCP / MCP Scripts | 暴露 GitHub、CLI、浏览器或外部系统的查询与行动入口 | 声明“能调用什么” |
-| Steps / Jobs | 在 Agent 前后混合确定性的 Actions 计算与编排 | 固定“哪些步骤不交给模型” |
-| Trigger / Permissions / Network / Budget / Safe Outputs | 限制何时运行、读取什么、访问哪里、花费多少和允许外化什么 | 固定“行动边界” |
+| Markdown Body | 目标、证据、判断规则、工作步骤、禁止项、输出与成功条件 | 定义 Task，即“要完成什么” |
+| `engine:` | Copilot、Claude、Codex、Gemini 等 Engine 及 Model/Driver 配置 | 选择 Agent Runtime，即“由谁推理” |
+| `skills:` | 在 Activation 阶段安装、固定到 Commit SHA 的外部 Skill | 注入“按什么方法工作” |
+| `imports:` | 复用共享 Prompt、Tool、Step、MCP Server 与控制配置 | 组合“哪些已有配置被继承” |
+| `tools:` | GitHub、Edit、Bash、Web、Playwright 等内置工具及调用限制 | 声明“可使用哪些内置能力” |
+| `mcp-servers:` / `mcp-scripts:` | 外部 MCP Server 或内联 MCP Tool 的连接、认证和 Allowlist | 扩展“可调用哪些外部能力” |
+| `pre-steps:` / `steps:` / `pre-agent-steps:` / `post-steps:` / `jobs:` | Agent 前后或独立 Job 中的确定性 Actions 计算 | 固定“哪些步骤不交给模型” |
+| `on:` / `if:` | Event、Schedule、Command、角色和条件过滤 | 固定“何时进入作业” |
+| `permissions:` / `network:` / `safe-outputs:` / Budget / Timeout | 读取权限、网络、外部写入、成本、时长和循环边界 | 固定“可以做到什么程度” |
 
-这一内容块直接支撑“装配清单”的说法：Skill、Agent 和 MCP 都是 Workflow 的显式声明，不是运行时临时授予的广泛能力。
+> [!important] 字段与运行时角色不是一一同名
+> `Task` 来自 Markdown Body；`Agent` 不是一个顶层 `agent:` 字段，而是 Compiler 根据 `engine:` 和任务正文生成的运行时 Job；`skills:`、`imports:`、`tools:`、`mcp-servers:` 与 `mcp-scripts:` 是相互独立的字段，而且均为按需配置。
+
+这一内容块支撑“装配清单”的准确含义：Workflow 显式声明 Engine、可选 Skill、工具能力和控制边界，Compiler 再把这些字段装配成 Agent Job 与受控 Actions 执行计划。
 
 ## 五、内容块二：Compiler 同时装配能力与控制边界
 
@@ -185,13 +191,14 @@ Scoped Write Job
 ### 必须进入页面
 
 1. Markdown Body + Frontmatter 组成 Workflow Source；
-2. 多 Agent Engine 可替换；
-3. Runtime Skills 与 Imports；
-4. GitHub Tools、MCP 和确定性 Steps/Jobs 的组合；
-5. Compiler + `.lock.yml`；
-6. 默认只读、Sandbox、Network 与 Tool Allowlist；
-7. Candidate Artifact、Threat Detection、Safe Outputs 和最小写权限 Job；
-8. 原有 CI、Ruleset、CODEOWNERS 与 Environment Approval 保持最终 Gate。
+2. `engine:` 选择 Agent Runtime，Agent 不是同名 Frontmatter 字段；
+3. `skills:` 与 `imports:` 分别承担方法注入和配置复用；
+4. `tools:` 与 `mcp-servers:` / `mcp-scripts:` 分别表达内置和扩展工具面；
+5. `pre-steps:` / `steps:` / `pre-agent-steps:` / `post-steps:` / `jobs:` 组合确定性计算；
+6. Compiler + `.lock.yml`；
+7. 默认只读、Sandbox、Network 与 Tool Allowlist；
+8. Candidate Artifact、Threat Detection、Safe Outputs 和最小写权限 Job；
+9. 原有 CI、Ruleset、CODEOWNERS 与 Environment Approval 保持最终 Gate。
 
 ### 只作为页脚状态或讲解补充
 
