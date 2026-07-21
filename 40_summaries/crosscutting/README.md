@@ -4,6 +4,7 @@ tags:
   - research/agentic-cicd
   - synthesis/crosscutting
 status: complete
+workflow: batch-insight
 as_of: 2026-07-16
 ---
 
@@ -227,7 +228,7 @@ M4 不是“所有 CI/CD 无人化”，而是企业能在多个明确场景中�
 
 ## 下钻入口
 
-- [[90_report/seven-dimension-analysis|七维分析汇总报告]]
+- [[90_report/seven-dimension-analysis|七维交叉分析工作台]]
 - [[10_summaries/tools/README|Agent 工具与技术栈总结]]
 - [[20_summaries/companies/README|公司维度总结]]
 - [[30_summaries/stages/README|阶段维度总结]]

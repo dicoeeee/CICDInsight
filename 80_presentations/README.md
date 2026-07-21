@@ -12,7 +12,7 @@ as_of: 2026-07-21
 # Agentic CI/CD 演示文稿
 
 > [!abstract] 目的
-> 本目录管理 PPT 的叙事结构、页面文案、视觉意图和来源映射。研究事实与详细论证继续在总结、专题深研和 Source Brief 中维护。
+> 本目录基于已经完成且标记为 `presentation_ready: true` 的 Deep Dive，管理 PPT 的叙事结构、页面文案、视觉意图和来源映射。研究事实与详细论证由专题深研维护，分类总结和 Source Brief 只作为辅助证据。
 
 ## 内容边界
 
@@ -22,9 +22,16 @@ as_of: 2026-07-21
 - `outputs/` 存放：完成渲染的 PPTX、HTML、PDF 和预览图。
 
 > [!important] 维护原则
-> PPT 不建立第二套事实源。页面文案可以持续改写，但每个关键判断都应链接回已有的研究笔记。
+> PPT 不建立第二套事实源。每个正式公司页或功能页必须至少有一个 Presentation-ready Deep Dive 作为主要分析来源；页面文案可以持续改写，但不能绕过专题直接从单条来源生成结论。
 
-补充洞察应先沉淀到 [[50_deepdives/README|专题深研层]]。当新洞察改变现有页面的主张、作业流、产品状态、自治或成熟度、控制边界、企业启示或来源映射时，可以同步修改相关 `slides/*.md` 与 Source Map；仅增加实现细节或旁支事实时，不必改动 Presentation。
+补充洞察应先沉淀到 [[50_deepdives/README|专题深研层]]。没有对应专题或专题尚未达到 Presentation-ready 时，页面只能保留中性选题、阻塞原因和研究缺口，并标记为 `blocked-by-deep-dive`；不得预写页面主张、作业流或正式论证。当专题更新改变现有页面的主张、作业流、产品状态、自治或成熟度、控制边界、企业启示或来源映射时，再同步修改相关 `slides/*.md` 与 Source Map。
+
+## 状态字段
+
+- Deep Dive README 的 `presentation_ready: true/false` 是唯一汇报就绪事实源。
+- Slide 的 `content_status` 只描述页面内容阶段，使用 `blocked-by-deep-dive`、`deep-dive-ready` 或 `content-archived`。
+- Slide 的 `visual_status` 只描述视觉阶段，使用 `blocked`、`pending` 或 `complete`。
+- Slide 不重复保存 Deep Dive readiness；非阻塞页面的 `primary_deep_dive` 必须能回链到专题 README，阻塞页面将该字段留空。
 
 ## 当前演示项目
 
@@ -32,8 +39,9 @@ as_of: 2026-07-21
 
 ## 建议工作流
 
-1. 在 Deck Brief 中明确受众、沟通任务和核心结论。
-2. 在 Slide Outline 中决定页序和每页唯一主张。
-3. 按统一 Slide Template 编写页面内容。
-4. 在 Source Map 中校验状态、自治等级和证据口径。
-5. 完成文案审核后，再进入视觉制作和渲染。
+1. 检查候选页面是否存在 `presentation_ready: true` 的 Deep Dive；缺少时保持阻塞。
+2. 在 Deck Brief 中明确受众、沟通任务和核心结论。
+3. 在 Slide Outline 中决定页序和每页唯一主张。
+4. 按统一 Slide Template 从 Deep Dive 提炼页面内容。
+5. 在 Source Map 中校验主要专题、辅助总结、产品状态、自治等级和证据口径。
+6. 完成文案审核后，再进入视觉制作和渲染。

@@ -6,9 +6,10 @@ tags:
   - company/harness
 status: draft
 slide: 2
-content_status: archived
+content_status: content-archived
 visual_status: pending
-as_of: 2026-07-21
+primary_deep_dive: "[[50_deepdives/harness-company/README]]"
+as_of: 2026-07-16
 ---
 
 # Harness 把 Agent 插入 CI Pipeline，但把成功标准留给原始 Gate

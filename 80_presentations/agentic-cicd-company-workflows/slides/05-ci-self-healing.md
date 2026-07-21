@@ -5,6 +5,10 @@ tags:
   - deliverable/presentation/slide
 status: draft
 slide: 5
+content_status: deep-dive-ready
+visual_status: pending
+primary_deep_dive: "[[50_deepdives/cicd-self-healing/README]]"
+as_of: 2026-07-15
 ---
 
 # CI 自愈的可信闭环是修复后复验，而不是无限重跑

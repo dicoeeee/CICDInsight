@@ -5,8 +5,9 @@ tags:
   - deliverable/presentation/slide
 status: draft
 slide: 1
-content_status: archived
+content_status: content-archived
 visual_status: pending
+primary_deep_dive: "[[50_deepdives/github-agentic-workflows/README]]"
 as_of: 2026-07-21
 ---
 

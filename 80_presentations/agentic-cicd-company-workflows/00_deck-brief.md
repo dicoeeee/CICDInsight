@@ -27,6 +27,7 @@ Agent 如何重构 CI/CD：主要公司与能力作业流洞察
 
 ## 内容组织原则
 
+- 每个正式公司页或能力页必须有一个 `presentation_ready: true` 的 Deep Dive 作为主要分析来源；否则只登记候选题目，不进入页面制作。
 - 全生命周期或控制面较完整的平台：一家公司一页。
 - 专业厂商证据集中的领域：一个大能力块一页，页内放代表厂商。
 - 每页只表达一个主张，不追求罗列该公司的全部产品。
@@ -51,7 +52,10 @@ Agent 如何重构 CI/CD：主要公司与能力作业流洞察
 
 ## 上游研究入口
 
+- [[50_deepdives/README|Presentation-ready Deep Dive 索引]]
 - [[20_summaries/companies/README|公司维度总结]]
 - [[30_summaries/stages/README|八阶段维度总结]]
 - [[40_summaries/crosscutting/README|横向变化总结]]
-- [[90_report/seven-dimension-analysis|七维分析汇总报告]]
+- [[90_report/seven-dimension-analysis|七维交叉分析工作台]]
+
+分类总结和七维分析用于跨页比较，不能替代单页对应的 Deep Dive。

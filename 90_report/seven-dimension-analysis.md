@@ -1,5 +1,5 @@
 ---
-title: Agentic CI/CD 七维分析汇总报告
+title: Agentic CI/CD 七维交叉分析工作台
 aliases:
   - Agentic CI/CD Multidimensional Analysis
   - Agentic CI/CD 七维洞察
@@ -7,7 +7,9 @@ tags:
   - research/agentic-cicd
   - report
   - synthesis/multidimensional
-status: complete
+status: supporting-analysis
+workflow: batch-insight
+report_role: analysis-workbench
 as_of: 2026-07-16
 audience:
   - CTO
@@ -15,14 +17,16 @@ audience:
   - 平台工程负责人
 ---
 
-# Agentic CI/CD 七维分析汇总报告
+# Agentic CI/CD 七维交叉分析工作台
 
 **观察窗口：** 2025-07-01—2026-07-16，重点关注 2026 年
 **研究范围：** 编码完成后的代码评审、检查与门禁、构建出包、制品与版本、部署发布、发布后验证与恢复
 **证据基础：** [[00_sources/agentic-cicd-source-landscape|81 条核心一手资料]]、[[00_sources/README|68 个深度 Source Brief]]
 
-> [!abstract] 总结论
-> 2026 年 Agent 已经进入 CI/CD 的分析、变更生成和受控执行层，但行业成熟单位不是“一个平台”或“一个模型”，而是一个可以被独立评测和授权的**任务场景**。企业应以 Scenario 为连接键，同时判断它处于哪个 Stage、由哪些 Company 提供、依赖什么 Tool Stack、是否具有成熟度和价值证据、在什么运行架构与控制边界中执行，以及人员和流程如何承接责任。
+> [!abstract] 文档角色
+> 本文是批量洞察的交叉分析框架和候选观点工作台，不是第二份最终主报告。它负责连接 Stage、Company、Tool、Scenario、成熟度、运行边界和组织流程，并检验候选观点；最终对外观点、企业建议和路线由 [[90_report/README|主报告]]统一维护。
+
+当前工作判断：2026 年 Agent 已经进入 CI/CD 的分析、变更生成和受控执行层，但行业成熟单位不是“一个平台”或“一个模型”，而是一个可以被独立评测和授权的**任务场景**。
 
 ## 一、七维框架
 
@@ -246,7 +250,9 @@ Harness Worker Agent 提供了一个可供验证的厂商实现：运行时把 A
 
 流程资产也会改变。除代码、Pipeline 和 Runbook 外，企业需要维护：任务验收规范、Agent/Skill 版本、Tool Registry、风险分级、黄金评测集、批准前置条件、Evidence Pack、失败回放和成本基线。PR、Pipeline、Plan/Approval 与 Runbook 将成为四类主要人机边界。
 
-## 九、七维交叉后的关键结论
+## 九、七维交叉后的候选观点
+
+以下内容用于检验和筛选主报告观点，不作为另一份独立结论清单。进入 [[90_report/README|主报告]]前，仍需确认反例、置信度、观察窗口和决策价值。
 
 1. **场景而不是产品是采用单位。** 采购一个“L3 Agent 平台”没有直接意义；企业需要批准的是某个 Agent 在某类仓库、环境和风险条件下完成某个任务。
 2. **可验证性和可逆性决定自治上限。** 模型能力影响完成率，但外部 Oracle、隔离和回滚决定能否获得执行权。
@@ -257,23 +263,17 @@ Harness Worker Agent 提供了一个可供验证的厂商实现：运行时把 A
 7. **“自愈”必须按闭环与权限双重判级。** SH0—SH4 描述检测到回退是否完整，L0—L4 描述行动权；自动调查、创建 PR、验证写回和生产恢复不能混成同一个成熟度。
 8. **人的工作向高语境与高责任环节集中。** 自动化程度上升不会消除责任，而会使意图、验收标准、风险边界、异常接管和效果评测更重要。
 
-## 十、企业采用建议
+## 十、转译到主报告的规则
 
-### 第一优先级：建立场景基线
+候选观点只有满足以下条件才进入 [[90_report/README|主报告]]：
 
-选择 2—3 个高频、可回滚、可验证场景，例如 Review、CI 修复和只读事故调查。记录任务成功、人工介入、回归、Lead Time、审计和单位成功成本。
+1. 至少跨两个分析维度成立，而不是单一产品功能描述；
+2. 有一手证据或可追溯 Source Brief，并处理重要反例；
+3. 能支持目标受众的判断、取舍或行动，而不只是信息汇总；
+4. 与现有主报告观点不重复；若只是加强证据，则更新原观点而不是新增章节；
+5. 标明观察窗口、置信度和不能外推的边界。
 
-### 第二优先级：建设运行与控制底座
-
-统一任务身份、受控 Tool/MCP 目录、Runner/Sandbox、PR/Plan/Approval 出口、外部 Oracle、预算和审计。不要让各团队使用共享高权限机器人账号自由接入工具。
-
-### 第三优先级：按证据升级自治
-
-从只读和 Draft PR 开始；达到任务质量、治理和经济性阈值后，开放非生产 L3；只有在动作可逆、影响范围小、成功条件清晰且有可靠 Runbook 时，才开放局部 L4。
-
-### 第四优先级：重构组织运营机制
-
-平台、QA、安全、SRE 和业务团队共同维护评测集、Rules/Skills、风险等级、工具权限和失败回放。Agent 自治等级应像 SLO 和生产权限一样持续运营，而不是一次采购决定。
+企业采用路线、采购清单和最终建议只在主报告维护，本文保留用于推导它们的矩阵和分析结果。
 
 ## 十一、证据边界
 
@@ -296,4 +296,4 @@ Harness Worker Agent 提供了一个可供验证的厂商实现：运行时把 A
 - [[50_deepdives/README|专题深研索引]]
 - [[50_deepdives/cicd-self-healing/README|CI/CD 问题自愈深研]]
 - [[50_deepdives/harness-company/README|Harness 公司深研]]
-- [[90_report/README|原综合主报告与 18 个月路线]]
+- [[90_report/README|最终观点主报告与 18 个月路线]]

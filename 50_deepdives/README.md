@@ -13,11 +13,11 @@ as_of: 2026-07-21
 # Agentic CI/CD 专题深研
 
 > [!summary] 定位
-> 专题层位于分类总结与主报告之间，用于对高价值问题进行问题树拆解、证据映射、跨案例比较、动手复现和企业 Playbook 设计。专题可以深入，但不复制 [[00_sources/README|L0 证据]]和 [[05_case_library/README|规范案例卡]]。
+> 专题层是一条独立作业流，用于对单一公司、功能、技术、治理问题或端到端场景进行问题树拆解、证据映射和完整论证，并按需开展跨案例比较、动手复现和企业 Playbook 设计。它不再是所有批量洞察进入主报告的必经中间层，也不复制 [[00_sources/README|L0 证据]]和 [[05_case_library/README|规范案例卡]]。
 
 ## 专题工作单元
 
-每个专题至少包含：
+每个专题的必需交付物：
 
 ```text
 <topic>/
@@ -25,13 +25,21 @@ as_of: 2026-07-21
   00_charter.md         # 研究范围、决策问题、非目标
   10_question-tree.md   # 问题树、假设和验收标准
   20_evidence-map.md    # Claim—Evidence—Gap 矩阵
-  30_case-map.md        # 规范案例的横向比较
-  40_labs/              # 自有实验、复现和原始结果
   50_findings.md        # 分析发现、反例与置信度
-  60_playbook.md        # 企业试点和治理建议
   90_report.md          # 专题完整报告
-  assets/               # 图、截图和非文本附件
 ```
+
+按研究问题选择可选交付物：
+
+```text
+<topic>/
+  30_case-map.md        # 需要跨案例比较时
+  40_labs/              # 能够或必须通过学习、配置、复现验证时
+  60_playbook.md        # 需要企业试点和治理建议时
+  assets/               # 需要图、截图或非文本附件时
+```
+
+配置或实践细节具有复用价值时，可在 [[60_tutorials/README|教程层]]形成专题衍生物，不要求每个专题都编写教程。
 
 ## 专题地图：按研究维度拆分
 
@@ -65,21 +73,36 @@ CLI 与 MCP 仅在选型边界发生交叉，统一比较见 [[50_deepdives/cli-
 flowchart LR
   P["proposed"] --> R["researching"]
   R --> E["evidence-ready"]
-  E --> X["experimenting"]
+  E --> D["report-draft"]
+  E -.-> X["experimenting（按需）"]
   X --> D["report-draft"]
   D --> C["complete"]
   C --> W["watch / refresh"]
   W --> R
 ```
 
-专题完成不是“写完一篇文章”，而是以下条件同时成立：关键 Claim 能下钻到证据、案例与实验不混写、重要反例已处理、结论置信度明确、需要回流的上层报告已经更新。
+专题完成不是“写完一篇文章”，而是以下条件同时成立：关键 Claim 能下钻到证据、事实与分析不混写、重要反例已处理、结论置信度明确、必需交付物已完成。只有专题结论改变跨行业观点时才回流主报告。
+
+## Presentation-ready 门禁
+
+专题 README Frontmatter 使用 `presentation_ready: true/false` 表示它能否作为正式汇报页面的主要分析来源。
+
+设置为 `true` 至少要求：
+
+- 有清晰、可被一页汇报表达的核心主张；
+- 机制、作业流或能力关系能够直接证明主张；
+- 产品状态、自治等级、证据强度、时间点和关键边界已经校准；
+- 重要反例不会推翻页面结论；
+- `90_report.md` 已形成可引用的完整论证。
+
+该字段不表示产品本身成熟，也不要求专题一定进入某个 Deck。
 
 ## 增量洞察回流
 
-- 补充洞察默认进入最相关的专题目录，并按性质更新 `20_evidence-map.md`、`30_case-map.md`、`40_labs/`、`50_findings.md`、`60_playbook.md` 或 `90_report.md`，不能只在 PPT 中维护。
+- 单一公司、功能、技术或场景的补充洞察进入最相关的专题目录，并按性质更新 Evidence Map、案例、实验、Findings、Playbook 或专题报告。
 - 新的一手证据先在 [[00_sources/README|信息源层]]保留 Source Brief 或可追溯入口，专题层负责 Claim、反例、置信度和企业含义。
 - 没有匹配专题且问题尚未形成完整研究范围时，先在本索引登记为 `proposed`；不要把不同研究维度强行合并。
-- 每次专题更新后评估其演示影响。如果它改变页面主张、作业流、产品状态、自治或成熟度、控制边界、企业启示或来源映射，可以同步到 [[80_presentations/README|演示文稿层]]；否则保留在 Deep Dive 即可。
+- 每次专题更新后重新判断 `presentation_ready`。只有它改变已有页面主张、作业流、状态、控制边界、企业启示或来源映射时才同步到 [[80_presentations/README|演示文稿层]]。
 
 ## 规范
 

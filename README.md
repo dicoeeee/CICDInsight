@@ -5,7 +5,7 @@ aliases:
 tags:
   - research/agentic-cicd
   - research/2026
-status: complete
+status: active
 as_of: 2026-07-21
 ---
 
@@ -14,9 +14,15 @@ as_of: 2026-07-21
 > [!abstract] 研究目的
 > 帮助 CTO、研发效能负责人和平台工程负责人判断未来两年 Agent 将如何重构 CI/CD，哪些场景已经具备落地条件，企业应如何调整平台能力、工作流程、人员职责与治理机制，并据此制定分阶段演进路线。
 
+## 项目的三个核心作用
+
+1. **批量洞察，形成观点：** 对多公司、行业趋势和 CI/CD 阶段进行批量研究，经分类总结和交叉分析形成主报告。
+2. **针对公司或功能进行深度洞察：** 对单一公司、功能、技术或场景建立完整专题研究。
+3. **基于深度洞察形成汇报思路：** 从已完成且适合汇报的 Deep Dive 中提炼页面主张、作业流和企业启示。
+
 ## 快速阅读
 
-- [[90_report/seven-dimension-analysis|七维分析汇总报告]]：从 Stage、Company、Tool、Scenario、成熟度与价值、运行架构与控制边界、组织与工作流程七个维度形成统一判断。
+- [[90_report/seven-dimension-analysis|七维交叉分析工作台]]：从七个维度检验批量研究的候选观点，不作为第二份最终报告。
 - [[90_report/README|主报告]]：决策结论、八阶段影响、参考架构、18 个月路线与 2027—2028 展望。
 - [[80_presentations/README|演示文稿层]]：管理 PPT 的叙事、页面文案、作业流表达和来源映射；最终渲染文件仍放在 `outputs/`。
 - [[00_sources/agentic-cicd-source-landscape|81 条核心一手资料景观]]：精简并增补后的 L0 来源与逐条 Brief。
@@ -25,18 +31,18 @@ as_of: 2026-07-21
 - [[00_sources/incremental-source-research-2026-07-14|本轮增量研究记录]]：25 条新增源的排重与选源依据。
 - [[05_case_library/README|实践案例库]]：把跨专题复用的外部实践整理成架构、流程、控制边界和证据强度明确的案例卡。
 - [[10_summaries/tools/README|Agent 工具与技术栈]]、[[20_summaries/companies/README|公司维度]]、[[30_summaries/stages/README|阶段维度]]、[[40_summaries/crosscutting/README|横向变化]]：主报告的四组中间证据。
-- [[50_deepdives/README|专题深研索引]]：问题树、证据矩阵、案例比较、可复现实验、Findings、Playbook 和专题报告。
+- [[50_deepdives/README|专题深研索引]]：问题树、证据矩阵、Findings 和专题报告，以及按需开展的案例比较、实验与 Playbook。
 - [[60_tutorials/README|配置与实践教程]]：用最小 YAML/Frontmatter 示例解释关键字段、默认值、风险、常见错误和验证方法。
 - [[50_deepdives/cli-agent-interface/90_report|CLI 深度报告]]、[[50_deepdives/mcp-protocol/90_report|MCP 深度报告]]、[[50_deepdives/cli-anything/90_report|CLI-Anything 项目深度报告]]、[[50_deepdives/github-agentic-workflows/90_report|GitHub Agentic Workflows 深度报告]]、[[50_deepdives/cicd-self-healing/90_report|CI/CD 问题自愈深度报告]]、[[50_deepdives/harness-company/90_report|Harness 公司深度报告]]：分别研究执行接口、协议、接口生成项目、Agent Workflow 平台、端到端自愈场景与 Harness Inc. 的产品/架构/实践；跨 CLI/MCP 选型见 [[50_deepdives/cli-vs-mcp-decision-guide|决策指南]]。
 
 ## 研究边界
 
-- 时间：2025 年 7 月 1 日至 2026 年 7 月 15 日，重点关注 2026 年；趋势判断延伸至 2027—2028 年。
+- 时间：纳入 2025 年 7 月 1 日以来的材料，重点关注 2026 年；每个批次和专题单独记录观察截止日，趋势判断可延伸至 2027—2028 年。
 - 地域：全球实践为主，中国企业作为重要对照。
 - 起点：编码完成，变更进入代码评审和交付系统。
 - 终点：发布后验证、观测、回滚和故障恢复。
 - 不单独研究传统 CI/CD；现有流程仅作为定位 Agent 介入点的坐标。
-- 本次先产出一次性报告；可复用研究工作流不在本次范围内。
+- 单次批量洞察、专题和演示项目分别记录自己的观察窗口、状态与 `as_of`。
 
 ## Agent 纳入标准
 
@@ -67,25 +73,39 @@ as_of: 2026-07-21
 
 门禁和 Agent 治理同时作为跨阶段能力研究。
 
-## 交付结构
+## 目录与所有权
 
 - [[00_sources/README|信息源层]]：原始来源、Source Brief 和事实证据。
-- [[05_case_library/README|实践案例层]]：提取可复用的外部案例，明确架构、流程、自治与证据等级。
-- [[10_summaries/tools/README|Agent 工具与技术栈总结]]：MCP、CLI/API、Agent 原生接口生成、Skills、Claude Code、Codex CLI、OpenCode、Gemini CLI、OpenHands、运行承载与治理控制面。
-- [[20_summaries/companies/README|公司维度总结]]：厂商产品组合、内部实践、客户案例和战略方向。
-- [[30_summaries/stages/README|阶段维度总结]]：沿八个 CI/CD 阶段分析 Agent 介入方式。
-- [[40_summaries/crosscutting/README|横向变化总结]]：工具平台、工作流程、人员能力、治理与度量。
-- [[50_deepdives/README|专题深研层]]：对重点课题建立问题树、Claim—Evidence Matrix、案例比较、实验、Playbook 和专题报告。
-- [[60_tutorials/README|配置与实践教程层]]：不重复完整原理，提供可复制的配置、逐字段解释、常见错误和最小验证步骤。
-- [[80_presentations/README|演示文稿层]]：把跨公司、跨能力的研究结论改写为可比较的 PPT 叙事和单页作业流。
-- [[90_report/seven-dimension-analysis|七维分析汇总报告]]：以任务场景为连接键，将三个描述维度与四个企业决策维度汇总。
-- [[90_report/README|主报告]]：跨分类提炼趋势、成熟度、实践、风险和未来判断。
+- [[05_case_library/README|实践案例库]]：三条作业流共享的规范案例资产，不是必经步骤。
+- [[10_summaries/tools/README|工具视图]]、[[20_summaries/companies/README|公司视图]]、[[30_summaries/stages/README|阶段视图]]、[[40_summaries/crosscutting/README|横向变化视图]]：批量洞察的四组分析视图。
+- [[50_deepdives/README|专题深研]]：单一公司、功能、技术或场景的分析事实源。
+- [[60_tutorials/README|配置与实践教程]]：Deep Dive 的可选实践衍生物。
+- [[80_presentations/README|演示文稿]]：从 Presentation-ready Deep Dive 生成汇报叙事，不维护独立研究事实。
+- [[90_report/seven-dimension-analysis|七维交叉分析]]：批量洞察的分析框架和候选观点工作台。
+- [[90_report/README|主报告]]：批量洞察最终形成的跨行业观点和决策结论。
 
-## 增量洞察维护
+## 三条作业流
 
-- 新增或刷新洞察时，默认补充到最相关的 [[50_deepdives/README|专题深研]]；若使用了新的外部证据，同时在 [[00_sources/README|信息源层]]保留可追溯来源。
-- 完成 Deep Dive 更新后，再判断是否影响现有 Presentation。若它改变页面主张、作业流、产品状态、自治或成熟度判断、控制边界、企业启示或来源映射，可同步更新 [[80_presentations/README|演示文稿层]]。
-- 只增加实现细节或旁支事实、且不改变演示结论时，可以不更新 Presentation。PPT 不建立第二套事实源，新增页面判断必须回链到 Deep Dive、分类总结或 Source Brief。
+```mermaid
+flowchart LR
+  E["共享证据<br/>Sources · Cases"] --> B["批量洞察<br/>10—40 Summaries"]
+  B --> R["观点<br/>90 Report"]
+  E --> D["深度洞察<br/>50 Deep Dives"]
+  D --> T["可选教程<br/>60 Tutorials"]
+  D --> P["汇报思路<br/>80 Presentations"]
+  P --> O["演示成品<br/>outputs"]
+```
+
+- **批量洞察：** 范围与观察窗口 → 批量收集与排重 → Source Brief → 维度归类 → 七维交叉分析 → 主报告观点。
+- **深度洞察：** Charter → Question Tree → Evidence Map → 案例/实验（按需）→ Findings → 专题报告 → Presentation-ready 判断。
+- **汇报思路：** 选择 Presentation-ready Deep Dive → Deck Brief → Slide Outline → 单页主张 → Source Map → 内容评审与成品。
+
+## 增量洞察路由
+
+- 批量研究的新洞察更新信息源、相关分类视图和主报告，不要求为每个公司或案例建立 Deep Dive。
+- 单一公司、功能、技术或场景的新洞察进入对应 Deep Dive；只有改变演示主张或边界时才同步 Presentation。
+- Presentation 中发现的事实缺口必须回到 Deep Dive 补证据；没有对应专题时，页面保持阻塞。
+- 跨专题结论只有在改变全局观点时才回流主报告。
 - Git 采用单分支协作：所有变更直接进入 `main`；需要提交或推送时直接操作 `main`，不新建额外分支，也不创建 Pull Request。
 - 面向后续 Agent 的完整执行规则见 `AGENTS.md`。
 

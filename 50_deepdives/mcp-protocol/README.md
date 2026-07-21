@@ -14,6 +14,7 @@ topic_type: technology
 stages:
   - cross-stage
 confidence: high
+presentation_ready: true
 refresh_after: 2026-07-29
 ---
 
@@ -25,7 +26,7 @@ refresh_after: 2026-07-29
 ## 版本口径
 
 - 截至 2026-07-15，当前正式发布规范为 [2025-11-25](https://modelcontextprotocol.io/specification/2025-11-25/architecture)。
-- [2026-07-28 Release Candidate](https://blog.modelcontextprotocol.io/posts/2026-07-28-release-candidate/) 已公开，但计划中的正式发布日期晚于本报告观察日。
+- 目标版本名为 `2026-07-28` 的 [Release Candidate](https://blog.modelcontextprotocol.io/posts/2026-07-28-release-candidate/) 已于 2026-05-21 公开；最终规范计划在 2026-07-28 发布，晚于本报告观察日。
 - 本专题把前者当作当前事实，把后者单独标为“候选方向”，不混写。
 
 ## 关键结论

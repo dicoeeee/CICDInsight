@@ -11,6 +11,8 @@ status: draft
 
 ## 1. 页面标识
 
+- **主要 Deep Dive：** 必须指向一个 `presentation_ready: true` 的专题；缺少时页面状态为 `blocked-by-deep-dive`。
+- **专题观察日：** 使用 Deep Dive 的 `as_of`，页面不得把旧证据写成当前状态。
 - **横向维度：** 公司 / 生态 / 大能力块
 - **一句话主张：** 不使用纯产品名标题，直接写这页想让受众记住的判断。
 - **覆盖阶段：** CI/CD 1—8 阶段中的具体范围。
@@ -45,9 +47,11 @@ status: draft
 
 ## 5. 来源要求
 
+- 主要分析来源必须是 Presentation-ready Deep Dive；分类总结用于跨页比较，Source Brief 用于核对事实。
 - 每个成熟度、自治等级和产品状态都必须有上游链接。
 - 供应商量化数据必须标记为厂商自述或第一方研究。
 - 页面只展示必要来源，完整映射统一维护在 [[80_presentations/agentic-cicd-company-workflows/source-map|Source Map]]。
+- 页面制作中发现新事实或证据缺口时，先更新 Deep Dive，再回到页面；不得直接在 Slide 文件建立孤立结论。
 
 ## 6. Agent 生成输入
 

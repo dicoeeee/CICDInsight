@@ -18,6 +18,7 @@ stages:
   - release
   - post-release-operations
 confidence: high
+presentation_ready: true
 refresh_after: 2026-09-15
 ---
 

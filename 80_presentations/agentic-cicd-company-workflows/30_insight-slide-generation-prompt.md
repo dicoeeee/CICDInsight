@@ -7,13 +7,13 @@ tags:
   - deliverable/presentation
   - prompt/generation
 status: active
-as_of: 2026-07-20
+as_of: 2026-07-21
 ---
 
 # Agentic CI/CD 洞察页生成方法与提示词
 
 > [!abstract] 用途
-> 本文档是后续公司页与大能力页的统一内容生成输入。它定义页面应完成的沟通任务、论证方法、输出结构和证据边界；具体页面字段继续参考 [[80_presentations/agentic-cicd-company-workflows/20_slide-template|作业流单页模板]]。
+> 本文档是从 Presentation-ready Deep Dive 生成公司页与大能力页的统一内容输入。它定义页面应完成的沟通任务、论证方法、输出结构和证据边界；没有对应专题时只允许输出研究缺口和阻塞状态，不生成正式页面内容。
 
 ## 一、默认沟通任务
 
@@ -27,6 +27,7 @@ as_of: 2026-07-20
 
 ## 二、页面选题规则
 
+- 正式页面必须有一个 `presentation_ready: true` 的主要 Deep Dive；公司总结、阶段总结或单条 Source Brief 不能替代专题研究。
 - 全生命周期平台或控制面较完整的厂商，以“公司/生态”为横向维度。
 - 专业能力证据集中但单一厂商覆盖有限时，以“大能力块”为横向维度，选择少量代表厂商作为机制证据。
 - 每页只承担一个叙事任务和一个主张，不做公司产品全景或功能目录。
@@ -85,7 +86,7 @@ as_of: 2026-07-20
 
 ## 七、证据与成熟度规则
 
-- 研究事实只引用当前工作区中的公司总结、阶段总结、专题深研、Source Brief 和已登记一手资料；PPT 不建立第二套事实源。
+- 页面主张和论证链以 Presentation-ready Deep Dive 为主要来源；公司/阶段总结用于跨页比较，Source Brief 和一手资料用于核对事实。PPT 不建立第二套事实源。
 - 产品状态与任务自治等级分开：GA 不等于任务成熟，L3 不等于有正向业务价值。
 - 自治等级按具体场景、输出、环境和批准方式判断，不给整家公司贴统一等级。
 - Preview、Beta、EA、Experimental、Research 和 Roadmap 不写成当前生产标准能力。
@@ -114,7 +115,8 @@ as_of: 2026-07-20
 - 横向维度：{{公司 / 生态 / 大能力块}}
 - 目标受众：{{默认：CTO、研发效能负责人、平台工程负责人}}
 - 使用场合：{{研究分享 / 决策汇报 / 方案讨论}}
-- 上游材料：{{工作区内公司总结、阶段总结、专题深研、Source Brief 路径}}
+- 主要 Deep Dive：{{必须提供；路径、status、presentation_ready、as_of}}
+- 辅助材料：{{公司总结、阶段总结、Source Brief 路径}}
 - 候选主张：{{如有；允许基于证据重写}}
 - 产品与能力状态：{{GA / Preview / Beta / EA / Research；包含时间点}}
 - 页面限制：{{单页、期望密度、必须包含和明确排除的内容}}
@@ -146,6 +148,7 @@ Skill、Agent、MCP、Pipeline、Oracle、Safe Output 等组件不能作为孤�
 9. 本页明确不展开的内容。
 
 【硬约束】
+- 没有 `presentation_ready: true` 的 Deep Dive 时，输出 `blocked-by-deep-dive`、缺失研究问题和建议专题范围，不生成正式页面；
 - 不发明事实、指标、客户结果或产品状态；
 - GA 不等于任务成熟，MCP 可调用不等于获得授权；
 - Preview、Beta、EA、Experimental、Research 和 Roadmap 不写成生产基线；
@@ -157,8 +160,9 @@ Skill、Agent、MCP、Pipeline、Oracle、Safe Output 等组件不能作为孤�
 ## 十、归档与使用
 
 1. 先用本提示生成页面内容分析。
-2. 将结果归档到对应的 `slides/<编号>-<对象>.md`，该文件作为页面唯一内容源。
-3. 在 [[80_presentations/agentic-cicd-company-workflows/source-map|Source Map]] 中核对事实来源与状态。
-4. 内容评审通过后，再进入视觉设计和成品生成。
+2. 若专题未通过门禁，只更新 Slide Outline 和 Source Map 的阻塞状态。
+3. 通过门禁后，将结果归档到对应的 `slides/<编号>-<对象>.md`，该文件作为页面唯一内容源。
+4. 在 [[80_presentations/agentic-cicd-company-workflows/source-map|Source Map]] 中核对主要 Deep Dive、辅助来源与状态。
+5. 内容评审通过后，再进入视觉设计和成品生成。
 
 首个已归档示例：[[80_presentations/agentic-cicd-company-workflows/slides/01-github|GitHub Agentic Workflows 页面分析]]。

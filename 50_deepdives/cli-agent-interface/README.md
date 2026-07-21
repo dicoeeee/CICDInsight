@@ -14,6 +14,7 @@ topic_type: technology
 stages:
   - cross-stage
 confidence: high
+presentation_ready: true
 refresh_after: 2026-10-15
 ---
 

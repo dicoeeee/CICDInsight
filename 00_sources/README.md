@@ -3,14 +3,16 @@ title: 信息源与 Source Brief
 tags:
   - research/agentic-cicd
   - evidence/source
-status: complete
+status: active
 as_of: 2026-07-16
 ---
 
 # 信息源与 Source Brief
 
-> [!info] L0 证据层
+> [!info] 三条作业流共享的 L0 证据层
 > [[00_sources/agentic-cicd-source-landscape|Agentic CI/CD source landscape]] 收录 81 条 2025-07-01—2026-07-14 核心一手资料。每条均包含组织、日期、URL、来源类型、能力状态、八阶段标签、工具类别、地域、关键事实、价值和置信度/局限，因此本身就是一组结构化 Brief。[[00_sources/source-pruning-2026-07-14|信息源精简审计]]记录从 107 条候选源缩减到 80 条核心源、再增补 CLI-Anything 形成当前 81 条核心源的过程；[[00_sources/incremental-source-research-2026-07-14|增量研究记录]]保留前期排重和选源过程。下列 68 个独立 Source Brief（另加模板）对高频主题做进一步展开，可能引用核心登记之外的补充材料。
+
+本目录只维护可追溯事实，不决定所有事实都必须进入 Deep Dive。批量洞察可直接从本层更新分类视图和主报告；单对象研究则把相关证据映射到专题 Claim；Presentation 通过 Deep Dive 使用这些事实。
 
 ## 证据口径
 
@@ -118,6 +120,7 @@ as_of: 2026-07-16
 ## 模板
 
 - [[00_sources/briefs/Source Brief Template|Source Brief Template]]
+- [[00_sources/_templates/Batch Insight Template|Batch Insight Template]]：记录一次批量洞察的范围、排重、维度更新、候选观点与完成门禁。
 
 ## 覆盖空白
 

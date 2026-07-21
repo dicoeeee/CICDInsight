@@ -4,6 +4,7 @@ tags:
   - research/agentic-cicd
   - synthesis/stages
 status: complete
+workflow: batch-insight
 as_of: 2026-07-16
 ---
 
