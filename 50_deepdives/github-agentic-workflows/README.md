@@ -52,6 +52,8 @@ refresh_after: 2026-09-15
 | Actions Relationship Evidence | 完成 | [[50_deepdives/github-agentic-workflows/fixed-actions-relationship-research|与固定 GitHub Actions CI/CD 的关系]] |
 | Complex Workflow Case Study | 完成 | [[50_deepdives/github-agentic-workflows/complex-workflow-case-study|CI Optimization Coach 复杂案例]] |
 | Architecture Diagram | 完成 | [[50_deepdives/github-agentic-workflows/assets/github-agentic-workflow-architecture-white.png|GitHub Agentic Workflow 白底架构图]] |
+| Cross-job Security Diagram | 完成 | [[50_deepdives/github-agentic-workflows/assets/github-agentic-workflow-security-boundaries.png|跨 Job 安全执行链]] |
+| Agent Security Layers | 完成 | [[50_deepdives/github-agentic-workflows/assets/github-agent-execution-security-layers.svg|Agent 执行层安全环形图]] |
 
 ## 架构图
 
@@ -59,6 +61,18 @@ refresh_after: 2026-09-15
 
 > [!note] 图示边界
 > Authoring Agent 与 Authoring Skill 属于可选的设计时能力；`.md → .lock.yml` 由不含 Agent 的确定性 Compiler 完成。运行时动态判断只发生在 Actions 控制面内的 `Agent + Skill + MCP` 区域，外部写入继续由 Detection 与 Safe Outputs 控制。
+
+### 跨 Job 安全执行链
+
+![[50_deepdives/github-agentic-workflows/assets/github-agentic-workflow-security-boundaries.png|1200]]
+
+该图表达只读 Agent Job、Artifact 交接、Detection 门禁、独立写权限 Safe Outputs Job 与 GitHub API 之间的整体控制关系。
+
+### Agent 执行层纵深防御
+
+![[50_deepdives/github-agentic-workflows/assets/github-agent-execution-security-layers.svg|1000]]
+
+该图只聚焦 Agent Job 内部：Job Permissions 限制授权范围，Tool Boundary 限制可调用能力，Execution Isolation 限制执行与网络边界。SVG 不包含下游输出流程，便于作为 PPT 中的局部安全模型独立使用。
 
 ## 上下游关系
 

@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="1000" viewBox="0 0 1400 1000" role="img" aria-labelledby="title desc">
+  <title id="title">GitHub Actions Agent Job security layers</title>
+  <desc id="desc">Three concentric security layers surround an AI Agent: job permissions, tool boundary, and execution isolation.</desc>
+
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#173B70"/>
+    </marker>
+  </defs>
+
+  <rect width="1400" height="1000" fill="#FFFFFF"/>
+  <rect x="52" y="38" width="1296" height="910" rx="30" fill="#FFFFFF" stroke="#173B70" stroke-width="3"/>
+
+  <text x="700" y="105" text-anchor="middle" fill="#102A56" font-family="Arial, Helvetica, sans-serif" font-size="42" font-weight="700">
+    GitHub Actions Agent Job
+  </text>
+
+  <text x="700" y="166" text-anchor="middle" fill="#102A56" font-family="Arial, Helvetica, sans-serif" font-size="26" font-weight="600">
+    Workflow Prompt + Context
+  </text>
+  <line x1="700" y1="182" x2="700" y2="216" stroke="#173B70" stroke-width="4" marker-end="url(#arrow)"/>
+
+  <!-- Layer 1: job-level authorization -->
+  <ellipse cx="700" cy="570" rx="505" ry="335" fill="#EAF4FF" stroke="#2384E8" stroke-width="3"/>
+
+  <!-- Layer 2: callable capabilities -->
+  <ellipse cx="700" cy="570" rx="395" ry="255" fill="#FFF3E7" stroke="#F17A16" stroke-width="3"/>
+
+  <!-- Layer 3: runtime isolation -->
+  <ellipse cx="700" cy="570" rx="285" ry="180" fill="#F0F8E8" stroke="#4B9F38" stroke-width="3"/>
+
+  <!-- Layer labels -->
+  <text x="700" y="278" text-anchor="middle" fill="#102A56" font-family="Arial, Helvetica, sans-serif" font-size="30" font-weight="700">
+    Job Permissions
+  </text>
+  <text x="700" y="311" text-anchor="middle" fill="#334E73" font-family="Arial, Helvetica, sans-serif" font-size="22">
+    Read-only Token Scopes
+  </text>
+
+  <text x="700" y="358" text-anchor="middle" fill="#102A56" font-family="Arial, Helvetica, sans-serif" font-size="29" font-weight="700">
+    Tool Boundary
+  </text>
+  <text x="700" y="391" text-anchor="middle" fill="#334E73" font-family="Arial, Helvetica, sans-serif" font-size="22">
+    Skill · MCP / Tools · Allowlist
+  </text>
+
+  <text x="700" y="435" text-anchor="middle" fill="#102A56" font-family="Arial, Helvetica, sans-serif" font-size="28" font-weight="700">
+    Execution Isolation
+  </text>
+  <text x="700" y="468" text-anchor="middle" fill="#334E73" font-family="Arial, Helvetica, sans-serif" font-size="22">
+    Sandbox · Network Firewall
+  </text>
+
+  <!-- AI Agent -->
+  <circle cx="700" cy="605" r="108" fill="#FFFFFF" stroke="#B7C1CF" stroke-width="2"/>
+
+  <line x1="700" y1="501" x2="700" y2="516" stroke="#173B70" stroke-width="4" stroke-linecap="round"/>
+  <circle cx="700" cy="494" r="7" fill="#FFFFFF" stroke="#173B70" stroke-width="4"/>
+  <rect x="643" y="516" width="114" height="72" rx="20" fill="#FFFFFF" stroke="#173B70" stroke-width="4"/>
+  <rect x="632" y="537" width="12" height="30" rx="6" fill="#FFFFFF" stroke="#173B70" stroke-width="4"/>
+  <rect x="756" y="537" width="12" height="30" rx="6" fill="#FFFFFF" stroke="#173B70" stroke-width="4"/>
+  <circle cx="677" cy="551" r="7" fill="#FFFFFF" stroke="#173B70" stroke-width="4"/>
+  <circle cx="723" cy="551" r="7" fill="#FFFFFF" stroke="#173B70" stroke-width="4"/>
+  <path d="M 677 572 Q 700 585 723 572" fill="none" stroke="#173B70" stroke-width="4" stroke-linecap="round"/>
+
+  <text x="700" y="635" text-anchor="middle" fill="#102A56" font-family="Arial, Helvetica, sans-serif" font-size="28" font-weight="700">
+    AI Agent
+  </text>
+  <text x="700" y="665" text-anchor="middle" fill="#334E73" font-family="Arial, Helvetica, sans-serif" font-size="19">
+    Dynamic Decisions
+  </text>
+</svg>
