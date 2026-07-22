@@ -6,15 +6,15 @@ tags:
 status: draft
 slide: 1
 content_status: content-archived
-visual_status: pending
+visual_status: architecture-and-copy-archived
 primary_deep_dive: "[[50_deepdives/github-agentic-workflows/README]]"
-as_of: 2026-07-21
+as_of: 2026-07-22
 ---
 
-# GitHub 以 Workflow 为装配清单，把 Skill、Agent 与 MCP 编译成受控的 Actions 作业
+# GitHub 以“Agentic Authoring + 确定性编译 + 受控运行”将 Agent 装配进 Actions 生命周期
 
 > [!abstract] 页面唯一主张
-> GitHub Agentic Workflows 的关键不只是让 Coding Agent 在 Actions 中运行，而是用 Workflow Source 显式声明 Task、Engine、Skill、Tool/MCP 和控制边界，再由 Compiler 把它们生成可审查、分阶段授权的 Actions 执行计划。固定 Actions 不只是承载环境，还是包住动态推理的流程骨架和最终复验 Oracle。
+> GitHub 把 Agent 放在两个不同阶段：设计时由 Authoring Agent 辅助生成可审核的 Workflow Source，运行时由 Runtime Agent 处理无法预先编码的判断；中间由不含 Agent 的确定性 Compiler 固化 Job、Step、依赖和权限，并由 Actions 与 Safe Outputs 掌握外部状态变更边界。
 
 ## 一、页面沟通任务
 
@@ -26,11 +26,35 @@ as_of: 2026-07-21
 
 ### 标题
 
-GitHub 以 Workflow 为装配清单，把 Skill、Agent 与 MCP 编译成受控的 Actions 作业
+GitHub 以“Agentic Authoring + 确定性编译 + 受控运行”将 Agent 装配进 Actions 生命周期
 
 ### 副标题
 
-自然语言定义任务，Frontmatter 声明能力与边界，Compiler 生成分权限 Job，Agent 只能通过受控出口改变外部状态。
+Authoring Agent 生成可审核声明，Compiler 固化 Job、Step 与权限，Runtime Agent 只在 Actions 控制面内动态决策。
+
+### 当前页面架构图
+
+![[80_presentations/agentic-cicd-company-workflows/assets/github-agentic-workflow-white.png|1400]]
+
+> [!note] 读图口径
+> Design Time 中的 Authoring Agent 与 Authoring Skill 是可选的工作流生产能力；`.md → .lock.yml` 由确定性 Compiler 完成。Run Time 的动态决策区只包含 Agent 对任务的理解、Skill 应用和 MCP/Tool 选择，Detection、Safe Outputs 与外部写入仍属于受控 Actions 机制。
+
+### 图下内容定稿
+
+| Design Time：可审核意图声明 | Compile Time：确定性执行计划 | Run Time：受控动态决策 |
+|---|---|---|
+| **解决问题：** 将业务目标、触发条件、能力需求和输出边界收敛为可版本化声明。 | **解决问题：** 将能力声明固化为标准 Actions Job Graph，而不是理解 Markdown Body 后动态拆解任务。 | **解决问题：** 在固定 Runner、DAG、权限和时限内处理无法预先枚举的判断。 |
+| **关键机制：** Human / Authoring Agent + Authoring Skill；Frontmatter + Instructions；人工审查。 | **关键机制：** Parse；Schema/Expression 校验；Import 解析；Job/Permission 装配；Action SHA 与镜像固定。 | **关键机制：** Activation 注入上下文；Agent + Skill + MCP 动态执行；Detection；Safe Outputs。 |
+| **阶段产物：** `workflow.md`，由人和 Agent 共同维护的 Source of Truth。 | **阶段产物：** `.lock.yml`，Actions 实际执行和审查的确定性计划。 | **阶段产物：** Candidate Artifact，以及经策略允许后创建的 PR、Issue 或 Summary。 |
+
+> [!important] 页底核心洞察
+> **设计复杂性交给 Authoring Agent，控制复杂性交给确定性 Compiler，任务不确定性交给 Runtime Agent，外部状态变更权继续由 Actions 与 Safe Outputs 掌握。**
+
+#### 页面边界提示
+
+- Compiler 不理解任务语义，只根据 Frontmatter、Imports 和组件配置装配预定义 Job/Step 模板；
+- MCP 提供可调用能力，不代表获得对应系统的写入授权；
+- Agent 生成候选变更请求，Detection 与 Safe Outputs 决定是否允许外化。
 
 ### 状态信息
 
@@ -52,7 +76,10 @@ GitHub 以 Workflow 为装配清单，把 Skill、Agent 与 MCP 编译成受控�
 → Threat Detection 与 Safe Output Job 决定哪些结果可以外化
 → 原 Actions Test / Scan / Ruleset / Environment 决定能否继续
 
-### 当前左右分栏版式判断
+### 历史备选：左右分栏版式判断
+
+> [!note] 当前版式决策
+> 当前页面已采用上方完整架构图 + 下方三阶段分工的横向版式；以下左右分栏内容仅保留为演讲备注和后续局部放大页的素材，不再作为本页主版式。
 
 左侧采用“工作流声明 → 声明转配置 → 工作流执行 → 结果输出”的四阶段结构总体合适，能够把设计时装配与运行时执行放进一条可读链路。但当前文案需要做四项调整，才能与实际机制和本页主张完全一致：
 
