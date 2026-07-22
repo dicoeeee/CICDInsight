@@ -4,21 +4,21 @@
     "type": "split",
     "children": [
       {
-        "id": "27e886c12387de1e",
+        "id": "c274b5a5e5da827f",
         "type": "tabs",
         "children": [
           {
-            "id": "142ed0162086cda1",
+            "id": "c533b53999364ab7",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "90_report/seven-dimension-analysis.md",
+                "file": "60_tutorials/github-agentic-workflows-config.md",
                 "mode": "preview",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "seven-dimension-analysis"
+              "title": "github-agentic-workflows-config"
             }
           }
         ]
@@ -78,7 +78,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 271.5
+    "width": 240.5
   },
   "right": {
     "id": "919b90cf591ad83e",
@@ -94,7 +94,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "90_report/seven-dimension-analysis.md",
+                "file": "60_tutorials/github-agentic-workflows-config.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -104,7 +104,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "seven-dimension-analysis 的反向链接列表"
+              "title": "github-agentic-workflows-config 的反向链接列表"
             }
           },
           {
@@ -113,12 +113,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "90_report/seven-dimension-analysis.md",
+                "file": "60_tutorials/github-agentic-workflows-config.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "seven-dimension-analysis 的出链列表"
+              "title": "github-agentic-workflows-config 的出链列表"
             }
           },
           {
@@ -156,13 +156,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "90_report/seven-dimension-analysis.md",
+                "file": "60_tutorials/github-agentic-workflows-config.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "seven-dimension-analysis 的大纲"
+              "title": "github-agentic-workflows-config 的大纲"
             }
           }
         ]
@@ -183,21 +183,44 @@
       "bases:新建数据库": false
     }
   },
-  "active": "142ed0162086cda1",
+  "active": "c533b53999364ab7",
   "lastOpenFiles": [
-    "00_sources/agentic-cicd-source-landscape.md",
-    "90_report/seven-dimension-analysis.md",
-    "30_summaries/stages/README.md",
-    "10_summaries/tools/README.md",
-    "40_summaries/crosscutting/README.md",
-    "20_summaries/companies/README.md",
-    "00_sources/briefs/2026-github-agentic-workflows.md",
-    "未命名.base",
-    "00_sources/briefs/2026-tricentis-agentic-test-automation.md",
-    "00_sources/briefs/2026-uber-agent-identity.md",
-    "90_report/README.md",
-    "README.md",
-    "00_sources/briefs/2025-github-remote-mcp-server-ga.md",
-    "00_sources/briefs/2025-dora-state-ai-assisted-software-development.md"
+    "50_deepdives/github-agentic-workflows/assets/github-agentic-workflow-architecture-white.png",
+    "50_deepdives/github-agentic-workflows/assets",
+    "80_presentations/agentic-cicd-company-workflows/assets/github-agentic-workflow-white.png",
+    "80_presentations/agentic-cicd-company-workflows/assets",
+    "50_deepdives/github-agentic-workflows/complex-workflow-case-study.md",
+    "80_presentations/agentic-cicd-company-workflows/slides/01-github.md",
+    "60_tutorials/github-agentic-workflows-config.md",
+    "60_tutorials/agent-pipeline-control-reference.md",
+    "50_deepdives/github-agentic-workflows/fixed-actions-relationship-research.md",
+    "50_deepdives/github-agentic-workflows/90_report.md",
+    "50_deepdives/github-agentic-workflows/README.md",
+    "00_sources/_templates/Batch Insight Template.md",
+    "00_sources/_templates",
+    "AGENTS.md",
+    "60_tutorials/_templates/Config Quick Reference Template.md",
+    "60_tutorials/harness-worker-agent-config.md",
+    "60_tutorials/_templates",
+    "60_tutorials/README.md",
+    "60_tutorials",
+    "50_deepdives/mcp-protocol/progressive-loading-research.md",
+    "50_deepdives/harness-company/40_labs/README.md",
+    "50_deepdives/harness-company/research-evidence.md",
+    "50_deepdives/harness-company/README.md",
+    "50_deepdives/harness-company/90_report.md",
+    "50_deepdives/harness-company/60_playbook.md",
+    "50_deepdives/harness-company/50_findings.md",
+    "50_deepdives/harness-company/40_labs",
+    "50_deepdives/harness-company/30_case-map.md",
+    "50_deepdives/harness-company/20_evidence-map.md",
+    "50_deepdives/harness-company/10_question-tree.md",
+    "50_deepdives/harness-company/00_charter.md",
+    "50_deepdives/harness-company",
+    "50_deepdives/github-agentic-workflows/research-evidence.md",
+    "50_deepdives/github-agentic-workflows/60_playbook.md",
+    "50_deepdives/github-agentic-workflows/40_labs",
+    "50_deepdives/cicd-self-healing/40_labs",
+    "50_deepdives/cicd-self-healing"
   ]
 }

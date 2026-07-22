@@ -9,7 +9,7 @@ tags:
   - company/github
   - tool/agentic-workflows
 status: complete
-as_of: 2026-07-21
+as_of: 2026-07-22
 topic_id: github-agentic-workflows
 topic_type: company
 companies:
@@ -50,6 +50,15 @@ refresh_after: 2026-09-15
 | Report | 完成 | [[50_deepdives/github-agentic-workflows/90_report|完整报告]] |
 | Research Evidence | 完成 | [[50_deepdives/github-agentic-workflows/research-evidence|一手证据底稿]] |
 | Actions Relationship Evidence | 完成 | [[50_deepdives/github-agentic-workflows/fixed-actions-relationship-research|与固定 GitHub Actions CI/CD 的关系]] |
+| Complex Workflow Case Study | 完成 | [[50_deepdives/github-agentic-workflows/complex-workflow-case-study|CI Optimization Coach 复杂案例]] |
+| Architecture Diagram | 完成 | [[50_deepdives/github-agentic-workflows/assets/github-agentic-workflow-architecture-white.png|GitHub Agentic Workflow 白底架构图]] |
+
+## 架构图
+
+![[50_deepdives/github-agentic-workflows/assets/github-agentic-workflow-architecture-white.png|1200]]
+
+> [!note] 图示边界
+> Authoring Agent 与 Authoring Skill 属于可选的设计时能力；`.md → .lock.yml` 由不含 Agent 的确定性 Compiler 完成。运行时动态判断只发生在 Actions 控制面内的 `Agent + Skill + MCP` 区域，外部写入继续由 Detection 与 Safe Outputs 控制。
 
 ## 上下游关系
 
