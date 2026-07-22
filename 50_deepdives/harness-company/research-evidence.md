@@ -16,6 +16,7 @@ topic_type: company
 source_policy: official-primary-first
 time_window: "2025-07-01/2026-07-16"
 confidence: medium-high
+validation_overlay: "[[50_deepdives/harness-company/ci-validation-2026-07-22]]"
 ---
 
 # Harness 公司与 Agentic Software Delivery 一手证据底稿
@@ -26,6 +27,9 @@ confidence: medium-high
 > 但“GA”“所有客户可用”“可安全用于生产”不能合并成一个判断。当前文档同时显示账户开通、Feature Flag、SaaS-only、模型 Provider、Stage 类型和触发方式限制；最关键的细粒度 scoped-token 功能仍需 `HARNESS_TOKEN_INJECT`，而 webhook、artifact、manifest、schedule 等 Trigger 发起的运行目前没有可继承的触发人 scoped token。现有安全验证、性能数字和客户效果几乎全部来自 Harness 自身或 Harness 托管的客户案例，尚不能视为独立审计或跨厂商基准。
 
 本文件专指 [Harness Inc.](https://www.harness.io/) 与 Harness Software Delivery Platform，**不讨论通用 Agent Harness 工程框架**。观察期为 2025H2—2026-07-16；较早资料仅在解释合同冲突或产品基线时使用。
+
+> [!warning] 2026-07-22 CI 权限补充
+> 本文件保留 2026-07-16 的证据快照。Worker 默认只读权限、Stage/Step Group Token 传播、两份权限文档冲突、Code Quality 独立实现和 Agent Evals/ZTS 增量，请以 [[50_deepdives/harness-company/ci-validation-2026-07-22|Harness CI 检验与补充]] 为覆盖层。
 
 ## 证据口径
 

@@ -8,14 +8,14 @@ tags:
   - research/deep-dive
   - company/harness
 status: complete
-as_of: 2026-07-16
+as_of: 2026-07-22
 confidence: medium-high
 ---
 
 # Harness 公司 Agentic Software Delivery 深度洞察报告
 
 > [!abstract] 核心结论
-> Harness 在 2026 年已经不只是“带 AI 的 CI/CD 厂商”，而是在把既有 Pipeline 和软件交付平台改造成 Agent 的生产控制面。它用 DevOps Agent 处理平台设计与交互，用 Worker Agents 承载 Pipeline 内多轮行动，用 Knowledge Graph/HQL 提供结构化交付上下文，用 MCP/CLI/Skills 向外部 Agent 开放能力，再由 RBAC、OPA、Approval、Scoped Token、隔离 Runtime 和 Audit 收窄风险。其产品形态和安全架构值得大型企业重点跟踪；但通用 Worker Agent 刚于 2026-06 GA，量化效果、独立红队、Marketplace 供应链和全生命周期生产自治仍缺证据。最合理的近期定位是 **L2 可审查变更 + 非生产/批准后 L3 执行**，不是关键发布的通用 L4。
+> Harness 在 2026 年已经不只是“带 AI 的 CI/CD 厂商”，而是在把既有 Pipeline 和软件交付平台改造成 Agent 的生产控制面。它用 DevOps Agent 处理平台设计与交互，用 Worker Agents 承载 Pipeline 内多轮行动，用 Knowledge Graph/HQL 提供结构化交付上下文，用 MCP/CLI/Skills 向外部 Agent 开放能力，再由 RBAC、OPA、Approval、Scoped Token、隔离 Runtime 和 Audit 收窄风险。其产品形态和安全架构值得大型企业重点跟踪；但通用 Worker Agent 刚于 2026-06 GA，量化效果、独立红队、Marketplace 供应链和全生命周期生产自治仍缺证据；当前两份权限文档在 Principal 绑定和资源覆盖上也存在冲突。最合理的近期定位是 **L2 可审查变更 + 非生产/批准后 L3 执行**，不是关键发布的通用 L4。
 
 ## 一、研究对象与观察窗口
 
@@ -98,8 +98,8 @@ Worker Agent 支持 Harness Managed 的 Anthropic/OpenAI Connector，也支持�
 
 | 领域 | 能力 | 输出/Oracle | 当前判断 |
 |---|---|---|---|
-| Code Repository | PR Summary、Code Review、Semantic Search | PR Comment、人工 Review | 已文档化 GA |
-| Code Quality | Review、Coverage、AutoFix | Comment、Coverage、Branch/PR、CI | L2—L3；效果数据不足 |
+| Code Repository / Code Quality PR Agents | PR Summary、Review、Coverage、AutoFix | Comment、Coverage、Branch/PR、Build | L1—L3；Run Step/Execute API/PAT 路径，需独立核验 Runtime |
+| Managed Worker CI Agents | CI Autofix、Coverage 等 Marketplace Agent | PR Branch、Build 重触发、max-turns | 受限 L3；Worker Runtime，效果数据不足 |
 | AI Test Automation | Intent Test、AI Assertion、Smart Selector、自愈 | 真实浏览器/API/视觉结果 | 产品成熟度较高，但需开通 |
 | Security | STO/SCS Remediation、Manifest/Zero-day/Library Agent | Scanner、SBOM、Policy、PR | 适合 Analyzer + Agent |
 | IaCM/CD/GitOps | Pipeline 创建、Drift/Manifest 修复、Sync | Plan、OPA、Approval、Deploy | 批准后 L3 |
@@ -107,7 +107,7 @@ Worker Agent 支持 Harness Managed 的 Anthropic/OpenAI Connector，也支持�
 | AI SRE | Scribe、RCA Change Agent、Investigator、Runbook | Incident Timeline、人类确认、Pipeline/Runbook | 分析 L1—L2，受控动作 L3 |
 | AIDI/CCM | AI 采用、工程指标、AI/Cloud Cost、Dashboard | DORA/SPACE、成本数据 | 管理和优化入口 |
 
-专项 Agent 不一定都基于同一 Worker Runtime。企业必须分别询问数据、模型、权限、版本和 SLA，不能从 Worker Agent 的隔离架构推断全部专项模块具有相同实现。
+专项 Agent 不一定都基于同一 Worker Runtime。当前 Code Repository/Code Quality 文档仍展示普通 Run Step、专用 Execute API、Harness PAT/模型密钥和多组容器镜像；Marketplace Managed Worker 才按通用 Agent Definition/Runtime 运行。企业必须分别询问数据、模型、凭据、镜像、权限、版本和 SLA，不能从 Worker Agent 的隔离架构推断全部专项模块具有相同实现。
 
 ### 3.4 MCP、CLI 和 Skills：向 Harness 外部开放
 
@@ -144,7 +144,7 @@ MCP 支持本地 `stdio`、HTTP 和 Hosted 模式；Hosted MCP 可能需要 Harn
 3. 配置 Instructions、Model Connector 和必要 MCP Connector；
 4. 只暴露任务需要的 MCP Toolset/Tools；
 5. 将 Agent 添加到目标 Stage；CD/Custom 使用 Containerized Step Group；
-6. 对手动/API Run 声明具体 Resource/Verb Permission，并与触发人的 RBAC 取交集；Webhook/Schedule/Artifact/Manifest Trigger 另行设计身份与审批；
+6. 显式配置 Resource/Verb Permission；7 月 20 日 Worker 页面称 Manual/API Run 按触发 Principal RBAC 与 Grant 求交集，但 7 月 15 日权限页给出不同身份语义，必须按目标账户实测；Webhook/Schedule/Artifact/Manifest Trigger 另行设计身份与审批；
 7. 设置最大轮次、超时、成本、网络和输出；
 8. 前置确定性证据收集，后置 Test/Scan/Policy/Approval；
 9. 先在非生产运行，审查 Tool Call、Patch、成本和 Audit；
@@ -226,9 +226,9 @@ flowchart LR
 
 Harness 称回放某 CVSS-9.0 攻击后，环境变量输出从 709 个含真实 Secret 降至 33 个无可用凭据，并把隔离测试作为 Image Release Gate。它说明设计有工程化测试，但仍是第一方声明；客户应验证自己使用的 Image、CPU 架构、Delegate/K8s 配置、DNS/IPv6/Sidecar 和 MCP 路径。
 
-### 5.5 身份与授权：委托身份，不是共享 Bot
+### 5.5 身份与授权：目标是委托身份，但当前文档仍冲突
 
-[2026-07-16 身份文章](https://www.harness.io/blog/identity-and-permissions-for-ai-worker-agents-in-harness)给出的核心不变量是：
+[2026-07-16 身份文章](https://www.harness.io/blog/identity-and-permissions-for-ai-worker-agents-in-harness)与 7 月 20 日 Worker 页面给出的目标模型是：
 
 > Agent 没有常驻特权；有效访问是触发 Principal 权限的有界子集，只在一次 Run 内存在。
 
@@ -238,11 +238,13 @@ Harness 称回放某 CVSS-9.0 攻击后，环境变量输出从 709 个含真实
 |---|---|---|
 | Save/Trigger 前 | Agent Resource RBAC | 谁能 Author、Publish、Execute、Attach Connector |
 | Save/Trigger 前 | OPA | 哪些 Model、Connector、Turn、Variable 和 Permission 允许 |
-| Runtime | Scoped Ephemeral Token | `parent RBAC ∩ declared grant`，结束即删除 |
+| Runtime | Scoped Ephemeral Token | 7/20 Worker 页面称 `parent RBAC ∩ declared grant`；7/15 权限页对身份绑定有不同描述 |
 | Runtime | MCP Gateway Tool Scope | `connector.allowedTools ∩ agent.allowedTools` |
 | Runtime/After | Per-call Attribution | Agent、Run、Principal、Tool、参数、结果 |
 
-Agent 具有独立的 Agent/Run 身份用于审计，但动作仍归因到触发人。这可以调和官方材料中的“distinct AI identity”和“acts as triggering principal”：前者标识工作负载，后者保留委托与问责。
+Agent 具有独立的 Agent/Run 身份用于审计。按 7 月 20 日 Worker 页面，存在 invoking principal 时动作应在其 RBAC 与声明 Grant 的交集内；但 7 月 15 日 [Agent permissions](https://developer.harness.io/docs/platform/harness-ai/core-capabilities/in-your-pipelines/permissions/) 页面又称 Runtime Token 独立于 Pipeline Author，并只列出更窄的资源支持。两份当前文档不能同时作为同一版本的精确事实，采购与授权必须以目标 Cluster 中的 Token Subject、Scope、Expiry 和 Audit Principal 实测为准。
+
+此外，不声明 `permissions` block 并不等于零权限：7 月 20 日 Worker 文档列出多模块默认只读 Permission；一旦声明 block，默认项不再合并，Managed LLM Connector 还需要显式 `ai_llm_gateway: access`。Permission 位于 CI/STO/SCS/IaCM Stage 或 CD/Custom Containerized Step Group，Scoped Token 会注入组内每个 Step。Agent 应使用最小独立 Stage/Step Group，避免旁路脚本或插件共享不必要权限。
 
 > [!danger] 事件 Trigger 不是同一个授权模型
 > 当前 Worker 文档注明，Pipeline Trigger 发起的 Agent Run 不会注入 scoped token，Webhook、Schedule、Artifact、Manifest 等触发方式因此不能把声明 Grant 解析为某个触发 Principal 的权限子集；该模型目前主要适用于存在 Principal 的手动/API 触发。事件驱动生产 Agent 必须单独验证运行身份、Connector Credential、审批和归因，不能把“始终继承触发人”当作现状。
@@ -257,6 +259,10 @@ Agent 具有独立的 Agent/Run 身份用于审计，但动作仍归因到触发
 
 三者不可互换。Rules 能让生成 YAML 更接近标准，但不能证明它合规；OPA 能证明规则表达的结构满足要求，但不能证明业务行为正确；外部 Oracle 验证运行结果，却也必须防止被 Agent 修改。
 
+2026-07-21 发布的 AgentTrace 与开源 [`harness-evals`](https://github.com/harness/harness-evals)把 Model/Tool/Retrieval Trace、生产 Failure Dataset、Threshold 和 Exit Code 接入 CI，可作为 Agent/Prompt/Model 的回归 Oracle；Harness AI Evals SaaS 同期仍标为 Beta。概率 Eval 或 LLM Judge 只能补充传统 Oracle，不能替代 Build、Test、Scanner、OPA、Signature、SLO 和人工 Review。
+
+[Zero Trust Service 工程文](https://www.harness.io/blog/building-a-zero-trust-service-for-ci-cd-how-we-intercept-every-task-before-it-executes)还披露了客户控制的 Task 前置 Validator Chain 与 fail-closed 参考架构。它强化了“外部控制决定 Agent 能走多远”的方向，但当前属于工程披露/联系 Account Team 的可选控制，不能写成所有 Worker Run 的默认 GA Gate。
+
 ### 5.7 数据与模型边界
 
 [Core Capabilities](https://developer.harness.io/docs/platform/harness-ai/core-capabilities/)称 DevOps Agent/Chat 通过 Harness Managed Provider 调用模型，不支持 BYOM；Worker Agents 则可使用客户 Model Connector。官方 AI 总览在观察日列出 Claude Opus 4.6，但同页 FAQ 和较旧 Support 文档仍保留其他模型版本，说明自动升级与文档同步是运营风险。
@@ -270,7 +276,7 @@ Agent 具有独立的 Agent/Run 身份用于审计，但动作仍归因到触发
 | 1 评审/质量 | PR Summary、Semantic Search、Code Review | L1—L2 | 评论正确率、噪声、SCM 范围 |
 | 2 静态/安全/合规 | OPA 生成、STO/SCS 修复、Zero-day/Manifest Agent | L2，沙箱 L3 | 必须由 Scanner/Policy 复验 |
 | 3 测试/门禁 | Coverage Agent、AI Test Copilot、Playwright、Smart Selector | 测试沙箱 L3 | 自愈可能错误命中或掩盖回归 |
-| 4 编译/构建 | Error Analyzer、AutoFix、重触发 Build | SH2—SH3 | 只覆盖可修、可复现失败；不自动 Merge |
+| 4 编译/构建 | Error Analyzer、PR Agent AutoFix；Marketplace Worker 可重触发 Build | SH2—SH3 | 实现路径不同；只覆盖可修、可复现失败；不自动 Merge |
 | 5 制品/供应链 | Artifact Registry、Dependency Firewall、SCS、MCP 资源 | L1—L2 | Agent 晋级/签名自治证据有限 |
 | 6 IaC/部署 | IaCM Pipeline、Drift/Manifest Remediation、GitOps Sync | 批准后 L3 | Plan、具体资源、环境和回退 |
 | 7 发布/变更 | FME Release Agent、Flag Cleanup、Approval、Pipeline | L2—L3 | Release Agent 偏知识/摘要；关键发布仍保守 |
@@ -310,11 +316,15 @@ AI Scribe 监听 Slack、Zoom、Teams，生成关键事件、行动项和六段�
 | Worker Agents/Marketplace | GA | AI Agents 启用；部分账户/权限需 Support/Flag；事件 Trigger 身份另验 | 首发客户引语，量化数据少 |
 | Harness MCP | GA | Hosted 可能需账户配置；自托管可用 | 开源实现和文档较强 |
 | Unified CLI 3.0 | Public Beta | 安装和认证 | 仍需兼容性运营 |
-| Code Quality Agents | 文档化可用 | Connector/Secret/SCM 配置 | 缺跨客户成功率 |
+| Code Quality PR/API Agents | 文档化可用 | Run Step、Execute API、PAT/LLM Key、SCM 与镜像配置 | 缺跨客户成功率；不能继承 Worker 安全结论 |
+| Managed Worker CI Agents | Worker/Marketplace GA 口径 | AI Agents 启用、Agent Definition、Runtime 与 Permission 条件 | Build Loop 机制已披露，量化效果少 |
 | AI Test Copilot | 总览 GA | 完整模块需销售/团队开通 | 三个署名案例，仍为第一方 |
 | AI Scribe | 总览 GA | 详细文档要求 Support | 机制清晰，独立效果少 |
 | Investigator Pipelines | EA | Harness Representative 启用 | 不应承诺生产 SLA |
-| Scoped Agent Permissions | 设计已公开 | `HARNESS_TOKEN_INJECT` Flag；当前 Trigger Run 无触发人 Token | 必须按 Trigger 类型实测 |
+| Scoped Agent Permissions | 设计已公开但文档冲突 | `HARNESS_TOKEN_INJECT` Flag；默认只读 Permission；Stage/Group Token 传播；Trigger Run 无触发人 Token | 必须按账户、资源与 Trigger 类型实测 |
+| AgentTrace / `harness-evals` | 开源/工程能力可用 | Trace、Dataset、Threshold、Exit Code | 适合 Agent 回归，不替代业务 Oracle |
+| Harness AI Evals | Beta | 申请加入 Beta | Native Pipeline Gate 尚不能写成 GA 基线 |
+| Zero Trust Service | 工程披露/受控接洽 | 客户 Validator、Task 前置、fail closed | 非 Worker 默认组成，需 Account Team 确认 |
 
 ### 8.2 目前可以确认什么
 
@@ -426,7 +436,8 @@ Harness 是 2026 年 Agentic CI/CD 最值得关注的平台厂商之一，因为
 - [Harness AI Overview](https://developer.harness.io/docs/platform/harness-ai/overview/)
 - [Harness AI Core Capabilities](https://developer.harness.io/docs/platform/harness-ai/core-capabilities/)
 - [Harness DevOps Agent](https://developer.harness.io/3k-docs/ai/devops-agent/)
-- [Worker Agents](https://developer.harness.io/docs/platform/harness-ai/harness-agents/)
+- [Worker Agents](https://developer.harness.io/docs/platform/harness-ai/core-capabilities/in-your-pipelines/harness-agents/)
+- [Agent Permissions](https://developer.harness.io/docs/platform/harness-ai/core-capabilities/in-your-pipelines/permissions/)
 - [Harness MCP Server](https://developer.harness.io/docs/platform/harness-aida/harness-mcp-server/)
 - [MCP Open-source Repository](https://github.com/harness/mcp-server)
 - [Knowledge Graph/HQL Architecture](https://www.harness.io/blog/why-harness-ai-uses-knowledge-graph)
@@ -434,6 +445,9 @@ Harness 是 2026 年 Agentic CI/CD 最值得关注的平台厂商之一，因为
 - [Worker Agent Isolation](https://www.harness.io/blog/how-we-secured-ai-worker-agents-in-harness)
 - [Worker Agent Identity and Permissions](https://www.harness.io/blog/identity-and-permissions-for-ai-worker-agents-in-harness)
 - [Code Quality Agents](https://developer.harness.io/3k-docs/platform/getting-started/agents/code-quality/)
+- [Code Repository AI Agents](https://developer.harness.io/docs/code-repository/pull-requests/ai-agents/)
+- [AgentTrace](https://www.harness.io/blog/introducing-agent-trace)、[AI Evals](https://www.harness.io/blog/introducing-ai-evals) 与 [harness-evals](https://github.com/harness/harness-evals)
+- [Zero Trust Service](https://www.harness.io/blog/building-a-zero-trust-service-for-ci-cd-how-we-intercept-every-task-before-it-executes)
 - [AI Test Automation](https://developer.harness.io/docs/ai-test-automation/get-started/overview/)
 - [AI SRE](https://developer.harness.io/3k-docs/ai-sre/get-started/overview/)
 - [Harness Subscription Terms](https://www.harness.io/legal/subscription-terms)

@@ -4,8 +4,8 @@ source_id: harness-code-quality-agents-2026-07-02
 organization: Harness
 source_type: official-docs
 published: 2026-07-02
-verified: 2026-07-16
-availability: ga
+verified: 2026-07-22
+availability: mixed
 confidence: high
 geography:
   - global
@@ -34,10 +34,10 @@ tags:
 
 - 标题：Code Quality Agents
 - 组织或项目：Harness
-- 发布或更新日期：2026-07-02
+- 发布或更新日期：2026-07-15；2026-07-22 复核
 - 链接：[Harness Developer Hub](https://developer.harness.io/3k-docs/platform/getting-started/agents/code-quality/)
 - 来源类型：官方产品文档
-- 能力状态：正式文档能力
+- 能力状态：职责已正式文档化；Code Repository PR Agent、Code Quality Pipeline 示例与 Marketplace Worker 是不同入口/实现，整体状态按 `mixed` 处理
 
 ## 一句话结论
 
@@ -49,7 +49,9 @@ Harness 用三个专业 Agent 把 PR 评审、测试生成和 CI 失败修复连
 - Code Coverage Agent 生成测试来提升覆盖率，并以 PR 或报告交付。
 - AutoFix Agent 分析 CI 失败与代码变更，生成修复、验证构建并创建 PR。
 - 三类 Agent 都运行在流水线触发链路中，输出由开发者审查和合并。
-- 这三个专项 Agent 不应自动假设与通用 Worker Agent 使用完全相同的 Runtime、模型和权限实现，采购时需分别核验。
+- Code Repository PR Agent 文档展示普通 Run Step 调用专用 Execute API，并显式传 Harness PAT、模型密钥和 Git Connector；Code Quality 示例还使用多组容器镜像与脚本。
+- Marketplace Managed Worker CI Agent 才可按通用 Worker Definition/Runtime 评估；职责相似不等于共享 Scoped Token、四层隔离或 MCP Gateway。
+- Coverage 文档中的 90% 总覆盖、80% 单文件覆盖是配置目标，不是跨语言、跨仓库的效果 Benchmark。
 
 ## CI/CD 相关性
 
@@ -67,6 +69,7 @@ Harness 用三个专业 Agent 把 PR 评审、测试生成和 CI 失败修复连
 - 缺少不同语言、仓库规模和失败类型下的独立成功率数据。
 - “自动修复”最终仍通过 PR 交付，不等于无人值守合并。
 - Agent 不应修改或跳过用来证明其修复成功的原始 CI Gate。
+- 需核验示例镜像的 Owner、固定版本/Digest、签名、SBOM、PAT/LLM Key 注入路径，以及旧 PR/API 实现与 Managed Worker 的迁移关系。
 
 ## 可引用判断
 

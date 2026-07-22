@@ -5,7 +5,7 @@ tags:
   - research/findings
   - company/harness
 status: complete
-as_of: 2026-07-16
+as_of: 2026-07-22
 ---
 
 # Harness 公司专题分析发现
@@ -22,7 +22,7 @@ Harness 的 2026 产品组合不再只围绕 Pipeline Runner。DevOps Agent 负�
 |---|---|---|---|---|
 | DevOps Agent | Harness UI | 创建/修改 Pipeline、资源、Policy、GitOps，排障 | Harness Managed，不支持 BYOM | 用户审核、RBAC、OPA、模块许可证 |
 | Worker Agent | Pipeline Agent Step | 在交付流程中多轮行动 | Managed Connector 或自带 Anthropic/OpenAI | 隔离 Runtime、Scoped Token、MCP Tool Scope、Gate |
-| 专项 Agent | Code/AIT/SRE/FME/安全等模块 | Review、Coverage、Test、RCA、Release 等领域任务 | 模块各异 | 领域 Oracle、PR/Runbook/模块权限 |
+| 专项 Agent | Code/AIT/SRE/FME/安全等模块 | Review、Coverage、Test、RCA、Release 等领域任务 | 模块各异；Code Quality 旧入口可为 Run Step + Execute API/PAT | 领域 Oracle、PR/Runbook/模块权限；不能自动继承 Worker Runtime |
 
 DevOps Agent 更像“平台配置与交互入口”；Worker Agent 是“可复用执行单元”；专项 Agent 是“产品化任务实现”。它们可以组合，但可用性、数据、模型和自治等级不同。
 
@@ -50,6 +50,8 @@ Worker Agent 仍是 Step。它前后可以放确定性日志采集、测试、�
 
 “每个 Pipeline Step 都可成为 Agent”应理解为平台允许在各阶段插入 Agent 能力，不应理解为固定脚本、测试、签名和审批都变成概率推理。
 
+CI AutoFix 还必须按实现拆分：Code Repository/Code Quality 文档中的 PR Agent 通过普通 Run Step、专用 Execute API、Harness PAT 和模型密钥运行；Marketplace 的 Managed Worker CI Autofix 才明确使用通用 Worker Definition/Runtime，并可在 PR Branch 内重触发 Build 至通过或达到最大轮次。两者输出都应回到 Branch/PR，但不能共享镜像隔离、Scoped Token 或 MCP Gateway 的安全结论。
+
 ## F6. Worker Agent 的安全设计已接近生产架构，但证据仍是第一方
 
 2026-07 两篇技术文章补齐了架构细节：
@@ -59,13 +61,15 @@ Worker Agent 仍是 Step。它前后可以放确定性日志采集、测试、�
 - Agent、Credential Broker、Egress Proxy 使用不同非特权用户；
 - 真实 Secret 不进入 Agent 环境，Placeholder 只对目标 Host 有效；
 - 网络默认拒绝并强制通过 Allowlist Proxy；
-- Agent 以触发人的委托身份运行，Token 只包含声明的权限子集；
+- 最新 Worker 页面称存在 Principal 时，Token 按触发人 RBAC 与声明 Grant 求交集；另一份当前权限页却称 Token 独立于 Pipeline Author，精确身份语义存在文档冲突；
 - MCP Gateway 允许 `connector.allowedTools ∩ agent.allowedTools`；
 - 每次 Tool Call 记录 Agent、Run、Principal、参数和结果。
 
 这是比“模型会拒绝危险 Prompt”更可靠的思路。但它仍需客户验证 Feature Flag、实际 Runtime 配置、所有网络路径、审计字段和 Marketplace Agent 供应链；厂商自报的漏洞回放不是独立安全认证。
 
 还有一个不能被“治理继承”口号掩盖的缺口：当前文档称 Pipeline Trigger 发起的 Worker Run 不会注入 scoped token，因此 Webhook、Schedule、Artifact、Manifest 等事件触发不能直接继承某个用户的权限子集。手动/API 与事件触发必须分开建模；后者在身份方案和审批验证完成前不应获得生产写权限。
+
+2026-07-20 Worker 文档还修正了“无显式 Permission 即零权限”的理解：不声明 `permissions` block 时，会注入一组模块默认只读权限；声明 block 后默认项不再合并，Managed LLM Connector 还需要显式 `ai_llm_gateway: access`。同时，Scoped Token 会进入所在 Stage 或 Containerized Step Group 的每个 Step，而非只进入 Agent 内核。最小权限设计因此必须同时检查默认读权限、显式覆盖语义和组内旁路 Step 的 Blast Radius。
 
 ## F7. “治理继承”有价值，但不是自动完整
 
@@ -115,3 +119,9 @@ AI Test Copilot 在总览为 GA，但完整 AI Test Automation 仍需联系销�
 **短板：** 最大价值依赖平台采用深度；DevOps Agent 与 Chat 的模型选择有限；许多最新能力开通状态复杂；产品更新快导致文档漂移；通用 Agent 的独立效果数据不足；SMP/完全私有化需求受限。
 
 因此 Harness 最适合已经把 Pipeline/模块治理作为交付控制面的企业，或计划将异构工具集中到一个交付语义层的企业；只想在现有 CI 上添加一个轻量 Coding Agent 的团队，可能承担过高的平台迁移成本。
+
+## F13. Agent 自身开始拥有 CI Oracle，但成熟度仍分层
+
+2026-07-21 发布的 AgentTrace 与开源 `harness-evals` 把 Model Call、Tool Call、Retrieval、成本和生产 Failure 组织成 Trace/Dataset，并可通过 Threshold 与 Exit Code 进入 CI Regression Gate；这补上了 Agent/Prompt/Model 自身的质量 Oracle。Harness AI Evals SaaS 则仍以 Beta 方式开放，不能并入 GA Worker Agent。
+
+这类 Eval 能验证 Groundedness、Safety、Trajectory 和 Performance，但本身仍可能依赖概率 Judge。它适合补充 Build/Test/Scan/OPA/SLO 与人工 Review，不应替代这些确定性或业务 Oracle。Zero Trust Service 的 Task 前置 Validator 也值得作为客户控制的 fail-closed 参考架构跟踪，但当前只是工程披露/受控接洽，不是所有 Worker Run 的默认 Gate。

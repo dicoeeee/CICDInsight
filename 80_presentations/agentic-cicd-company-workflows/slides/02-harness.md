@@ -9,7 +9,7 @@ slide: 2
 content_status: content-archived
 visual_status: pending
 primary_deep_dive: "[[50_deepdives/harness-company/README]]"
-as_of: 2026-07-16
+as_of: 2026-07-22
 ---
 
 # Harness 把 Agent 插入 CI Pipeline，但把成功标准留给原始 Gate
@@ -39,7 +39,7 @@ Agent 读取 Diff、日志和测试结果，生成诊断、测试或修复；原
 - **覆盖阶段：** 代码评审、测试与质量门禁、编译构建，以及跨阶段治理
 - **典型输出：** PR Comment、Coverage Report、候选测试、修复分支或 Draft PR
 - **自治口径：** 诊断属于 L1；生成可审查修改属于 L2；在沙箱中调用工具并复验可达到受限 L3；不把自动 Merge 或 Release 视为当前可信基线
-- **状态口径：** Worker Agents 与 Code Quality Agents 已有正式产品文档；Worker 账户入口、细粒度权限和部分能力仍需管理员、Support 或 Feature Flag 核验
+- **状态口径：** Worker Agents 与 Code Quality 职责已有正式产品文档；Worker 账户入口和权限仍需 Support/Feature Flag 核验，且 7 月 15 日与 20 日权限文档存在冲突
 
 ## 三、页面论证链
 
@@ -93,7 +93,7 @@ Human Review · Branch Protection · Merge Policy
 |---|---|---|---|
 | DevOps Agent | CI 设计时 | 创建或修改 Pipeline、Stage、Step 与 OPA Policy 草案 | 聊天结果直接拥有运行或生产权限 |
 | Worker Agent | CI 运行时 | 作为 Agent Step 读取上下文、多轮调用允许的 Tool、输出诊断或候选修改 | 用 Prompt 替代 Pipeline DAG、RBAC 或 Gate |
-| Code Quality Agents | PR / 测试 / 构建链路 | Code Review 发布意见，Coverage 生成测试，AutoFix 诊断失败、验证构建并交付 PR | 三者必然共享同一 Worker Runtime、模型或权限实现 |
+| Code Quality Agents | PR / 测试 / 构建链路 | PR Agent/Execute API 或 Managed Worker 提供 Review、Coverage、AutoFix 并交付 PR | 两类入口必然共享同一 Worker Runtime、模型或权限实现 |
 
 页面应把 DevOps Agent 放在主流程左上方作为“设计时入口”，把 Worker/专项 Agent 放进 Pipeline 主链，避免把生成 Pipeline 和运行 Pipeline 画成同一个连续 Agent。
 
@@ -117,7 +117,7 @@ CI、STO、SCS 和 IaCM Stage 可使用 Harness Cloud Runtime；企业也可以�
 ### 运行时授权链
 
 ~~~text
-触发 Principal 的 Harness RBAC
+7 月 20 日 Worker 文档声明：触发 Principal 的 Harness RBAC
         ∩
 Agent 声明的 Resource / Verb Grant
         =
@@ -132,6 +132,8 @@ Agent Allowed Tools
 
 - Agent、Run、触发 Principal、Tool、参数和结果应进入逐次调用审计。
 - Worker Runtime 采用硬化镜像、非特权进程、Credential Broker、Secret Placeholder 与默认拒绝的 Egress Proxy，目标是即使 Agent 进程被攻陷也限制 Blast Radius。
+- 7 月 15 日 Agent permissions 页面又称 Token 独立于 Pipeline Author，并给出更窄的资源范围；该冲突必须在目标账户以 Token Subject、Effective Permission 和 Audit Principal 验收。
+- 不声明 `permissions` block 时仍有文档化默认只读权限；Scoped Token 会进入所在 Stage/Step Group 的每个 Step，因此 Agent 应使用最小独立组。
 - AI Rules 只能影响模型生成；OPA 才能在 Save/Run 阶段 Warn 或 Block；Build/Test/Scan 等外部 Oracle 才能证明行为结果。
 - 当前文档指出，Webhook、Schedule、Artifact、Manifest 等 Trigger 发起的 Worker Run 不能注入某个触发人的 Scoped Token。事件驱动 Agent 在身份与审批模型完成验证前，不应获得高风险写权限。
 - 细粒度 Permission / Token Injection 仍需在目标账户确认 `HARNESS_TOKEN_INJECT` 等 Feature Flag 的实际状态。
@@ -157,8 +159,8 @@ Agent Allowed Tools
 
 | 对象 | 观察日状态 | 本页采用的自治判断 | 证据边界 |
 |---|---|---|---|
-| Worker Agents | 平台总览与文档列 GA；账户入口和细粒度权限可能受控 | 读写范围受限时 L1—L3 | 正式文档与第一方技术文章；缺跨客户成功率 |
-| Code Quality Agents | 正式文档能力 | Review L1；测试/修复 PR 为 L2；沙箱复验可为受限 L3 | 机制清晰；不同语言和失败类型的独立效果不足 |
+| Worker Agents | 平台总览列 GA；账户入口和权限可能受控 | 读写范围受限时 L1—L3 | 权限文档存在冲突；缺跨客户成功率 |
+| Code Quality Agents | 职责文档化，PR/API 与 Managed Worker 实现并存 | Review L1；测试/修复 PR 为 L2；受控复验可为 L3 | Runtime/凭据需按实现核验；独立效果不足 |
 | DevOps Agent | 企业版能力，使用 Harness 管理模型 | 生成 Pipeline / OPA 草案为 L1—L2 | 厂商的 50 Stage 验证未公开任务集和成功标准 |
 | CI AutoFix 闭环 | 诊断、修改、验证并交付 PR | 最高可信输出停在可审查变更 | 不等于自动 Merge，更不等于 Release 自治 |
 
@@ -166,7 +168,8 @@ Agent Allowed Tools
 
 - [[50_deepdives/harness-company/90_report#5.3 Pipeline：概率决策与确定性执行的混合图|Pipeline 混合控制机制]]
 - [[50_deepdives/harness-company/90_report#5.4 Worker Runtime：假设 Agent 已被攻陷|Worker Runtime 隔离]]
-- [[50_deepdives/harness-company/90_report#5.5 身份与授权：委托身份，不是共享 Bot|委托身份与权限]]
+- [[50_deepdives/harness-company/90_report#5.5 身份与授权：目标是委托身份，但当前文档仍冲突|委托身份与权限冲突]]
+- [[50_deepdives/harness-company/ci-validation-2026-07-22|Harness CI 2026-07-22 检验与补充]]
 - [[00_sources/briefs/2026-harness-worker-agents|Worker Agents Source Brief]]
 - [[00_sources/briefs/2026-harness-worker-agent-security|Worker Agent 安全 Source Brief]]
 - [[00_sources/briefs/2026-harness-code-quality-agents|Code Quality Agents Source Brief]]
