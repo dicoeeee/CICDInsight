@@ -1,0 +1,230 @@
+digraph HarnessAgenticDelivery {
+  graph [
+    bgcolor="#FFFFFF",
+    rankdir=TB,
+    pad="0.10",
+    margin="0",
+    nodesep="0.10",
+    ranksep="0.08",
+    splines=spline,
+    outputorder=edgesfirst,
+    fontname="PingFang SC"
+  ];
+
+  node [
+    shape=rect,
+    style="rounded,filled",
+    fontname="PingFang SC",
+    color="#D4DEE9",
+    penwidth="1.2",
+    margin="0.06,0.04"
+  ];
+
+  edge [
+    style=invis,
+    color="#91A4B8",
+    penwidth="1.5",
+    arrowsize="0.72",
+    fontname="PingFang SC",
+    fontsize="9",
+    fontcolor="#64778A"
+  ];
+
+  scenario [
+    width="10.20",
+    fillcolor="#E7F3EA",
+    color="#A8CCB2",
+    label=<
+      <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="5" WIDTH="720">
+        <TR>
+          <TD COLSPAN="10" ALIGN="CENTER">
+            <FONT POINT-SIZE="10" COLOR="#4F7D5B"><B>01  用户场景与反馈闭环</B></FONT>
+          </TD>
+        </TR>
+        <TR>
+          <TD WIDTH="128" ALIGN="CENTER"><FONT POINT-SIZE="13" COLOR="#1D5131"><B>代码与 PR</B></FONT></TD>
+          <TD WIDTH="20"><FONT POINT-SIZE="13" COLOR="#7EA087">·</FONT></TD>
+          <TD WIDTH="128" ALIGN="CENTER"><FONT POINT-SIZE="13" COLOR="#1D5131"><B>构建与测试</B></FONT></TD>
+          <TD WIDTH="20"><FONT POINT-SIZE="13" COLOR="#7EA087">·</FONT></TD>
+          <TD WIDTH="140" ALIGN="CENTER"><FONT POINT-SIZE="13" COLOR="#1D5131"><B>安全与供应链</B></FONT></TD>
+          <TD WIDTH="20"><FONT POINT-SIZE="13" COLOR="#7EA087">·</FONT></TD>
+          <TD WIDTH="128" ALIGN="CENTER"><FONT POINT-SIZE="13" COLOR="#1D5131"><B>部署与发布</B></FONT></TD>
+          <TD WIDTH="20"><FONT POINT-SIZE="13" COLOR="#7EA087">·</FONT></TD>
+          <TD WIDTH="128" ALIGN="CENTER"><FONT POINT-SIZE="13" COLOR="#1D5131"><B>运行与 SRE</B></FONT></TD>
+        </TR>
+        <TR>
+          <TD COLSPAN="10" ALIGN="CENTER">
+            <FONT POINT-SIZE="9" COLOR="#668470">结果、证据与状态持续回流，改变代码、发布策略与运行判断，触发下一轮交付</FONT>
+          </TD>
+        </TR>
+      </TABLE>
+    >
+  ];
+
+  entry [
+    width="10.20",
+    fillcolor="#F2F6FB",
+    color="#C2D0E0",
+    label=<
+      <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="5" WIDTH="720">
+        <TR>
+          <TD COLSPAN="4" ALIGN="CENTER">
+            <FONT POINT-SIZE="10" COLOR="#647A91"><B>02  开发者入口</B></FONT>
+          </TD>
+        </TR>
+        <TR>
+          <TD WIDTH="180" ALIGN="CENTER"><FONT POINT-SIZE="12" COLOR="#163A63"><B>Harness UI</B></FONT></TD>
+          <TD WIDTH="180" ALIGN="CENTER"><FONT POINT-SIZE="12" COLOR="#163A63"><B>VS Code</B></FONT></TD>
+          <TD WIDTH="180" ALIGN="CENTER"><FONT POINT-SIZE="12" COLOR="#163A63"><B>MCP Client + Skills</B></FONT></TD>
+          <TD WIDTH="180" ALIGN="CENTER"><FONT POINT-SIZE="12" COLOR="#163A63"><B>CLI 3.0 Beta</B></FONT></TD>
+        </TR>
+        <TR>
+          <TD COLSPAN="4" ALIGN="CENTER">
+            <FONT POINT-SIZE="9" COLOR="#6F8093">访问边界：用户 / 服务账号 · OAuth / PAT · RBAC</FONT>
+          </TD>
+        </TR>
+      </TABLE>
+    >
+  ];
+
+  agents [
+    width="10.20",
+    fillcolor="#FFFFFF",
+    color="#EBC6AD",
+    label=<
+      <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="8" CELLPADDING="6" WIDTH="720">
+        <TR>
+          <TD COLSPAN="3" ALIGN="CENTER">
+            <FONT POINT-SIZE="10" COLOR="#9C5B36"><B>03  智能体组合</B></FONT><BR ALIGN="CENTER"/>
+            <FONT POINT-SIZE="9" COLOR="#9B806F">职责不同，模型、权限与运行位置不必相同</FONT>
+          </TD>
+        </TR>
+        <TR>
+          <TD WIDTH="226" HEIGHT="126" ALIGN="CENTER" BGCOLOR="#FFF7F1">
+            <FONT POINT-SIZE="10" COLOR="#A65B31"><B>平台配置与运维智能体</B></FONT><BR ALIGN="CENTER"/>
+            <FONT POINT-SIZE="14" COLOR="#743417"><B>DevOps Agent</B></FONT><BR ALIGN="CENTER"/><BR ALIGN="CENTER"/>
+            <FONT POINT-SIZE="10" COLOR="#624E43">创建或修改交付配置与平台资源<BR ALIGN="CENTER"/>Pipeline · Service · Environment · OPA · GitOps</FONT>
+            <BR ALIGN="CENTER"/><BR ALIGN="CENTER"/>
+            <FONT POINT-SIZE="8" COLOR="#8E6A55">边界：用户确认 · 模块 RBAC · 资源变更留痕</FONT>
+          </TD>
+          <TD WIDTH="226" HEIGHT="126" ALIGN="CENTER" BGCOLOR="#FDE8D7">
+            <FONT POINT-SIZE="10" COLOR="#A84F1F"><B>流水线工作智能体</B></FONT><BR ALIGN="CENTER"/>
+            <FONT POINT-SIZE="14" COLOR="#743417"><B>Worker Agents</B></FONT><BR ALIGN="CENTER"/><BR ALIGN="CENTER"/>
+            <FONT POINT-SIZE="10" COLOR="#624E43">在 Pipeline Agent Step 中多轮分析<BR ALIGN="CENTER"/>调用工具并输出结构化结果</FONT>
+            <BR ALIGN="CENTER"/><BR ALIGN="CENTER"/>
+            <FONT POINT-SIZE="8" COLOR="#8E5E40">边界：Scoped Token* · Turn / Cost / Tool Scope</FONT>
+          </TD>
+          <TD WIDTH="226" HEIGHT="126" ALIGN="CENTER" BGCOLOR="#FFF7F1">
+            <FONT POINT-SIZE="10" COLOR="#A65B31"><B>领域专项智能体</B></FONT><BR ALIGN="CENTER"/>
+            <FONT POINT-SIZE="12" COLOR="#743417"><B>Code · Test · Security<BR ALIGN="CENTER"/>FME · AI SRE</B></FONT><BR ALIGN="CENTER"/><BR ALIGN="CENTER"/>
+            <FONT POINT-SIZE="10" COLOR="#624E43">覆盖代码、测试、安全与 FME<BR ALIGN="CENTER"/>产出评审、修复、实验总结与 RCA</FONT>
+            <BR ALIGN="CENTER"/><BR ALIGN="CENTER"/>
+            <FONT POINT-SIZE="8" COLOR="#8E6A55">边界：模块凭据 · 结果 / 日志 · Runtime varies</FONT>
+          </TD>
+        </TR>
+      </TABLE>
+    >
+  ];
+
+  capabilities [
+    width="10.20",
+    fillcolor="#FFFFFF",
+    color="#D1DBE5",
+    label=<
+      <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="8" CELLPADDING="6" WIDTH="720">
+        <TR>
+          <TD COLSPAN="2" ALIGN="CENTER">
+            <FONT POINT-SIZE="10" COLOR="#596A86"><B>04  智能体能力支撑</B></FONT><BR ALIGN="CENTER"/>
+            <FONT POINT-SIZE="9" COLOR="#8490A3">知识回答“知道什么”，工具决定“能够做什么”</FONT>
+          </TD>
+        </TR>
+        <TR>
+          <TD WIDTH="346" HEIGHT="90" ALIGN="CENTER" BGCOLOR="#F2EEFB">
+            <FONT POINT-SIZE="10" COLOR="#76639B"><B>上下文与知识</B></FONT><BR ALIGN="CENTER"/>
+            <FONT POINT-SIZE="13" COLOR="#40315F"><B>软件交付知识图谱 · HQL</B></FONT><BR ALIGN="CENTER"/>
+            <FONT POINT-SIZE="10" COLOR="#40315F"><B>Pipeline Context</B></FONT><BR ALIGN="CENTER"/>
+            <FONT POINT-SIZE="9" COLOR="#706983">读取 · 查询 · 分析 · Scope 控制</FONT>
+          </TD>
+          <TD WIDTH="346" HEIGHT="90" ALIGN="CENTER" BGCOLOR="#EAF5F6">
+            <FONT POINT-SIZE="10" COLOR="#417980"><B>工具与动作</B></FONT><BR ALIGN="CENTER"/>
+            <FONT POINT-SIZE="13" COLOR="#1E5961"><B>Harness / 第三方 MCP</B></FONT><BR ALIGN="CENTER"/>
+            <FONT POINT-SIZE="10" COLOR="#1E5961"><B>Connector · API</B></FONT><BR ALIGN="CENTER"/>
+            <FONT POINT-SIZE="9" COLOR="#5D7B7F">凭据授权 · 请求与资源变更留痕</FONT>
+          </TD>
+        </TR>
+      </TABLE>
+    >
+  ];
+
+  pipeline [
+    width="10.20",
+    fillcolor="#183B64",
+    color="#183B64",
+    label=<
+      <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="5" WIDTH="720">
+        <TR>
+          <TD ALIGN="CENTER">
+            <FONT POINT-SIZE="10" COLOR="#BFD2E8"><B>05  交付流程编排</B></FONT>
+          </TD>
+        </TR>
+        <TR>
+          <TD ALIGN="CENTER">
+            <FONT POINT-SIZE="12" COLOR="#FFFFFF"><B>Pipeline　·　DAG　·　条件 / 并行　·　审批 / OPA　·　重试 / 失败策略 / 回滚</B></FONT>
+          </TD>
+        </TR>
+        <TR>
+          <TD ALIGN="CENTER">
+            <FONT POINT-SIZE="9" COLOR="#C4D3E3">Agent 输出进入确定性流程；Stage / Step 状态、日志与审批记录在此汇聚</FONT>
+          </TD>
+        </TR>
+      </TABLE>
+    >
+  ];
+
+  runtime [
+    width="10.20",
+    fillcolor="#F0F2F5",
+    color="#CCD4DE",
+    label=<
+      <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="5" WIDTH="720">
+        <TR>
+          <TD COLSPAN="3" ALIGN="CENTER">
+            <FONT POINT-SIZE="10" COLOR="#6D7987"><B>06  运行基础设施</B></FONT>
+          </TD>
+        </TR>
+        <TR>
+          <TD WIDTH="240" ALIGN="CENTER"><FONT POINT-SIZE="13" COLOR="#34495F"><B>Harness Cloud</B></FONT></TD>
+          <TD WIDTH="240" ALIGN="CENTER"><FONT POINT-SIZE="13" COLOR="#34495F"><B>Delegate</B></FONT></TD>
+          <TD WIDTH="240" ALIGN="CENTER"><FONT POINT-SIZE="13" COLOR="#34495F"><B>客户 Kubernetes</B></FONT></TD>
+        </TR>
+        <TR>
+          <TD COLSPAN="3" ALIGN="CENTER">
+            <FONT POINT-SIZE="9" COLOR="#6F7C89">Delegate Token · Secret Resolution · Container / Delegate Log · 网络与基础设施遥测</FONT>
+          </TD>
+        </TR>
+      </TABLE>
+    >
+  ];
+
+  optical_balance [
+    shape=box,
+    style=invis,
+    width="0.50",
+    height="0.01",
+    fixedsize=true,
+    label=""
+  ];
+
+  { rank=same; scenario; optical_balance; }
+  scenario -> optical_balance [style=invis, weight=80];
+
+  scenario -> entry [style=invis, weight=30];
+
+  entry -> agents [style=invis, weight=30];
+
+  agents -> capabilities [style=invis, weight=30];
+
+  capabilities -> pipeline [style=invis, weight=30];
+
+  pipeline -> runtime [style=invis, weight=30];
+}
