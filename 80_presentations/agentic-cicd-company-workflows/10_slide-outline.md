@@ -14,7 +14,7 @@ status: draft
 | 页码 | 横向维度 | 页面主张 | 状态 |
 |---|---|---|---|
 | 01 | GitHub | 以 Workflow 为装配清单，把 Skill、Agent 与 MCP 编译成受控的 Actions 作业 | 内容分析已归档、待视觉设计 |
-| 02 | Harness | 竞争单位不是一个 Agent，而是受治理的软件交付控制面 | 单页公司级架构图已就绪 |
+| 02 | Harness | 将多类 Agent 嵌入交付 Pipeline：分工协作、真实上下文与逐层权限控制同时成立 | 可编辑单页已就绪 |
 | 03 | GitLab | GitLab 公司页；主张待公司 Deep Dive 形成 | `blocked-by-deep-dive` |
 | 04 | AWS | AWS 公司页；主张待公司 Deep Dive 形成 | `blocked-by-deep-dive` |
 | 05 | CI 自愈能力 | 成熟闭环不是“重跑”，而是失败分类、受控修复、原任务复验与 PR 交付 | Deep Dive 已就绪、页面待完善 |

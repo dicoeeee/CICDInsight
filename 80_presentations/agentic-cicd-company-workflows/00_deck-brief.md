@@ -48,7 +48,7 @@ Agent 如何重构 CI/CD：主要公司与能力作业流洞察
 - [[80_presentations/agentic-cicd-company-workflows/20_slide-template|作业流单页模板]]：定义页面字段、主作业流、三条泳道、页底洞察和来源要求。
 - [[80_presentations/agentic-cicd-company-workflows/30_insight-slide-generation-prompt|洞察页生成方法与提示词]]：总结内容方法，并提供后续公司页或能力页可直接复用的参数化提示。
 - [[80_presentations/agentic-cicd-company-workflows/slides/01-github|GitHub Agentic Workflows 页面分析]]：首个完成内容归档、等待视觉设计的示例页面。
-- [[80_presentations/agentic-cicd-company-workflows/slides/02-harness|Harness Agentic Software Delivery 控制面]]：以公司级六层分析视图呈现三类 Agent、上下文与工具、Pipeline/Runtime，以及贯穿式治理与证明边界。
+- [[80_presentations/agentic-cicd-company-workflows/slides/02-harness|Harness CI Agent 分工、上下文与治理]]：以六层分析框架呈现三类 Agent 如何分工，Knowledge Graph/HQL/Pipeline Context 与 Tool 如何支撑行动，以及身份、Agent Scope、Pipeline Gate 和 Runtime 如何逐层控制权限。
 
 ## 上游研究入口
 
