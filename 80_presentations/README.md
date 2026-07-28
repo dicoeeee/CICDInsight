@@ -6,7 +6,7 @@ tags:
   - research/agentic-cicd
   - deliverable/presentation
 status: active
-as_of: 2026-07-21
+as_of: 2026-07-24
 ---
 
 # Agentic CI/CD 演示文稿
@@ -37,6 +37,10 @@ as_of: 2026-07-21
 
 - [[80_presentations/agentic-cicd-company-workflows/00_deck-brief|Agentic CI/CD 公司与能力作业流]]
 
+## 成品交付规范
+
+- [[80_presentations/PPTX-editability-standard|PPTX 原生可编辑性与交付验收规范]]：所有后续 PowerPoint 成品必须保持原生文本与对象，支持修改字体颜色、自由组合和取消组合，并在交付前检查 `noGrp`、文本锁、图片化、越界与渲染结果。
+
 ## 建议工作流
 
 1. 检查候选页面是否存在 `presentation_ready: true` 的 Deep Dive；缺少时保持阻塞。
@@ -45,3 +49,4 @@ as_of: 2026-07-21
 4. 按统一 Slide Template 从 Deep Dive 提炼页面内容。
 5. 在 Source Map 中校验主要专题、辅助总结、产品状态、自治等级和证据口径。
 6. 完成文案审核后，再进入视觉制作和渲染。
+7. PPTX 成品按 [[80_presentations/PPTX-editability-standard|原生可编辑性规范]]完成自动检查与 PowerPoint 抽检，再归档到 `outputs/`。

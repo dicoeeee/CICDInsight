@@ -7,7 +7,7 @@ tags:
   - deliverable/presentation
   - prompt/generation
 status: active
-as_of: 2026-07-21
+as_of: 2026-07-24
 ---
 
 # Agentic CI/CD 洞察页生成方法与提示词
@@ -164,5 +164,6 @@ Skill、Agent、MCP、Pipeline、Oracle、Safe Output 等组件不能作为孤�
 3. 通过门禁后，将结果归档到对应的 `slides/<编号>-<对象>.md`，该文件作为页面唯一内容源。
 4. 在 [[80_presentations/agentic-cicd-company-workflows/source-map|Source Map]] 中核对主要 Deep Dive、辅助来源与状态。
 5. 内容评审通过后，再进入视觉设计和成品生成。
+6. PPTX 成品必须按 [[80_presentations/PPTX-editability-standard|PPTX 原生可编辑性与交付验收规范]]检查文本颜色可修改、对象可组合、无编辑锁且未整页图片化，通过后才能归档到 `outputs/`。
 
 首个已归档示例：[[80_presentations/agentic-cicd-company-workflows/slides/01-github|GitHub Agentic Workflows 页面分析]]。

@@ -17,7 +17,7 @@ status: draft
 | 02 | Harness | 将多类 Agent 嵌入交付 Pipeline：分工协作、真实上下文与逐层权限控制同时成立 | 可编辑单页已就绪 |
 | 03 | GitLab | GitLab 公司页；主张待公司 Deep Dive 形成 | `blocked-by-deep-dive` |
 | 04 | AWS | AWS 公司页；主张待公司 Deep Dive 形成 | `blocked-by-deep-dive` |
-| 05 | CI 自愈能力 | 成熟闭环不是“重跑”，而是失败分类、受控修复、原任务复验与 PR 交付 | Deep Dive 已就绪、页面待完善 |
+| 05 | CI 自愈能力 | 从失败分类到独立复验与有界写回，形成可信自愈闭环 | 可编辑评审版已生成、待确认 |
 
 ## 可选扩展页
 

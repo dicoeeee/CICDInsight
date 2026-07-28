@@ -56,3 +56,7 @@ status: draft
 ## 6. Agent 生成输入
 
 本模板只定义页面应该包含的字段。需要生成新的公司页或能力页时，使用 [[80_presentations/agentic-cicd-company-workflows/30_insight-slide-generation-prompt|洞察页生成方法与提示词]]，先完成主张、论证链、组件阶段映射和排除项，再将结果归档到对应的 `slides/<编号>-<对象>.md`。
+
+## 7. PPTX 成品要求
+
+视觉设计和 PowerPoint 生成完成后，必须按 [[80_presentations/PPTX-editability-standard|PPTX 原生可编辑性与交付验收规范]]验收。由我们生成的文本、框、表格、图表和连线必须保持原生对象；用户应能修改字体颜色、移动对象并自由组合或取消组合。带有 `noGrp`、`noTextEdit`、`noSelect` 锁，或把页面主体图片化的文件不能标记为 `visual_status: complete`。
