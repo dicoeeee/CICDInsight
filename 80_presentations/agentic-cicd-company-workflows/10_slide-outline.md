@@ -18,6 +18,7 @@ status: draft
 | 03 | GitLab | GitLab 公司页；主张待公司 Deep Dive 形成 | `blocked-by-deep-dive` |
 | 04 | AWS | AWS 公司页；主张待公司 Deep Dive 形成 | `blocked-by-deep-dive` |
 | 05 | CI 自愈能力 | 从失败分类到独立复验与有界写回，形成可信自愈闭环 | 可编辑评审版已生成、待确认 |
+| 06 | CLI / MCP 选型 | 软件交付的 Agent 接口走向互补：CLI 走向结构化输出与 Skill 复用，MCP 接入走向渐进发现与按需加载 | 可编辑最终版已归档、事实审计与视觉验收完成 |
 
 ## 可选扩展页
 

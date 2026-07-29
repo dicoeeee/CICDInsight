@@ -8,20 +8,20 @@ tags:
   - research/deep-dive
   - tool/cli
 status: complete
-as_of: 2026-07-15
+as_of: 2026-07-27
 topic_id: cli-agent-interface
 topic_type: technology
 stages:
   - cross-stage
 confidence: high
 presentation_ready: true
-refresh_after: 2026-10-15
+refresh_after: 2026-10-27
 ---
 
 # CLI 与 Agent-ready Interface 专题
 
 > [!abstract] 当前判断
-> CLI 正在从“给人使用的终端命令”重构为 Agent 的确定性执行契约：稳定的帮助、非交互模式、结构化输入输出、退出码、显式状态、幂等与 dry-run 比命令是否运行在终端更重要。它与 MCP 只在“Agent 调用工具”这一层部分重叠，通常是互补关系。
+> CLI 正在从“给人使用的终端命令”重构为 Agent 的可重放执行契约：Agent 负责概率性判断，CLI 把判断压缩为显式命令、目标、输入输出和副作用，任务身份与 Sandbox 限定行动范围，外部 Oracle 决定结果能否被接受。它与 MCP 只在“Agent 调用工具”这一层部分重叠，通常是互补关系。
 
 ## 关键结论
 
@@ -30,6 +30,7 @@ refresh_after: 2026-10-15
 3. MCP 可以替代“每个客户端各写一套 CLI 适配”的前台接口，却通常不会替代后台 CLI、API、SDK 或业务实现。
 4. 2026 年的趋势不是 CLI 与 MCP 二选一，而是 Agent CLI/Harness、确定性 CLI 能力底座和 MCP 互操作层同时增长。
 5. 对 CI/CD 来说，CLI 的主要风险不是“技术老”，而是人类友好输出、隐式全局状态、共享凭据和非幂等命令被 Agent 误当成稳定机器契约。
+6. “模型可见的 Toolset”与“当前任务获准执行的命令”必须分离；JSON、Schema 或 Tool Discovery 都不能替代命令级授权和独立成功验证。
 
 ## 专题导航
 
@@ -44,6 +45,7 @@ refresh_after: 2026-10-15
 | Playbook | 完成 | [[50_deepdives/cli-agent-interface/60_playbook|企业 Playbook]] |
 | Report | 完成 | [[50_deepdives/cli-agent-interface/90_report|专题报告]] |
 | Research Notes | 完成 | [[50_deepdives/cli-agent-interface/research-evidence|一手资料笔记]] |
+| Presentation Research | 完成 | [[50_deepdives/cli-agent-interface/presentation-page-research-2026-07-27|单页汇报研究稿]] |
 
 ## 与其他专题的边界
 

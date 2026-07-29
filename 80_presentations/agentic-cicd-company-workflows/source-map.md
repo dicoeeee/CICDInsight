@@ -16,6 +16,7 @@ status: draft
 | GitLab | 暂无公司专题 | [[20_summaries/companies/README#3. GitLab：一体化上下文与治理控制面|GitLab 公司总结]] | [[00_sources/briefs/2026-gitlab-duo-agent-platform]] | `blocked-by-deep-dive` |
 | AWS | 暂无公司专题 | [[20_summaries/companies/README#5. AWS：从生产根因分析向发布决策扩展|AWS 公司总结]] | [[00_sources/briefs/2026-aws-devops-agent-production-operations-ga]]、[[00_sources/briefs/2026-aws-devops-agent-release-management-preview]] | `blocked-by-deep-dive` |
 | CI 自愈 | [[50_deepdives/cicd-self-healing/90_report|CI/CD 自愈深研]] | [[30_summaries/stages/README#4. 编译、构建与出包|构建阶段总结]] | [[00_sources/briefs/2026-circleci-chunk-agent]]、[[00_sources/briefs/2026-nx-self-healing-ci]]、[[00_sources/briefs/2026-buildkite-ai-agents-in-pipelines]] | `mapped` |
+| CLI / MCP 选型 | [[50_deepdives/cli-agent-interface/README|CLI Agent 接口深研]]、[[50_deepdives/cli-agent-interface/industry-mainstream-slide-evidence-refresh-2026-07-28|2026-07-28 单页证据刷新]]、[[50_deepdives/cli-agent-interface/industry-mcp-evolution-and-progressive-discovery-2026-07-28|MCP 渐进发现证据]] | [[50_deepdives/cli-vs-mcp-decision-guide|CLI vs MCP 决策指南]] | OpenAI Codex CLI、GitHub Copilot CLI、Anthropic Claude Code、OpenCode、GitHub CLI、Snyk、CircleCI、JFrog、HashiCorp、Sentry 与 MCP 官方资料；最终成品见 `outputs/cli-software-delivery-agent-interface-insight-final.pptx` | `mapped` |
 
 ## 状态校验规则
 
