@@ -1,0 +1,159 @@
+digraph Body_Blueprint {
+  graph [
+    rankdir=TB,
+    bgcolor="#0B1220",
+    pad="0.30",
+    margin="0",
+    nodesep="0.22",
+    ranksep="0.34",
+    splines=ortho,
+    outputorder=edgesfirst
+  ];
+
+  node [
+    shape=rect,
+    style="filled",
+    fontname="PingFang SC",
+    fontsize=13,
+    fontcolor="#E8EEF8",
+    color="#34445E",
+    penwidth=1.25,
+    margin="0.18,0.13"
+  ];
+
+  edge [
+    color="#5C708E",
+    penwidth=1.7,
+    arrowsize=0.70
+  ];
+
+  h1 [label="INFRASTRUCTURE", shape=plain, style="", fontsize=11, fontcolor="#8192AD"];
+  h2 [label="COMPANY PATHS", shape=plain, style="", fontsize=11, fontcolor="#8192AD"];
+  h3 [label="INDUSTRY DIRECTION / DRIVER / GUARDRAIL", shape=plain, style="", fontsize=11, fontcolor="#8192AD"];
+  { rank=same; h1; h2; h3; }
+  h1 -> h2 -> h3 [style=invis, weight=80];
+
+  repo [
+    label="01 代码仓",
+    width=1.38,
+    height=1.06,
+    fixedsize=true,
+    fillcolor="#14233B",
+    color="#4F8CFF",
+    fontcolor="#8CB8FF"
+  ];
+  repo_paths [
+    label="GitHub  | Issue / 评论 → 临时环境 → PR\lGitLab   | Issue / MR / Event → Flow / Runner → MR + CI Log\l",
+    width=5.25,
+    height=1.10,
+    fixedsize=true,
+    fillcolor="#101B2D",
+    color="#2E4C78",
+    fontsize=10.8
+  ];
+  repo_trend [
+    label="DIRECTION  任务上下文与候选变更协作面\nDRIVER     异步任务需要规则、历史与运行结果\nGUARDRAIL  Review / Required Checks 独立裁决",
+    width=6.25,
+    height=1.18,
+    fixedsize=true,
+    fillcolor="#12203A",
+    color="#4F8CFF",
+    fontsize=10.6
+  ];
+  { rank=same; repo; repo_paths; repo_trend; }
+  repo -> repo_paths -> repo_trend [color="#4F8CFF"];
+
+  pipe [
+    label="02 流水线",
+    width=1.38,
+    height=1.18,
+    fixedsize=true,
+    fillcolor="#0F2A29",
+    color="#35C99B",
+    fontcolor="#7DE2C1"
+  ];
+  pipe_paths [
+    label="GitHub     | Markdown → Actions YAML → Runner / Policy\lBuildkite  | MCP → Agent Step → 分析或触发\lHarness   | Worker Agent → 受控凭据 / 网络 → 修复复验\l",
+    width=5.25,
+    height=1.30,
+    fixedsize=true,
+    fillcolor="#101B2D",
+    color="#2D5A55",
+    fontsize=10.3
+  ];
+  pipe_trend [
+    label="DIRECTION  受控 Agent 运行时\nDRIVER     动态 Tool 调用会产生副作用\nGUARDRAIL  Tool / Secret / Network / Budget 外部约束",
+    width=6.25,
+    height=1.30,
+    fixedsize=true,
+    fillcolor="#0E2829",
+    color="#35C99B",
+    fontsize=10.5
+  ];
+  { rank=same; pipe; pipe_paths; pipe_trend; }
+  pipe -> pipe_paths -> pipe_trend [color="#35C99B"];
+
+  build [
+    label="03 构建与资源",
+    width=1.38,
+    height=1.25,
+    fixedsize=true,
+    fillcolor="#302013",
+    color="#F59A4A",
+    fontcolor="#FFC087"
+  ];
+  build_paths [
+    label="CircleCI | Snapshot → Sidecar / Microbuild → 增量反馈\lNx       | Graph / Affected → Cache / Worker → Task 复验\lBazel    | Hermetic Graph → RBE / Cache → 确定性复用\l",
+    width=5.25,
+    height=1.34,
+    fixedsize=true,
+    fillcolor="#101B2D",
+    color="#64452C",
+    fontsize=10.2
+  ];
+  build_trend [
+    label="DIRECTION  高频验证与反馈经济性底座\nDRIVER     多轮并发放大排队、冷启动和计算成本\nGUARDRAIL  既有 Graph / Cache / RBE 能力升值",
+    width=6.25,
+    height=1.34,
+    fixedsize=true,
+    fillcolor="#2A1D13",
+    color="#F59A4A",
+    fontsize=10.4
+  ];
+  { rank=same; build; build_paths; build_trend; }
+  build -> build_paths -> build_trend [color="#F59A4A"];
+
+  artifact [
+    label="04\n制品与供应链",
+    width=1.38,
+    height=1.28,
+    fixedsize=true,
+    fillcolor="#231A36",
+    color="#A77BFF",
+    fontcolor="#C8AFFF"
+  ];
+  artifact_paths [
+    label="Sonatype   | 依赖情报 → 推荐版本\lCloudsmith | MCP 查询 → 受限操作 → 人工 Policy\lJFrog       | Repo / Evidence / Release → Agent Package\l",
+    width=5.25,
+    height=1.34,
+    fixedsize=true,
+    fillcolor="#101B2D",
+    color="#4C3A6D",
+    fontsize=10.1
+  ];
+  artifact_trend [
+    label="DIRECTION  供应链事实与可验证交付证据面\nDRIVER     依赖选择和发布需要实时事实与 Provenance\nGUARDRAIL  查询不等于授权，高风险动作独立审批",
+    width=6.25,
+    height=1.34,
+    fixedsize=true,
+    fillcolor="#211832",
+    color="#A77BFF",
+    fontsize=10.3
+  ];
+  { rank=same; artifact; artifact_paths; artifact_trend; }
+  artifact -> artifact_paths -> artifact_trend [color="#A77BFF"];
+
+  h1 -> repo -> pipe -> build -> artifact [style=invis, weight=150];
+  h2 -> repo_paths -> pipe_paths -> build_paths -> artifact_paths [style=invis, weight=150];
+  h3 -> repo_trend -> pipe_trend -> build_trend -> artifact_trend [style=invis, weight=150];
+}

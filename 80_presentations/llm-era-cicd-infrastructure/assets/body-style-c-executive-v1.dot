@@ -1,0 +1,128 @@
+digraph Body_Executive {
+  graph [
+    rankdir=TB,
+    bgcolor="#FFFFFF",
+    pad="0.20",
+    margin="0",
+    nodesep="0.18",
+    ranksep="0.16",
+    splines=ortho,
+    outputorder=edgesfirst
+  ];
+
+  node [
+    shape=plain,
+    style="",
+    fontname="Arial Unicode MS",
+    fontsize=10,
+    fontcolor="#142033"
+  ];
+
+  edge [
+    color="#B2B9C5",
+    penwidth=1.4,
+    arrowsize=0.64
+  ];
+
+  h1 [label="基础设施", fontsize=10, fontcolor="#7B8493"];
+  h2 [label="公司的不同切入方式", fontsize=10, fontcolor="#7B8493"];
+  h3 [label="行业共同变化", fontsize=10, fontcolor="#7B8493"];
+  right_pad [shape=box, label="", width=0.90, height=0.01, fixedsize=true, style=invis];
+  { rank=same; h1; h2; h3; right_pad; }
+  h1 -> h2 -> h3 -> right_pad [style=invis, weight=80];
+
+  repo [label=<
+    <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="2">
+      <TR><TD ALIGN="LEFT"><FONT POINT-SIZE="15" COLOR="#315FA9"><B>代码仓</B></FONT></TD></TR>
+      <TR><TD ALIGN="LEFT"><FONT POINT-SIZE="8" COLOR="#7C8798">TASK &amp; CONTEXT</FONT></TD></TR>
+    </TABLE>
+  >];
+  repo_paths [label=<
+    <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="3">
+      <TR><TD ALIGN="LEFT"><B>GitHub</B></TD><TD ALIGN="LEFT">Issue / 评论 → 临时环境 → PR</TD></TR>
+      <TR><TD ALIGN="LEFT"><B>GitLab</B></TD><TD ALIGN="LEFT">Issue / MR / Event → Flow / Runner → MR + CI Log</TD></TR>
+    </TABLE>
+  >];
+  repo_trend [label=<
+    <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="3" WIDTH="280">
+      <TR><TD ALIGN="LEFT"><FONT POINT-SIZE="11" COLOR="#254E91"><B>仓库成为 Agent 的任务协作面</B></FONT></TD></TR>
+      <TR><TD ALIGN="LEFT"><FONT POINT-SIZE="9">汇合规则、历史、运行结果与候选变更</FONT></TD></TR>
+      <TR><TD ALIGN="LEFT"><FONT POINT-SIZE="8" COLOR="#6D7787">边界：Merge 仍由 Review /<BR ALIGN="LEFT"/>Required Checks 接受</FONT></TD></TR>
+    </TABLE>
+  >];
+  { rank=same; repo; repo_paths; repo_trend; }
+  repo -> repo_paths -> repo_trend;
+
+  pipe [label=<
+    <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="2">
+      <TR><TD ALIGN="LEFT"><FONT POINT-SIZE="15" COLOR="#1E7E61"><B>流水线</B></FONT></TD></TR>
+      <TR><TD ALIGN="LEFT"><FONT POINT-SIZE="8" COLOR="#7C8798">ORCHESTRATION</FONT></TD></TR>
+    </TABLE>
+  >];
+  pipe_paths [label=<
+    <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="3">
+      <TR><TD ALIGN="LEFT"><B>GitHub</B></TD><TD ALIGN="LEFT">Markdown → Actions YAML → Runner / Policy</TD></TR>
+      <TR><TD ALIGN="LEFT"><B>Buildkite</B></TD><TD ALIGN="LEFT">MCP → Agent Step → 分析或触发</TD></TR>
+      <TR><TD ALIGN="LEFT"><B>Harness</B></TD><TD ALIGN="LEFT">Worker Agent → 受控凭据 / 网络 → 修复复验</TD></TR>
+    </TABLE>
+  >];
+  pipe_trend [label=<
+    <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="3" WIDTH="280">
+      <TR><TD ALIGN="LEFT"><FONT POINT-SIZE="11" COLOR="#17694F"><B>流水线增加受控 Agent 运行时</B></FONT></TD></TR>
+      <TR><TD ALIGN="LEFT"><FONT POINT-SIZE="9">Tool 调用进入 Runner、权限、<BR ALIGN="LEFT"/>网络与预算外壳</FONT></TD></TR>
+      <TR><TD ALIGN="LEFT"><FONT POINT-SIZE="8" COLOR="#6D7787">边界：可调用 ≠ 获得 Secret / 生产权限</FONT></TD></TR>
+    </TABLE>
+  >];
+  { rank=same; pipe; pipe_paths; pipe_trend; }
+  pipe -> pipe_paths -> pipe_trend;
+
+  build [label=<
+    <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="2">
+      <TR><TD ALIGN="LEFT"><FONT POINT-SIZE="15" COLOR="#B45E1D"><B>构建与资源</B></FONT></TD></TR>
+      <TR><TD ALIGN="LEFT"><FONT POINT-SIZE="8" COLOR="#7C8798">FEEDBACK ECONOMICS</FONT></TD></TR>
+    </TABLE>
+  >];
+  build_paths [label=<
+    <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="3">
+      <TR><TD ALIGN="LEFT"><B>CircleCI</B></TD><TD ALIGN="LEFT">Snapshot → Microbuild → 增量反馈</TD></TR>
+      <TR><TD ALIGN="LEFT"><B>Nx</B></TD><TD ALIGN="LEFT">Graph / Affected → Cache / Worker → Task 复验</TD></TR>
+      <TR><TD ALIGN="LEFT"><B>Bazel</B></TD><TD ALIGN="LEFT">Hermetic Graph → RBE / Cache → 确定性复用</TD></TR>
+    </TABLE>
+  >];
+  build_trend [label=<
+    <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="3" WIDTH="280">
+      <TR><TD ALIGN="LEFT"><FONT POINT-SIZE="11" COLOR="#9D4E15"><B>构建能力升级为反馈经济底座</B></FONT></TD></TR>
+      <TR><TD ALIGN="LEFT"><FONT POINT-SIZE="9">并发验证依赖 Graph / Affected / Cache<BR ALIGN="LEFT"/>与 RBE / 动态调度</FONT></TD></TR>
+      <TR><TD ALIGN="LEFT"><FONT POINT-SIZE="8" COLOR="#6D7787">边界：既有能力升值，不是 Agent 新发明</FONT></TD></TR>
+    </TABLE>
+  >];
+  { rank=same; build; build_paths; build_trend; }
+  build -> build_paths -> build_trend;
+
+  artifact [label=<
+    <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="2">
+      <TR><TD ALIGN="LEFT"><FONT POINT-SIZE="15" COLOR="#7145A6"><B>制品与供应链</B></FONT></TD></TR>
+      <TR><TD ALIGN="LEFT"><FONT POINT-SIZE="8" COLOR="#7C8798">FACTS &amp; EVIDENCE</FONT></TD></TR>
+    </TABLE>
+  >];
+  artifact_paths [label=<
+    <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="3">
+      <TR><TD ALIGN="LEFT"><B>Sonatype</B></TD><TD ALIGN="LEFT">依赖情报 → 推荐版本</TD></TR>
+      <TR><TD ALIGN="LEFT"><B>Cloudsmith</B></TD><TD ALIGN="LEFT">MCP 查询 → 受限操作 → 人工 Policy</TD></TR>
+      <TR><TD ALIGN="LEFT"><B>JFrog</B></TD><TD ALIGN="LEFT">Repo / Evidence / Release → Agent Package</TD></TR>
+    </TABLE>
+  >];
+  artifact_trend [label=<
+    <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="3" WIDTH="280">
+      <TR><TD ALIGN="LEFT"><FONT POINT-SIZE="11" COLOR="#623795"><B>制品平台成为供应链<BR ALIGN="LEFT"/>事实与证据面</B></FONT></TD></TR>
+      <TR><TD ALIGN="LEFT"><FONT POINT-SIZE="9">依赖选择与发布消费实时情报<BR ALIGN="LEFT"/>和 Provenance</FONT></TD></TR>
+      <TR><TD ALIGN="LEFT"><FONT POINT-SIZE="8" COLOR="#6D7787">边界：查询不等于授权，高风险动作独立审批</FONT></TD></TR>
+    </TABLE>
+  >];
+  { rank=same; artifact; artifact_paths; artifact_trend; }
+  artifact -> artifact_paths -> artifact_trend;
+
+  h1 -> repo -> pipe -> build -> artifact [style=invis, weight=150];
+  h2 -> repo_paths -> pipe_paths -> build_paths -> artifact_paths [style=invis, weight=150];
+  h3 -> repo_trend -> pipe_trend -> build_trend -> artifact_trend [style=invis, weight=150];
+}

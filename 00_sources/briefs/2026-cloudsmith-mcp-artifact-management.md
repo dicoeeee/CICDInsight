@@ -4,7 +4,7 @@ source_id: cloudsmith-mcp-2026-03-02
 organization: Cloudsmith
 source_type: official-changelog
 published: 2026-03-02
-verified: 2026-07-14
+verified: 2026-07-28
 availability: available
 confidence: high
 geography:
@@ -46,6 +46,7 @@ tags:
 - Cloudsmith CLI 把 API 暴露为 MCP 工具，可查询漏洞、列举版本并管理制品。
 - 支持 API Key、SSO 登录和多 Profile，可把生产与沙箱环境分开。
 - 当前只提供本地 MCP Server；高级 Workspace Policy 和使用指标尚未暴露。
+- 官方产品页进一步限定：当前 MCP 只允许非破坏性动作；可以创建 Policy 草案，但 Policy 激活仍保持人工控制。
 
 ## CI/CD 相关性
 
@@ -62,6 +63,7 @@ tags:
 
 - 没有长期生产成效、自动晋级或跨环境发布决策数据。
 - “可管理制品”不等于 Agent 默认拥有写权限，真实边界取决于 CLI 凭据。
+- 产品页对未来能力的描述不能覆盖 2026-03-02 Changelog 的当前实现边界。
 
 ## 可引用判断
 

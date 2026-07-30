@@ -4,7 +4,7 @@ source_id: sonatype-guide-2025-12-09
 organization: Sonatype
 source_type: official-announcement
 published: 2025-12-09
-verified: 2026-07-14
+verified: 2026-07-28
 availability: available
 confidence: high
 geography:
@@ -46,6 +46,7 @@ tags:
 - 通过 MCP 提供实时组件、漏洞、恶意包、许可证和维护者健康信息。
 - 可以给出推荐版本与合规检查，引导 Agent 在引入依赖前先查询供应链情报。
 - 官方提供免费开始方式，但没有公开长期企业效果对照。
+- 官方 MCP 文档列出的公开工具集中于组件版本、漏洞、许可证与推荐版本查询；没有证据证明其 MCP 已能发布制品、修改 Firewall Policy 或建立 Waiver。
 
 ## CI/CD 相关性
 
@@ -62,6 +63,7 @@ tags:
 
 - 重点在依赖选择，不是制品签名、晋级或版本发布。
 - 产品效果和生态规模数据来自厂商，不能外推为因果收益。
+- Sonatype Firewall 另有可批量建立 Waiver 的 API 且没有后续审批流；因此 Agent 发现风险与批准豁免必须使用不同身份和控制面。
 
 ## 可引用判断
 

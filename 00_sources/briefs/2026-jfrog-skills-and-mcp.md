@@ -4,9 +4,9 @@ source_id: jfrog-skills-mcp-2026-04-21
 organization: JFrog
 source_type: official-product-blog
 published: 2026-04-21
-verified: 2026-07-14
-availability: ga
-confidence: medium
+verified: 2026-07-28
+availability: mixed-beta-and-open-beta
+confidence: high
 geography:
   - global
 lifecycle_stages:
@@ -38,7 +38,7 @@ tags:
 - 发布日期：2026-04-21
 - 链接：[JFrog Blog](https://jfrog.com/blog/ai-agents-jfrog-skills-mcp-tools/)
 - 来源类型：官方产品博客
-- 能力状态：官方 Skills 与扩展 MCP 工具发布
+- 能力状态：官方 Skills 已发布；JFrog MCP Server 仍标为 Beta；Skills Repository / Agent Packages 部分能力为 Open Beta
 
 ## 一句话结论
 
@@ -50,6 +50,8 @@ JFrog 把制品、依赖、漏洞、可信仓库和治理策略暴露为 Agent �
 - 目标是让 Agent 查询可信包来源、安全态势和组织治理政策。
 - 官方描述覆盖包、制品、模型、Agent 和 Skill 等更广泛资产。
 - 能力重点不是模型生成，而是为外部 Agent 提供供应链可见性和治理信息。
+- JFrog MCP Server 工具覆盖 Repository、Xray、SBOM、Evidence、Release Bundle、AppTrust，以及 Token/OIDC/Role 等高风险治理对象；所有工具仍受 JFrog Platform 权限控制。
+- 2026-06 的 Agent Packages Repository 已可存放 Skills、Plugins、Prompts、Hooks、MCP Servers、Instructions 和 Agents，使 Agent 可执行资产本身进入制品治理范围。
 
 ## CI/CD 相关性
 
@@ -66,8 +68,9 @@ JFrog 把制品、依赖、漏洞、可信仓库和治理策略暴露为 Agent �
 
 - 来源偏产品定位，需进一步验证具体 MCP 工具权限、审批和审计机制。
 - 尚无公开的 Agent 使用供应链上下文后对风险或效率的量化效果。
+- JFrog MCP Server 仍是 Beta，Skills Repository/语义扫描部分能力为 Open Beta，不能统一写成 GA。
+- Token、OIDC、Role、Release 与 Promotion Tool 的存在不等于默认授权，生产身份必须按 Toolset 与环境拆分。
 
 ## 可引用判断
 
 - Agentic CI/CD 会提高制品与供应链元数据的价值，因为 Agent 需要机器可读的可信来源、风险和政策上下文。
-

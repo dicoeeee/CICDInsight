@@ -1,0 +1,400 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Agent 新负载驱动 CI/CD 基础设施共同演进</title>
+  <style>
+    :root {
+      --ink: #172033;
+      --body: #303a4d;
+      --muted: #727b8b;
+      --line: #e4e7ec;
+      --repo: #4068b2;
+      --repo-soft: #edf2fb;
+      --pipe: #19805f;
+      --pipe-soft: #edf8f3;
+      --build: #b85b19;
+      --build-soft: #fff4eb;
+      --artifact: #7144aa;
+      --artifact-soft: #f6f0fc;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      width: 1600px;
+      height: 2000px;
+      margin: 0;
+      overflow: hidden;
+      background: #ffffff;
+    }
+
+    body {
+      color: var(--ink);
+      font-family: "PingFang SC", "Microsoft YaHei", "Arial Unicode MS", sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .canvas {
+      width: 1600px;
+      height: 2000px;
+      padding: 70px 72px;
+      background: #ffffff;
+    }
+
+    .head {
+      display: grid;
+      grid-template-columns: 250px 1fr;
+      column-gap: 36px;
+      align-items: end;
+      height: 90px;
+      margin-bottom: 22px;
+      border-bottom: 2px solid #eef0f3;
+    }
+
+    .head div {
+      padding-bottom: 20px;
+      color: #7a8290;
+      font-size: 29px;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+    }
+
+    .head div:last-child {
+      color: #5f6775;
+      font-size: 34px;
+    }
+
+    .load {
+      display: grid;
+      grid-template-columns: 230px 1fr;
+      align-items: center;
+      height: 110px;
+      margin-bottom: 24px;
+      padding: 18px 28px;
+      border: 1.5px solid #dfe4eb;
+      border-radius: 20px;
+      background: linear-gradient(100deg, #f6f8fb 0%, #ffffff 100%);
+    }
+
+    .load-title {
+      color: #273246;
+      font-size: 29px;
+      font-weight: 730;
+      line-height: 1.2;
+    }
+
+    .load-title small {
+      display: block;
+      margin-bottom: 7px;
+      color: #7a8290;
+      font-size: 17px;
+      font-weight: 700;
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
+    }
+
+    .traits {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+
+    .trait {
+      padding: 13px 8px;
+      border: 1px solid #e2e6ec;
+      border-radius: 12px;
+      background: #ffffff;
+      color: #384357;
+      font-size: 22px;
+      font-weight: 650;
+      line-height: 1.2;
+      text-align: center;
+      white-space: nowrap;
+    }
+
+    .stack {
+      display: grid;
+      row-gap: 20px;
+    }
+
+    .section {
+      position: relative;
+      height: 390px;
+      overflow: hidden;
+      border: 1.5px solid var(--line);
+      border-radius: 22px;
+      background: #ffffff;
+      box-shadow: 0 9px 25px rgba(20, 31, 51, 0.05);
+      --accent: var(--repo);
+      --accent-soft: var(--repo-soft);
+    }
+
+    .section.repo {
+      height: 340px;
+    }
+
+    .section.pipe {
+      --accent: var(--pipe);
+      --accent-soft: var(--pipe-soft);
+    }
+
+    .section.build {
+      height: 410px;
+      --accent: var(--build);
+      --accent-soft: var(--build-soft);
+    }
+
+    .section.artifact {
+      height: 410px;
+      --accent: var(--artifact);
+      --accent-soft: var(--artifact-soft);
+    }
+
+    .section::before {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      width: 8px;
+      background: var(--accent);
+      content: "";
+    }
+
+    .section-head {
+      display: grid;
+      grid-template-columns: 285px 1fr;
+      align-items: center;
+      min-height: 92px;
+      padding: 19px 30px 18px 38px;
+      border-bottom: 1px solid color-mix(in srgb, var(--accent) 18%, #ffffff);
+      background: linear-gradient(90deg, var(--accent-soft) 0%, #ffffff 92%);
+    }
+
+    .category {
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      padding: 2px 0;
+      color: var(--accent);
+      white-space: nowrap;
+    }
+
+    .number {
+      font-size: 21px;
+      font-weight: 750;
+      letter-spacing: 0.05em;
+    }
+
+    .category-name {
+      font-size: 30px;
+      font-weight: 750;
+      line-height: 1.2;
+      letter-spacing: -0.02em;
+    }
+
+    .conclusion {
+      padding-left: 28px;
+      border-left: 1px solid color-mix(in srgb, var(--accent) 25%, #ffffff);
+      color: #202b3e;
+      font-size: 32px;
+      font-weight: 730;
+      line-height: 1.28;
+      letter-spacing: -0.025em;
+    }
+
+    .section-body {
+      display: grid;
+      grid-template-columns: 1fr 390px;
+      column-gap: 22px;
+      height: calc(100% - 92px);
+      padding: 20px 28px 22px 38px;
+    }
+
+    .evidence {
+      min-width: 0;
+    }
+
+    .section-label {
+      margin-bottom: 8px;
+      color: var(--muted);
+      font-size: 17px;
+      font-weight: 750;
+      letter-spacing: 0.08em;
+      line-height: 1;
+      text-transform: uppercase;
+    }
+
+    .proof {
+      position: relative;
+      padding: 8px 0 8px 18px;
+      color: var(--body);
+      font-size: 20px;
+      font-weight: 500;
+      line-height: 1.42;
+    }
+
+    .proof + .proof {
+      border-top: 1px solid #eef0f3;
+    }
+
+    .proof::before {
+      position: absolute;
+      top: 18px;
+      left: 0;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      content: "";
+    }
+
+    .proof strong {
+      color: var(--accent);
+      font-weight: 750;
+    }
+
+    .response {
+      align-self: stretch;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 20px 22px;
+      border: 1px solid color-mix(in srgb, var(--accent) 18%, #ffffff);
+      border-radius: 15px;
+      background: var(--accent-soft);
+    }
+
+    .response .section-label {
+      margin-bottom: 10px;
+      color: var(--accent);
+    }
+
+    .response p {
+      margin: 0;
+      color: #263247;
+      font-size: 21px;
+      font-weight: 620;
+      line-height: 1.48;
+    }
+
+    .repo .proof {
+      font-size: 21px;
+    }
+
+    .pipe .proof,
+    .build .proof,
+    .artifact .proof {
+      font-size: 19px;
+      line-height: 1.40;
+    }
+
+    .build .category-name,
+    .artifact .category-name {
+      font-size: 27px;
+    }
+  </style>
+</head>
+<body>
+  <main class="canvas">
+    <header class="head">
+      <div>共同演进判断</div>
+      <div>公司证据如何支撑结论</div>
+    </header>
+
+    <section class="load">
+      <div class="load-title">
+        <small>Common cause</small>
+        Agent 新负载
+      </div>
+      <div class="traits">
+        <div class="trait">长时异步</div>
+        <div class="trait">并行会话</div>
+        <div class="trait">多轮迭代</div>
+        <div class="trait">跨工具副作用</div>
+      </div>
+    </section>
+
+    <section class="stack">
+      <article class="section repo">
+        <div class="section-head">
+          <div class="category"><span class="number">01</span><span class="category-name">代码仓</span></div>
+          <div class="conclusion">代码事实源 → Agent 任务、上下文与候选变更协作面</div>
+        </div>
+        <div class="section-body">
+          <div class="evidence">
+            <div class="section-label">公司证据怎么理解</div>
+            <div class="proof"><strong>GitHub：</strong>Issue / 评论变成异步任务，在临时 Actions 环境执行，最终以 Branch / Draft PR 交付——仓库闭合了委托、执行和审查。</div>
+            <div class="proof"><strong>GitLab：</strong>仓库事件触发 Custom Flow，Runner 执行后把 Session、CI Log 与结果关联回 MR——仓库承担运行归因和候选交付。</div>
+          </div>
+          <div class="response">
+            <div class="section-label">Infrastructure response</div>
+            <p>任务、仓库规则、运行上下文和候选变更需要版本化、可检索、可接续。</p>
+          </div>
+        </div>
+      </article>
+
+      <article class="section pipe">
+        <div class="section-head">
+          <div class="category"><span class="number">02</span><span class="category-name">流水线</span></div>
+          <div class="conclusion">固定 Job / DAG → 承载 Agent Session 与 Tool 调用的动态运行时</div>
+        </div>
+        <div class="section-body">
+          <div class="evidence">
+            <div class="section-label">公司证据怎么理解</div>
+            <div class="proof"><strong>GitHub：</strong>Markdown 意图编译为 Actions YAML，Agent Job 仍运行在 Runner、权限与 Policy 中——自然语言没有替代流水线控制面。</div>
+            <div class="proof"><strong>Buildkite：</strong>把 Build State、Log 与 Trigger 暴露为 Tool，再由 Agent Step 分析或触发——流水线开始原生承载 Tool 调用。</div>
+            <div class="proof"><strong>Harness：</strong>把隔离 Worker、凭据、网络和 Autofix 轮次纳入同一环境——模型调用被扩展为完整 Agent Runtime。</div>
+          </div>
+          <div class="response">
+            <div class="section-label">Infrastructure response</div>
+            <p>流水线需要承载 Session、事件、Tool 调用、结构化输出和运行成本。</p>
+          </div>
+        </div>
+      </article>
+
+      <article class="section build">
+        <div class="section-head">
+          <div class="category"><span class="number">03</span><span class="category-name">构建系统与底层资源</span></div>
+          <div class="conclusion">开发提速工具 → 高频验证与资源调度底座</div>
+        </div>
+        <div class="section-body">
+          <div class="evidence">
+            <div class="section-label">公司证据怎么理解</div>
+            <div class="proof"><strong>CircleCI：</strong>用预热 Snapshot 和 Microbuild 拆出快速验证内环，完整 CI 继续兜底——验证路径开始针对 Agent 多轮试错重构。</div>
+            <div class="proof"><strong>Nx：</strong>用 Graph / Affected 选择任务，再连接 Cache、动态 Worker 与 Self-Healing 复验——任务图、算力和 Oracle 形成反馈系统。</div>
+            <div class="proof"><strong>Bazel：</strong>Hermetic Graph、Remote Cache 与 RBE 不是 Agent 新发明，但为并行任务提供确定性复用和远程算力——既有底座因新负载升值。</div>
+          </div>
+          <div class="response">
+            <div class="section-label">Infrastructure response</div>
+            <p>平台需要降低排队、冷启动和重复计算，并动态调度 Worker 与远程算力。</p>
+          </div>
+        </div>
+      </article>
+
+      <article class="section artifact">
+        <div class="section-head">
+          <div class="category"><span class="number">04</span><span class="category-name">制品仓与供应链</span></div>
+          <div class="conclusion">文件存储 → 可查询事实、交付证据与行为资产面</div>
+        </div>
+        <div class="section-body">
+          <div class="evidence">
+            <div class="section-label">公司证据怎么理解</div>
+            <div class="proof"><strong>Sonatype：</strong>把版本、漏洞、许可和推荐版本前移到 Agent 选择依赖的时点——依赖决策从模型记忆转向实时事实。</div>
+            <div class="proof"><strong>Cloudsmith：</strong>把制品与漏洞能力暴露为 Tool，并只开放非破坏动作——平台从可查询扩展到受限可行动。</div>
+            <div class="proof"><strong>JFrog：</strong>把 Repo、Xray、SBOM、Evidence 与 Release Tool 化，并开始管理 Skill / Prompt / MCP——制品对象扩展到 Agent 行为资产。</div>
+          </div>
+          <div class="response">
+            <div class="section-label">Infrastructure response</div>
+            <p>版本、风险、来源、Digest 与行为资产需要能够被机器实时查询、绑定和追溯。</p>
+          </div>
+        </div>
+      </article>
+    </section>
+  </main>
+</body>
+</html>

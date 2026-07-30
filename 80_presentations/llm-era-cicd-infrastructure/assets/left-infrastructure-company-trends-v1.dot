@@ -1,0 +1,155 @@
+digraph CICD_Agent_Evolution {
+  graph [
+    rankdir=TB,
+    bgcolor="#F7F8FA",
+    pad="0.26",
+    margin="0",
+    nodesep="0.24",
+    ranksep="0.34",
+    splines=ortho,
+    outputorder=edgesfirst
+  ];
+
+  node [
+    shape=rect,
+    style="rounded,filled",
+    fontname="PingFang SC",
+    fontsize=15,
+    fontcolor="#172033",
+    color="#CBD2DC",
+    penwidth=1.2,
+    margin="0.18,0.13"
+  ];
+
+  edge [
+    color="#7B8798",
+    penwidth=1.8,
+    arrowsize=0.72
+  ];
+
+  h1 [label="基础设施", shape=plain, style="", fontname="PingFang SC", fontsize=13, fontcolor="#687386"];
+  h2 [label="代表公司 / 产品信号", shape=plain, style="", fontname="PingFang SC", fontsize=13, fontcolor="#687386"];
+  h3 [label="Agent 时代的变化趋势", shape=plain, style="", fontname="PingFang SC", fontsize=13, fontcolor="#687386"];
+  { rank=same; h1; h2; h3; }
+  h1 -> h2 -> h3 [style=invis, weight=50];
+
+  repo [
+    label="代码仓",
+    width=1.60,
+    height=0.86,
+    fixedsize=true,
+    fillcolor="#E8F0FF",
+    color="#4777D9",
+    fontcolor="#234B9A"
+  ];
+  repo_company [
+    label="GitHub  ·  GitLab",
+    width=2.34,
+    height=0.86,
+    fixedsize=true,
+    fillcolor="#FFFFFF",
+    fontsize=13
+  ];
+  repo_trend [
+    label="代码存放 / 人工协作\n→ 任务上下文 · 仓库规则\n· 候选变更协作",
+    width=3.54,
+    height=1.00,
+    fixedsize=true,
+    fillcolor="#F1F5FF",
+    color="#9CB5EA",
+    fontsize=13
+  ];
+  { rank=same; repo; repo_company; repo_trend; }
+  repo -> repo_company -> repo_trend;
+
+  pipe [
+    label="流水线",
+    width=1.60,
+    height=0.86,
+    fixedsize=true,
+    fillcolor="#E9F7F2",
+    color="#23956F",
+    fontcolor="#176A51"
+  ];
+  pipe_company [
+    label="GitHub  ·  GitLab\nBuildkite  ·  Harness",
+    width=2.34,
+    height=0.92,
+    fixedsize=true,
+    fillcolor="#FFFFFF",
+    fontsize=13
+  ];
+  pipe_trend [
+    label="固定 Job 编排\n→ Agent Session · 动态 Tool\n· 可观测运行",
+    width=3.54,
+    height=1.00,
+    fixedsize=true,
+    fillcolor="#F0F9F6",
+    color="#91CFBA",
+    fontsize=13
+  ];
+  { rank=same; pipe; pipe_company; pipe_trend; }
+  pipe -> pipe_company -> pipe_trend;
+
+  build [
+    label="构建系统\n与执行资源",
+    width=1.60,
+    height=0.86,
+    fixedsize=true,
+    fillcolor="#FFF2E8",
+    color="#E27B31",
+    fontcolor="#9B4B15"
+  ];
+  build_company [
+    label="CircleCI  ·  Nx\nBazel",
+    width=2.34,
+    height=0.86,
+    fixedsize=true,
+    fillcolor="#FFFFFF",
+    fontsize=13
+  ];
+  build_trend [
+    label="单次构建 / 静态资源\n→ Graph / Affected · Cache / RBE\n· Snapshot · 动态资源调度",
+    width=3.54,
+    height=1.08,
+    fixedsize=true,
+    fillcolor="#FFF7F0",
+    color="#E9B48C",
+    fontsize=12.5
+  ];
+  { rank=same; build; build_company; build_trend; }
+  build -> build_company -> build_trend;
+
+  artifact [
+    label="制品仓及相邻\n供应链平台",
+    width=1.60,
+    height=0.86,
+    fixedsize=true,
+    fillcolor="#F2ECFF",
+    color="#8458C7",
+    fontcolor="#593694"
+  ];
+  artifact_company [
+    label="Sonatype  ·  Cloudsmith\nGitHub Attestations",
+    width=2.34,
+    height=0.92,
+    fixedsize=true,
+    fillcolor="#FFFFFF",
+    fontsize=12.5
+  ];
+  artifact_trend [
+    label="包与二进制存放\n→ 依赖情报 · SBOM / Provenance\n· 可验证交付证据",
+    width=3.54,
+    height=1.00,
+    fixedsize=true,
+    fillcolor="#F8F4FF",
+    color="#C0AAE5",
+    fontsize=12.5
+  ];
+  { rank=same; artifact; artifact_company; artifact_trend; }
+  artifact -> artifact_company -> artifact_trend;
+
+  h1 -> repo -> pipe -> build -> artifact [style=invis, weight=120];
+  h2 -> repo_company -> pipe_company -> build_company -> artifact_company [style=invis, weight=120];
+  h3 -> repo_trend -> pipe_trend -> build_trend -> artifact_trend [style=invis, weight=120];
+}

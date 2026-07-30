@@ -1,0 +1,155 @@
+digraph Body_Editorial {
+  graph [
+    rankdir=TB,
+    bgcolor="#F7F5F0",
+    pad="0.30",
+    margin="0",
+    nodesep="0.22",
+    ranksep="0.32",
+    splines=ortho,
+    outputorder=edgesfirst
+  ];
+
+  node [
+    shape=rect,
+    style="rounded,filled",
+    fontname="PingFang SC",
+    fontsize=13,
+    fontcolor="#1D2636",
+    color="#D6D3CB",
+    penwidth=1.1,
+    margin="0.18,0.13"
+  ];
+
+  edge [
+    color="#9A978F",
+    penwidth=1.6,
+    arrowsize=0.68
+  ];
+
+  h1 [label="基础设施", shape=plain, style="", fontsize=12, fontcolor="#77746E"];
+  h2 [label="代表公司的差异化路径", shape=plain, style="", fontsize=12, fontcolor="#77746E"];
+  h3 [label="共同趋势 · Agent 驱动 · 边界", shape=plain, style="", fontsize=12, fontcolor="#77746E"];
+  { rank=same; h1; h2; h3; }
+  h1 -> h2 -> h3 [style=invis, weight=80];
+
+  repo [
+    label="01\n代码仓",
+    width=1.25,
+    height=1.10,
+    fixedsize=true,
+    fillcolor="#E8EEF9",
+    color="#5073B8",
+    fontcolor="#294B8C"
+  ];
+  repo_paths [
+    label="GitHub   Issue / 评论 → 临时环境 → Branch / Draft PR\lGitLab    Issue / MR / Event → Flow / Runner → MR + CI Log\l",
+    width=5.35,
+    height=1.10,
+    fixedsize=true,
+    fillcolor="#FFFDFC",
+    fontsize=10.8
+  ];
+  repo_trend [
+    label="仓库成为 Agent 的任务上下文与候选变更协作面\nAgent 驱动：异步任务需要携带规则、历史和运行结果\n边界：Review / Required Checks 仍独立裁决",
+    width=6.20,
+    height=1.18,
+    fixedsize=true,
+    fillcolor="#EEF2FA",
+    color="#A8B9DB",
+    fontsize=10.7
+  ];
+  { rank=same; repo; repo_paths; repo_trend; }
+  repo -> repo_paths -> repo_trend;
+
+  pipe [
+    label="02\n流水线",
+    width=1.25,
+    height=1.18,
+    fixedsize=true,
+    fillcolor="#E8F4EF",
+    color="#3E9273",
+    fontcolor="#1F6F55"
+  ];
+  pipe_paths [
+    label="GitHub      Markdown 意图 → Actions YAML → Runner / Policy\lBuildkite   Build / Log / Trigger MCP → Agent Step\lHarness    Worker Agent → 受控凭据与网络 → 修复 / 复验\l",
+    width=5.35,
+    height=1.30,
+    fixedsize=true,
+    fillcolor="#FFFDFC",
+    fontsize=10.3
+  ];
+  pipe_trend [
+    label="流水线从固定 Job 扩展为受控 Agent 运行时\nAgent 驱动：长时任务会动态调用 Tool 并产生副作用\n边界：Tool / Secret / Network / Budget 由外部策略约束",
+    width=6.20,
+    height=1.30,
+    fixedsize=true,
+    fillcolor="#EDF7F3",
+    color="#A1CEBC",
+    fontsize=10.6
+  ];
+  { rank=same; pipe; pipe_paths; pipe_trend; }
+  pipe -> pipe_paths -> pipe_trend;
+
+  build [
+    label="03\n构建与资源",
+    width=1.25,
+    height=1.28,
+    fixedsize=true,
+    fillcolor="#FBEEE3",
+    color="#D17B3F",
+    fontcolor="#9C4D19"
+  ];
+  build_paths [
+    label="CircleCI   Snapshot → Sidecar / Microbuild → 增量反馈\lNx           Graph / Affected → Cache / 动态 Worker → Task 复验\lBazel       Hermetic Graph → RBE / Cache → 确定性结果复用\l",
+    width=5.35,
+    height=1.34,
+    fixedsize=true,
+    fillcolor="#FFFDFC",
+    fontsize=10.2
+  ];
+  build_trend [
+    label="构建能力从提速项升级为 Agent 的反馈经济底座\nAgent 驱动：多轮并发验证放大排队、冷启动和计算成本\n边界：Graph / Cache / RBE 是既有能力升值，并非新发明",
+    width=6.20,
+    height=1.34,
+    fixedsize=true,
+    fillcolor="#FDF2E9",
+    color="#E4B894",
+    fontsize=10.4
+  ];
+  { rank=same; build; build_paths; build_trend; }
+  build -> build_paths -> build_trend;
+
+  artifact [
+    label="04\n制品与供应链",
+    width=1.25,
+    height=1.30,
+    fixedsize=true,
+    fillcolor="#F0EAF9",
+    color="#8359BA",
+    fontcolor="#5D3793"
+  ];
+  artifact_paths [
+    label="Sonatype     依赖情报 → 推荐版本\lCloudsmith   MCP 查询 → 受限非破坏性操作 → 人工激活 Policy\lJFrog         Repo / Xray / Evidence / Release → Agent Package\l",
+    width=5.35,
+    height=1.34,
+    fixedsize=true,
+    fillcolor="#FFFDFC",
+    fontsize=10.0
+  ];
+  artifact_trend [
+    label="制品平台扩展为可查询的供应链事实与交付证据面\nAgent 驱动：依赖选择与发布动作需要实时事实和 Provenance\n边界：查询不等于授权，高风险操作必须独立审批",
+    width=6.20,
+    height=1.34,
+    fixedsize=true,
+    fillcolor="#F6F1FB",
+    color="#C3AFE0",
+    fontsize=10.3
+  ];
+  { rank=same; artifact; artifact_paths; artifact_trend; }
+  artifact -> artifact_paths -> artifact_trend;
+
+  h1 -> repo -> pipe -> build -> artifact [style=invis, weight=150];
+  h2 -> repo_paths -> pipe_paths -> build_paths -> artifact_paths [style=invis, weight=150];
+  h3 -> repo_trend -> pipe_trend -> build_trend -> artifact_trend [style=invis, weight=150];
+}

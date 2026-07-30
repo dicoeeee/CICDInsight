@@ -6,7 +6,7 @@ tags:
   - research/agentic-cicd
   - deliverable/presentation
 status: active
-as_of: 2026-07-24
+as_of: 2026-07-29
 ---
 
 # Agentic CI/CD 演示文稿
@@ -36,6 +36,7 @@ as_of: 2026-07-24
 ## 当前演示项目
 
 - [[80_presentations/agentic-cicd-company-workflows/00_deck-brief|Agentic CI/CD 公司与能力作业流]]
+- [[80_presentations/llm-era-cicd-infrastructure/00_deck-brief|大模型时代的 CI/CD 基础设施单页汇报]]
 
 ## 成品交付规范
 

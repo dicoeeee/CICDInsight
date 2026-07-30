@@ -7,7 +7,7 @@ tags:
   - research/agentic-cicd
   - research/deep-dive
 status: active
-as_of: 2026-07-21
+as_of: 2026-07-28
 ---
 
 # Agentic CI/CD 专题深研
@@ -54,6 +54,7 @@ as_of: 2026-07-21
 | [[50_deepdives/github-agentic-workflows/README|GitHub Agentic Workflows]] | Agent Workflow 编译与 Actions 运行平台 | Markdown/Frontmatter、Compiler、Safe Outputs、Sandbox、复杂编排与 CI/CD 实践 | GitHub 全产品线、通用 Harness 模型能力比较 | complete |
 | [[50_deepdives/cicd-self-healing/README|CI/CD 问题自愈]] | 端到端问题恢复场景 | 失败分类、诊断、修复、独立验证、受控执行、观察、回退与学习闭环 | 通用传统 CI/CD、单一模型能力比较 | complete |
 | [[50_deepdives/harness-company/README|Harness 公司]] | 单一厂商/平台 | Harness Inc. 产品组合、Agent 应用、Knowledge Graph/MCP/Pipeline 原理、隔离与委托权限、案例、成熟度和采购落地 | 通用 Agent Harness 工程方法、所有 Agent Runtime 横向比较 | complete |
+| [[50_deepdives/llm-era-cicd-infrastructure/README|大模型时代的 CI/CD 基础设施]] | 跨基础设施技术变化 | 代码仓、流水线、构建系统、制品仓，以及身份、证据、审计和成本控制 | 单一产品教程、基础模型能力比较、LLMOps | complete |
 | Skill / Rules / Hooks | 知识与行为资产 | 组织知识封装、发现与加载、版本、测试、供应链和生命周期 | Harness 推理架构、底层 CLI 实现 | proposed |
 | 通用 Agent Harness / Runtime | 推理与运行主体 | 上下文、规划、工具循环、权限、沙箱、审批、评测和 Claude Code/Codex/OpenCode 等实现 | Harness Inc. 公司产品线、单个协议或知识包的完整标准研究 | proposed |
 

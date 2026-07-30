@@ -1,0 +1,133 @@
+digraph Left_Company_Paths_Editorial {
+  graph [
+    rankdir=TB,
+    bgcolor="#F7F5F0",
+    pad="0.28",
+    margin="0",
+    nodesep="0.24",
+    ranksep="0.44",
+    splines=ortho,
+    outputorder=edgesfirst
+  ];
+
+  node [
+    shape=rect,
+    style="rounded,filled",
+    fontname="PingFang SC",
+    fontsize=14,
+    fontcolor="#1D2636",
+    color="#D6D3CB",
+    penwidth=1.1,
+    margin="0.18,0.15"
+  ];
+
+  edge [
+    color="#9A978F",
+    penwidth=1.7,
+    arrowsize=0.72
+  ];
+
+  h1 [
+    label="基础设施",
+    shape=plain,
+    style="",
+    fontsize=13,
+    fontcolor="#77746E"
+  ];
+  h2 [
+    label="代表公司的差异化路径",
+    shape=plain,
+    style="",
+    fontsize=13,
+    fontcolor="#77746E"
+  ];
+  { rank=same; h1; h2; }
+  h1 -> h2 [style=invis, weight=80];
+
+  repo [
+    label="01\n代码仓",
+    width=1.35,
+    height=1.35,
+    fixedsize=true,
+    fillcolor="#E8EEF9",
+    color="#5073B8",
+    fontcolor="#294B8C",
+    fontsize=15
+  ];
+  repo_paths [
+    label="GitHub   Issue / 评论 → 临时 Actions 环境\n             → Branch / Draft PR\lGitLab    Issue / MR / Event → Custom Flow / Runner\n             → MR + CI Log\l",
+    width=5.25,
+    height=1.48,
+    fixedsize=true,
+    fillcolor="#FFFDFC",
+    fontsize=11.4
+  ];
+  { rank=same; repo; repo_paths; }
+  repo -> repo_paths;
+
+  pipe [
+    label="02\n流水线",
+    width=1.35,
+    height=1.50,
+    fixedsize=true,
+    fillcolor="#E8F4EF",
+    color="#3E9273",
+    fontcolor="#1F6F55",
+    fontsize=15
+  ];
+  pipe_paths [
+    label="GitHub      Markdown 意图 → Actions YAML → Runner / Policy\lBuildkite   Build / Log / Trigger MCP → Agent Step\n                  → 分析或触发\lHarness    Worker Agent → 受控凭据与网络 → 修复 / 复验\l",
+    width=5.25,
+    height=1.62,
+    fixedsize=true,
+    fillcolor="#FFFDFC",
+    fontsize=10.9
+  ];
+  { rank=same; pipe; pipe_paths; }
+  pipe -> pipe_paths;
+
+  build [
+    label="03\n构建与资源",
+    width=1.35,
+    height=1.50,
+    fixedsize=true,
+    fillcolor="#FBEEE3",
+    color="#D17B3F",
+    fontcolor="#9C4D19",
+    fontsize=14
+  ];
+  build_paths [
+    label="CircleCI   Snapshot → Sidecar / Microbuild → 增量反馈\lNx           Graph / Affected → Cache / 动态 Worker\n                → Task 复验\lBazel       Hermetic Graph → RBE / Cache → 确定性复用\l",
+    width=5.25,
+    height=1.62,
+    fixedsize=true,
+    fillcolor="#FFFDFC",
+    fontsize=10.7
+  ];
+  { rank=same; build; build_paths; }
+  build -> build_paths;
+
+  artifact [
+    label="04\n制品与供应链",
+    width=1.35,
+    height=1.50,
+    fixedsize=true,
+    fillcolor="#F0EAF9",
+    color="#8359BA",
+    fontcolor="#5D3793",
+    fontsize=13.4
+  ];
+  artifact_paths [
+    label="Sonatype      依赖情报 → 推荐版本\lCloudsmith   MCP 查询 → 受限非破坏性操作\n                    → 人工激活 Policy\lJFrog          Repo / Xray / Evidence / Release\n                    → Agent Package\l",
+    width=5.25,
+    height=1.72,
+    fixedsize=true,
+    fillcolor="#FFFDFC",
+    fontsize=10.6
+  ];
+  { rank=same; artifact; artifact_paths; }
+  artifact -> artifact_paths;
+
+  h1 -> repo -> pipe -> build -> artifact [style=invis, weight=150];
+  h2 -> repo_paths -> pipe_paths -> build_paths -> artifact_paths [style=invis, weight=150];
+}

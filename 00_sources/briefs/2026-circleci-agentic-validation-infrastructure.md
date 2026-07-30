@@ -4,9 +4,9 @@ source_id: circleci-agentic-validation-2026-06-05
 organization: CircleCI
 source_type: official-engineering-blog
 published: 2026-06-05
-verified: 2026-07-14
-availability: engineering-guidance
-confidence: medium
+verified: 2026-07-28
+availability: available-with-engineering-guidance
+confidence: medium-high
 geography:
   - global
 lifecycle_stages:
@@ -48,6 +48,7 @@ tags:
 - Agentic Loop 需要反复运行 Lint、Test 或其他 Agent 检查。
 - CI 提供并行执行、固定检查集合和不让 Agent 直接访问 Secret 的安全边界。
 - 传统 CI 的排队、Fan-out 行为和失败后继续执行策略可能浪费 Agent 迭代时间与成本。
+- CircleCI 已发布 Chunk Sidecar 与 Microbuild：通过预热快照、增量 Git Patch 同步和直接返回给 Agent 的精简验证结果形成低延迟内循环；正式 CI 仍承担完整系统级外循环。
 
 ## CI/CD 相关性
 
@@ -64,8 +65,8 @@ tags:
 
 - 属于厂商工程观点，缺少跨平台定量对比。
 - 需要用真实 Agent 并发和重试数据验证基础设施瓶颈。
+- Sidecar 快照不是完全 Hermetic Reproducibility；厂商自测的 Token/成本效率不得外推为行业平均值。
 
 ## 可引用判断
 
 - Agent 自主等级越高，CI 越从终点门禁转变为持续反馈基础设施，其容量、延迟和隔离会成为 Agent 生产率的一部分。
-

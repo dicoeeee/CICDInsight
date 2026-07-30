@@ -1,0 +1,373 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CI/CD 基础设施共同演进与 Agent 驱动</title>
+  <style>
+    :root {
+      --ink: #172033;
+      --muted: #727b8b;
+      --line: #e4e7ec;
+      --soft: #f7f8fa;
+      --repo: #4068b2;
+      --repo-soft: #edf2fb;
+      --pipe: #19805f;
+      --pipe-soft: #edf8f3;
+      --build: #b85b19;
+      --build-soft: #fff4eb;
+      --artifact: #7144aa;
+      --artifact-soft: #f6f0fc;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      width: 1600px;
+      height: 2000px;
+      margin: 0;
+      overflow: hidden;
+      background: #ffffff;
+    }
+
+    body {
+      color: var(--ink);
+      font-family: "PingFang SC", "Microsoft YaHei", "Arial Unicode MS", sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .canvas {
+      width: 1600px;
+      height: 2000px;
+      padding: 76px 72px 70px;
+      background: #ffffff;
+    }
+
+    .head {
+      display: grid;
+      grid-template-columns: 250px 1fr;
+      column-gap: 36px;
+      align-items: end;
+      height: 100px;
+      margin-bottom: 28px;
+      border-bottom: 2px solid #eef0f3;
+    }
+
+    .head div {
+      padding-bottom: 22px;
+      color: #7a8290;
+      font-size: 29px;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+    }
+
+    .head div:last-child {
+      font-size: 34px;
+      color: #5f6775;
+    }
+
+    .stack {
+      display: grid;
+      row-gap: 28px;
+    }
+
+    .section {
+      position: relative;
+      min-height: 380px;
+      overflow: hidden;
+      border: 1.5px solid var(--line);
+      border-radius: 24px;
+      background: #ffffff;
+      box-shadow: 0 10px 28px rgba(20, 31, 51, 0.055);
+      --accent: var(--repo);
+      --accent-soft: var(--repo-soft);
+    }
+
+    .section.repo {
+      min-height: 326px;
+    }
+
+    .section.pipe {
+      --accent: var(--pipe);
+      --accent-soft: var(--pipe-soft);
+    }
+
+    .section.build {
+      min-height: 410px;
+      --accent: var(--build);
+      --accent-soft: var(--build-soft);
+    }
+
+    .section.artifact {
+      min-height: 410px;
+      --accent: var(--artifact);
+      --accent-soft: var(--artifact-soft);
+    }
+
+    .section::before {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      width: 8px;
+      background: var(--accent);
+      content: "";
+    }
+
+    .top {
+      display: grid;
+      grid-template-columns: 300px 1fr;
+      align-items: center;
+      min-height: 104px;
+      padding: 19px 32px 18px 38px;
+      background: linear-gradient(90deg, var(--accent-soft) 0%, #ffffff 92%);
+      border-bottom: 1.5px solid color-mix(in srgb, var(--accent) 18%, #ffffff);
+    }
+
+    .category {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      color: var(--accent);
+    }
+
+    .number {
+      font-size: 24px;
+      font-weight: 750;
+      letter-spacing: 0.04em;
+    }
+
+    .name {
+      font-size: 34px;
+      font-weight: 750;
+      letter-spacing: -0.03em;
+      white-space: nowrap;
+    }
+
+    .conclusion {
+      padding-left: 28px;
+      border-left: 1.5px solid color-mix(in srgb, var(--accent) 25%, #ffffff);
+      color: #202b3e;
+      font-size: 36px;
+      font-weight: 720;
+      line-height: 1.22;
+      letter-spacing: -0.025em;
+    }
+
+    .body {
+      display: grid;
+      grid-template-columns: 1fr 390px;
+      column-gap: 24px;
+      padding: 24px 30px 24px 38px;
+    }
+
+    .changes {
+      min-width: 0;
+    }
+
+    .label {
+      margin-bottom: 11px;
+      color: var(--muted);
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: 0.10em;
+      line-height: 1;
+      text-transform: uppercase;
+    }
+
+    .company {
+      display: grid;
+      grid-template-columns: 148px 1fr;
+      column-gap: 14px;
+      align-items: baseline;
+      min-height: 50px;
+      padding: 7px 0 8px;
+    }
+
+    .company + .company {
+      border-top: 1px solid #eef0f3;
+    }
+
+    .company-name {
+      color: var(--accent);
+      font-size: 25px;
+      font-weight: 730;
+      line-height: 1.28;
+      white-space: nowrap;
+    }
+
+    .change {
+      color: #303a4d;
+      font-size: 24px;
+      font-weight: 500;
+      line-height: 1.36;
+    }
+
+    .driver {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      min-height: 172px;
+      padding: 22px 24px;
+      border: 1px solid color-mix(in srgb, var(--accent) 20%, #ffffff);
+      border-radius: 16px;
+      background: var(--accent-soft);
+    }
+
+    .driver .label {
+      color: var(--accent);
+    }
+
+    .driver p {
+      margin: 0;
+      color: #263247;
+      font-size: 24px;
+      font-weight: 560;
+      line-height: 1.48;
+    }
+
+    .repo .body {
+      padding-top: 20px;
+      padding-bottom: 20px;
+    }
+
+    .repo .driver {
+      min-height: 138px;
+    }
+
+    .pipe .body,
+    .build .body,
+    .artifact .body {
+      padding-top: 21px;
+      padding-bottom: 21px;
+    }
+
+    .pipe .company,
+    .build .company,
+    .artifact .company {
+      min-height: 58px;
+    }
+  </style>
+</head>
+<body>
+  <main class="canvas">
+    <header class="head">
+      <div>共同演进</div>
+      <div>公司变化说明 · Agent 驱动</div>
+    </header>
+
+    <div class="stack">
+      <section class="section repo">
+        <div class="top">
+          <div class="category"><span class="number">01</span><span class="name">代码仓</span></div>
+          <div class="conclusion">代码协作面 → Agent 任务与上下文协作面</div>
+        </div>
+        <div class="body">
+          <div class="changes">
+            <div class="label">Company change</div>
+            <div class="company">
+              <span class="company-name">GitHub</span>
+              <span class="change">任务、临时执行与 PR 交付闭合进仓库工作流</span>
+            </div>
+            <div class="company">
+              <span class="company-name">GitLab</span>
+              <span class="change">Flow、Runner 与 MR / CI Log 证据关联</span>
+            </div>
+          </div>
+          <div class="driver">
+            <div class="label">Why agent</div>
+            <p>异步长任务要求上下文、规则与候选变更可版本化、可接续。</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section pipe">
+        <div class="top">
+          <div class="category"><span class="number">02</span><span class="name">流水线</span></div>
+          <div class="conclusion">固定 Job 编排 → 受控 Agent 运行时</div>
+        </div>
+        <div class="body">
+          <div class="changes">
+            <div class="label">Company change</div>
+            <div class="company">
+              <span class="company-name">GitHub</span>
+              <span class="change">Markdown 意图编译为受控 Agent Job</span>
+            </div>
+            <div class="company">
+              <span class="company-name">Buildkite</span>
+              <span class="change">Build / Log Tool 化并由 Agent Step 消费</span>
+            </div>
+            <div class="company">
+              <span class="company-name">Harness</span>
+              <span class="change">隔离、凭据、网络与 Autofix 轮次进入 Runtime</span>
+            </div>
+          </div>
+          <div class="driver">
+            <div class="label">Why agent</div>
+            <p>动态执行路径要求流水线承载 Session、事件、结构化输出与运行成本。</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section build">
+        <div class="top">
+          <div class="category"><span class="number">03</span><span class="name">构建与资源</span></div>
+          <div class="conclusion">提速工具 → 高频验证的反馈底座</div>
+        </div>
+        <div class="body">
+          <div class="changes">
+            <div class="label">Company change</div>
+            <div class="company">
+              <span class="company-name">CircleCI</span>
+              <span class="change">Snapshot / Microbuild 拆出低延迟验证内环</span>
+            </div>
+            <div class="company">
+              <span class="company-name">Nx</span>
+              <span class="change">Graph、Cache、动态 Worker 与复验串成反馈系统</span>
+            </div>
+            <div class="company">
+              <span class="company-name">Bazel</span>
+              <span class="change">Hermetic Graph、Remote Cache / RBE 因并行负载升值</span>
+            </div>
+          </div>
+          <div class="driver">
+            <div class="label">Why agent</div>
+            <p>多 Agent、多轮验证放大排队、冷启动、重复计算与算力消耗。</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section artifact">
+        <div class="top">
+          <div class="category"><span class="number">04</span><span class="name">制品与供应链</span></div>
+          <div class="conclusion">文件存储 → 可查询事实与交付证据面</div>
+        </div>
+        <div class="body">
+          <div class="changes">
+            <div class="label">Company change</div>
+            <div class="company">
+              <span class="company-name">Sonatype</span>
+              <span class="change">实时依赖情报前移到 Agent 选择时点</span>
+            </div>
+            <div class="company">
+              <span class="company-name">Cloudsmith</span>
+              <span class="change">制品 Tool 从可查询扩展到受限可行动</span>
+            </div>
+            <div class="company">
+              <span class="company-name">JFrog</span>
+              <span class="change">Repo / Evidence Tool 化并扩展 Agent 行为资产</span>
+            </div>
+          </div>
+          <div class="driver">
+            <div class="label">Why agent</div>
+            <p>依赖、制品与 Skill / MCP 的版本、风险、来源和 Digest 必须可实时查询与追溯。</p>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+</body>
+</html>

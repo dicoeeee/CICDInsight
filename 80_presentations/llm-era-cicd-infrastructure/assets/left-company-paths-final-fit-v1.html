@@ -1,0 +1,360 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>代表公司的差异化路径</title>
+  <style>
+    :root {
+      --ink: #172033;
+      --muted: #727b8b;
+      --line: #e4e7ec;
+      --soft: #f7f8fa;
+      --repo: #4068b2;
+      --repo-soft: #edf2fb;
+      --pipe: #19805f;
+      --pipe-soft: #edf8f3;
+      --build: #b85b19;
+      --build-soft: #fff4eb;
+      --artifact: #7144aa;
+      --artifact-soft: #f6f0fc;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      width: 1728px;
+      height: 1480px;
+      margin: 0;
+      overflow: hidden;
+      background: #ffffff;
+    }
+
+    body {
+      color: var(--ink);
+      font-family: "PingFang SC", "Microsoft YaHei", "Arial Unicode MS", sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .canvas {
+      display: grid;
+      grid-template-rows: 278px 374px 374px 374px;
+      gap: 26px;
+      width: 1728px;
+      height: 1480px;
+      background: #ffffff;
+    }
+
+    .section {
+      display: grid;
+      grid-template-columns: 296px 1fr;
+      column-gap: 24px;
+      min-height: 0;
+      --accent: var(--repo);
+      --accent-soft: var(--repo-soft);
+    }
+
+    .section.pipe {
+      --accent: var(--pipe);
+      --accent-soft: var(--pipe-soft);
+    }
+
+    .section.build {
+      --accent: var(--build);
+      --accent-soft: var(--build-soft);
+    }
+
+    .section.artifact {
+      --accent: var(--artifact);
+      --accent-soft: var(--artifact-soft);
+    }
+
+    .category {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 30px 26px 30px 42px;
+      overflow: hidden;
+      border: 1.5px solid color-mix(in srgb, var(--accent) 30%, #ffffff);
+      border-radius: 22px;
+      background: linear-gradient(150deg, #ffffff 0%, var(--accent-soft) 100%);
+    }
+
+    .category::before {
+      position: absolute;
+      top: 30px;
+      bottom: 30px;
+      left: 0;
+      width: 7px;
+      border-radius: 0 7px 7px 0;
+      background: var(--accent);
+      content: "";
+    }
+
+    .number {
+      position: absolute;
+      top: 16px;
+      right: 18px;
+      color: color-mix(in srgb, var(--accent) 12%, #ffffff);
+      font-size: 76px;
+      font-weight: 750;
+      line-height: 1;
+    }
+
+    .name {
+      position: relative;
+      color: var(--accent);
+      font-size: 39px;
+      font-weight: 750;
+      line-height: 1.18;
+      letter-spacing: -0.03em;
+    }
+
+    .en {
+      position: relative;
+      margin-top: 12px;
+      color: #8a92a0;
+      font-size: 17px;
+      font-weight: 650;
+      line-height: 1.25;
+      letter-spacing: 0.055em;
+    }
+
+    .paths {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      min-width: 0;
+      padding: 14px 24px;
+      border: 1.5px solid var(--line);
+      border-radius: 22px;
+      background: #ffffff;
+      box-shadow: 0 8px 24px rgba(20, 31, 51, 0.05);
+    }
+
+    .company {
+      display: grid;
+      grid-template-columns: 46px 145px 1fr;
+      column-gap: 15px;
+      align-items: center;
+      min-height: 92px;
+      padding: 10px 2px;
+    }
+
+    .company + .company {
+      border-top: 1.2px solid #edf0f3;
+    }
+
+    .company img {
+      display: block;
+      width: 38px;
+      height: 38px;
+      object-fit: contain;
+    }
+
+    .company-name {
+      font-size: 27px;
+      font-weight: 730;
+      line-height: 1.2;
+      letter-spacing: -0.02em;
+      white-space: nowrap;
+    }
+
+    .route {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 32px minmax(0, 1.18fr) 32px minmax(0, 1fr);
+      align-items: center;
+      column-gap: 8px;
+      min-width: 0;
+    }
+
+    .step {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      min-height: 38px;
+      padding: 6px 11px 7px;
+      border: 1px solid #e1e5ea;
+      border-radius: 10px;
+      background: var(--soft);
+      color: #273246;
+      font-size: 22px;
+      font-weight: 520;
+      line-height: 1.2;
+      white-space: nowrap;
+    }
+
+    .step.key {
+      border-color: color-mix(in srgb, var(--accent) 28%, #ffffff);
+      background: var(--accent-soft);
+      color: color-mix(in srgb, var(--accent) 88%, #111827);
+      font-weight: 680;
+    }
+
+    .arrow {
+      color: color-mix(in srgb, var(--accent) 68%, #8a92a0);
+      font-size: 24px;
+      font-weight: 750;
+      line-height: 1;
+      text-align: center;
+    }
+
+    .repo .company {
+      min-height: 103px;
+    }
+
+    .build .company,
+    .artifact .company,
+    .pipe .company {
+      min-height: 100px;
+    }
+  </style>
+</head>
+<body>
+  <main class="canvas">
+    <section class="section repo">
+      <div class="category">
+        <span class="number">01</span>
+        <span class="name">代码仓</span>
+        <span class="en">TASK &amp; CONTEXT</span>
+      </div>
+      <div class="paths">
+        <div class="company">
+          <img src="./company-icons/github.svg" alt="" />
+          <span class="company-name">GitHub</span>
+          <div class="route">
+            <span class="step">Issue / 评论</span><span class="arrow">→</span>
+            <span class="step key">临时 Actions 环境</span><span class="arrow">→</span>
+            <span class="step">Branch / Draft PR</span>
+          </div>
+        </div>
+        <div class="company">
+          <img src="./company-icons/gitlab.svg" alt="" />
+          <span class="company-name">GitLab</span>
+          <div class="route">
+            <span class="step">Issue / MR / Event</span><span class="arrow">→</span>
+            <span class="step key">Custom Flow / Runner</span><span class="arrow">→</span>
+            <span class="step">MR + CI Log</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section pipe">
+      <div class="category">
+        <span class="number">02</span>
+        <span class="name">流水线</span>
+        <span class="en">ORCHESTRATION</span>
+      </div>
+      <div class="paths">
+        <div class="company">
+          <img src="./company-icons/github.svg" alt="" />
+          <span class="company-name">GitHub</span>
+          <div class="route">
+            <span class="step">Markdown 意图</span><span class="arrow">→</span>
+            <span class="step key">Actions YAML</span><span class="arrow">→</span>
+            <span class="step">Runner / Policy</span>
+          </div>
+        </div>
+        <div class="company">
+          <img src="./company-icons/buildkite.svg" alt="" />
+          <span class="company-name">Buildkite</span>
+          <div class="route">
+            <span class="step">Build / Log / Trigger MCP</span><span class="arrow">→</span>
+            <span class="step key">Agent Step</span><span class="arrow">→</span>
+            <span class="step">分析或触发</span>
+          </div>
+        </div>
+        <div class="company">
+          <img src="./company-icons/harness-icon.svg" alt="" />
+          <span class="company-name">Harness</span>
+          <div class="route">
+            <span class="step">Worker Agent</span><span class="arrow">→</span>
+            <span class="step key">受控凭据与网络</span><span class="arrow">→</span>
+            <span class="step">修复 / 复验</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section build">
+      <div class="category">
+        <span class="number">03</span>
+        <span class="name">构建与资源</span>
+        <span class="en">FEEDBACK ECONOMICS</span>
+      </div>
+      <div class="paths">
+        <div class="company">
+          <img src="./company-icons/circleci.svg" alt="" />
+          <span class="company-name">CircleCI</span>
+          <div class="route">
+            <span class="step">Snapshot</span><span class="arrow">→</span>
+            <span class="step key">Sidecar / Microbuild</span><span class="arrow">→</span>
+            <span class="step">增量反馈</span>
+          </div>
+        </div>
+        <div class="company">
+          <img src="./company-icons/nx.svg" alt="" />
+          <span class="company-name">Nx</span>
+          <div class="route">
+            <span class="step">Graph / Affected</span><span class="arrow">→</span>
+            <span class="step key">Cache / 动态 Worker</span><span class="arrow">→</span>
+            <span class="step">Task 复验</span>
+          </div>
+        </div>
+        <div class="company">
+          <img src="./company-icons/bazel.svg" alt="" />
+          <span class="company-name">Bazel</span>
+          <div class="route">
+            <span class="step">Hermetic Graph</span><span class="arrow">→</span>
+            <span class="step key">RBE / Cache</span><span class="arrow">→</span>
+            <span class="step">确定性复用</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section artifact">
+      <div class="category">
+        <span class="number">04</span>
+        <span class="name">制品与<br />供应链</span>
+        <span class="en">FACTS &amp; EVIDENCE</span>
+      </div>
+      <div class="paths">
+        <div class="company">
+          <img src="./company-icons/sonatype.svg" alt="" />
+          <span class="company-name">Sonatype</span>
+          <div class="route">
+            <span class="step">依赖请求</span><span class="arrow">→</span>
+            <span class="step key">版本 / 漏洞 / 许可情报</span><span class="arrow">→</span>
+            <span class="step">推荐版本</span>
+          </div>
+        </div>
+        <div class="company">
+          <img src="./company-icons/cloudsmith.svg" alt="" />
+          <span class="company-name">Cloudsmith</span>
+          <div class="route">
+            <span class="step">MCP 查询</span><span class="arrow">→</span>
+            <span class="step key">受限非破坏性操作</span><span class="arrow">→</span>
+            <span class="step">人工 Policy</span>
+          </div>
+        </div>
+        <div class="company">
+          <img src="./company-icons/jfrog.svg" alt="" />
+          <span class="company-name">JFrog</span>
+          <div class="route">
+            <span class="step">Repo / Xray</span><span class="arrow">→</span>
+            <span class="step key">Evidence / Release</span><span class="arrow">→</span>
+            <span class="step">Agent Package</span>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

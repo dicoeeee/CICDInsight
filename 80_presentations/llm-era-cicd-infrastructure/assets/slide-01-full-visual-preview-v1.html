@@ -1,0 +1,368 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Agent 长程任务推动 CI/CD 基础设施演进</title>
+  <style>
+    :root {
+      --ink: #172033;
+      --body: #374154;
+      --muted: #7c8491;
+      --line: #e3e6eb;
+      --red: #c00000;
+      --repo: #4068b2;
+      --repo-soft: #eef3fb;
+      --pipe: #19805f;
+      --pipe-soft: #edf8f3;
+      --build: #b85b19;
+      --build-soft: #fff4eb;
+      --artifact: #7144aa;
+      --artifact-soft: #f6f0fc;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      width: 1920px;
+      height: 1080px;
+      margin: 0;
+      overflow: hidden;
+      background: #ffffff;
+    }
+
+    body {
+      color: var(--ink);
+      font-family: "PingFang SC", "Microsoft YaHei", "Arial Unicode MS", sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .slide {
+      position: relative;
+      width: 1920px;
+      height: 1080px;
+      padding: 28px 64px 0;
+      background: #ffffff;
+    }
+
+    .title {
+      height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--red);
+      font-size: 38px;
+      font-weight: 760;
+      letter-spacing: -0.025em;
+      line-height: 1.15;
+      text-align: center;
+      white-space: nowrap;
+    }
+
+    .title-rule {
+      height: 2px;
+      background: #ededed;
+    }
+
+    .column-heads {
+      display: grid;
+      grid-template-columns: 700px minmax(0, 1fr);
+      column-gap: 26px;
+      align-items: end;
+      height: 52px;
+      padding: 0 8px 9px;
+    }
+
+    .column-title {
+      color: #5f6775;
+      font-size: 21px;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+    }
+
+    .right-column-title {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .driver-note {
+      color: #959ca7;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      white-space: nowrap;
+    }
+
+    .body {
+      display: grid;
+      grid-template-columns: 700px minmax(0, 1fr);
+      column-gap: 26px;
+      height: 740px;
+    }
+
+    .left-panel {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 0;
+      min-height: 0;
+    }
+
+    .left-panel img {
+      display: block;
+      width: auto;
+      height: 740px;
+      max-width: 100%;
+      object-fit: contain;
+    }
+
+    .right-panel {
+      display: grid;
+      grid-template-rows: 142px 191px 191px 192px;
+      row-gap: 8px;
+      min-width: 0;
+    }
+
+    .layer {
+      --accent: var(--repo);
+      --accent-soft: var(--repo-soft);
+      position: relative;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: #ffffff;
+    }
+
+    .layer::before {
+      position: absolute;
+      inset: 0 auto 0 0;
+      width: 5px;
+      background: var(--accent);
+      content: "";
+    }
+
+    .layer.pipe {
+      --accent: var(--pipe);
+      --accent-soft: var(--pipe-soft);
+    }
+
+    .layer.build {
+      --accent: var(--build);
+      --accent-soft: var(--build-soft);
+    }
+
+    .layer.artifact {
+      --accent: var(--artifact);
+      --accent-soft: var(--artifact-soft);
+    }
+
+    .layer-head {
+      display: grid;
+      grid-template-columns: 122px 1fr;
+      align-items: center;
+      min-height: 40px;
+      padding: 7px 14px 7px 18px;
+      background: linear-gradient(90deg, var(--accent-soft), #ffffff 78%);
+      border-bottom: 1px solid color-mix(in srgb, var(--accent) 16%, #ffffff);
+    }
+
+    .category {
+      color: var(--accent);
+      font-size: 15px;
+      font-weight: 780;
+      white-space: nowrap;
+    }
+
+    .category span {
+      margin-right: 7px;
+      font-size: 11px;
+      letter-spacing: 0.05em;
+    }
+
+    .conclusion {
+      color: #202a3d;
+      font-size: 17px;
+      font-weight: 760;
+      line-height: 1.3;
+      white-space: nowrap;
+    }
+
+    .evidence {
+      padding: 5px 15px 4px 18px;
+    }
+
+    .proof {
+      position: relative;
+      padding: 2px 0 2px 12px;
+      color: var(--body);
+      font-size: 12.2px;
+      font-weight: 500;
+      line-height: 1.32;
+    }
+
+    .proof::before {
+      position: absolute;
+      top: 8px;
+      left: 0;
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--accent);
+      content: "";
+    }
+
+    .proof strong {
+      color: var(--accent);
+      font-weight: 780;
+    }
+
+    .response {
+      position: absolute;
+      right: 12px;
+      bottom: 8px;
+      left: 18px;
+      padding: 5px 10px 5px 12px;
+      border-left: 3px solid var(--accent);
+      border-radius: 6px;
+      background: var(--accent-soft);
+      color: #303a4d;
+      font-size: 11.8px;
+      font-weight: 650;
+      line-height: 1.24;
+    }
+
+    .insight {
+      position: absolute;
+      right: 0;
+      bottom: 28px;
+      left: 0;
+      display: grid;
+      grid-template-columns: 214px 1fr;
+      height: 104px;
+    }
+
+    .insight-label {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #a30000;
+      color: #ffffff;
+      font-size: 27px;
+      font-weight: 780;
+      line-height: 1.18;
+      text-align: center;
+      letter-spacing: 0.04em;
+    }
+
+    .insight-copy {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 8px;
+      padding: 11px 68px 12px 32px;
+      background: var(--red);
+      color: #ffffff;
+      font-size: 18px;
+      font-weight: 720;
+      line-height: 1.3;
+    }
+
+    .insight-line {
+      display: grid;
+      grid-template-columns: 28px 1fr;
+      align-items: start;
+      line-height: 1.35;
+    }
+
+    .insight-number {
+      font-weight: 820;
+    }
+  </style>
+</head>
+<body>
+  <main class="slide">
+    <header class="title">Agent 长程任务正推动 CI/CD 基础设施向上下文协作、动态运行、快速验证与供应链事实演进</header>
+    <div class="title-rule"></div>
+
+    <section class="column-heads">
+      <div class="column-title">代表公司的差异化路径</div>
+      <div class="right-column-title">
+        <div class="column-title">共同演进与公司证据解释</div>
+        <div class="driver-note">驱动：长时异步 · 并行会话 · 多轮迭代 · 跨工具副作用</div>
+      </div>
+    </section>
+
+    <section class="body">
+      <div class="left-panel">
+        <img src="./left-company-paths-original-layout-cropped-v1.png" alt="四类 CI/CD 基础设施的代表公司差异化演进路径" />
+      </div>
+
+      <div class="right-panel">
+        <article class="layer repo">
+          <div class="layer-head">
+            <div class="category"><span>01</span>代码仓</div>
+            <div class="conclusion">代码事实源 → Agent 任务、上下文与候选变更协作面</div>
+          </div>
+          <div class="evidence">
+            <div class="proof"><strong>GitHub：</strong>Issue / 评论变成异步任务，在临时 Actions 环境执行，最终以 Branch / Draft PR 交付——仓库闭合了委托、执行和审查。</div>
+            <div class="proof"><strong>GitLab：</strong>仓库事件触发 Custom Flow，Runner 执行后把 Session、CI Log 与结果关联回 MR——仓库承担运行归因和候选交付。</div>
+          </div>
+          <div class="response">基础设施响应：任务、仓库规则、运行上下文和候选变更需要版本化、可检索、可接续。</div>
+        </article>
+
+        <article class="layer pipe">
+          <div class="layer-head">
+            <div class="category"><span>02</span>流水线</div>
+            <div class="conclusion">固定 Job / DAG → 承载 Agent Session 与 Tool 调用的动态运行时</div>
+          </div>
+          <div class="evidence">
+            <div class="proof"><strong>GitHub：</strong>Markdown 意图编译为 Actions YAML，Agent Job 仍运行在 Runner、权限与 Policy 中——自然语言没有替代流水线控制面。</div>
+            <div class="proof"><strong>Buildkite：</strong>把 Build State、Log 与 Trigger 暴露为 Tool，再由 Agent Step 分析或触发——流水线开始原生承载 Tool 调用。</div>
+            <div class="proof"><strong>Harness：</strong>把隔离 Worker、凭据、网络和 Autofix 轮次纳入同一环境——模型调用被扩展为完整 Agent Runtime。</div>
+          </div>
+          <div class="response">基础设施响应：流水线需要承载 Session、事件、Tool 调用、结构化输出和运行成本。</div>
+        </article>
+
+        <article class="layer build">
+          <div class="layer-head">
+            <div class="category"><span>03</span>构建与资源</div>
+            <div class="conclusion">开发提速工具 → 高频验证与资源调度底座</div>
+          </div>
+          <div class="evidence">
+            <div class="proof"><strong>CircleCI：</strong>用预热 Snapshot 和 Microbuild 拆出快速验证内环，完整 CI 继续兜底——验证路径开始针对 Agent 多轮试错重构。</div>
+            <div class="proof"><strong>Nx：</strong>用 Graph / Affected 选择任务，再连接 Cache、动态 Worker 与 Self-Healing 复验——任务图、算力和 Oracle 形成反馈系统。</div>
+            <div class="proof"><strong>Bazel：</strong>Hermetic Graph、Remote Cache 与 RBE 不是 Agent 新发明，但为并行任务提供确定性复用和远程算力——既有底座因新任务模式升值。</div>
+          </div>
+          <div class="response">基础设施响应：降低排队、冷启动和重复计算，并动态调度 Worker 与远程算力。</div>
+        </article>
+
+        <article class="layer artifact">
+          <div class="layer-head">
+            <div class="category"><span>04</span>制品与供应链</div>
+            <div class="conclusion">文件存储 → 可查询事实、交付证据与行为资产面</div>
+          </div>
+          <div class="evidence">
+            <div class="proof"><strong>Sonatype：</strong>把版本、漏洞、许可和推荐版本前移到 Agent 选择依赖的时点——依赖决策从模型记忆转向实时事实。</div>
+            <div class="proof"><strong>Cloudsmith：</strong>把制品与漏洞能力暴露为 Tool，并只开放非破坏动作——平台从可查询扩展到受限可行动。</div>
+            <div class="proof"><strong>JFrog：</strong>把 Repo、Xray、SBOM、Evidence 与 Release Tool 化，并开始管理 Skill / Prompt / MCP——制品对象扩展到 Agent 行为资产。</div>
+          </div>
+          <div class="response">基础设施响应：版本、风险、来源、Digest 与行为资产需要能够被机器实时查询、绑定和追溯。</div>
+        </article>
+      </div>
+    </section>
+
+    <footer class="insight">
+      <div class="insight-label">洞察<br />总结</div>
+      <div class="insight-copy">
+        <div class="insight-line"><div class="insight-number">1.</div><div>跨系统 Agent 的约束不只在模型能力，更在上下文能否复用；将规则、事件、任务图和制品事实转为可查询、可版本化接口。</div></div>
+        <div class="insight-line"><div class="insight-number">2.</div><div>Agent 将一次提交放大为多轮并行尝试；应以影响分析、缓存和可复用环境增强快速验证，并按资源利用率弹性调度算力。</div></div>
+      </div>
+    </footer>
+  </main>
+</body>
+</html>

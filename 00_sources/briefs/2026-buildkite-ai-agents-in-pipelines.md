@@ -4,7 +4,7 @@ source_id: buildkite-ai-agents-pipelines-2026
 organization: Buildkite
 source_type: official-docs
 published: null
-verified: 2026-07-14
+verified: 2026-07-28
 availability: ga
 confidence: high
 geography:
@@ -47,6 +47,7 @@ Buildkite 同时支持 Agent 构建和维护流水线，以及把 Agent 直接�
 - MCP Server 可让 Agent 实时读取 Build State、日志并触发运行。
 - Model Provider 可直接连接到 Pipeline Step，使 Agent 使用日志、制品、安全策略和实时 Pipeline 数据。
 - Agentic Step 可执行分析、失败摘要和其他构建内任务。
+- 当前 Model Provider 官方文档只列出 Anthropic；失败分析插件还支持 Bedrock 与 OpenAI，但插件维护状态各不相同。
 
 ## CI/CD 相关性
 
@@ -63,8 +64,8 @@ Buildkite 同时支持 Agent 构建和维护流水线，以及把 Agent 直接�
 
 - 文档未提供 Agentic Step 的生产成功率、成本与隔离细节对比。
 - 不同模型提供商的权限和网络边界需要逐项核验。
+- MCP 可触发 Run 不等于 Agent 获得合并、发布或部署权，实际副作用继承 Buildkite Token 与平台权限。
 
 ## 可引用判断
 
 - CI 平台正在同时成为 Agent 的工具服务器和受控执行环境。
-

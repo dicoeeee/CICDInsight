@@ -2,9 +2,9 @@
 title: About GitHub Agentic Workflows
 source_id: github-agentic-workflows-docs-2026
 organization: GitHub
-source_type: official-docs
-published: null
-verified: 2026-07-14
+source_type: official-docs-and-changelog
+published: 2026-06-11
+verified: 2026-07-28
 availability: preview
 confidence: high
 geography:
@@ -37,7 +37,7 @@ tags:
 - 组织或项目：GitHub
 - 链接：[GitHub Enterprise Cloud Docs](https://docs.github.com/en/enterprise-cloud%40latest/copilot/concepts/agents/about-github-agentic-workflows)
 - 来源类型：官方产品文档
-- 能力状态：Public Preview
+- 能力状态：Public Preview；[2026-06-11 官方 Changelog](https://github.blog/changelog/2026-06-11-github-agentic-workflows-is-now-in-public-preview/)
 
 ## 一句话结论
 
@@ -50,6 +50,8 @@ GitHub 将 Agentic Workflows 定位为运行在 GitHub Actions 上的仓库级�
 - 默认只读；写操作只能通过声明的 `safe-outputs`，敏感凭证不暴露给 Agent 运行时。
 - 运行环境包含沙箱、网络限制和威胁检测，可产出 Issue、评论或 PR 供人审。
 - 官方列出的场景包括 CI 失败调查、测试覆盖改进、文档维护和仓库状态报告。
+- 2026-06-11 后可使用 Actions 内置 `GITHUB_TOKEN` 请求 Copilot，并按 Run 查看与限制 Actions 分钟和 AI Credits；不再必须维护长期 PAT。
+- 2026-07-23 GitHub Issues 增加 Rationale、Confidence 与可选 Approval，但[官方明确说明这些 Approval 是工作流便利而非服务器端安全边界](https://github.blog/changelog/2026-07-23-agent-automation-controls-in-github-issues-in-public-preview/)。
 
 ## CI/CD 相关性
 
@@ -68,6 +70,7 @@ GitHub 将 Agentic Workflows 定位为运行在 GitHub Actions 上的仓库级�
 
 - 仍为公开预览，接口和计费可能变化。
 - 官方文档证明能力存在，但尚不能证明大规模生产效果。
+- Issue Confidence/Approval 仍为 Public Preview，且不能替代 Repository Permission、Safe Output、Ruleset 或 Required Check。
 
 ## 可引用判断
 
