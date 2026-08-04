@@ -418,3 +418,12 @@ as_of: 2026-08-03
 - 自动检查：页面契约 native-review 通过；`slides_test.py` 无画布溢出；原生文字与 Microsoft YaHei / Arial 字体引用通过；无 `noTextEdit`、`noSelect`、`noMove`、`noResize`；
 - 组合边界：导出器为 212 个对象保留 `noGrp`；本页 grouping 为 optional，不影响逐对象编辑，未声明已完成组合交互验证；
 - `VS-NATIVE-V1` 保持 `proposed`，等待用户批准该精确渲染基线。
+
+## 2026-08-04：原生 Review V1 晋级 canonical 输出并归档
+
+- 用户明确要求：`将该ppt放到output中，并commit and push`；该指令指定将上述精确的 native review V1 作为页面正式输出，不改动其可见文案、版式或对象结构；
+- canonical 文件：`/Users/zhujiayi/personal/02_knowledge/03_cicdInsight/outputs/aws-agentcore-devops-agent-insight.pptx`；
+- canonical SHA-256：`5d23e182f6ddbaf2e6e533c5ee7e03199d7c09afab1343041b0c57c25773a612`；与 Review V1 完全一致；
+- canonical 渲染预览：`/private/tmp/cicdinsight-aws-agentcore-20260804/canonical-render/slide-1.png`；SHA-256：`88f6a7ce66c5774299e6f5fe157837f9ce0a0d261dbc2d25610cf3b50131d43d`；与 Review V1 渲染结果完全一致；
+- canonical 检查：`slides_test.py` 无溢出；原生文字 / Microsoft YaHei / Arial 检查通过；1 个来源备注包含 `[Sources]`；
+- 页面契约更新为 `status: production-complete`、`visual_status: final-pptx-verified`，`VS-NATIVE-V1` 与 visual lock 记为 `user_approved`。

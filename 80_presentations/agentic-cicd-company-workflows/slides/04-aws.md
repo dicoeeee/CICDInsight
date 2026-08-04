@@ -3,11 +3,11 @@ title: Slide 04 - AWS AgentCore 与 DevOps Agent
 tags:
   - research/agentic-cicd
   - deliverable/presentation/slide
-status: content-designed
+status: production-complete
 slide: 4
 contract_version: 7
 content_status: user-approved-v4
-visual_status: native-review-proposed
+visual_status: final-pptx-verified
 page_genre: technical-insight
 audience: CTO、研发效能负责人、平台工程负责人
 as_of: "2026-08-04"
@@ -128,7 +128,9 @@ production:
 visual_baseline:
   review_file: "/private/tmp/cicdinsight-aws-agentcore-20260804/aws-agentcore-devops-agent-native-v1.review.pptx"
   review_sha256: "5d23e182f6ddbaf2e6e533c5ee7e03199d7c09afab1343041b0c57c25773a612"
-  rendered_preview: "/private/tmp/cicdinsight-aws-agentcore-20260804/aws-agentcore-devops-agent-native-v1.review/slide-1.png"
+  rendered_preview: "/private/tmp/cicdinsight-aws-agentcore-20260804/canonical-render/slide-1.png"
+  rendered_preview_sha256: "88f6a7ce66c5774299e6f5fe157837f9ce0a0d261dbc2d25610cf3b50131d43d"
+  canonical_sha256: "5d23e182f6ddbaf2e6e533c5ee7e03199d7c09afab1343041b0c57c25773a612"
 
 full_page_reference:
   state: user_approved
@@ -141,8 +143,8 @@ locks:
     state: user_approved
     approval_quote: "同意按 v4 PNG 的全部可见文案与版式制作，底部两行洞察保持不变。"
   visual:
-    state: proposed
-    approval_quote: ""
+    state: user_approved
+    approval_quote: "将该ppt放到output中，并commit and push"
 
 active_decisions:
   - id: CD-FULL-V4
@@ -158,8 +160,8 @@ active_decisions:
   - id: VS-NATIVE-V1
     gate: visual
     proposal: "全原生 native review V1：沿用 v4 黑灰红视觉、50/50 主体、左右机制密度与底部两行洞察；PowerPoint 渲染预览绑定 SHA-256 5d23e182f6ddbaf2e6e533c5ee7e03199d7c09afab1343041b0c57c25773a612。"
-    state: proposed
-    approval_quote: ""
+    state: user_approved
+    approval_quote: "将该ppt放到output中，并commit and push"
 
 decision_history: "./history/04-aws-agentcore-devops-agent-decisions.md"
 
