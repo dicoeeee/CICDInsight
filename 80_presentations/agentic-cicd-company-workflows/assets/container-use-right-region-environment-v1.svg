@@ -1,0 +1,123 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="840" viewBox="0 0 900 840">
+  <defs>
+    <marker id="arrowBlack" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0 0 L10 5 L0 10 z" fill="#202020"/>
+    </marker>
+    <marker id="arrowRed" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0 0 L10 5 L0 10 z" fill="#E2383F"/>
+    </marker>
+  </defs>
+  <rect width="900" height="840" fill="#FFFFFF"/>
+
+  <!-- Region thesis -->
+  <rect x="28" y="18" width="6" height="58" rx="3" fill="#E2383F"/>
+  <text x="52" y="44" font-family="Arial, Helvetica, sans-serif" font-size="28" font-weight="700" fill="#171717">Container Use｜Agent 任务环境的生命周期</text>
+  <text x="52" y="71" font-family="Arial, Helvetica, sans-serif" font-size="15.5" fill="#666666">Environment 绑定代码、容器状态与操作记录，使每次尝试可继续、可接管、可处置</text>
+  <line x1="28" y1="91" x2="872" y2="91" stroke="#D9D9D9" stroke-width="2"/>
+
+  <!-- Complete technical model -->
+  <text x="34" y="121" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="700" fill="#E2383F">完整技术模型</text>
+  <rect x="30" y="138" width="840" height="407" rx="18" fill="#FCFCFC" stroke="#D5D5D5" stroke-width="1.7"/>
+
+  <g font-family="Arial, Helvetica, sans-serif">
+    <!-- Agent invocation contexts -->
+    <text x="122" y="165" text-anchor="middle" font-size="11" font-weight="700" fill="#777777">AGENT CONTEXT</text>
+    <rect x="51" y="176" width="142" height="109" rx="15" fill="#F3F3F3" stroke="#888888" stroke-width="1.6"/>
+    <rect x="67" y="190" width="110" height="25" rx="12" fill="#FFFFFF"/>
+    <rect x="67" y="221" width="110" height="25" rx="12" fill="#FFFFFF"/>
+    <rect x="67" y="252" width="110" height="25" rx="12" fill="#FFF0F1" stroke="#E2383F" stroke-width="1.3"/>
+    <text x="122" y="207" text-anchor="middle" font-size="12.5" font-weight="700" fill="#303030">Claude Code</text>
+    <text x="122" y="238" text-anchor="middle" font-size="12.5" font-weight="700" fill="#303030">Codex</text>
+    <text x="122" y="269" text-anchor="middle" font-size="12.5" font-weight="700" fill="#E2383F">Goose</text>
+
+    <!-- Container Use process -->
+    <rect x="246" y="176" width="158" height="109" rx="15" fill="#FFF0F1" stroke="#E2383F" stroke-width="2.5"/>
+    <text x="325" y="207" text-anchor="middle" font-size="17" font-weight="700" fill="#E2383F">Container Use</text>
+    <text x="325" y="235" text-anchor="middle" font-size="11.5" fill="#666666">MCP server / CLI</text>
+    <text x="325" y="257" text-anchor="middle" font-size="11.5" fill="#666666">local process</text>
+
+    <!-- Environment lifecycle surface -->
+    <rect x="459" y="158" width="375" height="145" rx="16" fill="#FFFFFF" stroke="#202020" stroke-width="2"/>
+    <text x="646.5" y="179" text-anchor="middle" font-size="11" font-weight="700" fill="#777777">ENVIRONMENT LIFECYCLE SURFACE</text>
+    <rect x="478" y="189" width="337" height="23" rx="7" fill="#FFF0F1" stroke="#E2383F" stroke-width="1.4"/>
+    <rect x="478" y="217" width="337" height="23" rx="7" fill="#F4F4F4"/>
+    <rect x="478" y="245" width="337" height="23" rx="7" fill="#F4F4F4"/>
+    <rect x="478" y="273" width="337" height="23" rx="7" fill="#F4F4F4"/>
+    <text x="495" y="205" font-family="SFMono-Regular, Menlo, Consolas, monospace" font-size="10.7" font-weight="700" fill="#E2383F">create(ref) · open</text>
+    <text x="495" y="233" font-family="SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" font-weight="700" fill="#303030">run · file operation · add service</text>
+    <text x="495" y="261" font-family="SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" font-weight="700" fill="#303030">log · diff · terminal · checkout</text>
+    <text x="495" y="289" font-family="SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" font-weight="700" fill="#303030">merge · apply · delete · prune</text>
+  </g>
+
+  <path d="M193 231 L246 231" fill="none" stroke="#202020" stroke-width="2.4" marker-end="url(#arrowBlack)"/>
+  <text x="219" y="219" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="10" font-weight="700" fill="#777777">MCP / CLI</text>
+  <path d="M404 231 L459 231" fill="none" stroke="#E2383F" stroke-width="2.6" marker-end="url(#arrowRed)"/>
+  <text x="432" y="219" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="10" font-weight="700" fill="#777777">MANAGE</text>
+
+  <!-- Selected Environment object -->
+  <rect x="175" y="315" width="659" height="202" rx="17" fill="#FFF8F8" stroke="#E2383F" stroke-width="2.7"/>
+  <text x="198" y="342" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="700" fill="#E2383F">ENVIRONMENT STATE · env-42</text>
+  <rect x="650" y="324" width="163" height="25" rx="12" fill="#FFDDE0"/>
+  <text x="731.5" y="341" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="10.5" font-weight="700" fill="#E2383F">ONE TASK · ONE ENV</text>
+
+  <rect x="195" y="367" width="618" height="105" rx="12" fill="#FFFFFF" stroke="#B7B7B7" stroke-width="1.5"/>
+  <text x="213" y="387" font-family="Arial, Helvetica, sans-serif" font-size="10.5" font-weight="700" fill="#777777">ENVIRONMENT OBJECT MODEL</text>
+
+  <g font-family="Arial, Helvetica, sans-serif">
+    <rect x="210" y="397" width="138" height="54" rx="9" fill="#F2F2F2" stroke="#777777" stroke-width="1.5"/>
+    <rect x="358" y="397" width="138" height="54" rx="9" fill="#FFFFFF" stroke="#202020" stroke-width="1.7"/>
+    <rect x="506" y="397" width="138" height="54" rx="9" fill="#FFFFFF" stroke="#202020" stroke-width="1.7"/>
+    <rect x="654" y="397" width="144" height="54" rx="9" fill="#F2F2F2" stroke="#777777" stroke-width="1.5"/>
+
+    <text x="279" y="420" text-anchor="middle" font-size="10.8" font-weight="700" fill="#202020">Git branch</text>
+    <text x="279" y="438" text-anchor="middle" font-size="9.5" fill="#666666">+ worktree</text>
+
+    <text x="427" y="420" text-anchor="middle" font-size="10.6" font-weight="700" fill="#202020">ContainerID</text>
+    <text x="427" y="438" text-anchor="middle" font-size="9.5" fill="#666666">filesystem state</text>
+
+    <text x="575" y="420" text-anchor="middle" font-size="10.6" font-weight="700" fill="#202020">command notes</text>
+    <text x="575" y="438" text-anchor="middle" font-size="9.3" fill="#666666">cmd · exit · output</text>
+
+    <text x="726" y="420" text-anchor="middle" font-size="10.2" font-weight="700" fill="#202020">environment.json</text>
+    <text x="726" y="438" text-anchor="middle" font-size="9.2" fill="#666666">base · setup · services</text>
+  </g>
+
+  <rect x="214" y="481" width="584" height="25" rx="12" fill="#ECECEC"/>
+  <text x="506" y="498" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="10.5" font-weight="700" fill="#555555">create → run / modify → inspect / continue → merge / apply / delete</text>
+  <path d="M647 303 L647 315" fill="none" stroke="#E2383F" stroke-width="2.5" marker-end="url(#arrowRed)"/>
+
+  <!-- Failure-handling relevance -->
+  <rect x="30" y="554" width="840" height="42" rx="13" fill="#FFF0F1" stroke="#E2383F" stroke-width="1.3"/>
+  <text x="49" y="580" font-family="Arial, Helvetica, sans-serif" font-size="13.2" font-weight="700" fill="#E2383F">失败后仍可继续处理</text>
+  <text x="220" y="580" font-family="Arial, Helvetica, sans-serif" font-size="12.0" fill="#444444">非零退出仍保存 Container state 与 command notes，便于查看现场后继续或处置</text>
+
+  <!-- Core capabilities -->
+  <text x="34" y="626" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="700" fill="#E2383F">核心能力</text>
+  <line x1="118" y1="621" x2="870" y2="621" stroke="#E1E1E1" stroke-width="1.5"/>
+
+  <g font-family="Arial, Helvetica, sans-serif">
+    <rect x="30" y="644" width="410" height="81" rx="14" fill="#F7F7F7"/>
+    <text x="52" y="673" font-size="14" font-weight="700" fill="#E2383F">01</text>
+    <text x="87" y="673" font-size="15.5" font-weight="700" fill="#202020">每个任务独立建环境</text>
+    <text x="87" y="697" font-size="12.2" fill="#666666">branch、worktree 与 Container state 按任务</text>
+    <text x="87" y="715" font-size="12.2" fill="#666666">隔离，减少工作目录冲突。</text>
+
+    <rect x="460" y="644" width="410" height="81" rx="14" fill="#F7F7F7"/>
+    <text x="482" y="673" font-size="14" font-weight="700" fill="#E2383F">02</text>
+    <text x="517" y="673" font-size="15.5" font-weight="700" fill="#202020">失败后保留处理现场</text>
+    <text x="517" y="697" font-size="12.2" fill="#666666">非零退出仍记录容器状态、命令、</text>
+    <text x="517" y="715" font-size="12.2" fill="#666666">退出码与输出，不只留下失败日志。</text>
+
+    <rect x="30" y="737" width="410" height="81" rx="14" fill="#FFF3F3" stroke="#E2383F" stroke-width="1.4"/>
+    <text x="52" y="766" font-size="14" font-weight="700" fill="#E2383F">03</text>
+    <text x="87" y="766" font-size="15.5" font-weight="700" fill="#202020">人可以观察并接管</text>
+    <text x="87" y="790" font-size="12.2" fill="#666666">log、diff、terminal、checkout 支持</text>
+    <text x="87" y="808" font-size="12.2" fill="#666666">查看变化、进入环境并继续处理。</text>
+
+    <rect x="460" y="737" width="410" height="81" rx="14" fill="#F7F7F7"/>
+    <text x="482" y="766" font-size="14" font-weight="700" fill="#E2383F">04</text>
+    <text x="517" y="766" font-size="15.5" font-weight="700" fill="#202020">结果可以接受或丢弃</text>
+    <text x="517" y="790" font-size="12.2" fill="#666666">merge、apply、delete、prune 为每次</text>
+    <text x="517" y="808" font-size="12.2" fill="#666666">Agent 尝试提供明确结局。</text>
+  </g>
+</svg>

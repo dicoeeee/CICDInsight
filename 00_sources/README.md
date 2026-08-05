@@ -4,13 +4,13 @@ tags:
   - research/agentic-cicd
   - evidence/source
 status: active
-as_of: 2026-07-28
+as_of: 2026-08-04
 ---
 
 # 信息源与 Source Brief
 
 > [!info] 三条作业流共享的 L0 证据层
-> [[00_sources/agentic-cicd-source-landscape|Agentic CI/CD source landscape]] 收录 81 条 2025-07-01—2026-07-14 核心一手资料。每条均包含组织、日期、URL、来源类型、能力状态、八阶段标签、工具类别、地域、关键事实、价值和置信度/局限，因此本身就是一组结构化 Brief。[[00_sources/source-pruning-2026-07-14|信息源精简审计]]记录从 107 条候选源缩减到 80 条核心源、再增补 CLI-Anything 形成当前 81 条核心源的过程；[[00_sources/incremental-source-research-2026-07-14|增量研究记录]]保留前期排重和选源过程。下列 70 个独立 Source Brief（另加模板）对高频主题做进一步展开，可能引用核心登记之外的补充材料。
+> [[00_sources/agentic-cicd-source-landscape|Agentic CI/CD source landscape]] 收录 81 条 2025-07-01—2026-07-14 核心一手资料。每条均包含组织、日期、URL、来源类型、能力状态、八阶段标签、工具类别、地域、关键事实、价值和置信度/局限，因此本身就是一组结构化 Brief。[[00_sources/source-pruning-2026-07-14|信息源精简审计]]记录从 107 条候选源缩减到 80 条核心源、再增补 CLI-Anything 形成当前 81 条核心源的过程；[[00_sources/incremental-source-research-2026-07-14|增量研究记录]]保留前期排重和选源过程。下列 76 个独立 Source Brief（另加模板）对高频主题做进一步展开，可能引用核心登记之外的补充材料。
 
 本目录只维护可追溯事实，不决定所有事实都必须进入 Deep Dive。批量洞察可直接从本层更新分类视图和主报告；单对象研究则把相关证据映射到专题 Claim；Presentation 通过 Deep Dive 使用这些事实。
 
@@ -48,6 +48,14 @@ as_of: 2026-07-28
 
 - [[00_sources/briefs/2026-aws-devops-agent-production-operations-ga|AWS DevOps Agent Production Operations GA]]
 - [[00_sources/briefs/2026-aws-devops-agent-release-management-preview|AWS Release Management Preview]]
+- [[00_sources/research-aws-devops-agent-deep-dive-2026-08-03|AWS DevOps Agent 一手资料深度研究]]
+- [[00_sources/research-amazon-bedrock-agentcore-architecture-2026-08-03|Amazon Bedrock AgentCore 产品边界、架构与运行约束]]
+- [[00_sources/research-amazon-bedrock-agentcore-governance-2026-08-03|Amazon Bedrock AgentCore 企业治理与落地边界]]
+- [[00_sources/research-amazon-bedrock-agentcore-evaluations-mechanics-2026-08-03|Amazon Bedrock AgentCore Evaluations 机制、数据合同与生产边界]]
+- [[00_sources/research-amazon-bedrock-agentcore-evaluations-cicd-2026-08-03|Amazon Bedrock AgentCore Evaluations 与 CI/CD 发布门禁边界]]
+- [[00_sources/research-amazon-bedrock-agentcore-memory-cicd-2026-08-04|Amazon Bedrock AgentCore Memory 机制与 CI/CD 启发]]
+- [[00_sources/research-aws-llm-cicd-agent-platform-capabilities-2026-08-03|AgentCore 与 CI/CD Agent 底层平台能力]]
+- [[00_sources/research-agentcore-transform-devops-agent-relationship-2026-08-03|AgentCore、AWS Transform 与 AWS DevOps Agent 层级关系]]
 - [[00_sources/briefs/2026-google-gemini-cloud-assist-next26|Google Gemini Cloud Assist Next 26]]
 - [[00_sources/briefs/2025-dora-state-ai-assisted-software-development|DORA 2025 AI-assisted Software Development]]
 - [[00_sources/briefs/2026-dora-platform-engineering-ai|DORA Platform Engineering and AI]]
@@ -68,6 +76,12 @@ as_of: 2026-07-28
 
 ## Pipeline、构建与开源 Agent
 
+- [[00_sources/briefs/2026-dagger-engine-modules-execution|Dagger Engine、Module 与增量执行]]
+- [[00_sources/briefs/2026-dagger-sandbox-secrets-engine-security|Dagger Function 沙箱、Secret 与 Engine 特权边界]]
+- [[00_sources/briefs/2026-dagger-cloud-engines-checks|Dagger Cloud Engines 与 Cloud Checks Early Access]]
+- [[00_sources/briefs/2026-dagger-llm-mcp-runtime|Dagger LLM Primitive、Tool Use 与 MCP]]
+- [[00_sources/briefs/2023-dagger-airbyte-ci-case-study|Airbyte 使用 Dagger 重构 CI 与共享缓存]]
+- [[00_sources/briefs/2025-dagger-puzzle-kubevirt-ci|Puzzle 以 KubeVirt 隔离 Dagger 特权 Engine]]
 - [[00_sources/briefs/2026-circleci-chunk-agent|CircleCI Chunk]]
 - [[00_sources/briefs/2026-circleci-agentic-validation-infrastructure|CircleCI Agentic Validation Infrastructure]]
 - [[00_sources/briefs/2026-nx-self-healing-ci|Nx Self-Healing CI]]

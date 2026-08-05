@@ -1,0 +1,35 @@
+{"kind":"deck","id":"pr/68b61d","name":"Deck"}
+{"kind":"layout","layoutId":"/ppt/slideMasters/slideMaster1.xml","name":"Master","type":"master"}
+{"kind":"layout","layoutId":"/ppt/slideLayouts/slideLayout1.xml","name":"Title Slide","type":"title"}
+{"kind":"slide","id":"sl/y90nupkv","slide":1,"title":"软件交付的 Agent 接口走向互补：CLI 走向结构化输出与 Skill 复用，MCP 接入走向渐进发现与按需加载","textShapes":13}
+{"kind":"textbox","id":"sh/ozmd8r65","slide":1,"name":"slide-title","text":"软件交付的 Agent 接口走向互补：CLI 走向结构化输出与 Skill 复用，MCP 接入走向渐进发现与按需加载","textPreview":"软件交付的 Agent 接口走向互补：CLI 走向结构化输出与 Skill 复用，MCP 接入走向渐进发现与按需加载","textChars":58,"textLines":1,"bbox":[40,19,1840,60]}
+{"kind":"shape","id":"sh/547294r6","slide":1,"name":"as-of","bbox":[1878,16,1,1]}
+{"kind":"shape","id":"sh/k3yl0zql","slide":1,"name":"title-accent","bbox":[40,82,1,1]}
+{"kind":"shape","id":"sh/sryl4zqx","slide":1,"name":"cli-trend-surface","bbox":[964,794,916,38]}
+{"kind":"shape","id":"sh/fu94fe98","slide":1,"name":"cli-trend-edge","bbox":[964,794,5,38]}
+{"kind":"shape","id":"sh/utg3698n","slide":1,"name":"cli-trend-label-bg","bbox":[977,800,92,26]}
+{"kind":"textbox","id":"sh/wn6dc7eh","slide":1,"name":"cli-trend-label","text":"CLI 趋势","textPreview":"CLI 趋势","textChars":6,"textLines":1,"bbox":[977,800,92,26]}
+{"kind":"textbox","id":"sh/hofulsf2","slide":1,"name":"cli-trend-sentence","text":"结构化输出与 Skill 封装增强 Agent 的稳定调用与可重放执行。","textPreview":"结构化输出与 Skill 封装增强 Agent 的稳定调用与可重放执行。","textChars":36,"textLines":1,"bbox":[1080,797,574,32]}
+{"kind":"textbox","id":"sh/ul4vaxgb","slide":1,"name":"cli-trend-evidence","text":"Codex · Claude Code · Copilot","textPreview":"Codex · Claude Code · Copilot","textChars":29,"textLines":1,"bbox":[1652,799,212,28]}
+{"kind":"shape","id":"sh/vmdcj2xw","slide":1,"name":"mcp-trend-surface","bbox":[964,837,916,38]}
+{"kind":"shape","id":"sh/4r6dg7et","slide":1,"name":"mcp-trend-edge","bbox":[964,837,5,38]}
+{"kind":"shape","id":"sh/5sfepcfe","slide":1,"name":"mcp-trend-label-bg","bbox":[977,843,92,26]}
+{"kind":"textbox","id":"sh/ipovexwn","slide":1,"name":"mcp-trend-label","text":"MCP 趋势","textPreview":"MCP 趋势","textChars":6,"textLines":1,"bbox":[977,843,92,26]}
+{"kind":"textbox","id":"sh/3qxwn2x8","slide":1,"name":"mcp-trend-sentence","text":"Tool Search、渐进发现与按需加载避免一次性注入全部工具定义。","textPreview":"Tool Search、渐进发现与按需加载避免一次性注入全部工具定义。","textChars":35,"textLines":1,"bbox":[1080,840,574,32]}
+{"kind":"textbox","id":"sh/sfqdkrep","slide":1,"name":"mcp-trend-evidence","text":"Claude Code · MCP 官方","textPreview":"Claude Code · MCP 官方","textChars":20,"textLines":1,"bbox":[1652,842,212,28]}
+{"kind":"shape","id":"sh/dgzetcfa","slide":1,"name":"overall-trend-surface","bbox":[964,880,916,38]}
+{"kind":"shape","id":"sh/1cvuxc7e","slide":1,"name":"overall-trend-edge","bbox":[964,880,5,38]}
+{"kind":"shape","id":"sh/0bmd476t","slide":1,"name":"overall-trend-label-bg","bbox":[977,886,92,26]}
+{"kind":"textbox","id":"sh/zadcv2p8","slide":1,"name":"overall-trend-label","text":"整体趋势","textPreview":"整体趋势","textChars":4,"textLines":1,"bbox":[977,886,92,26]}
+{"kind":"textbox","id":"sh/e94v2hon","slide":1,"name":"overall-trend-sentence","text":"主流终端 Agent 同时保留 CLI 与 MCP，并按任务边界组合使用。","textPreview":"主流终端 Agent 同时保留 CLI 与 MCP，并按任务边界组合使用。","textChars":37,"textLines":1,"bbox":[1080,883,574,32]}
+{"kind":"textbox","id":"sh/90ve1w7q","slide":1,"name":"overall-trend-evidence","text":"Thoughtworks · Caution","textPreview":"Thoughtworks · Caution","textChars":22,"textLines":1,"bbox":[1652,885,212,28]}
+{"kind":"shape","id":"sh/432dwn6l","slide":1,"name":"stage-01-title-mask","bbox":[105,253,248,43]}
+{"kind":"textbox","id":"sh/uxgjq907","slide":1,"name":"stage-01-title-coding-collaboration","text":"编码与协同","textPreview":"编码与协同","textChars":5,"textLines":1,"bbox":[110,254,238,41]}
+{"kind":"shape","id":"sh/vyp0je1s","slide":1,"name":"insight-label-background","bbox":[40,945,108,95]}
+{"kind":"textbox","id":"sh/wzy1szid","slide":1,"name":"insight-label","text":"洞察\n启示","textPreview":"洞察 | 启示","textChars":5,"textLines":2,"bbox":[40,945,108,95]}
+{"kind":"shape","id":"sh/h072l4jy","slide":1,"name":"insight-body-background","bbox":[160,945,1720,95]}
+{"kind":"textbox","id":"sh/i1gje90j","slide":1,"name":"insight-body","text":"1. 已有成熟命令，任务依赖本地文件、进程、管道或完整执行语义时，优先使用 CLI；通过结构化输出与 Skill 封装提升 Agent 调用稳定性。\n2. Agent 需要在运行时查找工具、获取调用参数，并由平台统一控制权限时，优先使用 MCP；通过渐进式发现与按需加载降低上下文开销。","textPreview":"1. 已有成熟命令，任务依赖本地文件、进程、管道或完整执行语义时，优先使用 CLI；通过结构化输出与 Skill 封装提升 Agent 调用稳定性。 | 2. Agent 需要在运行时查找工具、获取调用参数，并由平台统一控制权限时，优先使用 MCP；通过渐进式发现与按需加载...","textChars":143,"textLines":2,"bbox":[168,948,1704,89]}
+{"kind":"table","id":"tb/5ormd43y","slide":1,"name":"表格 28","rows":7,"cols":5,"preview":"作业阶段 | 公司 | CLI | 功能方向 | MCP 形态 / 成熟度","bbox":[40,570,900,345]}
+{"kind":"table","id":"tb/ypw36543","slide":1,"name":"表格 29","rows":5,"cols":3,"preview":"对比维度 | CLI｜直接执行面 | MCP｜标准接入面","bbox":[964,570,916,208]}
+{"kind":"image","id":"im/0jmxony1","slide":1,"name":"图片 27","alt":"CLI 贯穿软件交付作业链：跨阶段 Headless Agent CLI 与六个软件交付阶段","bbox":[40,93,1840,452]}
+{"kind":"notes","id":"nt/y90nupkv","slide":1,"text":"[Sources]\n- Top workflow image and source map: outputs/cli-upper-half-c-final-light.png; outputs/cli-upper-half-c-refined-command-sources.md\n- Representative table source map: outputs/cli-lower-left-representative-table-sources.md\n- CLI/MCP evidence audit: 50_deepdives/cli-agent-interface/industry-mcp-evolution-and-progressive-discovery-2026-07-28.md\n- Claude Code Tool Search: https://code.claude.com/docs/en/mcp#scale-with-mcp-tool-search\n- MCP Client Best Practices: https://modelcontextprotocol.io/docs/develop/clients/client-best-practices\n- Thoughtworks Technology Radar, MCP by default: https://www.thoughtworks.com/radar/techniques/mcp-by-default\n[/Sources]\n\nEvidence boundary: progressive discovery and on-demand loading are host/client implementation patterns, not automatic MCP core-protocol guarantees. MCP standardizes discovery and invocation contracts; authorization and governance remain platform/server responsibilities.\nas_of: 2026-07-28"}

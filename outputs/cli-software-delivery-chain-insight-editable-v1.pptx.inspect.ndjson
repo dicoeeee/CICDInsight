@@ -1,0 +1,29 @@
+{"kind":"deck","id":"pr/d0nasx","name":"Deck"}
+{"kind":"layout","layoutId":"d7d6fdec-e91c-4f3b-a254-fa526ae2f789","name":"Master","type":"master"}
+{"kind":"layout","layoutId":"f78a4d46-681d-4551-8457-b7faeeb74623","name":"Title Slide","type":"title"}
+{"kind":"slide","id":"sl/3fhbuy","slide":1,"title":"CLI 贯穿软件交付作业链，直接执行与标准接入协同演进","textShapes":11}
+{"kind":"textbox","id":"sh/lwfm1wzm","slide":1,"name":"slide-title","text":"CLI 贯穿软件交付作业链，直接执行与标准接入协同演进","textPreview":"CLI 贯穿软件交付作业链，直接执行与标准接入协同演进","textChars":27,"textLines":1,"bbox":[40,18,1760,58]}
+{"kind":"textbox","id":"sh/y9onqh0b","slide":1,"name":"as-of","text":"技术洞察 · 2026-07-28","textPreview":"技术洞察 · 2026-07-28","textChars":17,"textLines":1,"bbox":[1632,31,248,30]}
+{"kind":"shape","id":"sh/zax4zmhw","slide":1,"name":"title-accent","bbox":[40,78,116,7]}
+{"kind":"shape","id":"sh/7yx436hs","slide":1,"name":"cli-trend-surface","bbox":[964,884,916,47]}
+{"kind":"shape","id":"sh/o3m5k7i9","slide":1,"name":"cli-trend-edge","bbox":[964,884,6,47]}
+{"kind":"shape","id":"sh/p4vmtcze","slide":1,"name":"cli-trend-label-bg","bbox":[980,892,92,31]}
+{"kind":"textbox","id":"sh/hkna90vm","slide":1,"name":"cli-trend-label","text":"CLI 趋势","textPreview":"CLI 趋势","textChars":6,"textLines":1,"bbox":[980,892,92,31]}
+{"kind":"textbox","id":"sh/gze9gfe1","slide":1,"name":"cli-trend-sentence","text":"Agent CLI 从交互命令走向 Headless、结构化输出与 Skill，成为可重放的高保真执行面。","textPreview":"Agent CLI 从交互命令走向 Headless、结构化输出与 Skill，成为可重放的高保真执行面。","textChars":53,"textLines":1,"bbox":[1088,889,565,37]}
+{"kind":"textbox","id":"sh/vy587adg","slide":1,"name":"cli-trend-evidence","text":"Codex · Claude Code · Copilot","textPreview":"Codex · Claude Code · Copilot","textChars":29,"textLines":1,"bbox":[1652,891,212,33]}
+{"kind":"shape","id":"sh/uxwre5wv","slide":1,"name":"mcp-trend-surface","bbox":[964,939,916,47]}
+{"kind":"shape","id":"sh/5onadkvi","slide":1,"name":"mcp-trend-edge","bbox":[964,939,6,47]}
+{"kind":"shape","id":"sh/4ne9kfed","slide":1,"name":"mcp-trend-label-bg","bbox":[980,947,92,31]}
+{"kind":"textbox","id":"sh/3m5sbads","slide":1,"name":"mcp-trend-label","text":"MCP 趋势","textPreview":"MCP 趋势","textChars":6,"textLines":1,"bbox":[980,947,92,31]}
+{"kind":"textbox","id":"sh/ilwri5w7","slide":1,"name":"mcp-trend-sentence","text":"MCP 以 Tool Search、渐进发现和程序化调用转向按需加载，并强化远程鉴权与治理。","textPreview":"MCP 以 Tool Search、渐进发现和程序化调用转向按需加载，并强化远程鉴权与治理。","textChars":46,"textLines":1,"bbox":[1088,944,565,37]}
+{"kind":"textbox","id":"sh/ds7ah4vu","slide":1,"name":"mcp-trend-evidence","text":"Claude Code · MCP 官方","textPreview":"Claude Code · MCP 官方","textChars":20,"textLines":1,"bbox":[1652,946,212,33]}
+{"kind":"shape","id":"sh/sry9oze9","slide":1,"name":"overall-trend-surface","bbox":[964,994,916,47]}
+{"kind":"shape","id":"sh/cv6tk3ml","slide":1,"name":"overall-trend-edge","bbox":[964,994,6,47]}
+{"kind":"shape","id":"sh/dwfud836","slide":1,"name":"overall-trend-label-bg","bbox":[980,1002,92,31]}
+{"kind":"textbox","id":"sh/qtobit4f","slide":1,"name":"overall-trend-label","text":"整体趋势","textPreview":"整体趋势","textChars":4,"textLines":1,"bbox":[980,1002,92,31]}
+{"kind":"textbox","id":"sh/buxcbyl0","slide":1,"name":"overall-trend-sentence","text":"主流终端 Agent 同时保留 CLI 与 MCP，界面选择趋向按任务组合，而非默认封装所有能力。","textPreview":"主流终端 Agent 同时保留 CLI 与 MCP，界面选择趋向按任务组合，而非默认封装所有能力。","textChars":49,"textLines":1,"bbox":[1088,999,565,37]}
+{"kind":"textbox","id":"sh/0z6to32h","slide":1,"name":"overall-trend-evidence","text":"Thoughtworks · Caution","textPreview":"Thoughtworks · Caution","textChars":22,"textLines":1,"bbox":[1652,1001,212,33]}
+{"kind":"table","id":"tb/4fihgjap","slide":1,"name":"","rows":7,"cols":5,"preview":"作业阶段 | 公司 / CLI | 功能方向 | MCP 接入方式 | MCP 形态 / 成熟度","bbox":[40,630,900,410]}
+{"kind":"table","id":"tb/3e9gne9k","slide":1,"name":"","rows":5,"cols":3,"preview":"对比维度 | CLI｜直接执行面 | MCP｜标准接入面","bbox":[964,630,916,240]}
+{"kind":"image","id":"im/hwfu1wji","slide":1,"name":"","alt":"CLI 贯穿软件交付作业链：跨阶段 Headless Agent CLI 与六个软件交付阶段","bbox":[40,94,1840,518]}
+{"kind":"notes","id":"nt/3fhbuy","slide":1,"text":"[Sources]\n- Top workflow image and its source map: outputs/cli-upper-half-c-final-light.png; outputs/cli-upper-half-c-refined-command-sources.md\n- Representative table source map: outputs/cli-lower-left-representative-table-sources.md\n- CLI/MCP evidence audit: 50_deepdives/cli-agent-interface/industry-mcp-evolution-and-progressive-discovery-2026-07-28.md\n- Claude Code Tool Search: https://code.claude.com/docs/en/mcp#scale-with-mcp-tool-search\n- MCP Client Best Practices: https://modelcontextprotocol.io/docs/develop/clients/client-best-practices\n- Thoughtworks Technology Radar, MCP by default: https://www.thoughtworks.com/radar/techniques/mcp-by-default\n[/Sources]\n\nEvidence boundary: Tool Search is a host/client implementation pattern, not an MCP core RPC guarantee. Thoughtworks cautions against default adoption and explicitly does not reject MCP.\nas_of: 2026-07-28"}

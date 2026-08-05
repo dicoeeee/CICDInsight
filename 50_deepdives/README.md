@@ -7,7 +7,7 @@ tags:
   - research/agentic-cicd
   - research/deep-dive
 status: active
-as_of: 2026-07-28
+as_of: 2026-08-03
 ---
 
 # Agentic CI/CD 专题深研
@@ -53,12 +53,21 @@ as_of: 2026-07-28
 | [[50_deepdives/cli-anything/README|CLI-Anything]] | Agent 原生接口生成项目 | 七阶段 SOP、CLI/测试/Skill、CLI-Hub、Preview、成熟度和 CI/CD 场景 | 全部 CLI 的设计理论、MCP 协议治理 | complete |
 | [[50_deepdives/github-agentic-workflows/README|GitHub Agentic Workflows]] | Agent Workflow 编译与 Actions 运行平台 | Markdown/Frontmatter、Compiler、Safe Outputs、Sandbox、复杂编排与 CI/CD 实践 | GitHub 全产品线、通用 Harness 模型能力比较 | complete |
 | [[50_deepdives/cicd-self-healing/README|CI/CD 问题自愈]] | 端到端问题恢复场景 | 失败分类、诊断、修复、独立验证、受控执行、观察、回退与学习闭环 | 通用传统 CI/CD、单一模型能力比较 | complete |
+| [[50_deepdives/runtime-generated-verification-gates/README|Agent 生成验证的运行时 Gate]] | 生成式验证与门禁控制 | 变更感知验证的规划、执行、证据契约、Gate adapter，以及 AWS Release Management 与 Meta JiTTesting 的机制边界 | 测试生成算法、mutant 质量、UI/API 测试类型 | complete |
 | [[50_deepdives/harness-company/README|Harness 公司]] | 单一厂商/平台 | Harness Inc. 产品组合、Agent 应用、Knowledge Graph/MCP/Pipeline 原理、隔离与委托权限、案例、成熟度和采购落地 | 通用 Agent Harness 工程方法、所有 Agent Runtime 横向比较 | complete |
+| [[50_deepdives/aws-devops-agent/README|AWS DevOps Agent]] | 单一厂商/平台 | Agent Space、Topology、Learned Skills、Production Operations、Release Management、IAM/数据/执行边界与企业试点 | AWS 全产品线、通用 AIOps 横评、端到端自主发布效果 | complete |
+| [[50_deepdives/amazon-bedrock-agentcore/README|Amazon Bedrock AgentCore]] | Agent 生产运行与治理平台 | Harness/Runtime、Gateway/Identity/Policy、Memory、Observability/Evaluations/Optimization，以及 Agent 行动与质量双闭环 | AWS DevOps Agent 业务能力、通用 Agent framework 横评、把 Evaluation 当发布授权 | complete |
+| [[50_deepdives/dagger/README|Dagger]] | 可编程软件交付执行层 | Engine、Module/Function、增量执行、Hybrid CI、Cloud、特权边界、LLM/MCP、采用与替代关系 | 通用 CI 平台全功能采购横评、完整 SDK 教程、所有 Build System 基准 | complete |
+| [[50_deepdives/claude-code-container-use/README|Claude Code × Dagger Container Use]] | Agent 候选执行环境 | Claude 原生 worktree/并行能力与 Container Use 的容器状态、执行历史、环境配置和本地—CI 复用边界 | Claude 模型质量 Benchmark、通用 Agent 编排、成熟联合客户方案 | complete |
+| [[50_deepdives/buildkite/README|Buildkite]] | 可编程 CI 编排与执行基础设施 | Dynamic Pipeline、Cluster/Queue/Agent/Stack、Hosted/Self-hosted Fleet、Test Engine、Package Registry、Agentic CI | Build System 内部依赖图、完整 CD/发布治理、所有 CI 产品采购横评 | complete |
+| [[50_deepdives/qovery/README|Qovery LLM/CI/CD]] | Agent 可操作的交付控制面 | AI Copilot、MCP、Skills、Code-to-Environment、部署诊断、Preview、RDE/Agent Workflow 与权限边界 | Qovery 全产品采购、基础模型 Benchmark、把 closed workflow 当 GA | complete |
 | [[50_deepdives/llm-era-cicd-infrastructure/README|大模型时代的 CI/CD 基础设施]] | 跨基础设施技术变化 | 代码仓、流水线、构建系统、制品仓，以及身份、证据、审计和成本控制 | 单一产品教程、基础模型能力比较、LLMOps | complete |
 | Skill / Rules / Hooks | 知识与行为资产 | 组织知识封装、发现与加载、版本、测试、供应链和生命周期 | Harness 推理架构、底层 CLI 实现 | proposed |
 | 通用 Agent Harness / Runtime | 推理与运行主体 | 上下文、规划、工具循环、权限、沙箱、审批、评测和 Claude Code/Codex/OpenCode 等实现 | Harness Inc. 公司产品线、单个协议或知识包的完整标准研究 | proposed |
 
 CLI 与 MCP 仅在选型边界发生交叉，统一比较见 [[50_deepdives/cli-vs-mcp-decision-guide|CLI 与 MCP 可替代性决策指南]]，不将两者合并为一个专题。规范案例仍保存在 [[05_case_library/README|案例库]]，可被多个独立专题引用。
+
+Dagger 与 Buildkite 的相邻层关系、双 DAG 所有权与分阶段采用路径见 [[50_deepdives/dagger-buildkite-decision-guide|Dagger 与 Buildkite 分层选型指南]]；该指南只综合两个已完成专题，不将其合并成单一事实源。
 
 ## 专题类型
 

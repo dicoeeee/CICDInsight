@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="850" viewBox="0 0 900 850">
+  <rect width="900" height="850" fill="#FFFFFF"/>
+
+  <!-- Region thesis -->
+  <rect x="30" y="18" width="6" height="58" rx="3" fill="#E2383F"/>
+  <text x="54" y="45" font-family="Arial, Helvetica, sans-serif" font-size="29" font-weight="700" fill="#171717">Dagger｜程序化增量执行底座</text>
+  <text x="54" y="72" font-family="Arial, Helvetica, sans-serif" font-size="16" fill="#666666">Module 定义能力，Engine 将其展开为可并发、可缓存的执行图。</text>
+  <line x1="30" y1="89" x2="870" y2="89" stroke="#D9D9D9" stroke-width="2"/>
+
+  <!-- 01 Module -->
+  <text x="40" y="117" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="700" fill="#E2383F">01</text>
+  <text x="82" y="117" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="700" fill="#171717">用 Module 封装任务</text>
+  <text x="344" y="116" font-family="Arial, Helvetica, sans-serif" font-size="14" fill="#737373">Build、Test 与 CI 入口成为可复用能力</text>
+
+  <rect x="90" y="129" width="720" height="188" rx="15" fill="#171717"/>
+  <text x="788" y="149" text-anchor="end" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="700" fill="#8F8F8F">DAGGER MODULE · MONOREPO CI</text>
+  <g font-family="SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-size="14" xml:space="preserve">
+    <text x="112" y="149" fill="#E2383F">@object()</text>
+    <text x="112" y="164"><tspan fill="#E2383F">export class</tspan><tspan fill="#F5F5F5"> MonorepoCI {</tspan></text>
+    <text x="112" y="179" fill="#E2383F">  @func()</text>
+    <text x="112" y="194" fill="#F5F5F5">  <tspan fill="#E2383F">async</tspan> ci(repo: <tspan fill="#D4D4D4">Directory</tspan>): Promise&lt;void&gt; {</text>
+    <text x="112" y="209" fill="#F5F5F5">    const <tspan fill="#E2383F">moduleA</tspan> = repo.directory("moduleA")</text>
+    <text x="112" y="224" fill="#F5F5F5">    const <tspan fill="#E2383F">moduleB</tspan> = repo.directory("moduleB")</text>
+    <text x="112" y="239" fill="#F5F5F5">    await <tspan fill="#E2383F" font-weight="700">Promise.all</tspan>([</text>
+    <text x="112" y="254" fill="#D4D4D4">      this.test(this.build(<tspan fill="#E2383F">moduleA</tspan>)).sync(),</text>
+    <text x="112" y="269" fill="#D4D4D4">      this.test(this.build(<tspan fill="#E2383F">moduleB</tspan>)).sync(),</text>
+    <text x="112" y="284" fill="#F5F5F5">    ])</text>
+    <text x="112" y="299" fill="#F5F5F5">  }</text>
+    <text x="112" y="314" fill="#F5F5F5">}</text>
+  </g>
+
+  <line x1="90" y1="335" x2="810" y2="335" stroke="#E6E6E6" stroke-width="2"/>
+
+  <!-- 02 DAG -->
+  <text x="40" y="365" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="700" fill="#E2383F">02</text>
+  <text x="82" y="365" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="700" fill="#171717">Engine 生成执行图</text>
+  <text x="344" y="364" font-family="Arial, Helvetica, sans-serif" font-size="14" fill="#737373">模块内按依赖串行，模块间无依赖并发</text>
+  <image href="dagger-02-function-dag.png" x="90" y="376" width="720" height="204" preserveAspectRatio="none"/>
+
+  <line x1="90" y1="596" x2="810" y2="596" stroke="#E6E6E6" stroke-width="2"/>
+
+  <!-- 03 Incremental cache -->
+  <text x="40" y="626" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="700" fill="#E2383F">03</text>
+  <text x="82" y="626" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="700" fill="#171717">只重跑变化部分</text>
+  <text x="344" y="625" font-family="Arial, Helvetica, sans-serif" font-size="14" fill="#737373">moduleA 重跑，moduleB 整条链缓存复用</text>
+  <image href="dagger-03-incremental-cache.png" x="90" y="637" width="720" height="204" preserveAspectRatio="none"/>
+</svg>

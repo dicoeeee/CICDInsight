@@ -1,0 +1,141 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="840" viewBox="0 0 900 840">
+  <defs>
+    <marker id="arrowBlack" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0 0 L10 5 L0 10 z" fill="#202020"/>
+    </marker>
+    <marker id="arrowRed" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0 0 L10 5 L0 10 z" fill="#E2383F"/>
+    </marker>
+  </defs>
+  <rect width="900" height="840" fill="#FFFFFF"/>
+
+  <!-- Region thesis -->
+  <rect x="28" y="18" width="6" height="58" rx="3" fill="#E2383F"/>
+  <text x="52" y="44" font-family="Arial, Helvetica, sans-serif" font-size="28" font-weight="700" fill="#171717">Dagger｜交付能力的程序化执行层</text>
+  <text x="52" y="71" font-family="Arial, Helvetica, sans-serif" font-size="15.5" fill="#666666">Module API 定义能力，Engine 求值类型化执行图并复用中间结果</text>
+  <line x1="28" y1="91" x2="872" y2="91" stroke="#D9D9D9" stroke-width="2"/>
+
+  <!-- Complete architecture -->
+  <text x="34" y="121" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="700" fill="#E2383F">完整技术模型</text>
+  <rect x="30" y="137" width="840" height="406" rx="18" fill="#FCFCFC" stroke="#D5D5D5" stroke-width="1.7"/>
+
+  <g font-family="Arial, Helvetica, sans-serif">
+    <!-- callers -->
+    <text x="105" y="165" text-anchor="middle" font-size="11.5" font-weight="700" fill="#777777">CALLERS</text>
+    <rect x="53" y="177" width="112" height="29" rx="14" fill="#F1F1F1" stroke="#888888" stroke-width="1.4"/>
+    <rect x="53" y="214" width="112" height="29" rx="14" fill="#F1F1F1" stroke="#888888" stroke-width="1.4"/>
+    <rect x="53" y="251" width="112" height="29" rx="14" fill="#FFF0F1" stroke="#E2383F" stroke-width="1.8"/>
+    <text x="109" y="197" text-anchor="middle" font-size="13" font-weight="700" fill="#303030">Developer</text>
+    <text x="109" y="234" text-anchor="middle" font-size="13" font-weight="700" fill="#303030">CI</text>
+    <text x="109" y="271" text-anchor="middle" font-size="13" font-weight="700" fill="#E2383F">Agent</text>
+
+    <!-- module API -->
+    <rect x="242" y="171" width="300" height="109" rx="16" fill="#FFF0F1" stroke="#E2383F" stroke-width="2.8"/>
+    <text x="392" y="198" text-anchor="middle" font-size="18" font-weight="700" fill="#E2383F">Delivery Module API</text>
+    <rect x="260" y="215" width="50" height="31" rx="8" fill="#FFFFFF"/>
+    <rect x="318" y="215" width="58" height="31" rx="8" fill="#FFFFFF"/>
+    <rect x="384" y="215" width="54" height="31" rx="8" fill="#FFFFFF"/>
+    <rect x="446" y="215" width="70" height="31" rx="8" fill="#FFFFFF"/>
+    <text x="285" y="235" text-anchor="middle" font-family="SFMono-Regular, Menlo, Consolas, monospace" font-size="12.5" font-weight="700" fill="#202020">ci</text>
+    <text x="347" y="235" text-anchor="middle" font-family="SFMono-Regular, Menlo, Consolas, monospace" font-size="12.5" font-weight="700" fill="#202020">build</text>
+    <text x="411" y="235" text-anchor="middle" font-family="SFMono-Regular, Menlo, Consolas, monospace" font-size="12.5" font-weight="700" fill="#202020">test</text>
+    <text x="481" y="235" text-anchor="middle" font-family="SFMono-Regular, Menlo, Consolas, monospace" font-size="11.5" font-weight="700" fill="#202020">publish</text>
+    <text x="392" y="265" text-anchor="middle" font-size="12" fill="#777777">discoverable · callable · composable</text>
+
+    <!-- outputs -->
+    <text x="765" y="165" text-anchor="middle" font-size="11.5" font-weight="700" fill="#777777">OUTPUTS</text>
+    <rect x="704" y="177" width="123" height="103" rx="14" fill="#FFFFFF" stroke="#202020" stroke-width="2"/>
+    <text x="765.5" y="204" text-anchor="middle" font-size="13.5" font-weight="700" fill="#202020">Artifact</text>
+    <text x="765.5" y="229" text-anchor="middle" font-size="13.5" font-weight="700" fill="#202020">OCI Image</text>
+    <text x="765.5" y="254" text-anchor="middle" font-size="13.5" font-weight="700" fill="#202020">Test Result</text>
+
+    <!-- typed objects -->
+    <rect x="53" y="335" width="150" height="127" rx="15" fill="#F3F3F3" stroke="#777777" stroke-width="1.8"/>
+    <text x="128" y="358" text-anchor="middle" font-size="11" font-weight="700" fill="#777777">TYPED OBJECTS</text>
+    <text x="128" y="387" text-anchor="middle" font-size="13.5" font-weight="700" fill="#202020">Directory · File</text>
+    <text x="128" y="413" text-anchor="middle" font-size="13.5" font-weight="700" fill="#202020">Container · Service</text>
+    <text x="128" y="439" text-anchor="middle" font-size="13.5" font-weight="700" fill="#202020">Secret</text>
+
+    <!-- engine graph -->
+    <rect x="242" y="305" width="455" height="185" rx="17" fill="#FFF8F8" stroke="#E2383F" stroke-width="2.6"/>
+    <text x="264" y="330" font-size="13" font-weight="700" fill="#E2383F">FUNCTION CALL · ci(source)</text>
+    <rect x="493" y="313" width="182" height="25" rx="12" fill="#FFDDE0"/>
+    <text x="584" y="330" text-anchor="middle" font-size="10.8" font-weight="700" fill="#E2383F">FUNCTION CACHE · 整体结果</text>
+
+    <rect x="260" y="348" width="419" height="91" rx="12" fill="#FFFFFF" stroke="#B7B7B7" stroke-width="1.5"/>
+    <text x="278" y="367" font-size="10.5" font-weight="700" fill="#777777">DAGGER ENGINE · OPERATION DAG</text>
+    <rect x="275" y="376" width="68" height="49" rx="8" fill="#FFFFFF" stroke="#202020" stroke-width="1.6"/>
+    <rect x="355" y="376" width="68" height="49" rx="8" fill="#FFFFFF" stroke="#202020" stroke-width="1.6"/>
+    <rect x="435" y="376" width="68" height="49" rx="8" fill="#FFFFFF" stroke="#202020" stroke-width="1.6"/>
+    <rect x="515" y="376" width="68" height="49" rx="8" fill="#FFFFFF" stroke="#202020" stroke-width="1.6"/>
+    <rect x="595" y="376" width="68" height="49" rx="8" fill="#FFFFFF" stroke="#202020" stroke-width="1.6"/>
+    <text x="309" y="397" text-anchor="middle" font-size="11.3" font-weight="700" fill="#202020">FROM</text>
+    <text x="389" y="397" text-anchor="middle" font-size="10.5" font-weight="700" fill="#202020">WITH src</text>
+    <text x="469" y="397" text-anchor="middle" font-size="10.3" font-weight="700" fill="#202020">RUN install</text>
+    <text x="549" y="397" text-anchor="middle" font-size="10.3" font-weight="700" fill="#202020">RUN build</text>
+    <text x="629" y="397" text-anchor="middle" font-size="10.3" font-weight="700" fill="#202020">RUN test</text>
+    <text x="309" y="415" text-anchor="middle" font-size="8.8" font-weight="700" fill="#777777">LAYER CACHE</text>
+    <text x="389" y="415" text-anchor="middle" font-size="8.8" font-weight="700" fill="#777777">LAYER CACHE</text>
+    <text x="469" y="415" text-anchor="middle" font-size="8.8" font-weight="700" fill="#777777">LAYER CACHE</text>
+    <text x="549" y="415" text-anchor="middle" font-size="8.8" font-weight="700" fill="#777777">LAYER CACHE</text>
+    <text x="629" y="415" text-anchor="middle" font-size="8.8" font-weight="700" fill="#777777">LAYER CACHE</text>
+
+    <rect x="342" y="450" width="252" height="28" rx="14" fill="#ECECEC"/>
+    <text x="468" y="468" text-anchor="middle" font-size="11.2" font-weight="700" fill="#666666">CACHE VOLUME · 工具数据</text>
+
+    <!-- runtime locations -->
+    <text x="469" y="506" text-anchor="middle" font-size="11" font-weight="700" fill="#777777">SAME EXECUTION DEFINITION</text>
+    <rect x="266" y="516" width="120" height="27" rx="13" fill="#F2F2F2" stroke="#888888" stroke-width="1.3"/>
+    <rect x="409" y="516" width="120" height="27" rx="13" fill="#F2F2F2" stroke="#888888" stroke-width="1.3"/>
+    <rect x="552" y="516" width="120" height="27" rx="13" fill="#F2F2F2" stroke="#888888" stroke-width="1.3"/>
+    <text x="326" y="534" text-anchor="middle" font-size="12.3" font-weight="700" fill="#202020">Local</text>
+    <text x="469" y="534" text-anchor="middle" font-size="12.3" font-weight="700" fill="#202020">Existing CI</text>
+    <text x="612" y="534" text-anchor="middle" font-size="12.3" font-weight="700" fill="#202020">Remote Engine</text>
+  </g>
+
+  <path d="M165 191 C202 191 207 214 242 218" fill="none" stroke="#202020" stroke-width="2.2" marker-end="url(#arrowBlack)"/>
+  <path d="M165 228 L242 228" fill="none" stroke="#202020" stroke-width="2.2" marker-end="url(#arrowBlack)"/>
+  <path d="M165 265 C202 265 207 242 242 238" fill="none" stroke="#E2383F" stroke-width="2.8" marker-end="url(#arrowRed)"/>
+  <path d="M392 280 L392 305" fill="none" stroke="#E2383F" stroke-width="2.8" marker-end="url(#arrowRed)"/>
+  <path d="M203 399 L242 399" fill="none" stroke="#202020" stroke-width="2.5" marker-end="url(#arrowBlack)"/>
+  <path d="M343 400 L355 400" fill="none" stroke="#202020" stroke-width="1.8" marker-end="url(#arrowBlack)"/>
+  <path d="M423 400 L435 400" fill="none" stroke="#202020" stroke-width="1.8" marker-end="url(#arrowBlack)"/>
+  <path d="M503 400 L515 400" fill="none" stroke="#202020" stroke-width="1.8" marker-end="url(#arrowBlack)"/>
+  <path d="M583 400 L595 400" fill="none" stroke="#202020" stroke-width="1.8" marker-end="url(#arrowBlack)"/>
+  <path d="M469 450 L469 425" fill="none" stroke="#777777" stroke-width="1.6" stroke-dasharray="5 4" marker-end="url(#arrowBlack)"/>
+  <path d="M697 399 L740 399 L740 280" fill="none" stroke="#E2383F" stroke-width="2.6" marker-end="url(#arrowRed)"/>
+  <path d="M469 490 L469 506" fill="none" stroke="#777777" stroke-width="1.6" stroke-dasharray="5 4"/>
+
+  <!-- Feature list -->
+  <text x="34" y="579" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="700" fill="#E2383F">核心能力</text>
+  <line x1="118" y1="574" x2="870" y2="574" stroke="#E1E1E1" stroke-width="1.5"/>
+
+  <g font-family="Arial, Helvetica, sans-serif">
+    <rect x="30" y="597" width="410" height="87" rx="14" fill="#F7F7F7"/>
+    <text x="52" y="626" font-size="14" font-weight="700" fill="#E2383F">01</text>
+    <text x="87" y="626" font-size="16" font-weight="700" fill="#202020">可复用的 Module Functions</text>
+    <text x="87" y="650" font-size="12.7" fill="#666666">构建、测试、发布封装为 Functions，</text>
+    <text x="87" y="669" font-size="12.7" fill="#666666">供本地、CI 和 Agent 统一调用。</text>
+
+    <rect x="460" y="597" width="410" height="87" rx="14" fill="#F7F7F7"/>
+    <text x="482" y="626" font-size="14" font-weight="700" fill="#E2383F">02</text>
+    <text x="517" y="626" font-size="16" font-weight="700" fill="#202020">显式建模执行依赖</text>
+    <text x="517" y="650" font-size="12.7" fill="#666666">Directory、Container、Service、Secret</text>
+    <text x="517" y="669" font-size="12.7" fill="#666666">作为类型化输入进入执行图。</text>
+
+    <rect x="30" y="696" width="410" height="87" rx="14" fill="#FFF3F3" stroke="#E2383F" stroke-width="1.4"/>
+    <text x="52" y="725" font-size="14" font-weight="700" fill="#E2383F">03</text>
+    <text x="87" y="725" font-size="16" font-weight="700" fill="#202020">分层缓存与增量执行</text>
+    <text x="87" y="749" font-size="12.7" fill="#666666">Function 命中跳过整个调用；未命中时，</text>
+    <text x="87" y="768" font-size="12.7" fill="#666666">Layer 仍按操作复用，Volume 保留工具数据。</text>
+
+    <rect x="460" y="696" width="410" height="87" rx="14" fill="#F7F7F7"/>
+    <text x="482" y="725" font-size="14" font-weight="700" fill="#E2383F">04</text>
+    <text x="517" y="725" font-size="16" font-weight="700" fill="#202020">跨环境复用执行定义</text>
+    <text x="517" y="749" font-size="12.7" fill="#666666">同一 Module Graph 可在本地、现有 CI</text>
+    <text x="517" y="768" font-size="12.7" fill="#666666">和 Remote Engine 上执行。</text>
+  </g>
+
+  <rect x="30" y="798" width="840" height="29" rx="14" fill="#EFEFEF"/>
+  <text x="450" y="817" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="12.2" fill="#555555">与 Gradle：Gradle 聚焦项目内 Task Graph；Dagger 将构建、测试、运行环境与制品纳入更外层执行图，二者可组合使用。</text>
+</svg>

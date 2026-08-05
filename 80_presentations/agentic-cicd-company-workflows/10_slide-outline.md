@@ -16,7 +16,7 @@ status: draft
 | 01 | GitHub | 以 Workflow 为装配清单，把 Skill、Agent 与 MCP 编译成受控的 Actions 作业 | 内容分析已归档、待视觉设计 |
 | 02 | Harness | 将多类 Agent 嵌入交付 Pipeline：分工协作、真实上下文与逐层权限控制同时成立 | 可编辑单页已就绪 |
 | 03 | GitLab | GitLab 公司页；主张待公司 Deep Dive 形成 | `blocked-by-deep-dive` |
-| 04 | AWS | AWS 公司页；主张待公司 Deep Dive 形成 | `blocked-by-deep-dive` |
+| 04 | AWS AgentCore × DevOps Agent | LF3 已批准；按用户要求暂停右侧与底部，只评审左侧 AgentCore Evaluations 机制方案 | `left-mechanism-solution-proposed` |
 | 05 | CI 自愈能力 | 从失败分类到独立复验与有界写回，形成可信自愈闭环 | 可编辑评审版已生成、待确认 |
 | 06 | CLI / MCP 选型 | 软件交付的 Agent 接口走向互补：CLI 走向结构化输出与 Skill 复用，MCP 接入走向渐进发现与按需加载 | 可编辑最终版已归档、事实审计与视觉验收完成 |
 

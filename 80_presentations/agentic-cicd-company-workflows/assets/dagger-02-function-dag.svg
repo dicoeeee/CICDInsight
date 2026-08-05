@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="340" viewBox="0 0 1200 340">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#202020"/>
+    </marker>
+  </defs>
+  <rect width="1200" height="340" fill="#FFFFFF"/>
+  <text x="1160" y="27" text-anchor="end" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="700" fill="#777777">MODULE FUNCTION → ENGINE DAG</text>
+
+  <g font-family="Arial, Helvetica, sans-serif">
+    <rect x="30" y="48" width="220" height="92" rx="16" fill="#F7F7F7" stroke="#202020" stroke-width="3"/>
+    <text x="140" y="87" text-anchor="middle" font-size="24" font-weight="700" fill="#202020">moduleA</text>
+    <text x="140" y="116" text-anchor="middle" font-size="17" fill="#777777">Directory</text>
+
+    <rect x="330" y="48" width="220" height="92" rx="16" fill="#FFFFFF" stroke="#202020" stroke-width="3"/>
+    <text x="440" y="103" text-anchor="middle" font-size="24" font-weight="700" fill="#202020">Build moduleA</text>
+
+    <rect x="650" y="48" width="220" height="92" rx="16" fill="#FFFFFF" stroke="#202020" stroke-width="3"/>
+    <text x="760" y="103" text-anchor="middle" font-size="24" font-weight="700" fill="#202020">Test moduleA</text>
+
+    <rect x="30" y="200" width="220" height="92" rx="16" fill="#F7F7F7" stroke="#202020" stroke-width="3"/>
+    <text x="140" y="239" text-anchor="middle" font-size="24" font-weight="700" fill="#202020">moduleB</text>
+    <text x="140" y="268" text-anchor="middle" font-size="17" fill="#777777">Directory</text>
+
+    <rect x="330" y="200" width="220" height="92" rx="16" fill="#FFFFFF" stroke="#202020" stroke-width="3"/>
+    <text x="440" y="255" text-anchor="middle" font-size="24" font-weight="700" fill="#202020">Build moduleB</text>
+
+    <rect x="650" y="200" width="220" height="92" rx="16" fill="#FFFFFF" stroke="#202020" stroke-width="3"/>
+    <text x="760" y="255" text-anchor="middle" font-size="24" font-weight="700" fill="#202020">Test moduleB</text>
+
+    <rect x="960" y="115" width="210" height="110" rx="18" fill="#FFF1F2" stroke="#E2383F" stroke-width="4"/>
+    <text x="1065" y="159" text-anchor="middle" font-family="SFMono-Regular, Menlo, Consolas, monospace" font-size="24" font-weight="700" fill="#E2383F">Promise.all</text>
+    <text x="1065" y="191" text-anchor="middle" font-size="17" fill="#777777">wait for both chains</text>
+  </g>
+
+  <path d="M250 94 L330 94" fill="none" stroke="#202020" stroke-width="4" marker-end="url(#arrow)"/>
+  <path d="M550 94 L650 94" fill="none" stroke="#202020" stroke-width="4" marker-end="url(#arrow)"/>
+  <path d="M250 246 L330 246" fill="none" stroke="#202020" stroke-width="4" marker-end="url(#arrow)"/>
+  <path d="M550 246 L650 246" fill="none" stroke="#202020" stroke-width="4" marker-end="url(#arrow)"/>
+  <path d="M870 94 C915 94 920 142 960 148" fill="none" stroke="#202020" stroke-width="4" marker-end="url(#arrow)"/>
+  <path d="M870 246 C915 246 920 198 960 192" fill="none" stroke="#202020" stroke-width="4" marker-end="url(#arrow)"/>
+</svg>

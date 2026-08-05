@@ -1,0 +1,146 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="840" viewBox="0 0 900 840">
+  <defs>
+    <marker id="arrowBlack" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0 0 L10 5 L0 10 z" fill="#202020"/>
+    </marker>
+    <marker id="arrowRed" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0 0 L10 5 L0 10 z" fill="#E2383F"/>
+    </marker>
+    <marker id="arrowGray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0 0 L10 5 L0 10 z" fill="#777777"/>
+    </marker>
+  </defs>
+  <rect width="900" height="840" fill="#FFFFFF"/>
+
+  <!-- Region thesis -->
+  <rect x="28" y="18" width="6" height="58" rx="3" fill="#E2383F"/>
+  <text x="52" y="44" font-family="Arial, Helvetica, sans-serif" font-size="28" font-weight="700" fill="#171717">Container Use｜任务环境的双状态架构</text>
+  <text x="52" y="71" font-family="Arial, Helvetica, sans-serif" font-size="15.5" fill="#666666">一个 Environment ID 同时关联 Git 工作现场与 Dagger 文件系统状态</text>
+  <line x1="28" y1="91" x2="872" y2="91" stroke="#D9D9D9" stroke-width="2"/>
+
+  <!-- Complete technical model -->
+  <text x="34" y="121" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="700" fill="#202020">实际技术架构</text>
+  <rect x="30" y="138" width="840" height="407" rx="18" fill="#FCFCFC" stroke="#D5D5D5" stroke-width="1.7"/>
+
+  <g font-family="Arial, Helvetica, sans-serif">
+    <!-- Inputs and coordinator -->
+    <rect x="54" y="158" width="151" height="65" rx="14" fill="#F2F2F2" stroke="#777777" stroke-width="1.5"/>
+    <text x="129.5" y="181" text-anchor="middle" font-size="10" font-weight="700" fill="#777777">CODING AGENT</text>
+    <text x="129.5" y="204" text-anchor="middle" font-size="14.5" font-weight="700" fill="#202020">Claude / Codex / Goose</text>
+
+    <rect x="275" y="151" width="250" height="78" rx="16" fill="#F2F2F2" stroke="#202020" stroke-width="1.8"/>
+    <text x="400" y="177" text-anchor="middle" font-size="17" font-weight="700" fill="#202020">Container Use process</text>
+    <text x="400" y="199" text-anchor="middle" font-size="11.5" fill="#555555">stdio MCP server · Repository coordinator</text>
+    <text x="400" y="216" text-anchor="middle" font-size="10.5" fill="#777777">holds dagger.Client</text>
+
+    <rect x="594" y="151" width="247" height="78" rx="14" fill="#FFFFFF" stroke="#777777" stroke-width="1.5"/>
+    <text x="717.5" y="175" text-anchor="middle" font-size="10" font-weight="700" fill="#777777">PROJECT BASELINE</text>
+    <text x="717.5" y="197" text-anchor="middle" font-family="SFMono-Regular, Menlo, Consolas, monospace" font-size="12.2" font-weight="700" fill="#202020">.container-use/environment.json</text>
+    <text x="717.5" y="215" text-anchor="middle" font-size="10.2" fill="#666666">base · setup/install · env · services</text>
+  </g>
+
+  <path d="M205 190 L275 190" fill="none" stroke="#202020" stroke-width="2.2" marker-end="url(#arrowBlack)"/>
+  <text x="240" y="178" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="9.5" font-weight="700" fill="#777777">STDIO MCP</text>
+  <path d="M594 190 L525 190" fill="none" stroke="#777777" stroke-width="1.8" stroke-dasharray="5 4" marker-end="url(#arrowGray)"/>
+  <text x="559" y="178" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="8.9" font-weight="700" fill="#777777">CREATE / CONFIG IMPORT</text>
+
+  <!-- Environment identity hub -->
+  <path d="M400 229 L400 248" fill="none" stroke="#E2383F" stroke-width="2.6" marker-end="url(#arrowRed)"/>
+  <rect x="277" y="250" width="246" height="42" rx="21" fill="#E2383F"/>
+  <text x="400" y="276" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="700" fill="#FFFFFF">Environment ID · env-42</text>
+
+  <rect x="586" y="246" width="255" height="50" rx="14" fill="#FFFFFF" stroke="#777777" stroke-width="1.5"/>
+  <text x="713.5" y="266" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="10" font-weight="700" fill="#777777">ENGINEER CLI</text>
+  <text x="713.5" y="284" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="10.3" font-weight="700" fill="#303030">inspect / terminal / merge / apply / delete</text>
+
+  <!-- Two state planes -->
+  <rect x="54" y="319" width="365" height="150" rx="16" fill="#FFFFFF" stroke="#202020" stroke-width="1.8"/>
+  <rect x="481" y="319" width="360" height="150" rx="16" fill="#FFFFFF" stroke="#202020" stroke-width="1.8"/>
+
+  <g font-family="Arial, Helvetica, sans-serif">
+    <text x="74" y="342" font-size="11" font-weight="700" fill="#777777">GIT STATE PLANE</text>
+    <text x="501" y="342" font-size="11" font-weight="700" fill="#777777">DAGGER EXECUTION STATE PLANE</text>
+
+    <rect x="72" y="354" width="329" height="31" rx="8" fill="#F2F2F2"/>
+    <text x="88" y="374" font-family="SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" font-weight="700" fill="#303030">local bare repo · container-use remote</text>
+
+    <rect x="72" y="394" width="101" height="54" rx="9" fill="#FFFFFF" stroke="#777777" stroke-width="1.3"/>
+    <rect x="183" y="394" width="101" height="54" rx="9" fill="#FFFFFF" stroke="#777777" stroke-width="1.3"/>
+    <rect x="294" y="394" width="107" height="54" rx="9" fill="#FFFFFF" stroke="#777777" stroke-width="1.3"/>
+    <text x="122.5" y="416" text-anchor="middle" font-size="10.5" font-weight="700" fill="#202020">env branch</text>
+    <text x="122.5" y="433" text-anchor="middle" font-size="9" fill="#666666">container-use/env-42</text>
+    <text x="233.5" y="416" text-anchor="middle" font-size="10.5" font-weight="700" fill="#202020">worktree</text>
+    <text x="233.5" y="433" text-anchor="middle" font-size="9" fill="#666666">source changes</text>
+    <text x="347.5" y="416" text-anchor="middle" font-size="10.5" font-weight="700" fill="#202020">Git notes</text>
+    <text x="347.5" y="433" text-anchor="middle" font-size="8.8" fill="#666666">history + state(ContainerID)</text>
+
+    <rect x="501" y="354" width="103" height="94" rx="11" fill="#FFFFFF" stroke="#777777" stroke-width="1.4"/>
+    <text x="552.5" y="384" text-anchor="middle" font-size="10.5" font-weight="700" fill="#202020">dagger.Client</text>
+    <text x="552.5" y="405" text-anchor="middle" font-size="9.4" fill="#666666">LoadContainerFromID</text>
+    <text x="552.5" y="423" text-anchor="middle" font-size="9.4" fill="#666666">WithExec · Sync</text>
+
+    <rect x="622" y="354" width="99" height="94" rx="11" fill="#F2F2F2" stroke="#202020" stroke-width="1.5"/>
+    <text x="671.5" y="385" text-anchor="middle" font-size="12" font-weight="700" fill="#202020">Dagger</text>
+    <text x="671.5" y="402" text-anchor="middle" font-size="12" font-weight="700" fill="#202020">Engine</text>
+    <text x="671.5" y="424" text-anchor="middle" font-size="9.5" fill="#666666">executes container</text>
+
+    <rect x="739" y="354" width="84" height="94" rx="11" fill="#FFFFFF" stroke="#202020" stroke-width="1.4"/>
+    <text x="781" y="385" text-anchor="middle" font-size="10.5" font-weight="700" fill="#202020">ContainerID</text>
+    <text x="781" y="405" text-anchor="middle" font-size="9.1" fill="#666666">loaded from notes</text>
+    <text x="781" y="421" text-anchor="middle" font-size="9.1" fill="#666666">filesystem state ref</text>
+  </g>
+
+  <path d="M400 292 C400 307 236 301 236 319" fill="none" stroke="#E2383F" stroke-width="2.2" marker-end="url(#arrowRed)"/>
+  <path d="M400 292 C400 307 661 301 661 319" fill="none" stroke="#E2383F" stroke-width="2.2" marker-end="url(#arrowRed)"/>
+  <text x="274" y="310" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="9.2" font-weight="700" fill="#E2383F">branch · worktree · notes</text>
+  <text x="576" y="310" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="9.2" font-weight="700" fill="#E2383F">container state</text>
+
+  <path d="M604 401 L622 401" fill="none" stroke="#202020" stroke-width="1.8" marker-end="url(#arrowBlack)"/>
+  <path d="M721 401 L739 401" fill="none" stroke="#202020" stroke-width="1.8" marker-end="url(#arrowBlack)"/>
+  <path d="M419 382 L481 382" fill="none" stroke="#777777" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#arrowGray)"/>
+  <text x="450" y="374" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="8.5" font-weight="700" fill="#777777">SOURCE</text>
+  <path d="M481 438 L419 438" fill="none" stroke="#777777" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#arrowGray)"/>
+  <text x="450" y="432" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="8.2" font-weight="700" fill="#777777">EXPORT / COMMIT</text>
+  <path d="M841 271 C856 271 854 494 841 494" fill="none" stroke="#777777" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#arrowGray)"/>
+
+  <!-- Lifecycle and implementation boundary -->
+  <rect x="54" y="480" width="787" height="28" rx="14" fill="#ECECEC"/>
+  <text x="447.5" y="499" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="10.2" font-weight="700" fill="#555555">create(ref) → run / modify → update worktree + notes + ContainerID → Engineer inspect / continue / merge / apply / delete</text>
+  <rect x="54" y="515" width="787" height="20" rx="10" fill="#F3F3F3"/>
+  <text x="447.5" y="529" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="9.6" font-weight="700" fill="#666666">边界：ContainerID 引用文件系统状态；运行中的 service / tunnel / 外部副作用不属于同等持久状态</text>
+
+  <!-- Failure-handling relevance -->
+  <rect x="30" y="554" width="840" height="42" rx="13" fill="#FFF0F1" stroke="#E2383F" stroke-width="1.3"/>
+  <text x="49" y="580" font-family="Arial, Helvetica, sans-serif" font-size="13.2" font-weight="700" fill="#E2383F">执行结果归档为候选环境</text>
+  <text x="246" y="580" font-family="Arial, Helvetica, sans-serif" font-size="11.8" fill="#444444">保存 ContainerID、exit code 与输出，并把工作目录变更导出到独立分支</text>
+
+  <!-- Core capabilities -->
+  <text x="34" y="626" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="700" fill="#202020">核心能力</text>
+  <line x1="118" y1="621" x2="870" y2="621" stroke="#E1E1E1" stroke-width="1.5"/>
+
+  <g font-family="Arial, Helvetica, sans-serif">
+    <rect x="30" y="644" width="410" height="81" rx="14" fill="#F7F7F7"/>
+    <text x="52" y="673" font-size="14" font-weight="700" fill="#777777">01</text>
+    <text x="87" y="673" font-size="15.5" font-weight="700" fill="#202020">任务执行与代码归档分离</text>
+    <text x="87" y="697" font-size="12.2" fill="#666666">Agent 在 Dagger Container 中操作，代码导出</text>
+    <text x="87" y="715" font-size="12.2" fill="#666666">并提交到独立 Environment branch。</text>
+
+    <rect x="460" y="644" width="410" height="81" rx="14" fill="#F7F7F7"/>
+    <text x="482" y="673" font-size="14" font-weight="700" fill="#777777">02</text>
+    <text x="517" y="673" font-size="15.5" font-weight="700" fill="#202020">执行状态回到同一 Environment</text>
+    <text x="517" y="697" font-size="12.2" fill="#666666">前台命令后保存 ContainerID、exit code</text>
+    <text x="517" y="715" font-size="12.2" fill="#666666">与输出，下一轮可从该状态继续。</text>
+
+    <rect x="30" y="737" width="410" height="81" rx="14" fill="#F7F7F7"/>
+    <text x="52" y="766" font-size="14" font-weight="700" fill="#777777">03</text>
+    <text x="87" y="766" font-size="15.5" font-weight="700" fill="#202020">配置成为 Environment 的一部分</text>
+    <text x="87" y="790" font-size="12.2" fill="#666666">项目配置定义新环境基线，State 保存本次</text>
+    <text x="87" y="808" font-size="12.2" fill="#666666">配置快照与 service 定义。</text>
+
+    <rect x="460" y="737" width="410" height="81" rx="14" fill="#F7F7F7"/>
+    <text x="482" y="766" font-size="14" font-weight="700" fill="#777777">04</text>
+    <text x="517" y="766" font-size="15.5" font-weight="700" fill="#202020">工程师通过 Git 决定去留</text>
+    <text x="517" y="790" font-size="12.2" fill="#666666">log、diff、terminal、checkout 支持审阅；</text>
+    <text x="517" y="808" font-size="12.2" fill="#666666">merge、apply、delete 完成处置。</text>
+  </g>
+</svg>

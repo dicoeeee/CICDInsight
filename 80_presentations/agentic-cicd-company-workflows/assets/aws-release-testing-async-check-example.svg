@@ -1,0 +1,120 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="860" viewBox="0 0 1500 860">
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L10,5 L0,10 Z" fill="#1B1B1B"/>
+    </marker>
+    <marker id="arrow-red" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L10,5 L0,10 Z" fill="#D92D2D"/>
+    </marker>
+    <style>
+      .title { font: 700 38px Arial, 'PingFang SC', 'Microsoft YaHei', sans-serif; fill: #111111; }
+      .subtitle { font: 400 22px Arial, 'PingFang SC', 'Microsoft YaHei', sans-serif; fill: #5D5D5D; }
+      .lane { font: 700 24px Arial, 'PingFang SC', 'Microsoft YaHei', sans-serif; fill: #FFFFFF; }
+      .node-title { font: 700 25px Arial, 'PingFang SC', 'Microsoft YaHei', sans-serif; fill: #171717; }
+      .node-copy { font: 400 20px Arial, 'PingFang SC', 'Microsoft YaHei', sans-serif; fill: #454545; }
+      .small { font: 400 18px Arial, 'PingFang SC', 'Microsoft YaHei', sans-serif; fill: #565656; }
+      .lane-small { font: 400 18px Arial, 'PingFang SC', 'Microsoft YaHei', sans-serif; fill: #D7D7D3; }
+      .gate-small { font: 400 18px Arial, 'PingFang SC', 'Microsoft YaHei', sans-serif; fill: #FFFFFF; }
+      .small-red { font: 700 18px Arial, 'PingFang SC', 'Microsoft YaHei', sans-serif; fill: #B42318; }
+      .mono { font: 700 19px Menlo, Consolas, monospace; fill: #171717; }
+      .insight { font: 700 21px Arial, 'PingFang SC', 'Microsoft YaHei', sans-serif; fill: #171717; }
+    </style>
+  </defs>
+
+  <rect width="1500" height="860" fill="#FFFFFF"/>
+
+  <text x="48" y="58" class="title">示例：PR #482 认证模块重构</text>
+  <text x="48" y="94" class="subtitle">当前提交版本 commit SHA：9f3a81c · 验证目标：已部署的 staging 应用</text>
+
+  <!-- Lane backgrounds -->
+  <rect x="42" y="126" width="1416" height="222" rx="14" fill="#F6F6F4" stroke="#D4D4D0" stroke-width="2"/>
+  <rect x="42" y="368" width="1416" height="198" rx="14" fill="#FFF5F4" stroke="#E9B3AF" stroke-width="2"/>
+  <rect x="42" y="586" width="1416" height="170" rx="14" fill="#F6F6F4" stroke="#D4D4D0" stroke-width="2"/>
+
+  <!-- Lane labels -->
+  <rect x="42" y="126" width="214" height="222" rx="14" fill="#262626"/>
+  <text x="72" y="181" class="lane">GitHub Actions</text>
+  <text x="72" y="217" class="lane">流水线适配器</text>
+  <text x="72" y="274" class="lane-small">负责触发与提交</text>
+
+  <rect x="42" y="368" width="214" height="198" rx="14" fill="#D92D2D"/>
+  <text x="72" y="425" class="lane">AWS Agent Space</text>
+  <text x="72" y="461" class="lane">Agent 执行面</text>
+  <text x="72" y="518" class="gate-small">负责生成与执行</text>
+
+  <rect x="42" y="586" width="214" height="170" rx="14" fill="#262626"/>
+  <text x="72" y="642" class="lane">GitHub</text>
+  <text x="72" y="678" class="lane">状态与 Gate</text>
+  <text x="72" y="724" class="lane-small">负责状态与执法</text>
+
+  <!-- Pipeline nodes -->
+  <rect x="292" y="177" width="220" height="116" rx="12" fill="#FFFFFF" stroke="#8D8D88" stroke-width="2"/>
+  <text x="402" y="218" text-anchor="middle" class="node-title">① 部署完成</text>
+  <text x="402" y="257" text-anchor="middle" class="node-copy">staging 已就绪</text>
+
+  <line x1="514" y1="235" x2="556" y2="235" stroke="#1B1B1B" stroke-width="3" marker-end="url(#arrow)"/>
+
+  <rect x="566" y="151" width="510" height="168" rx="12" fill="#FFFFFF" stroke="#8D8D88" stroke-width="2"/>
+  <text x="591" y="188" class="node-title">② Action 封装验证作业</text>
+  <rect x="591" y="207" width="204" height="38" rx="19" fill="#ECECE9"/>
+  <text x="693" y="233" text-anchor="middle" class="mono">SHA 9f3a81c</text>
+  <rect x="809" y="207" width="126" height="38" rx="19" fill="#ECECE9"/>
+  <text x="872" y="233" text-anchor="middle" class="small">PR #482</text>
+  <rect x="591" y="257" width="215" height="38" rx="19" fill="#FDE8E6"/>
+  <text x="698" y="283" text-anchor="middle" class="small-red">稳定测试档案</text>
+  <rect x="820" y="257" width="230" height="38" rx="19" fill="#FDE8E6"/>
+  <text x="935" y="283" text-anchor="middle" class="small-red">本次测试要求</text>
+
+  <!-- Revision callout -->
+  <rect x="1120" y="159" width="298" height="152" rx="12" fill="#FFFFFF" stroke="#D92D2D" stroke-width="2"/>
+  <text x="1146" y="198" class="node-title">版本锚定</text>
+  <text x="1146" y="231" class="node-copy">结果只属于</text>
+  <text x="1146" y="261" class="mono">commit 9f3a81c</text>
+  <text x="1146" y="292" class="small">新提交必须重新验证</text>
+  <path d="M1076 226 C1095 226, 1097 226, 1120 226" fill="none" stroke="#D92D2D" stroke-width="2.5" stroke-dasharray="7 6" marker-end="url(#arrow-red)"/>
+
+  <!-- Submit connector -->
+  <path d="M821 319 L821 389" fill="none" stroke="#D92D2D" stroke-width="3" marker-end="url(#arrow-red)"/>
+  <rect x="846" y="329" width="306" height="52" rx="10" fill="#FFFFFF" stroke="#E9B3AF" stroke-width="1.5"/>
+  <text x="999" y="352" text-anchor="middle" class="small-red">Webhook 提交作业</text>
+  <text x="999" y="374" text-anchor="middle" class="small">返回 2xx 后 Action 结束</text>
+
+  <!-- Agent execution -->
+  <rect x="343" y="412" width="410" height="108" rx="12" fill="#FFFFFF" stroke="#D92D2D" stroke-width="2"/>
+  <text x="548" y="454" text-anchor="middle" class="node-title">③ 生成变更特定测试计划</text>
+  <text x="548" y="490" text-anchor="middle" class="node-copy">结合测试档案与本次要求</text>
+
+  <line x1="755" y1="466" x2="808" y2="466" stroke="#D92D2D" stroke-width="3" marker-end="url(#arrow-red)"/>
+
+  <rect x="820" y="412" width="410" height="108" rx="12" fill="#FFFFFF" stroke="#D92D2D" stroke-width="2"/>
+  <text x="1025" y="454" text-anchor="middle" class="node-title">④ 对目标应用执行</text>
+  <text x="1025" y="490" text-anchor="middle" class="node-copy">执行发生在 Agent Space</text>
+
+  <!-- Result connector -->
+  <path d="M1025 520 L1025 574 L541 574 L541 608" fill="none" stroke="#1B1B1B" stroke-width="3" marker-end="url(#arrow)"/>
+  <rect x="730" y="552" width="140" height="36" rx="8" fill="#FFFFFF"/>
+  <text x="800" y="577" text-anchor="middle" class="small">异步回写</text>
+
+  <!-- Check and gate -->
+  <rect x="326" y="622" width="430" height="100" rx="12" fill="#FFFFFF" stroke="#8D8D88" stroke-width="2"/>
+  <text x="351" y="659" class="node-title">⑤ Check Run</text>
+  <text x="351" y="696" class="node-copy">进行中</text>
+  <line x1="455" y1="690" x2="507" y2="690" stroke="#1B1B1B" stroke-width="2.5" marker-end="url(#arrow)"/>
+  <text x="529" y="696" class="node-copy">通过 / 失败</text>
+
+  <line x1="758" y1="672" x2="806" y2="672" stroke="#1B1B1B" stroke-width="3" marker-end="url(#arrow)"/>
+
+  <rect x="818" y="622" width="264" height="100" rx="12" fill="#FFFFFF" stroke="#8D8D88" stroke-width="2"/>
+  <text x="950" y="659" text-anchor="middle" class="node-title">Required Check</text>
+  <text x="950" y="696" text-anchor="middle" class="small">仓库规则决定是否必需</text>
+
+  <line x1="1084" y1="672" x2="1128" y2="672" stroke="#1B1B1B" stroke-width="3" marker-end="url(#arrow)"/>
+
+  <rect x="1140" y="622" width="250" height="100" rx="12" fill="#262626"/>
+  <text x="1265" y="659" text-anchor="middle" class="lane">Gate</text>
+  <text x="1265" y="696" text-anchor="middle" class="gate-small">允许合并 / 阻断</text>
+
+  <!-- Footer insight -->
+  <rect x="42" y="784" width="1416" height="54" rx="10" fill="#FFF0EE"/>
+  <text x="750" y="818" text-anchor="middle" class="insight">关键机制：commit SHA 锚定 · Action 只提交 · Agent 外部执行 · Check Run 回写 · 宿主规则形成 Gate</text>
+</svg>

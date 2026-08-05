@@ -1,0 +1,10 @@
+{"kind":"deck","id":"pr/gg62dd","name":"Deck"}
+{"kind":"layout","layoutId":"8255aaec-642d-43a8-a665-e294002cfbe8","name":"Master","type":"master"}
+{"kind":"layout","layoutId":"8de786d6-c889-4a2a-bf46-470383d2efa2","name":"Title Slide","type":"title"}
+{"kind":"slide","id":"sl/bund4t","slide":1,"title":"Slide 1","textShapes":0}
+{"kind":"table","id":"tb/axs72947","slide":1,"name":"","rows":1,"cols":2,"preview":"CLI 贯穿软件交付作业链，直接执行与标准接入协同演进 | 技术洞察 · 2026-07-28","bbox":[40,18,1840,62]}
+{"kind":"table","id":"tb/wzap4zmd","slide":1,"name":"","rows":7,"cols":5,"preview":"作业阶段 | 公司 / CLI | 功能方向 | MCP 接入方式 | MCP 形态 / 成熟度","bbox":[40,630,900,410]}
+{"kind":"table","id":"tb/nu187ulw","slide":1,"name":"","rows":5,"cols":3,"preview":"对比维度 | CLI｜直接执行面 | MCP｜标准接入面","bbox":[964,630,916,240]}
+{"kind":"table","id":"tb/mt87yp4b","slide":1,"name":"","rows":3,"cols":3,"preview":"CLI 趋势 | Agent CLI 从交互命令走向 Headless、结构化输出与 Skill，成为可重放的高保真执行面。 | Codex · Claude Code · Copilot","bbox":[964,884,916,156]}
+{"kind":"image","id":"im/lsja5432","slide":1,"name":"","alt":"CLI 贯穿软件交付作业链：跨阶段 Headless Agent CLI 与六个软件交付阶段","bbox":[40,94,1840,518]}
+{"kind":"notes","id":"nt/bund4t","slide":1,"text":"[Sources]\n- Top workflow image and its source map: outputs/cli-upper-half-c-final-light.png; outputs/cli-upper-half-c-refined-command-sources.md\n- Representative table source map: outputs/cli-lower-left-representative-table-sources.md\n- CLI/MCP evidence audit: 50_deepdives/cli-agent-interface/industry-mcp-evolution-and-progressive-discovery-2026-07-28.md\n- Claude Code Tool Search: https://code.claude.com/docs/en/mcp#scale-with-mcp-tool-search\n- MCP Client Best Practices: https://modelcontextprotocol.io/docs/develop/clients/client-best-practices\n- Thoughtworks Technology Radar, MCP by default: https://www.thoughtworks.com/radar/techniques/mcp-by-default\n[/Sources]\n\nEvidence boundary: Tool Search is a host/client implementation pattern, not an MCP core RPC guarantee. Thoughtworks cautions against default adoption and explicitly does not reject MCP.\nas_of: 2026-07-28"}

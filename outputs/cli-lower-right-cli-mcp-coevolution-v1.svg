@@ -1,0 +1,129 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2200" height="1040" viewBox="0 0 2200 1040">
+  <defs>
+    <filter id="shadow" x="-10%" y="-15%" width="120%" height="135%">
+      <feDropShadow dx="0" dy="8" stdDeviation="16" flood-color="#19324C" flood-opacity="0.08"/>
+    </filter>
+    <linearGradient id="trendBg" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#F3F8FF"/>
+      <stop offset="0.5" stop-color="#F8F9FC"/>
+      <stop offset="1" stop-color="#FFF7F2"/>
+    </linearGradient>
+    <style>
+      .sans { font-family: "Microsoft YaHei", "PingFang SC", Arial, sans-serif; }
+      .mono { font-family: "SFMono-Regular", "JetBrains Mono", Menlo, monospace; }
+      .navy { fill: #19324C; }
+      .body { fill: #34495F; }
+      .muted { fill: #74849A; }
+      .cli { fill: #4967E8; }
+      .mcp { fill: #EF7043; }
+    </style>
+  </defs>
+
+  <rect width="2200" height="1040" fill="#FFFFFF"/>
+
+  <!-- Title -->
+  <text x="36" y="72" class="sans navy" font-size="48" font-weight="700" letter-spacing="0.5">CLI 与 MCP 正在协同演进，而非相互替代</text>
+  <text x="2164" y="67" class="sans muted" font-size="24" font-weight="600" text-anchor="end">直接执行 × 标准接入</text>
+  <rect x="36" y="94" width="116" height="7" rx="3.5" fill="#EF7043"/>
+
+  <!-- CLI card -->
+  <g filter="url(#shadow)">
+    <rect x="36" y="130" width="1034" height="402" rx="22" fill="#FFFFFF" stroke="#CCD7E8" stroke-width="2"/>
+  </g>
+  <rect x="36" y="130" width="10" height="402" rx="5" fill="#4967E8"/>
+  <rect x="72" y="164" width="62" height="62" rx="16" fill="#EDF1FF"/>
+  <text x="103" y="206" class="mono cli" font-size="27" font-weight="800" text-anchor="middle">&gt;_</text>
+  <text x="157" y="192" class="sans navy" font-size="34" font-weight="750">CLI｜直接执行面</text>
+  <text x="157" y="224" class="sans muted" font-size="22" font-weight="500">高保真复用成熟工具</text>
+  <rect x="796" y="168" width="232" height="42" rx="21" fill="#EDF1FF"/>
+  <text x="912" y="197" class="sans cli" font-size="21" font-weight="700" text-anchor="middle">Local / Runner</text>
+
+  <circle cx="88" cy="278" r="8" fill="#4967E8"/>
+  <text x="112" y="288" class="sans navy" font-size="27" font-weight="700">完整执行语义</text>
+  <text x="360" y="288" class="sans body" font-size="24">Shell · 文件 · 管道 · 退出码</text>
+
+  <circle cx="88" cy="345" r="8" fill="#4967E8"/>
+  <text x="112" y="355" class="sans navy" font-size="27" font-weight="700">低附加抽象</text>
+  <text x="360" y="355" class="sans body" font-size="24">直接重放、诊断与自动化</text>
+
+  <circle cx="88" cy="412" r="8" fill="#4967E8"/>
+  <text x="112" y="422" class="sans navy" font-size="27" font-weight="700">Agent 化方向</text>
+  <text x="360" y="422" class="sans body" font-size="24">Headless · JSON · Approval · Skill</text>
+
+  <rect x="72" y="461" width="956" height="48" rx="12" fill="#F5F7FF"/>
+  <text x="94" y="494" class="sans cli" font-size="22" font-weight="700">更适合</text>
+  <text x="191" y="494" class="sans body" font-size="22">本地工程动作 · 已有成熟 CLI · 强执行语义</text>
+
+  <!-- MCP card -->
+  <g filter="url(#shadow)">
+    <rect x="1130" y="130" width="1034" height="402" rx="22" fill="#FFFFFF" stroke="#E4D2C9" stroke-width="2"/>
+  </g>
+  <rect x="2154" y="130" width="10" height="402" rx="5" fill="#EF7043"/>
+  <rect x="1166" y="164" width="62" height="62" rx="16" fill="#FFF0E9"/>
+  <path d="M1182 184h13l7 10-7 10h-13l-7-10z M1198 184h13l7 10-7 10h-13l-7-10z" fill="none" stroke="#EF7043" stroke-width="3.5" stroke-linejoin="round"/>
+  <text x="1251" y="192" class="sans navy" font-size="34" font-weight="750">MCP｜标准接入面</text>
+  <text x="1251" y="224" class="sans muted" font-size="22" font-weight="500">跨系统互操作与治理</text>
+  <rect x="1924" y="168" width="198" height="42" rx="21" fill="#FFF0E9"/>
+  <text x="2023" y="197" class="sans mcp" font-size="21" font-weight="700" text-anchor="middle">Local / Remote</text>
+
+  <circle cx="1182" cy="278" r="8" fill="#EF7043"/>
+  <text x="1206" y="288" class="sans navy" font-size="27" font-weight="700">标准化契约</text>
+  <text x="1454" y="288" class="sans body" font-size="24">Tools · Resources · Prompts</text>
+
+  <circle cx="1182" cy="345" r="8" fill="#EF7043"/>
+  <text x="1206" y="355" class="sans navy" font-size="27" font-weight="700">互操作与治理</text>
+  <text x="1454" y="355" class="sans body" font-size="24">Remote · OAuth · Multi-client</text>
+
+  <circle cx="1182" cy="412" r="8" fill="#EF7043"/>
+  <text x="1206" y="422" class="sans navy" font-size="27" font-weight="700">工程化方向</text>
+  <text x="1454" y="422" class="sans body" font-size="24">Tool Search · 动态更新 · 按需加载</text>
+
+  <rect x="1166" y="461" width="956" height="48" rx="12" fill="#FFF8F4"/>
+  <text x="1188" y="494" class="sans mcp" font-size="22" font-weight="700">更适合</text>
+  <text x="1285" y="494" class="sans body" font-size="22">远程系统 · 跨客户端 · OAuth / 企业治理</text>
+
+  <!-- Convergence / trend -->
+  <rect x="36" y="560" width="2128" height="268" rx="20" fill="url(#trendBg)" stroke="#D7DFEA" stroke-width="2"/>
+  <rect x="68" y="590" width="186" height="40" rx="20" fill="#19324C"/>
+  <text x="161" y="618" class="sans" fill="#FFFFFF" font-size="21" font-weight="700" text-anchor="middle">共同趋势</text>
+  <text x="278" y="619" class="sans navy" font-size="30" font-weight="750">渐进发现成为 CLI 与 MCP 的收敛点</text>
+
+  <!-- convergence path -->
+  <rect x="74" y="662" width="454" height="72" rx="16" fill="#FFFFFF" stroke="#BFCBF2" stroke-width="2"/>
+  <text x="301" y="692" class="sans cli" font-size="22" font-weight="750" text-anchor="middle">CLI / Skill</text>
+  <text x="301" y="720" class="sans body" font-size="21" text-anchor="middle">--help · schema · command discovery</text>
+  <path d="M530 698H751" stroke="#91A0B5" stroke-width="4" stroke-linecap="round"/>
+  <path d="M751 698l-16-10v20z" fill="#91A0B5"/>
+
+  <rect x="758" y="650" width="684" height="96" rx="48" fill="#FFFFFF" stroke="#AAB8CA" stroke-width="2.5"/>
+  <circle cx="822" cy="698" r="27" fill="#19324C"/>
+  <path d="M812 698l8 8 15-18" fill="none" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="1100" y="691" class="sans navy" font-size="27" font-weight="750" text-anchor="middle">Agent 按需发现并加载能力</text>
+  <text x="1100" y="721" class="sans muted" font-size="20" font-weight="500" text-anchor="middle">只把任务需要的工具定义带入上下文</text>
+
+  <path d="M1670 698H1449" stroke="#91A0B5" stroke-width="4" stroke-linecap="round"/>
+  <path d="M1449 698l16-10v20z" fill="#91A0B5"/>
+  <rect x="1672" y="662" width="454" height="72" rx="16" fill="#FFFFFF" stroke="#F0C5B5" stroke-width="2"/>
+  <text x="1899" y="692" class="sans mcp" font-size="22" font-weight="750" text-anchor="middle">MCP / Tool Search</text>
+  <text x="1899" y="720" class="sans body" font-size="21" text-anchor="middle">search_tools · deferred schema</text>
+
+  <text x="74" y="790" class="sans body" font-size="21.5">
+    <tspan font-weight="750" fill="#19324C">Claude Code</tspan>
+    <tspan>：Tool Search 默认开启，完整 schema 按需进入上下文</tspan>
+  </text>
+  <text x="895" y="790" class="sans body" font-size="21.5">
+    <tspan font-weight="750" fill="#19324C">MCP 官方</tspan>
+    <tspan>：推荐 progressive discovery + programmatic tool calling</tspan>
+  </text>
+
+  <!-- Evidence and synthesis -->
+  <rect x="36" y="852" width="2128" height="148" rx="20" fill="#FFF8F4" stroke="#F0C5B5" stroke-width="2"/>
+  <rect x="68" y="879" width="210" height="44" rx="22" fill="#EF7043"/>
+  <text x="173" y="909" class="sans" fill="#FFFFFF" font-size="22" font-weight="750" text-anchor="middle">技术判断</text>
+  <text x="306" y="912" class="sans navy" font-size="29" font-weight="750">不要过度采用 MCP ≠ 否定 MCP</text>
+  <text x="68" y="963" class="sans body" font-size="23.5">选择标准：互操作与治理的增量收益，能否覆盖新增协议层、运维与权限复杂度</text>
+  <rect x="1746" y="870" width="376" height="108" rx="14" fill="#FFFFFF" stroke="#E4D2C9" stroke-width="1.5"/>
+  <text x="1934" y="906" class="sans mcp" font-size="20" font-weight="750" text-anchor="middle">Thoughtworks · Caution</text>
+  <text x="1934" y="939" class="sans muted" font-size="19" text-anchor="middle">反对 “MCP by default”</text>
+  <text x="1934" y="967" class="sans muted" font-size="19" text-anchor="middle">不是反对 MCP</text>
+</svg>
