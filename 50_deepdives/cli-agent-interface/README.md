@@ -52,6 +52,7 @@ refresh_after: 2026-10-27
 - MCP 的协议、传输、授权、Registry 与互操作：[[50_deepdives/mcp-protocol/README|MCP 专题]]。
 - 将应用生成 Agent-ready CLI 的具体项目：[[50_deepdives/cli-anything/README|CLI-Anything 专题]]。
 - 二者只在需要做技术选型时比较：[[50_deepdives/cli-vs-mcp-decision-guide|CLI 与 MCP 决策指南]]。
+- 业界实践者倾向 CLI 的具体论点和证据：[[50_deepdives/cli-first-practitioner-arguments/README|CLI-First 实践者论点]]。
 
 ## 上下游关系
 

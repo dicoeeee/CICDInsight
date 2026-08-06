@@ -58,3 +58,4 @@ refresh_after: 2026-07-29
 - CLI 的进程契约、结构化输出和 Runner 用法：[[50_deepdives/cli-agent-interface/README|CLI 专题]]。
 - CLI-Anything 生成接口的方法和成熟度：[[50_deepdives/cli-anything/README|CLI-Anything 专题]]。
 - 仅在选型层做交叉比较：[[50_deepdives/cli-vs-mcp-decision-guide|CLI 与 MCP 决策指南]]。
+- 业界实践者倾向 CLI 的具体论点和证据：[[50_deepdives/cli-first-practitioner-arguments/README|CLI-First 实践者论点]]。
