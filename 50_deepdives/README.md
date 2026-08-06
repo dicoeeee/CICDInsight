@@ -56,6 +56,7 @@ as_of: 2026-08-03
 | [[50_deepdives/runtime-generated-verification-gates/README|Agent 生成验证的运行时 Gate]] | 生成式验证与门禁控制 | 变更感知验证的规划、执行、证据契约、Gate adapter，以及 AWS Release Management 与 Meta JiTTesting 的机制边界 | 测试生成算法、mutant 质量、UI/API 测试类型 | complete |
 | [[50_deepdives/harness-company/README|Harness 公司]] | 单一厂商/平台 | Harness Inc. 产品组合、Agent 应用、Knowledge Graph/MCP/Pipeline 原理、隔离与委托权限、案例、成熟度和采购落地 | 通用 Agent Harness 工程方法、所有 Agent Runtime 横向比较 | complete |
 | [[50_deepdives/aws-devops-agent/README|AWS DevOps Agent]] | 单一厂商/平台 | Agent Space、Topology、Learned Skills、Production Operations、Release Management、IAM/数据/执行边界与企业试点 | AWS 全产品线、通用 AIOps 横评、端到端自主发布效果 | complete |
+| [[50_deepdives/aws-microsoft-intelligent-cicd/README|AWS 与 Microsoft 智能化 CI/CD 对比]] | 双公司能力对比 | AWS 与 Microsoft（GitHub/Azure DevOps/Azure）在发布前审查、合并前门禁、发布后恢复的 Agent 能力清单、生命周期与授权边界 | 全产品线盘点、成熟度排名、跨企业效果、端到端自治 | complete |
 | [[50_deepdives/amazon-bedrock-agentcore/README|Amazon Bedrock AgentCore]] | Agent 生产运行与治理平台 | Harness/Runtime、Gateway/Identity/Policy、Memory、Observability/Evaluations/Optimization，以及 Agent 行动与质量双闭环 | AWS DevOps Agent 业务能力、通用 Agent framework 横评、把 Evaluation 当发布授权 | complete |
 | [[50_deepdives/dagger/README|Dagger]] | 可编程软件交付执行层 | Engine、Module/Function、增量执行、Hybrid CI、Cloud、特权边界、LLM/MCP、采用与替代关系 | 通用 CI 平台全功能采购横评、完整 SDK 教程、所有 Build System 基准 | complete |
 | [[50_deepdives/claude-code-container-use/README|Claude Code × Dagger Container Use]] | Agent 候选执行环境 | Claude 原生 worktree/并行能力与 Container Use 的容器状态、执行历史、环境配置和本地—CI 复用边界 | Claude 模型质量 Benchmark、通用 Agent 编排、成熟联合客户方案 | complete |
