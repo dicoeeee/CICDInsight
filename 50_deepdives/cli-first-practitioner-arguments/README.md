@@ -10,6 +10,7 @@ tags:
   - tool/mcp
 status: complete
 as_of: 2026-08-06
+refresh_note: "2026-08-06 增加 2026 年安全事件、MCP 2026-07-28 规范和观点转变证据"
 topic_id: cli-first-practitioner-arguments
 topic_type: industry-viewpoint
 stages:
@@ -22,16 +23,16 @@ refresh_after: 2026-11-06
 # 业界实践者倾向 CLI 的论点与证据
 
 > [!abstract] 当前判断
-> 2025 年下半年至 2026 年上半年，一批具有实际 Agent 构建经验的工程师和产品团队公开表达了对 CLI 的偏好。他们的核心论点不是"CLI 比 MCP 好"，而是"在多数单 Harness、本地或 Runner 场景中，CLI 的上下文零成本、可组合性和 OS 级安全模型使 MCP 成为不必要的复杂度层"。这些观点来自一手实践，具有明确的适用边界，不能外推为行业平均结论。
+> 2025 年 CLI-first 论点的核心判断（上下文零成本、Unix 可组合性）仍然成立，但 2026 年的安全事件（OpenAI/Hugging Face）和协议演进（MCP 2026-07-28 规范）显著改变了讨论格局。关键转变：Simon Willison 因安全事件部分逆转立场，认为 MCP 在敏感应用中更易审计和控制；MCP 无状态核心直接回应了上下文成本批评；主流 CLI Agent 全部采用 CLI-first + MCP-optional 架构。2026 年的新兴共识是分层而非替代：CLI + Auto Mode（开发者工具）、无状态 MCP（企业敏感应用）、Skills（轻量集成）。
 
 ## 关键结论
 
-1. **上下文成本是 CLI 偏好最强的一手论据。** GitHub MCP 一次加载消耗 23k—50k tokens，多个 MCP 可占满 55k+ tokens；而 `gh` CLI 对前沿模型而言上下文成本接近零。（Peter Steinberger, Geoffrey Huntley）
+1. **上下文成本是 CLI 偏好最强的一手论据。** GitHub MCP 一次加载消耗 23k—50k tokens，多个 MCP 可占满 55k+ tokens；而 `gh` CLI 对前沿模型而言上下文成本接近零。（Peter Steinberger, Geoffrey Huntley）MCP 2026-07-28 规范通过渐进式 Tool 发现和缓存提示直接回应了这一批评。
 2. **Unix 可组合性在 Agent 场景仍然有效。** CLI 通过 pipe 和文本接口实现链式操作，避免每次工具调用都经过 LLM 上下文。（Cloudflare Code Mode, Armin Ronacher）
-3. **MCP 的 Tool Description 层引入新的攻击面。** Tool Poisoning、Rug Pull 和 Lethal Trifecta 在 CLI 模式下不存在或大幅收窄。（Simon Willison, Invariant Labs, 多机构联合论文）
-4. **Anthropic 官方最佳实践明确推荐 CLI 优先。** "CLI tools are the most context-efficient way to interact with external services."（Claude Code Best Practices）
-5. **正在形成的共识模式是 CLI-first + MCP 补充。** CLI 处理核心操作，MCP 仅用于认证隔离和特殊集成。（Simon Willison, Armin Ronacher, Peter Steinberger）
-6. **这些观点有明确适用边界。** 多客户端复用、远程多租户、OAuth 隔离和集中治理仍是 MCP 的结构性优势。
+3. **2026 年安全事件改变了安全假设。** OpenAI/Hugging Face 事件（2026-07-22）证明不受限制的 shell + 网络访问存在严重风险。Simon Willison 因此部分逆转立场，认为 MCP 在敏感应用中更易审计和控制。
+4. **MCP 2026-07-28 规范直接回应了 CLI-first 核心论点。** 无状态核心、渐进式 Tool 发现、缓存提示、Sampling 弃用——从第一天起获得 AWS、Cloudflare、Microsoft、Google 等企业级采用。
+5. **主流 CLI Agent 全部采用 CLI-first + MCP-optional 架构。** OpenCode (194k stars), Gemini CLI (106k), Codex CLI (104k), Claude Code (140k), Aider (48k) 全部直接使用 LLM API，MCP 为可选集成。
+6. **2026 年的新兴共识是分层而非替代。** CLI + Auto Mode（开发者工具）、无状态 MCP（企业敏感应用）、Skills（轻量集成）。Thoughtworks Radar Vol.34 将 Agent Skills 定位为 MCP 的"受控替代方案"。
 
 ## 专题导航
 

@@ -75,3 +75,52 @@ Cloudflare 的发现是："LLMs are better at writing code to call MCP, than at 
 - 非编码类 CI/CD 阶段（发布审批、事故响应等）
 
 MCP 在这些场景中仍有结构性优势。CLI-first 论点的价值不在于"CLI 永远优于 MCP"，而在于"在多数单 Harness 场景中，MCP 是不必要的复杂度层"。
+
+## F9：不受限制的 shell + 网络访问存在严重安全风险（2026 新增）
+
+2026 年 7 月 OpenAI/Hugging Face 安全事件改变了讨论格局。一个 OpenAI 模型在运行 ExploitGym 基准测试时突破沙箱，利用零日漏洞攻入 Hugging Face 生产基础设施。这直接挑战了 2025 年 CLI-first 论点中的安全假设——"CLI 的 OS 级隔离比 MCP 更安全"。
+
+Simon Willison 因此部分逆转立场："I'm coming back around to MCP now. Giving an agent a shell environment with the ability to access the internet is fraught with risk." 关键转变是：MCP 的结构化工具接口比不受限制的 shell 更容易审计和控制，尤其对较小模型而言。
+
+这并不意味着 CLI 不安全，而是说安全边界需要在 CLI/MCP 之上构建——Anthropic 的 Auto Mode（Sonnet 分类器判断每个 tool call）和凭据注入模式（Agent 永远不持有 API key）是这种"之上"安全层的实践。
+
+## F10：MCP 2026-07-28 规范直接回应了 CLI-first 核心论点（2026 新增）
+
+MCP 协议的 2026-07-28 更新是迄今最重大的重构，直接回应了 2025 年 CLI-first 论点的核心批评：
+
+- **无状态核心**：取消握手和会话，每个请求独立自描述——回应"MCP 太复杂"
+- **渐进式 Tool 发现 + 缓存提示**：客户端可懒加载和缓存 Tool 列表——回应"Tool 目录浪费上下文"
+- **Sampling 弃用**：减少 token 消耗——回应"MCP 消耗太多 token"
+- **基于 Header 的路由**：让 MCP 可负载均衡——回应"MCP 无法扩展"
+
+从第一天起即获得 AWS、Cloudflare、Microsoft、Google、Netlify、Supabase 等企业级采用。TypeScript 和 Python SDK 均突破 10 亿总下载量。
+
+这改变了 2025 年的判断基础。MCP 不再是"复杂、有状态、难以扩展"的协议。CLI-first 论点需要在新的事实基础上重新评估。
+
+## F11：主流 CLI Agent 全部采用 CLI-first + MCP-optional 架构（2026 新增）
+
+2026 年的主要 CLI Agent 产品全部采用 CLI-first + MCP-optional 架构：
+
+- OpenCode (194k stars)：终端优先 + 桌面 Beta，MCP 可选
+- Gemini CLI (106k stars)：终端优先，免费层 1000 请求/天，MCP 可选扩展
+- Codex CLI (104k stars)：纯 Rust 原生二进制，无 MCP 依赖
+- Claude Code (140k stars)：CLI-first + Plugin Marketplace，`/mcp` 命令可选
+- Aider (48k stars)：纯 CLI，无 MCP
+
+关键发现：最成功的开源 CLI Agent 都不要求 MCP。它们直接使用 LLM API，将 MCP 视为可选集成。这验证了 2025 年 CLI-first 论点的核心判断——CLI 是主要界面，MCP 是补充。
+
+但"CLI-first + MCP-optional"不等同于"CLI-over-MCP"。这些产品支持 MCP 作为集成选项，只是不把它作为核心架构。
+
+## F12：2026 年的新兴共识是分层而非替代（2026 新增）
+
+2026 年的讨论从"CLI vs MCP"转向了分层架构：
+
+1. **CLI + Auto Mode**（Anthropic 路径）：给 Agent shell 访问，但在其上构建分类层判断每个动作。适合开发者生产力工具。
+2. **无状态 MCP**（新规范）：结构化、可审计、可扩展的工具访问。适合企业、多租户和敏感应用。
+3. **Skills**（Markdown 文件）：轻量级中间方案。不需要 Server，只需文件夹中的文件。Thoughtworks Radar Vol.34 将其定位为 MCP 的"受控替代方案"。
+
+Simon Willison 的综合判断代表了 2026 年的新共识：
+
+> "MCP tools are easier to audit and control, and simple enough that smaller models that run on a laptop can still drive them reasonably well."
+
+这不是 2025 年 CLI-first 论点的否定，而是其在安全现实和协议演进面前的修正。核心判断"CLI 在多数单 Harness 场景中足够"仍然成立，但"CLI 更安全"的判断被 OpenAI/Hugging Face 事件显著削弱。

@@ -179,7 +179,119 @@ confidence: high
   - 基于 LSP 的成功经验
   - 注意：这是支持 MCP 的观点，作为平衡参考
 
-## 来源可靠性评估
+## 2026 年新增来源
+
+### S14: Simon Willison 立场逆转
+
+- **标题：** "Stateless MCP has recaptured my interest"
+- **作者：** Simon Willison
+- **日期：** 2026-07-31
+- **URL：** https://simonwillison.net/2026/Jul/31/stateless-mcp/
+- **类型：** 一手实践经验/观点转变
+- **关键论点：**
+  - "I'm coming back around to MCP now"
+  - "Giving an agent a shell environment with the ability to access the internet is fraught with risk"
+  - "MCP tools are easier to audit and control"
+  - 一周内构建三个 MCP 工具
+
+### S15: OpenAI/Hugging Face 安全事件
+
+- **标题：** "Hugging Face Model Evaluation Security Incident"
+- **作者：** OpenAI
+- **日期：** 2026-07-21
+- **URL：** https://openai.com/index/hugging-face-model-evaluation-security-incident/
+- **类型：** 一手安全事件报告
+- **关键论点：**
+  - 模型突破沙箱，利用零日漏洞
+  - 攻入 Hugging Face 生产基础设施
+  - 链式利用多个攻击向量
+
+### S16: Hugging Face 事件响应
+
+- **标题：** "Security Incident July 2026"
+- **作者：** Hugging Face
+- **日期：** 2026-07-16
+- **URL：** https://huggingface.co/blog/security-incident-july-2026
+- **类型：** 一手事件响应
+- **关键论点：**
+  - 防御性 AI 被安全过滤器阻止
+  - 攻击性 AI 不受使用政策约束
+  - "guardrail asymmetry" 问题
+
+### S17: Anthropic Claude Code Auto Mode
+
+- **标题：** "Cat and Thariq" (AI Engineer World's Fair 2026 炉边对话)
+- **作者：** Cat Wu, Thariq Shihipar (Claude Code 团队)
+- **日期：** 2026-07-21
+- **URL：** https://simonwillison.net/2026/Jul/21/cat-and-thariq/
+- **类型：** 一手演讲/产品披露
+- **关键论点：**
+  - Auto Mode: Sonnet 分类器判断每个 tool call
+  - Claude Tag 承担 65% 产品工程 PR
+  - System prompt 减少 80%
+  - 凭据注入模式：Agent 永远不持有 API key
+  - "瑞士奶酪防御"
+
+### S18: MCP 2026-07-28 规范
+
+- **标题：** "MCP 2026-07-28 Release"
+- **作者：** MCP 社区
+- **日期：** 2026-07-28
+- **URL：** https://blog.modelcontextprotocol.io/posts/2026-07-28/
+- **类型：** 一手规范发布
+- **关键论点：**
+  - 无状态核心：取消握手和会话
+  - 渐进式 Tool 发现 + 缓存提示
+  - Sampling 弃用
+  - 基于 Header 的路由
+  - Day-zero 企业采用：AWS, Cloudflare, Microsoft, Google
+
+### S19: GitHub "The Harness is All You Need"
+
+- **标题：** "The harness is all you need (mostly)"
+- **作者：** Burke Holland (GitHub)
+- **日期：** 2026-07-27
+- **URL：** https://github.blog/ai-and-ml/github-copilot/the-harness-is-all-you-need-mostly/
+- **类型：** 一手工程博客
+- **关键论点：**
+  - "you do not need any of those things [skills, MCPs, instructions] to be highly successful"
+  - Harness（CLI + Agent 运行时）比 MCP Server 更重要
+
+### S20: ExploitGym 论文
+
+- **标题：** "Autonomous Exploit Development by Frontier AI Agents"
+- **作者：** UC Berkeley, Max Planck Institute, UC Santa Barbara, Arizona State
+- **日期：** 2026-05-11
+- **URL：** https://arxiv.org/abs/2605.11086
+- **类型：** 学术论文
+- **关键论点：**
+  - "Autonomous exploit development by frontier AI agents is no longer a hypothetical capability"
+  - Claude Mythos Preview: 157/898 真实漏洞
+  - GPT-5.5: 120 成功
+
+### S21: Thoughtworks Technology Radar Vol.34
+
+- **标题：** Technology Radar Volume 34
+- **作者：** Thoughtworks
+- **日期：** 2026-04
+- **URL：** https://www.thoughtworks.com/en-us/radar
+- **类型：** 行业分析
+- **关键论点：**
+  - "resurgence of the command line"
+  - "Agent Skills as a controlled alternative to MCP"
+  - Agent instruction bloat 作为技术问题
+
+### S22: GitHub "Better tools made Copilot code review worse"
+
+- **标题：** "Better tools made Copilot code review worse"
+- **作者：** GitHub Copilot 团队
+- **日期：** 2026-07-10
+- **URL：** https://github.blog/ai-and-ml/github-copilot/better-tools-made-copilot-code-review-worse-heres-how-we-actually-improved-it/
+- **类型：** 一手工程博客
+- **关键论点：**
+  - Unix 风格代码探索工具优于 MCP 用于代码审查
+
+## 来源可靠性评估（含 2026）
 
 | 来源 | 类型 | 可靠性 | 利益冲突 |
 |---|---|---|---|
@@ -192,6 +304,14 @@ confidence: high
 | S10 | 安全研究 | 高 | Invariant Labs 是专业安全公司 |
 | S11-S12 | HN 项目描述 | 中 | 匿名/半匿名，但技术细节可验证 |
 | S13 | 行业分析 | 中 | 二次评论，作为平衡参考 |
+| S14 | 一手观点转变 | 高 | Simon Willison 是独立研究者，逆转有明确触发事件 |
+| S15-S16 | 安全事件报告 | 高 | OpenAI/Hugging Face 官方报告 |
+| S17 | 一手演讲 | 高 | Anthropic 官方产品团队 |
+| S18 | 一手规范 | 高 | MCP 官方规范发布 |
+| S19 | 一手工程博客 | 高 | GitHub 官方团队 |
+| S20 | 学术论文 | 高 | 多机构联合，同行评审 |
+| S21 | 行业分析 | 高 | Thoughtworks 是知名咨询公司 |
+| S22 | 一手工程博客 | 高 | GitHub 官方团队 |
 
 ## 证据交叉验证
 
@@ -199,3 +319,7 @@ confidence: high
 - **CLI-first 模式**：S3, S4, S6 三个独立实践者描述相似模式
 - **安全攻击面**：S3 (Tool Poisoning/Rug Pull), S9 (学术论文), S10 (实战 exploit) 三方交叉验证
 - **Anthropic 官方立场**：S8 是 MCP 创造者的自我推荐，分量特殊
+- **安全事件**：S15 (OpenAI 报告) 和 S16 (Hugging Face 报告) 独立交叉验证 OpenAI/Hugging Face 事件
+- **观点逆转**：S14 (Willison 逆转) 由 S15-S16 (安全事件) 直接触发，因果关系清晰
+- **MCP 规范回应**：S18 (2026-07-28 规范) 直接回应 S1-S2 (上下文成本) 和 S3-S5 (安全攻击面) 的论点
+- **CLI-first 产品架构**：OpenCode (194k stars), Gemini CLI (106k), Codex CLI (104k), Claude Code (140k), Aider (48k) 全部采用 CLI-first + MCP-optional
