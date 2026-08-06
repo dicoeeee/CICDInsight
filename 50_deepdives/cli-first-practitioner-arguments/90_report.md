@@ -22,7 +22,7 @@ confidence: high
 
 ## 一、背景：MCP 的快速采用与反思
 
-MCP（Model Context Protocol）由 Anthropic 于 2024 年 11 月发布，截至 2026 年 8 月已获得 8.9k GitHub stars，被 Claude、ChatGPT、VS Code Copilot、Cursor、Zed 等主流 AI 客户端支持。OpenAI 和 Google 分别于 2025 年 3 月和 4 月宣布支持 MCP。MCP 正在成为 Agent 工具集成的事实标准。
+MCP（Model Context Protocol）由 Anthropic 于 [2024 年 11 月发布](https://www.anthropic.com/news/model-context-protocol)，截至 2026 年 8 月已获得 8.9k GitHub stars（[MCP GitHub](https://github.com/modelcontextprotocol/modelcontextprotocol)），被 Claude、ChatGPT、VS Code Copilot、Cursor、Zed 等主流 AI 客户端支持。OpenAI 和 Google 分别于 2025 年 3 月和 4 月宣布支持 MCP。MCP 正在成为 Agent 工具集成的事实标准。
 
 然而，随着 MCP 的广泛采用，一批一线实践者开始公开质疑"默认 MCP"的假设。他们的核心论点不是"MCP 不好"，而是"在多数场景中，CLI 已经足够，MCP 增加了不必要的复杂度"。
 
@@ -30,11 +30,11 @@ MCP（Model Context Protocol）由 Anthropic 于 2024 年 11 月发布，截至 
 
 ### 2.1 上下文成本：MCP 的隐性税
 
-**Peter Steinberger**（PSPDFKit 创始人，2025 年 10 月）：
+**Peter Steinberger**（PSPDFKit 创始人，2025 年 10 月，[来源](https://steipete.me/posts/just-talk-to-it)）：
 
 > "Use GitHub's MCP and see 23k tokens gone. Heck, they did make it better because it was almost 50,000 tokens when it first launched... Or use the `gh` cli which has basically the same feature set, models already know how to use it, and pay zero context tax."
 
-**Geoffrey Huntley**（商业编码助手构建者，2025 年 8 月）：
+**Geoffrey Huntley**（商业编码助手构建者，2025 年 8 月，[来源](https://ghuntley.com/allocations/)）：
 
 > "Adding just the popular GitHub MCP defines 93 additional tools and swallows another 55,000 of those valuable tokens! MCP enthusiasts will frequently add several more, leaving precious few tokens available for solving the actual task."
 
@@ -46,7 +46,7 @@ MCP（Model Context Protocol）由 Anthropic 于 2024 年 11 月发布，截至 
 
 ### 2.2 Unix 可组合性：代码执行优于 tool call
 
-**Cloudflare Code Mode**（2025 年 9 月，更新至 2026 年 7 月）：
+**Cloudflare Code Mode**（2025 年 9 月，更新至 2026 年 7 月，[来源](https://blog.cloudflare.com/code-mode/)）：
 
 > "With the traditional approach, the output of each tool call must feed into the LLM's neural network, just to be copied over to the inputs of the next call, wasting time, energy, and tokens. When the LLM can write code, it can skip all that, and only read back the final results it needs."
 
@@ -54,7 +54,7 @@ MCP（Model Context Protocol）由 Anthropic 于 2024 年 11 月发布，截至 
 
 > "Making an LLM perform tasks with tool calling is like putting Shakespeare through a month-long class in Mandarin and then asking him to write a play in it. It's just not going to be his best work."
 
-**Armin Ronacher**（Flask 创始人，2025 年 6 月）：
+**Armin Ronacher**（Flask 创始人，2025 年 6 月，[来源](https://simonwillison.net/2025/Jun/29/agentic-coding/)）：
 
 > "When your agentic coding tool can run commands in a terminal you can mostly avoid MCP — instead of adding a new MCP tool, write a script or add a Makefile command and tell the agent to use that instead."
 
@@ -64,7 +64,7 @@ Armin Ronacher 的实践进一步说明：Makefile 和 shell 脚本本身就是 
 
 ### 2.3 安全攻击面：Tool Description 是新的注入点
 
-**Simon Willison**（Datasette 创始人，2025 年 4 月）：
+**Simon Willison**（Datasette 创始人，2025 年 4 月，[来源](https://simonwillison.net/2025/Apr/9/mcp-prompt-injection/)）：
 
 > "The curse of prompt injection continues to be that we've known about the issue for more than two and a half years and we still don't have convincing mitigations for handling it."
 
@@ -74,13 +74,13 @@ Simon Willison 详细分析了 MCP 的三类攻击：
 
 2. **Rug Pull**：MCP Tool 可以在获批后悄悄变更定义。"You approve a safe-looking tool on Day 1, and by Day 7 it's quietly rerouted your API keys to an attacker." 跨 Server 的 Tool 名称覆盖进一步放大风险。
 
-3. **Lethal Trifecta**：私有数据访问 + 不可信内容暴露 + 外部通信能力 = 不安全设计。"Any MCP that combines the three trifecta ingredients is insecure by design."
+3. **Lethal Trifecta**（[来源](https://simonwillison.net/2025/Jun/16/lethal-trifecta/)）：私有数据访问 + 不可信内容暴露 + 外部通信能力 = 不安全设计。"Any MCP that combines the three trifecta ingredients is insecure by design."
 
-**Invariant Labs**（2025 年）：
+**Invariant Labs**（2025 年，[来源](https://invariantlabs.ai/blog/whatsapp-mcp-exploited)）：
 
 WhatsApp MCP exploit 实战演示：攻击者的 Tool 替换定义以窃取数据，利用格式要求在空白字符中隐藏数据泄露，Cursor 界面隐藏水平滚动条以掩盖攻击。
 
-**多机构联合论文**（IBM, Invariant Labs, ETH Zurich, Google, Microsoft，2025 年 6 月）：
+**多机构联合论文**（IBM, Invariant Labs, ETH Zurich, Google, Microsoft，2025 年 6 月，[来源](https://arxiv.org/abs/2506.08837)）：
 
 > "As long as both agents and their defenses rely on the current class of language models, we believe it is unlikely that general-purpose agents can provide meaningful and reliable safety guarantees."
 
@@ -90,7 +90,7 @@ WhatsApp MCP exploit 实战演示：攻击者的 Tool 替换定义以窃取数�
 
 ### 2.4 Anthropic 官方立场：CLI 最高效
 
-**Anthropic Claude Code Best Practices**（2025-2026）：
+**Anthropic Claude Code Best Practices**（2025-2026，[来源](https://code.claude.com/docs/en/best-practices)）：
 
 > "CLI tools are the most context-efficient way to interact with external services. If you use GitHub, install the `gh` CLI. Claude knows how to use it for creating issues, opening pull requests, and reading comments."
 
@@ -106,19 +106,19 @@ Claude Code 推荐的 CLI 工具包括：`gh`, `aws`, `gcloud`, `sentry-cli`, `n
 
 至少 4 个独立实践者描述了相似的模式：
 
-**Simon Willison**（2025 年 11 月）：
+**Simon Willison**（2025 年 11 月，[来源](https://simonwillison.net/2025/Nov/2/how-i-use-every-claude-code-feature/)）：
 
 > "Most of my MCP usage with coding agents like Claude Code has been replaced by custom shell scripts for it to execute, but there's still a useful role for MCP in helping the agent access secure resources in a controlled way."
 
-**Armin Ronacher**（2025 年 6 月）：
+**Armin Ronacher**（2025 年 6 月，[来源](https://simonwillison.net/2025/Jun/29/agentic-coding/)）：
 
 > 只用 Playwright MCP 进行浏览器自动化，其他全部用 CLI 和 Makefile。
 
-**Peter Steinberger**（2025 年 10 月）：
+**Peter Steinberger**（2025 年 10 月，[来源](https://steipete.me/posts/just-talk-to-it)）：
 
 > 只用 chrome-devtools-mcp 进行浏览器调试，其他全部用 CLI。
 
-**Agent Loom**（2026 年 4 月）：
+**Agent Loom**（2026 年 4 月，[来源](https://news.ycombinator.com/item?id=47936461)）：
 
 > "There is no service, daemon, MCP server, workflow engine, or runtime database. The graph lives in Markdown files. Agents inspect it with normal tools: grep, find, git, cat, awk, sed, and shell pipes."
 
@@ -166,7 +166,7 @@ Cloudflare 的解决方案是把 MCP 工具转为 TypeScript API，让 LLM 写�
 ### 4.3 MCP 的结构性优势
 
 即使在 CLI-first 实践者中，MCP 的以下优势被承认：
-- **认证隔离**：API key 不暴露给 Agent（Simon Willison, Kenton Varda）
+- **认证隔离**：API key 不暴露给 Agent（[Simon Willison](https://simonwillison.net/2025/Nov/2/how-i-use-every-claude-code-feature/), Kenton Varda via [Cloudflare](https://blog.cloudflare.com/code-mode/)）
 - **跨客户端共享**：多个 Agent 客户端使用同一工具时，MCP 避免重复适配
 - **远程服务**：Streamable HTTP 和 OAuth 框架支持多租户
 - **Resources/Prompts**：MCP 特有语义，CLI 难以等价
