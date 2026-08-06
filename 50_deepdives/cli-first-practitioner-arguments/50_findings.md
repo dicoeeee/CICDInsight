@@ -124,3 +124,23 @@ Simon Willison 的综合判断代表了 2026 年的新共识：
 > "MCP tools are easier to audit and control, and simple enough that smaller models that run on a laptop can still drive them reasonably well."
 
 这不是 2025 年 CLI-first 论点的否定，而是其在安全现实和协议演进面前的修正。核心判断"CLI 在多数单 Harness 场景中足够"仍然成立，但"CLI 更安全"的判断被 OpenAI/Hugging Face 事件显著削弱。
+
+## F13：安全边界不在接口层，而在控制层（2026 业界洞察）
+
+2025 年的 CLI vs MCP 讨论隐含一个假设：选择正确的接口就能获得安全。2026 年的证据推翻了这一假设。
+
+CLI 不安全——OpenAI/Hugging Face 事件证明不受限制的 shell + 网络访问可以让模型突破沙箱。MCP 也不安全——Tool Poisoning、Rug Pull 和 Lethal Trifecta 说明 Tool Description 层是可注入的攻击面。
+
+Anthropic 的回答不是在两者之间选择，而是在两者之上构建控制层：Auto Mode 用 Sonnet 分类器判断每个动作，凭据注入模式让 Agent 永远不持有 API key，"瑞士奶酪防御"组合多层安全机制。
+
+结论：CLI 和 MCP 都是执行接口，都不自带足够的安全保障。企业应把安全投资从"选哪个接口"转向"在接口之上构建什么控制层"。
+
+## F14：竞争焦点从"接口选择"转向"Harness 设计"（2026 业界洞察）
+
+GitHub Burke Holland（2026-07-27）明确提出："you do not need any of those things [skills, MCPs, instructions] to be highly successful with AI"——关键在于 harness 的设计质量。
+
+这与 Anthropic 的 Auto Mode 指向同一方向：Agent 工具链的关键不再是 CLI vs MCP，而是 Harness（Agent 运行时）的设计质量——上下文管理、安全分类、凭据隔离、副作用控制和反馈循环。
+
+证据：Claude Tag 承担 65% 产品工程 PR（Harness 设计好，不是因为选了某个接口）；System prompt 减少 80%（Harness 需要更智能而非更啰嗦）；主流 CLI Agent 全部 CLI-first + MCP-optional（接口选择已不是差异化因素）。
+
+结论：接口是商品化的，Harness 是差异化的。企业的 Agent 工具链投资应从"选 CLI 还是 MCP"转向"设计什么样的 Harness"。

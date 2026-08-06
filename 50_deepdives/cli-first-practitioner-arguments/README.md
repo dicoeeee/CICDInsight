@@ -33,6 +33,8 @@ refresh_after: 2026-11-06
 4. **MCP 2026-07-28 规范直接回应了 CLI-first 核心论点。** 无状态核心、渐进式 Tool 发现、缓存提示、Sampling 弃用——从第一天起获得 AWS、Cloudflare、Microsoft、Google 等企业级采用。
 5. **主流 CLI Agent 全部采用 CLI-first + MCP-optional 架构。** OpenCode (194k stars), Gemini CLI (106k), Codex CLI (104k), Claude Code (140k), Aider (48k) 全部直接使用 LLM API，MCP 为可选集成。
 6. **2026 年的新兴共识是分层而非替代。** CLI + Auto Mode（开发者工具）、无状态 MCP（企业敏感应用）、Skills（轻量集成）。Thoughtworks Radar Vol.34 将 Agent Skills 定位为 MCP 的"受控替代方案"。
+7. **安全边界不在接口层（CLI 或 MCP），而在控制层。** CLI 和 MCP 都是执行接口，都不自带足够的安全保障。企业应把安全投资从"选哪个接口"转向"在接口之上构建什么控制层"——分类器、凭据隔离、sandbox、审计和人类审批。
+8. **竞争焦点从"接口选择"转向"Harness 设计"。** Agent 工具链的关键不再是 CLI vs MCP，而是 Harness（Agent 运行时）的设计质量——上下文管理、安全分类、凭据隔离、副作用控制和反馈循环。接口是商品化的，Harness 是差异化的。
 
 ## 专题导航
 
