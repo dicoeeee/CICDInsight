@@ -116,8 +116,13 @@ as_of: 2026-08-04
 - [[00_sources/briefs/2026-huawei-codearts-agent|华为 CodeArts Agent]]
 - [[00_sources/briefs/2026-meituan-agent-evaluation-ai-coding|美团 Agent 评测与 Pre-PR 实践]]
 - [[00_sources/briefs/2026-jd-joyagent-code-review|京东 JoyAgent 双 RAG 评审]]
+- [[00_sources/research-bytedance-cicd-2024-2026-trends-2026-08-07|字节跳动与火山引擎 CI/CD 变化趋势（2024 至今）]]
+- [[00_sources/research-openai-anthropic-cicd-trends-2026-08-07|OpenAI 与 Anthropic 的 CI/CD 变化趋势（2024 至今）]]
+- [[00_sources/research-github-microsoft-cicd-trends-2026-08-07|GitHub 与 Microsoft CI/CD 变化趋势（2024 至今）]]
 
 ## 企业实践、研究、基准与治理
+
+- [[00_sources/research-aws-cicd-trends-2024-2026-2026-08-07|AWS CI/CD 变化趋势（2024 至今）]]
 
 - [[00_sources/briefs/2025-whatscode-enterprise-practice|WhatsCode 大规模企业实践]]
 - [[00_sources/briefs/2026-swe-ci-benchmark|SWE-CI]]
