@@ -29,6 +29,7 @@ as_of: 2026-08-04
 - [[00_sources/briefs/2026-github-artifact-attestations-slsa|GitHub Artifact Attestations 与 SLSA]]
 - [[00_sources/briefs/2026-github-gh-aw-open-source|github/gh-aw]]
 - [[00_sources/briefs/2026-githubnext-agentics-examples|GitHub Next Agentics Examples]]
+- [[00_sources/research-github-cloud-agent-capabilities-2026-08-07|GitHub Copilot Cloud Agent 功能与机制一手证据]]
 - [[00_sources/briefs/2025-github-remote-mcp-server-ga|GitHub Remote MCP Server GA]]
 - [[00_sources/briefs/2026-microsoft-repository-migration-to-github|Microsoft 仓库迁移实践]]
 - [[00_sources/briefs/2026-azure-devops-mcp-open-source|Azure DevOps MCP]]
