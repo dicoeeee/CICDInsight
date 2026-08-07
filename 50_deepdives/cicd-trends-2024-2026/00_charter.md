@@ -37,6 +37,7 @@ as_of: 2026-08-07
 - **公司范围**：GitHub、Harness、AWS、Microsoft（Azure DevOps/GitHub 联动）、字节跳动（含火山引擎）、OpenAI、Anthropic。
 - **智能化 CI/CD 定义**：在编码完成后的检查、门禁、构建、制品、部署、发布、恢复环节中，引入 AI/Agent 能力（推理、生成、自主执行、门禁判断、编排）的形态。编码辅助本身不是本专题主线，但编码 Agent 进入 CI/CD 环节（CI 修复、评审、护送合并）属于本专题。
 - **变化类型**：能力形态、环节覆盖、自治等级、产品状态、执行形态五类演进。
+- **证据底稿**：[[00_sources/research-github-microsoft-cicd-trends-2026-08-07|GitHub/Microsoft]]、[[00_sources/research-aws-cicd-trends-2024-2026-2026-08-07|AWS]]、[[00_sources/research-openai-anthropic-cicd-trends-2026-08-07|OpenAI/Anthropic]]、[[00_sources/research-bytedance-cicd-2024-2026-trends-2026-08-07|字节]]、[[50_deepdives/harness-company/fact-table-2024-2026-2026-08-07|Harness 2024-2026 事实表]]（访问时间统一 2026-08-07）。
 
 ## 非目标（明确不做）
 

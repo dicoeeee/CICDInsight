@@ -13,6 +13,8 @@ as_of: 2026-08-07
 
 # Case Map：各公司智能化 CI/CD 演进趋势（2024—2026）
 
+> 时间线事件均回链至研究底稿：[[00_sources/research-github-microsoft-cicd-trends-2026-08-07|GitHub/Microsoft]]、[[00_sources/research-aws-cicd-trends-2024-2026-2026-08-07|AWS]]、[[00_sources/research-openai-anthropic-cicd-trends-2026-08-07|OpenAI/Anthropic]]、[[00_sources/research-bytedance-cicd-2024-2026-trends-2026-08-07|字节]]、[[50_deepdives/harness-company/fact-table-2024-2026-2026-08-07|Harness 事实表]]。事实编号（F/O/A）对应各底稿事实列；访问时间统一 2026-08-07。
+
 ## 一、各公司智能化演进轨迹（时间线）
 
 ### GitHub：把 Agent 编译进 Actions 控制面
@@ -108,14 +110,14 @@ as_of: 2026-08-07
 |---|---|---|
 | 2025-10-20 | Claude Code sandbox（双边界）+ Claude Code on the web | Beta/Research Preview / GA |
 | 2025-11-26 | 长时运行 harness 研究（initializer/coding agent/context reset） | Research |
-| 2026-02-18 | 自主性测量研究（工具调用时长翻倍、干预降低） | Research |
+| 2026-02-18 | 自主性测量研究（最长运行 turn 的 p99.9 时长近翻倍、平均人工干预 5.4→3.3/会话） | Research |
 | 2026-03-24 | 强化 harness 研究（planner/generator/evaluator） | Research |
 | 2026-03-25 | auto mode（模型分类器审批，20+ block rules） | GA |
 | 2026-04-08 | Managed Agents（cattle 化执行环境，凭据外置） | GA |
 | 2026-05-25 | 三产品 containment 架构披露（含多起真实事故） | 内部披露 |
 
 **形态演进**：终端 Claude Code → 沙箱执行 → 分类器审批 → 可恢复 cattle 执行环境。
-**自治边界**：auto mode 拦截"直接推 main/绕过 pre-check 部署"；headless 下连续拒绝终止进程。
+**自治边界**：auto mode 拦截"直接推 main/绕过 pre-check 部署"；headless 下连续拒绝终止进程（[[00_sources/research-openai-anthropic-cicd-trends-2026-08-07|Anthropic 底稿]] A5）。
 
 ## 二、共性演进模式（跨公司，2024-2026）
 
@@ -166,7 +168,7 @@ as_of: 2026-08-07
 - 2025-2026H1：治理凭据与执行边界（scoped token、凭据外置、只读代理）
 - 2026：治理持续行为与状态化授权（AWS temporal policies+rate limiting、Harness Runtime Token=grant∩RBAC+AgentTrace、GitHub Safe Outputs 独立 Job、Anthropic scoped git token 按 session 取用）
 
-**代表证据**：AWS F14（2026-08-06）、Harness 事实表（Worker 权限模型）、gh-aw（零密钥+独立写 Job）。
+**代表证据**：AWS F14（2026-08-06）、[[50_deepdives/harness-company/fact-table-2024-2026-2026-08-07|Harness 事实表]]（Worker 权限模型）、gh-aw（零密钥+独立写 Job）。
 
 **判断**：治理重心从"流程"移向"Agent 行为"，但权威仍分散在外部控制面，无一家把治理权交给 Agent 自管。
 

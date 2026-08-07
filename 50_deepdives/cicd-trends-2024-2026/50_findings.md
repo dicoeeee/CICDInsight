@@ -14,7 +14,7 @@ confidence: medium-to-high
 
 # Findings：各公司智能化 CI/CD 演进趋势（2024—2026）
 
-> 观察窗口 2024-01 至 2026-08-07（`as_of: 2026-08-07`）。每条发现标注证据强度、反例/限制与置信度。证据来源均为各研究底稿（`00_sources/` 与 `50_deepdives/harness-company/fact-table-2024-2026-2026-08-07.md`）。
+> 观察窗口 2024-01 至 2026-08-07（`as_of: 2026-08-07`）。每条发现标注证据强度、反例/限制与置信度。证据来源均为各研究底稿：[[00_sources/research-github-microsoft-cicd-trends-2026-08-07|GitHub/Microsoft]]、[[00_sources/research-aws-cicd-trends-2024-2026-2026-08-07|AWS]]、[[00_sources/research-openai-anthropic-cicd-trends-2026-08-07|OpenAI/Anthropic]]、[[00_sources/research-bytedance-cicd-2024-2026-trends-2026-08-07|字节]]、[[50_deepdives/harness-company/fact-table-2024-2026-2026-08-07|Harness 事实表]]。事实编号（F/O/A）对应各底稿事实列。
 
 ## 发现 1：能力形态从"AI 建议"走向"Agent 执行"再走向"Agent 编排"
 
@@ -80,7 +80,7 @@ confidence: medium-to-high
 
 - OpenAI Symphony 500% landed PR（厂商自述）。
 - Anthropic auto mode 93% 批准率、17% FNR、0.4% FPR（厂商自述）。
-- Anthropic harness 研究"工具调用时长翻倍、干预降 30%+"（第一方研究）。
+- Anthropic 自主性测量研究"最长运行 turn 的 p99.9 时长 3 个月近翻倍（<25→>45 分钟）、平均人工干预 5.4→3.3/会话"（第一方研究，[[00_sources/research-openai-anthropic-cicd-trends-2026-08-07|Anthropic 底稿]] A17）。
 - 字节 SE Lab 研究数值（第一方研究）。
 
 **证据强度**：低（用于量化结论）；**置信度**：高（标注不出错）。
@@ -99,7 +99,7 @@ OpenAI WORKFLOW.md、GitHub gh-aw Markdown+frontmatter、Anthropic AGENTS.md/Rul
 - **2025—2026H1（治理凭据与执行边界）**：scoped token、凭据外置、只读代理、沙箱——治理的是 Agent 的"手"（能碰什么）。
 - **2026（治理持续行为与状态化授权）**：AWS temporal policies（要求工作流顺序、tool 参数恰等于先前调用输出、特权操作前人工批准、数据新鲜度）+ rate limiting；Harness Runtime Token=声明 grant∩触发人 RBAC 交集、OPA 生成物标 `ai_generated:true` 进 Audit Trail、AgentTrace；GitHub Safe Outputs 独立 Job 持最小写权限。
 
-**代表证据**：AWS F14（temporal policies/rate limiting 2026-08-06 公告）、Harness 事实表（Worker 权限模型）、gh-aw（只读默认+独立写 Job）。
+**代表证据**：[[00_sources/research-aws-cicd-trends-2024-2026-2026-08-07|AWS 底稿]] F14（temporal policies/rate limiting 2026-08-06 公告）、[[50_deepdives/harness-company/fact-table-2024-2026-2026-08-07|Harness 事实表]]（Worker 权限模型）、gh-aw（只读默认+独立写 Job）。
 
 **判断**：治理重心从"流程"移向"Agent 行为"，但治理权威仍分散在外部控制面（Ruleset/OPA/Approval/身份），没有让 Agent 自管。**证据强度**：高（机制）；**置信度**：中（阶段归因是分析推断）。
 

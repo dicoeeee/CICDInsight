@@ -71,15 +71,17 @@ flowchart TD
 
 ## 三、假设与待验证
 
+> 证据底稿：[[00_sources/research-github-microsoft-cicd-trends-2026-08-07|GitHub/Microsoft]]、[[00_sources/research-aws-cicd-trends-2024-2026-2026-08-07|AWS]]、[[00_sources/research-openai-anthropic-cicd-trends-2026-08-07|OpenAI/Anthropic]]、[[00_sources/research-bytedance-cicd-2024-2026-trends-2026-08-07|字节]]、[[50_deepdives/harness-company/fact-table-2024-2026-2026-08-07|Harness 事实表]]。事实编号（F/O/A）对应各底稿事实列。
+
 | 假设 | 预计证据来源 | 状态 |
 |---|---|---|
 | H1：智能化能力先覆盖"检查/评审"再扩散到"构建修复/门禁/发布"，环节扩散有先后 | 各研究底稿事实表 | 待复核（证据地图环节密度表支撑） |
-| H2：自治等级从"只读/调查"向"受控执行"向"受控合并"演进，发布端始终被边界拦截 | GitHub/AWS/OpenAI/Anthropic 底稿 | 待复核（"PR 永不自动合并"、release readiness 边界等） |
+| H2：自治等级从"只读/调查"向"受控执行"向"受控合并"演进，发布端始终被边界拦截 | [[00_sources/research-github-microsoft-cicd-trends-2026-08-07|GitHub]]/[[00_sources/research-aws-cicd-trends-2024-2026-2026-08-07|AWS]]/[[00_sources/research-openai-anthropic-cicd-trends-2026-08-07|OpenAI/Anthropic]] 底稿 | 待复核（"PR 永不自动合并"、release readiness 边界等） |
 | H3：产品状态转正轨迹为 Research/Experimental → Preview/Beta → GA，2026 密集转正 | 各底稿状态列 | 待复核（gh-aw、AgentCore、Worker Agents、auto mode 等） |
-| H4：执行形态从"终端 CLI Agent"向"编译进流水线/常驻编排器"演进 | GitHub gh-aw、OpenAI Symphony、Harness Worker Agents | 待复核 |
+| H4：执行形态从"终端 CLI Agent"向"编译进流水线/常驻编排器"演进 | [[00_sources/research-github-microsoft-cicd-trends-2026-08-07|GitHub]] gh-aw、[[00_sources/research-openai-anthropic-cicd-trends-2026-08-07|OpenAI]] Symphony、Harness Worker Agents | 待复核 |
 | H5：不同公司演进起点与速度不同（平台厂商 vs AI 公司），但存在共性演进模式 | 跨公司对比 | 待复核 |
-| H6：治理对象从"流程/权限"演进为"Agent 身份与持续行为"，状态化授权（temporal policies）是 2026 新原语 | AWS F14、Harness 事实表、gh-aw | 待复核（C19-C21） |
-| H7：验证最终权威保持确定性，智能化演进的是"前置验收"（分类器/eval 门禁），且 Agent 不得自证 | Anthropic A4/A8、OpenAI O14、AWS F8 | 待复核（C22-C24） |
+| H6：治理对象从"流程/权限"演进为"Agent 身份与持续行为"，状态化授权（temporal policies）是 2026 新原语 | [[00_sources/research-aws-cicd-trends-2024-2026-2026-08-07|AWS]] F14、Harness 事实表、gh-aw | 待复核（C19-C21） |
+| H7：验证最终权威保持确定性，智能化演进的是"前置验收"（分类器/eval 门禁），且 Agent 不得自证 | [[00_sources/research-openai-anthropic-cicd-trends-2026-08-07|Anthropic]] A4/A8、[[00_sources/research-openai-anthropic-cicd-trends-2026-08-07|OpenAI]] O14、[[00_sources/research-aws-cicd-trends-2024-2026-2026-08-07|AWS]] F8 | 待复核（C22-C24） |
 
 ## 四、验收标准（每个问题）
 
