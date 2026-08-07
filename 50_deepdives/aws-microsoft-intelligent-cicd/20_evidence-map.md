@@ -8,7 +8,7 @@ tags:
   - company/github
   - company/azure
 status: complete
-as_of: 2026-08-06
+as_of: 2026-08-07
 confidence: high-for-mechanism-and-status medium-for-outcomes
 ---
 
@@ -44,11 +44,15 @@ confidence: high-for-mechanism-and-status medium-for-outcomes
 | C17 | Remote Azure DevOps MCP Server 为 public preview（Sprint 271），GA 目标 2026 Q3 未落地 | [Remote MCP docs](https://learn.microsoft.com/en-us/azure/devops/mcp-server/remote-mcp-server)、[roadmap](https://learn.microsoft.com/en-us/azure/devops/release-notes/features-timeline) | DevOps 索引页仍标 preview；不能写成 GA | high | passed |
 | C18 | AWS 与 Microsoft 都把 Agent 放在发布前审查、合并前门禁、发布后恢复三个位置，但保留确定性 Gate | C01—C17 的机制链 | **分析推断。** 没有公开 benchmark 证明哪种路线必然更高效或更安全 | medium-high | passed-as-analysis |
 | C19 | 两家路线差异：AWS 收敛"交付—运行上下文"，Microsoft 收敛"仓库内修复与门禁闭环" | C02-C07（AWS 上下文+发布/运行）vs C09-C14（Microsoft 仓库内闭环） | 这是机制层面的方向归纳，不是成熟度或效果排名 | medium-high | passed-as-analysis |
-| C20 | 本专题可支撑能力对比页，但不能支撑普遍 ROI 或端到端自治结论 | C01—C19；未找到可独立复核的效果数据 | "未找到"是证据缺口，不是证明客户不存在或产品无效 | high for boundary | passed |
+| C20 | 本专题可支撑能力对比页，但不能支撑普遍 ROI 或端到端自治结论 | C01—C21；未找到可独立复核的效果数据 | "未找到"是证据缺口，不是证明客户不存在或产品无效 | high for boundary | passed |
+| C21 | AWS DevOps Agent built on Amazon Bedrock AgentCore（memory/policies/evaluations/observability 四类专用基础设施） | [AWS DevOps Blog 2026-03-31](https://aws.amazon.com/blogs/devops/leverage-agentic-ai-for-autonomous-incident-response-with-aws-devops-agent/) 原文；[[00_sources/research-amazon-bedrock-agentcore-capabilities-2026-08-07\|AgentCore 能力核验]] | 不证明 Runtime 部署拓扑或具体模型；不使 AgentCore 本身成为 CI/CD 编排能力 | high | passed |
+| C22 | Amazon Bedrock AgentCore 提供 Harness/Runtime、Gateway/Identity/Policy、Memory、Evaluations/Optimization 等生产控制面，状态逐能力不同 | [[00_sources/research-amazon-bedrock-agentcore-capabilities-2026-08-07\|AgentCore 能力核验]]（各能力 What's New 公告） | 平台 GA 2025-10-13 不覆盖后续子能力；区域逐能力不同（Web Search 仅 us-east-1、Harness/Memory 15 区等） | high | passed |
+| C23 | AWS Transform built on AgentCore 未证实 | 未在 Transform 官方材料找到等价表述；仅确认 Transform 由 Amazon Bedrock 驱动 | "未检索到"不等于"不存在"；不得绘制 Transform→AgentCore 内部依赖 | high for boundary | passed |
+| C24 | Microsoft 侧 Agent 生产控制面为"三层收敛"：Foundry Agent Service（运行/构建）+ Agent 365（组织治理，官方定位 "The Control Plane for Agents"，GA 2026-05-01）+ Entra Agent ID（身份，GA 2026-04）；六域均可映射，唯 Payments 无直接对等、发布不支持流量灰度 | [[00_sources/research-microsoft-agent-platform-control-plane-2026-08-07\|Microsoft Agent 生产控制面研究报告]]（Microsoft Learn/Security Blog 一手来源） | Foundry Agent Service 精确 GA 公告日期未核验（文档无 preview 横幅为隐含证据）；Foundry Control Plane 多数特性 preview；Payments 无对等 | high for mechanism/status | passed |
 
 ## 生命周期与状态审计
 
-| 对象 | 截至 2026-08-06 的状态 | 可安全表述 | 不能写成 |
+| 对象 | 截至 2026-08-07 的状态 | 可安全表述 | 不能写成 |
 |---|---|---|---|
 | AWS Production operations | GA（2026-03-31） | 事件调查、预防建议、按需 SRE、自定义 Agent | 整个产品所有能力均 GA；自动修复生产 |
 | AWS Release Management | Preview；仅 us-east-1（文档记录 2026-06-11） | readiness review、托管验证、release testing | GA、全球可用、自动发布 |
@@ -56,6 +60,12 @@ confidence: high-for-mechanism-and-status medium-for-outcomes
 | Amazon Q Developer IDE 审查 | GA | SAST/secrets/IaC/质量/部署风险/SCA 六类 IDE 内检测 | 是 CodeGuru 的完全等价物 |
 | Amazon Q Developer for GitHub | Preview | 私有仓库 PR 自动审查 | GA、覆盖公开仓库 |
 | AWS Transform continuous modernization | GA（2026-08-03） | 技术债分析、自主生成修复 PR | 修复 PR 自动合并部署 |
+| Amazon Bedrock AgentCore 平台 | GA（2025-10-13） | 通用 Agent 生产控制面；DevOps Agent built on 底座 | 平台 GA 覆盖所有子能力全域可用 |
+| AgentCore Harness | GA（2026-06-17） | 配置式托管 loop 运行 | 是 CI/CD 编排能力本身 |
+| AgentCore Policy | GA（2026-03-03） | Gateway 外 Cedar 确定性拦截 | 覆盖一切路径（旁路需单独治理） |
+| AgentCore Evaluations | GA（2026-03-31） | 在线/按需/批处理质量评估 | 是业务正确性 Oracle 或发布授权 |
+| AgentCore Optimization / Insights | 主体 GA；Insights Preview | 推荐/A-B/配置包；失败聚类 | 关键门禁依赖 Preview Insights |
+| AgentCore Registry / Payments / Web Search | Preview（Registry 2026-04-09、Payments 2026-05-07）；Web Search GA 2026-06-17 仅 us-east-1 | 资产目录/微支付/联网搜索 | 已 GA 全域、默认财务授权 |
 | GitHub Copilot coding agent | GA（2025-09-25） | 异步 Draft PR、测试执行 | 自动合并、自动发布 |
 | agentic Copilot code review | GA（2026-03-05） | 全仓上下文行级评论、skills/MCP | 评论构成 Required Review 或阻断 |
 | GitHub Code Quality | GA（2026-07-20） | 检测+修复+覆盖率+Ruleset 闭环 | 门禁来自模型结论（门禁在 Ruleset） |
@@ -65,6 +75,12 @@ confidence: high-for-mechanism-and-status medium-for-outcomes
 | Azure Repos Copilot review / Autofix | limited public preview | Azure DevOps 侧候选修复与评审 | GA、public preview 已落地 |
 | Azure SRE Agent | 文档未显式标注 → unverified | 调查/根因/缓解建议、Review/Autonomous 模式 | GA、默认自动恢复生产 |
 | Remote Azure DevOps MCP | Public Preview（Sprint 271） | MCP tools、Entra ID 认证 | GA（目标 2026 Q3 未落地） |
+| Microsoft Foundry Agent Service | GA（文档无 preview 横幅；精确公告日期未核验） | 托管 agent 运行、immutable version、发布 endpoint | 精确 GA 日期可写；支持流量灰度（实际不支持） |
+| Microsoft Foundry Control Plane | 多数特性 Preview | 订阅级 agent/model/tool 目录、策略、fleet 洞察 | 已 GA、特性齐备 |
+| Microsoft Agent 365 | GA（2026-05-01） | Observe/Govern/Secure 组织治理；Registry Sync（Preview）跨云同步含 Amazon Bedrock | 已统管全部跨云 agent 生命周期（后续仅支持 start/stop/delete） |
+| Entra Agent ID | GA（2026-04） | agent identity + blueprint；OBO + client credentials | 发布后无需重新授权（实际需重授 RBAC） |
+| Foundry Evaluations / Agent Optimizer / traces-to-dataset | evaluation 部分区域 preview；optimizer preview；traces-to-dataset preview | GitHub Actions 作 CI 质量门、trace replay、评测驱动优化 | 已 GA、可作唯一发布授权 |
+| Microsoft 侧 Payments 对等物 | 无直接对等 | 资源消耗计费 + 按用户许可（Agent 365 $15/user/月 或 M365 E7） | 存在与 AgentCore Payments 对等的变现机制 |
 
 ## 主要证据缺口
 

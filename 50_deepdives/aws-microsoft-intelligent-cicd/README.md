@@ -10,8 +10,9 @@ tags:
   - company/microsoft
   - company/github
   - company/azure
+  - platform/aws
 status: complete
-as_of: 2026-08-06
+as_of: 2026-08-07
 topic_id: aws-microsoft-intelligent-cicd
 topic_type: company
 stages:
@@ -26,6 +27,7 @@ tools:
   - AWS DevOps Agent Release Management
   - Amazon Q Developer
   - AWS Transform
+  - Amazon Bedrock AgentCore
   - GitHub Copilot coding agent
   - GitHub Copilot code review
   - GitHub Code Quality
@@ -60,6 +62,9 @@ refresh_after: 2026-09-06
 4. **Agent 输出只有接入外部控制才成为 Gate。** AWS 的 `BLOCK / Proceed with Caution / Safe to Release` 需配置为 GitHub required check 或 GitLab approval rule 才阻断合并；Microsoft 的 Code Quality 门禁由 Ruleset 的确定性阈值持有，不来自模型结论。
 5. **效果数据全部为厂商自述。** WGU MTTR 2h→28min、GitHub 内部 67.3% findings 修复于合并前等均无独立第三方复核，不进入正式结论。
 6. **能力收敛有明确的时间信号。** AWS 于 2025-11-07 同日停止 CodeGuru Reviewer 新关联与 CodeCatalyst 新客户，能力向 DevOps Agent + Amazon Q Developer + Inspector Code Security + AWS Transform 四条线收敛。
+7. **AWS 平台底座是 Amazon Bedrock AgentCore。** `DevOps Agent built on AgentCore` 已获官方证实（记忆/策略/评测/可观测四类专用基础设施）；AgentCore 提供 Harness/Runtime、Gateway/Identity/Policy、Memory、Evaluations/Optimization 等生产控制面，但本身不是 CI/CD 编排能力；`Transform built on AgentCore` 未证实（unverified）。
+8. **Agent 平台层：AgentCore 单产品双闭环，Microsoft 三层收敛。** AgentCore 用单一产品承载行动闭环（Harness/Gateway/Identity/Policy）与质量闭环（Observability/Evaluations/Optimization/immutable version-endpoint）；Microsoft 侧由 Foundry Agent Service（运行/构建控制面）+ Agent 365（组织治理控制面，官方定位 "The Control Plane for Agents"）+ Entra Agent ID（身份控制面）三层收敛，没有单一对等物。六域均可映射，唯 Payments 无直接对等、发布不支持流量灰度；Agent 365 Registry Sync（Preview）原生支持把 Amazon Bedrock / Google Cloud agent 拉入统一注册表（跨云治理信号）。
+9. **平台层走在业务层前面。** 两家都先做"可治理、可观测、可版本化的 Agent 平台"，业务层 Agent（DevOps Agent、Copilot coding agents、SRE Agent）的写权限、版本与质量信号最终收敛到平台层控制面；智能化 CI/CD 成熟度取决于平台层而非业务层功能数量（分析推断，medium-high）。
 
 ## 专题导航
 
@@ -72,6 +77,16 @@ refresh_after: 2026-09-06
 | Report | 完成 | [[50_deepdives/aws-microsoft-intelligent-cicd/90_report\|完整特性清单与能力介绍]] |
 | AWS Source Brief | 完成 | [[00_sources/research-aws-intelligent-cicd-capabilities-2026-08-06\|AWS 能力复核与扩展]] |
 | Microsoft Source Brief | 完成 | [[00_sources/research-microsoft-intelligent-cicd-capabilities-2026-08-06\|Microsoft 能力复核与扩展]] |
+| AWS 能力全景图核验 | 完成 | [[00_sources/research-aws-official-intelligent-cicd-capability-map-2026-08-06\|AWS 官方全景图核研]] |
+| Microsoft 能力全景图核验 | 完成 | [[00_sources/research-microsoft-official-capability-map-panorama-2026-08-06\|Microsoft 官方全景图核验]] |
+| AgentCore 平台底座核验 | 完成 | [[00_sources/research-amazon-bedrock-agentcore-capabilities-2026-08-07\|AgentCore 能力核验 (2026-08-07)]] |
+| Microsoft Agent 平台控制面核验 | 完成 | [[00_sources/research-microsoft-agent-platform-control-plane-2026-08-07\|Microsoft Agent 生产控制面研究报告 (2026-08-07)]] |
+
+> [!important] 能力全景图证据边界
+> 截至 2026-08-06，**两家官方均未发布**单张覆盖多阶段并标注智能能力的"智能化 CI/CD 能力全景图"。AWS 只有"文字能力框架 + 单功能截图"（最近的多阶段 CI/CD 官方架构图为 2023 年非智能的 Deployment Pipeline Reference Architecture）；Microsoft 最接近的官方图为 Learn 的 Agent Lifecycle（Plan→Act→Evaluate 运行循环，非阶段能力地图）。任何全景图必须**自绘**并标注"基于官方产品文档整理，非厂商原图"，每个能力点回链单产品一手来源。
+
+> [!note] AgentCore 平台底座
+> AWS DevOps Agent **built on Amazon Bedrock AgentCore** 已获官方证实（[AWS DevOps Blog 2026-03-31](https://aws.amazon.com/blogs/devops/leverage-agentic-ai-for-autonomous-incident-response-with-aws-devops-agent/)），限定专用基础设施为 memory/policies/evaluations/observability；`Transform built on AgentCore` 未证实（unverified）。AgentCore 是全上半部分 AWS DevOps Agent 能力的运行与治理底座，但本身不是 CI/CD 编排能力；其对等物在 Microsoft 侧是"三层收敛"（Foundry Agent Service + Agent 365 + Entra Agent ID），详见 [[00_sources/research-microsoft-agent-platform-control-plane-2026-08-07\|Microsoft Agent 生产控制面研究报告 (2026-08-07)]] 与 [[50_deepdives/aws-microsoft-intelligent-cicd/90_report\|报告平台层交叉对比章节]]。
 
 ## 可选交付物判断
 
@@ -83,10 +98,10 @@ refresh_after: 2026-09-06
 
 ## Presentation-ready 判断
 
-- **当前值：** `true`，仅对"能力分布与生命周期及控制边界"这一受限比较主张成立。
-- **候选页面主张：** 云厂商正把 AI 放进发布前审查、合并前门禁与发布后恢复三个位置；AWS 用共享交付—运行上下文，Microsoft 用仓库内修复—门禁闭环，但两者都保留确定性 Gate 与人工授权。
-- **可用于：** AWS vs Microsoft 双公司机制页、智能化 CI/CD 能力全景页、Agent 自治边界页。
-- **禁止升级为：** "某家已端到端自动发布/自动恢复""Release Management 已 GA""Azure SRE Agent 默认自动恢复生产"或"已被独立证明普遍降低 MTTR"。
+- **当前值：** `true`，对"能力分布与生命周期及控制边界"与"Agent 平台层双闭环 vs 三层收敛"两组受限比较主张成立。
+- **候选页面主张：** 云厂商正把 AI 放进发布前审查、合并前门禁与发布后恢复三个位置；AWS 用共享交付—运行上下文，Microsoft 用仓库内修复—门禁闭环，但两者都保留确定性 Gate 与人工授权。平台层上，AgentCore 以单产品双闭环承载，Microsoft 以 Foundry + Agent 365 + Entra 三层收敛承载，业务层 Agent 的治理最终收敛到平台层控制面。
+- **可用于：** AWS vs Microsoft 双公司机制页、智能化 CI/CD 能力全景页、Agent 自治边界页、Agent 平台层（控制面）对比页。
+- **禁止升级为：** "某家已端到端自动发布/自动恢复""Release Management 已 GA""Azure SRE Agent 默认自动恢复生产""已被独立证明普遍降低 MTTR""AgentCore 与 Foundry Agent Service 成熟度对齐"或"Agent 365 已统一治理全部跨云 agent"。
 - **成熟度标签：** `AWS Production operations：GA（2026-03-31）；AWS Release Management：Preview / us-east-1；GitHub coding agent / code review / Code Quality / Dependabot remediation：GA；Agentic autofix / Agentic Workflows：Public Preview；Azure DevOps Copilot 审查与 Autofix：limited public preview；Azure SRE Agent：生命周期 unverified；独立效果：证据缺口`。
 
 ## 与相邻专题的边界

@@ -28,6 +28,8 @@ confidence: high
 ### 纳入
 
 - AWS：AWS DevOps Agent（Production Operations、Release Management、Learned Skills、Topology、Custom Agents、Sandbox、MCP/A2A）、Amazon Q Developer 代码审查、AWS Transform continuous modernization、CodeGuru/CodeCatalyst 状态；
+- AWS 平台底座：Amazon Bedrock AgentCore（Harness/Runtime、Gateway/Identity/Policy、Memory、Evaluations/Optimization 等生产控制面，作为 `DevOps Agent built on AgentCore` 的已证实底座）;
+- Microsoft 平台底座（限平台层对比口径）：Microsoft Foundry Agent Service / Foundry Control Plane、Microsoft Agent 365、Entra Agent ID —— 仅用于与 AgentCore 六域做"Agent 生产控制面"对比，不展开为独立平台专题；
 - Microsoft：GitHub Copilot coding agent、Copilot code review、GitHub Code Quality、Dependabot→AI agent 修复、Agentic autofix、GitHub Agentic Workflows、Azure Repos Copilot code review、Azure DevOps Autofix、Azure SRE Agent、GitHub Copilot for Azure / Azure MCP / Azure Skills、Remote Azure DevOps MCP、Defender for Cloud code-to-cloud；
 - 每项能力的机制、用户可见产物、产品状态与日期、授权/副作用边界、一手来源链接；
 - 生命周期标注（GA / Preview / limited public preview / unverified）；
@@ -37,7 +39,8 @@ confidence: high
 
 - 对两家公司全部开发者工具做产品线盘点；
 - 传统 CodePipeline / CodeBuild / Azure Pipelines / GitHub Actions / CodeQL / Dependabot 版本更新的确定性能力本身（只作为 Agent 输出的约束或输入）；
-- Amazon Bedrock AgentCore 作为通用 Agent 平台的能力（不列作原生 CI/CD 编排）；
+- Amazon Bedrock AgentCore 的全量 Agent 平台能力盘点（本专题只把其作为 DevOps Agent 的已证实底座补充，并做双公司平台层对比；完整研究见 [[50_deepdives/amazon-bedrock-agentcore/README|AgentCore 专题]]）；
+- Microsoft Foundry / Agent 365 / Entra 作为独立平台的完整能力与定价盘点（只做与 AgentCore 六域的口径对齐对比，见 [[00_sources/research-microsoft-agent-platform-control-plane-2026-08-07|Microsoft Agent 生产控制面研究报告]]）；
 - 基础模型、提示词、planner 或重试算法的无来源推测；
 - 实际连接客户账号、仓库、VPC、目标环境或生产系统；
 - 把厂商发布材料中的收益数字外推为行业平均；
@@ -45,8 +48,8 @@ confidence: high
 
 ## 观察窗口与证据政策
 
-- **事实截止：** 2026-08-06；
-- **访问时间：** 2026-08-06（Asia/Shanghai），部分条目在 2026-08-05 访问并复核；
+- **事实截止：** 2026-08-07；
+- **访问时间：** 2026-08-06（Asia/Shanghai），部分条目在 2026-08-05 访问并复核；AgentCore 平台底座与 Microsoft Agent 生产控制面对比在 2026-08-07 核验；
 - **主来源：** AWS User Guide、AWS What's New、AWS 官方博客、GitHub Changelog、GitHub 官方文档与仓库、Microsoft Learn、Azure DevOps release notes / roadmap；
 - **来源限制：** 产品与效果资料几乎都来自厂商方，机制事实可为高置信度，客户效果与跨组织适用性最多为中低置信度；
 - **状态口径：** 明确区分 GA / Preview / limited public preview / roadmap；文档存在性不自动等于 GA；路线图日期是"预期"而非承诺；

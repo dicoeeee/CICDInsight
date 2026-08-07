@@ -8,26 +8,29 @@ tags:
   - company/github
   - company/azure
 status: complete
-as_of: 2026-08-06
+as_of: 2026-08-07
 confidence: high-for-mechanism-and-status medium-for-outcomes
 ---
 
 # AWS 与 Microsoft 智能化 CI/CD 能力全景
 
 > [!important] 阅读约定
-> - 本报告是深度洞察成果，覆盖 AWS 与 Microsoft（含 GitHub、Azure DevOps、Azure）截至 **2026-08-06** 可核验的智能化 CI/CD 功能。
+> - 本报告是深度洞察成果，覆盖 AWS 与 Microsoft（含 GitHub、Azure DevOps、Azure）截至 **2026-08-07** 可核验的智能化 CI/CD 功能。
 > - 每项能力标注**产品状态**（GA / Preview / limited public preview / unverified）、**发布日期**、**机制**、**用户可见产物**、**授权边界**与**一手来源链接**。
 > - 所有效果数据（MTTR、解决率等）均为厂商自述，不进入正式结论。区分"来源明确陈述的事实""分析推断""待验证假设"。
 > - `unverified` 表示无法从官方来源核验生命周期，不代表产品不存在。
+> - 除业务层能力清单外，本报告新增**平台层交叉对比**（AgentCore 双闭环 vs Microsoft 三层收敛），见下方"平台层交叉对比"章节。
 
 ## 一、结论先行
 
 两家厂商都把 Agent / AI 放进了软件交付链的**发布前审查、合并前门禁、发布后恢复**三个位置，但机制方向相反：
 
-- **AWS 路线：收敛"交付—运行上下文"。** 以 AWS DevOps Agent 为核心，把资源拓扑、跨仓依赖、流水线晋级关系与运行遥测汇成共享上下文，再用于发布就绪审查、变更驱动发布测试与事件调查。Production operations 已 GA（2026-03-31），Release Management 为 `us-east-1` Preview。
+- **AWS 路线：收敛"交付—运行上下文"。** 以 AWS DevOps Agent 为核心，把资源拓扑、跨仓依赖、流水线晋级关系与运行遥测汇成共享上下文，再用于发布就绪审查、变更驱动发布测试与事件调查。Production operations 已 GA（2026-03-31），Release Management 为 `us-east-1` Preview。其运行与治理底座为 **Amazon Bedrock AgentCore**（`built on AgentCore` 已获官方证实，见 [AWS DevOps Blog 2026-03-31](https://aws.amazon.com/blogs/devops/leverage-agentic-ai-for-autonomous-incident-response-with-aws-devops-agent/)）。
 - **Microsoft 路线：仓库内"修复—门禁"闭环。** 以 GitHub Copilot / Code Quality 为核心，把代码变更、质量与安全发现、Draft PR 修复和 Ruleset 门禁在仓库内闭环，再以 Azure SRE Agent 延伸到运行恢复。coding agent / code review / Code Quality / Dependabot remediation 已 GA；Agentic autofix 与 Agentic Workflows 为 Public Preview；Azure 侧多次级仍为 limited preview。
 
 **两条路线都没有取消确定性 CI/CD Gate。** `BLOCK`、Check Run、Autofix PR、缓解建议、Autonomous run mode 都不等于自动合并、部署或恢复授权。
+
+**平台层（治理 Agent 的底座）呈现不同结构：** AWS 以 AgentCore 单产品双闭环（行动闭环 + 质量闭环）承载；Microsoft 以 Foundry Agent Service + Agent 365 + Entra Agent ID 三层收敛承载，没有单一对等物。两家都先做"可治理、可观测、可版本化的 Agent 平台"，业务层 Agent 的写权限、版本与质量信号最终收敛到平台层控制面（详见"平台层交叉对比"章节，分析推断 medium-high）。
 
 ---
 
@@ -151,6 +154,45 @@ confidence: high-for-mechanism-and-status medium-for-outcomes
 连接 GitHub/GitLab/Bitbucket/本地仓库，按需或定时扫描，产出优先级化技术债 findings，并按指示**自主生成验证过的修复 PR**；Web app + `atx ct` CLI + Kiro Power。属"变更/恢复"相邻能力（自助修复），非门禁。
 
 来源：[Transform GA 博客](https://aws.amazon.com/blogs/devops/analyze-and-remediate-technical-debt-autonomously-with-aws-transform-continuous-modernization/)
+
+### AWS 平台底座：Amazon Bedrock AgentCore（补充）
+
+AgentCore 是 AWS 的**通用 Agent 生产控制面（平台层）**，不是垂直业务 Agent，也不属于 CI/CD 编排能力本身。但在本专题中必须补充，因为 AWS 官方确认 **AWS DevOps Agent built on Amazon Bedrock AgentCore**（2026-03-31 博客原文："DevOps Agent is built on Amazon Bedrock AgentCore with dedicated infrastructure for memory, policies, evaluations, and observability"）。因此 AgentCore 是上方所有 AWS DevOps Agent 能力的运行与治理底座。
+
+| 能力域 | 代表能力 | 状态/日期 | 机制 | 来源 |
+|---|---|---|---|---|
+| 编排与运行 | Harness、Runtime、CLI/CDK、version/endpoint、导出为代码、Step Functions 集成 | 平台 GA 2025-10-13；Harness GA 2026-06-17 | 托管 agent loop（Strands 框架）+ 框架无关 serverless Runtime；每会话隔离 microVM + 持久文件系统；不可变版本 + 命名端点 | [What's New GA](https://aws.amazon.com/about-aws/whats-new/2025/10/amazon-bedrock-agentcore-available/)、[Harness GA](https://aws.amazon.com/about-aws/whats-new/2026/06/amazon-bedrock-agentcore-harness-generally-available/)、[Runtime](https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/agents-tools-runtime.html) |
+| 工具与行动 | Gateway、Identity、Policy、Browser、Code Interpreter、Web Search | Policy GA 2026-03-03；Web Search GA 2026-06-17（仅 us-east-1） | Gateway 把 API/Lambda/服务转 MCP 工具；Cedar Policy 在 Gateway 外确定性拦截；托管浏览器与沙箱代码执行 | [Policy GA](https://aws.amazon.com/about-aws/whats-new/2026/03/policy-amazon-bedrock-agentcore-generally-available/)、[Gateway](https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/gateway.html)、[Web Search](https://aws.amazon.com/blogs/aws/announcing-web-search-on-amazon-bedrock-agentcore-ground-your-ai-agents-in-current-accurate-web-knowledge/) |
+| 状态与上下文 | Memory、session/persistent filesystem | GA | 短期会话 + 长期策略记忆；harness 默认托管（SEMANTIC+SUMMARIZATION、按 actorId 隔离） | [Memory](https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/memory.html) |
+| 观测与质量 | Observability、Evaluations、Optimization、Insights | Evaluations GA 2026-03-31；Optimization 主体 GA 2026-06-17；Insights Preview | 在线/按需/批处理评估（13 内置 evaluator + 自定义）；2026-07-23 起 traces+prompts+logs 统一单 log group 并按 Agent 粒度 IAM/CMK | [Evaluations GA](https://aws.amazon.com/about-aws/whats-new/2026/03/agentcore-evaluations-generally-available/)、[Observability 统一](https://aws.amazon.com/about-aws/whats-new/2026/07/amazon-bedrock-agentcore-unified-observability-single-log-group/)、[Optimization](https://aws.amazon.com/blogs/machine-learning/new-in-amazon-bedrock-agentcore-build-agents-with-broader-knowledge-and-continuous-learning/) |
+| 资产与经济 | Agent Registry、Payments | Registry Preview（2026-04-09）；Payments Preview（2026-05-07） | 组织内容器目录（agent/tool/skill/MCP server）+ 审批流；x402 微支付 + 会话预算上限 | [Registry](https://aws.amazon.com/about-aws/whats-new/2026/04/aws-agent-registry-in-agentcore-preview/)、[Payments](https://aws.amazon.com/about-aws/whats-new/2026/04/amazon-bedrock-agentcore-payments-preview/) |
+
+**关键边界：**
+1. **AgentCore 支撑上方能力，但它不是上方能力的 CI/CD 编排功能。** 传统 CodePipeline/CodeBuild 仍由确定性规则执行；AgentCore 治理的是"Agent 本身"的运行、工具授权与质量。
+2. **`DevOps Agent built on AgentCore` 已证实**，来源为 [AWS DevOps Blog 2026-03-31](https://aws.amazon.com/blogs/devops/leverage-agentic-ai-for-autonomous-incident-response-with-aws-devops-agent/)，且限定专用基础设施为 memory/policies/evaluations/observability 四类；**不**外推 Runtime 部署拓扑或模型选择。
+3. **`AWS Transform built on AgentCore` 未证实（unverified）**。Transform 明确由 Amazon Bedrock 驱动，不得绘制 `Transform → AgentCore` 为产品内部依赖。
+4. **区域可用性逐能力不同**：Runtime/Gateway/Identity/Observability 20 区；Harness/Memory 15 区；Payments 4 区；Registry 5 区；Web Search 仅 us-east-1。不能因平台 GA 推断所有组件全域可用。
+5. **AgentCore 对比方在 Microsoft 侧是"三层收敛"而非单点对等物**：运行/构建控制面为 Microsoft Foundry Agent Service（GA，公告日期未核验）+ Foundry Control Plane（多数特性 Preview）；组织治理控制面为 Microsoft Agent 365（GA 2026-05-01，官方定位 "The Control Plane for Agents"）；身份控制面为 Entra Agent ID（GA 2026-04）。六域均可映射，唯 Payments 无直接对等、发布不支持流量灰度。详见 [[00_sources/research-microsoft-agent-platform-control-plane-2026-08-07|Microsoft Agent 生产控制面研究报告 (2026-08-07)]] 与下方"平台层交叉对比"章节。
+
+完整机制与双闭环分析见 [[50_deepdives/amazon-bedrock-agentcore/README|Amazon Bedrock AgentCore 专题]]；最新能力核验见 [[00_sources/research-amazon-bedrock-agentcore-capabilities-2026-08-07|AgentCore 能力核验 (2026-08-07)]]。
+
+### 平台层交叉对比：AgentCore 双闭环 vs Microsoft 三层收敛
+
+本节回答"Agent 平台层（治理 Agent 的基础设施）谁在对标谁"，与业务层（Agent 做 CI/CD）的能力清单区分开。
+
+**对比结论：** AgentCore 是**单产品双闭环**（行动闭环 + 质量闭环在一个控制面内），Microsoft 侧是**三层收敛的分散—分层结构**，没有单一产品同时承担全部职责。
+
+| 维度 | AWS AgentCore | Microsoft（Foundry / Agent 365 / Entra） | 差异点 |
+|---|---|---|---|
+| 行动闭环 | Harness/Runtime + Gateway/Identity/Policy 单控制面 | Agent Service 运行隔离 + Entra Agent Identity + MCP 工具授权（`require_approval`）+ AI Gateway（APIM）策略 | AWS 单点；Microsoft 跨越运行、身份、网关三个产品 |
+| 质量闭环 | Observability → Evaluations → Optimization → immutable version-endpoint | Agent Service：trace（OTel）→ evaluation（含 GitHub Actions 作 CI 质量门）→ Agent Optimizer（Preview）→ immutable agent version | 机制同构；Microsoft 桥的落点是 GitHub Actions |
+| 组织治理 | Agent Registry（Preview，组织内容器目录） | Agent 365（M365 admin center，Observe/Govern/Secure）+ Foundry Control Plane（订阅级） | Agent 365 Registry Sync（Preview）原生支持 Amazon Bedrock / Google Cloud 跨云治理 |
+| 身份 | AgentCore Identity（Gateway 侧授权） | Entra Agent ID（GA 2026-04，agent identity + blueprint，OBO + client credentials） | Microsoft 身份是独立租户级产品，独立于运行层 |
+| 发布 | version-endpoint 稳定端点 + 流量路由 | Agent Application 稳定 endpoint + Deployment 子资源；**100% 单版本路由，不支持灰度** | 流量灰度是定位到的能力差异 |
+| 变现 | Payments（Preview，x402 微支付） | 无直接对等；资源计费 + 按用户许可（Agent 365 $15/user/月 或 M365 E7） | Payments 为 AWS 独有方向 |
+| 平台级 | 单产品 GA 2025-10-13 | Entra Agent ID GA 2026-04 → Agent 365 GA 2026-05-01 → Agent Service 文档无 preview 横幅（公告日期未核验） | Microsoft 平台级控制面产品化晚约 6-7 个月 |
+
+**关键推断（分析，非事实）：** 两家都证明"先有可治理、可观测、可版本化的 Agent 平台，才谈得上把 Agent 放进发布/门禁/恢复流程"。业务层 Agent 的写权限、版本、质量信号最终收敛到平台层控制面 —— 智能化 CI/CD 的成熟度取决于平台层而非业务层功能数量。该推断置信度 medium-high，依据为双方平台层状态（发现七）与业务层能力清单（发现一至六）的分层比对。
 
 ---
 
@@ -348,7 +390,9 @@ VS Code/VS 2022/VS 2026 内以 Agent 模式查询 Azure 资源、生成 IaC（Bi
 
 ## 七、方法说明
 
-- 本报告基于 2026-08-06（部分 2026-08-05）对 AWS、GitHub、Microsoft Learn 官方来源的实际访问；状态/日期/版本号均来自访问页面。
-- 研究输入见 [[00_sources/research-aws-intelligent-cicd-capabilities-2026-08-06|AWS Source Brief]] 与 [[00_sources/research-microsoft-intelligent-cicd-capabilities-2026-08-06|Microsoft Source Brief]]。
-- 排除项：Amazon Bedrock AgentCore（通用 Agent 平台）、CodeGuru Reviewer（2025-11-07 停新关联）、CodeCatalyst（2025-11-07 停新客户）、传统 CodePipeline/CodeBuild/Azure Pipelines/GitHub Actions/CodeQL/Dependabot 版本更新的确定性能力本身。
+- 本报告基于 2026-08-06（部分 2026-08-05）对 AWS、GitHub、Microsoft Learn 官方来源的实际访问；状态/日期/版本号均来自访问页面。AgentCore 补充部分与平台层交叉对比基于 2026-08-07 核验。
+- 研究输入见 [[00_sources/research-aws-intelligent-cicd-capabilities-2026-08-06|AWS Source Brief]]、[[00_sources/research-microsoft-intelligent-cicd-capabilities-2026-08-06|Microsoft Source Brief]]、[[00_sources/research-amazon-bedrock-agentcore-capabilities-2026-08-07|AgentCore 能力核验]] 与 [[00_sources/research-microsoft-agent-platform-control-plane-2026-08-07|Microsoft Agent 生产控制面研究报告]]。
+- **能力全景图：** 截至 2026-08-06，AWS 与 Microsoft 官方均未发布单张"智能化 CI/CD 能力全景图"（详见 [[00_sources/research-aws-official-intelligent-cicd-capability-map-2026-08-06|AWS 全景图核研]] 与 [[00_sources/research-microsoft-official-capability-map-panorama-2026-08-06|Microsoft 全景图核验]]）。本报告中的阶段分布对照表为主 Agent 自绘整理，非厂商原图。
+- **AgentCore 定位：** 作为 AWS 平台底座补充（非 CI/CD 编排能力本身）；`DevOps Agent built on AgentCore` 已证实，`Transform built on AgentCore` 未证实（unverified）。
+- 排除项：CodeGuru Reviewer（2025-11-07 停新关联）、CodeCatalyst（2025-11-07 停新客户）、传统 CodePipeline/CodeBuild/Azure Pipelines/GitHub Actions/CodeQL/Dependabot 版本更新的确定性能力本身。
 - 所有"收益/效率"表述为厂商自述，未外推为行业平均值。

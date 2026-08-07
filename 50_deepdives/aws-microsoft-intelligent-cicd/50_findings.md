@@ -8,7 +8,7 @@ tags:
   - company/github
   - company/azure
 status: complete
-as_of: 2026-08-06
+as_of: 2026-08-07
 confidence: high-for-mechanism medium-for-outcomes
 ---
 
@@ -70,12 +70,58 @@ AWS 于 2025-11-07 同日停止 CodeGuru Reviewer 新关联与 CodeCatalyst 新�
 
 **反例：** 收缩是供应商产品生命周期事件，不证明替代品功能等价或更成熟；CodeGuru 存量关联仍可用。
 
+## 发现七：AgentCore 是单产品双闭环，Microsoft 侧是"三层收敛"的分散—分层控制面
+
+AgentCore 用一个产品承载全部 Agent 生产控制面职责：行动闭环（Harness/Gateway/Identity/Policy）与质量闭环（Observability/Evaluations/Optimization/immutable version-endpoint）在单一控制面内闭环（C21-C23，AgentCore 六域）。Microsoft 侧没有单一对等物，而是三层收敛：
+
+- **运行/构建控制面**：Microsoft Foundry Agent Service（GA，公告日期未核验）+ Foundry Control Plane（多数特性 preview）—— 与 AgentCore 的 Runtime/版本端点、工具身份、观测评估优化闭环一一对应，是最接近 AgentCore 的对象。
+- **组织治理控制面**：Microsoft Agent 365（GA 2026-05-01），官方定位即"The Control Plane for Agents"，Observe/Govern/Secure 三支柱；其 Registry Sync（public preview）原生支持把 **Amazon Bedrock / Google Cloud** 的 agent 同步进统一注册表。
+- **身份控制面**：Microsoft Entra Agent ID（GA 2026-04），agent identity + blueprint 体系，为前两层提供身份地基。
+- **GitHub 侧独立治理面**：GitHub AI Controls + Copilot SDK + Agentic Workflows，与 Foundry 治理不自动连通。
+
+**证据与置信度：** C21-C23 为 AgentCore 一手来源；Microsoft 三层均来自 `00_sources/research-microsoft-agent-platform-control-plane-2026-08-07.md` 官方一手来源，置信度 high for mechanism/status。
+
+**反例：** "三层收敛"中 Foundation Agent Service 精确 GA 公告日期未核验（文档无 preview 横幅、SDK 多数 stable 为隐含证据）；Foundry Control Plane 多数特性为 preview；Copilot SDK 的 GA 为厂商自述。Agent 365 生态伙伴（n8n/Kore.ai 等）为厂商自述，未验证第三方兑现程度。
+
+## 发现八：两家质量闭环同构，但发布与变现存在可定位差异
+
+两个平台的质量闭环（trace→eval→optimize→immutable version）机制同构：AgentCore 的 Evaluations/Optimization/version-endpoint（as_of 2026-08-07）对应 Foundry Agent Service 的 evaluation（含集成 GitHub Actions 作 CI/CD 质量门、trace replay、traces-to-dataset、Agent Optimizer preview）。可定位的差异点：
+
+- **发布流量**：AgentCore 支持 version-endpoint 稳定端点 + 流量路由；Foundry Agent Application 端点一次只服务一个版本，100% 流量路由，**不支持流量拆分/灰度**。
+- **变现模型**：AgentCore 有 Payments（Agent 订阅变现，Preview）；Microsoft 无直接对等，以资源消耗计费 + 按用户许可（Agent 365 $15/user/month 或含于 M365 E7）代替。
+- **跨云治理**：Agent 365 Registry Sync（Preview）对标 AgentCore 生态，原生支持 Amazon Bedrock —— 但这是"治理他方 agent"，不是"用他方 agent 跑 CI/CD"。
+
+**证据与置信度：** AgentCore 侧 C21-C23 + 8 月 7 日能力核验；Microsoft 侧见发现七来源。质量闭环同构为机制层面比对（分析推断），置信度 medium-high；差异点为官方文档直接事实，置信度 high。
+
+**反例：** 两平台质量闭环都大量为 preview（AgentCore Evaluations GA 2026-03-31，Optimization 部分 preview；Foundry evaluation 部分 preview、optimizer preview），"同构"是机制层同构，不等于成熟度对齐。
+
+## 发现九：AgentCore 的"双控制面之桥"角色在 Microsoft 侧由 Foundry evaluation→GitHub Actions 显式承接
+
+AgentCore 作为 CI/CD 双控制面的桥：Evaluations/Optimization 产出可作为 CI 门禁质量信号（与 GitHub Code Quality 的 AI 门禁角色同域）。Microsoft 侧把这一层显式产品化：Foundry evaluation **集成 GitHub Actions 作 CI/CD 质量门**，trace 可转数据集回灌评测（traces-to-dataset）。这补齐了"Agent 平台质量闭环"与"仓库门禁"之间的桥 —— 与 AgentCore 的 Evaluations-as-gate 叙述同构，但 Microsoft 侧桥的落点是 GitHub Actions（既有 CI 控制面），而不是 Agent 平台自己的版本发布。
+
+**证据与置信度：** Foundry evaluation 的 GitHub Actions 集成与 traces-to-dataset 来自研究报告官方文档；AgentCore Evaluations-as-gate 基于 C21-C23 与 55_evaluations-insight。分析推断，置信度 medium。
+
+**反例：** Foundry evaluation 与 traces-to-dataset 均为 preview；"桥"的完整度（能否端到端阻断合并）未在两平台官方文档中核验到同等深度。
+
+## 发现十：平台层 vs 业务层必须分离 —— 两家都先做"治理 Agent 的平台"，再谈"Agent 做 CI/CD"
+
+- **平台层**（治理 Agent）：AgentCore 六域控制面（2025-10-13 GA）vs Microsoft 三层收敛（Foundry Agent Service + Agent 365 + Entra Agent ID）。这是"Agent 的生产操作系统"。
+- **业务层**（Agent 做 CI/CD）：AWS DevOps Agent / Release Management / Release testing vs GitHub Copilot coding agents / Code Quality / Azure SRE Agent。这是这个操作系统上跑的具体业务 Agent。
+
+两家都证明了一个判断：**先有可治理、可观测、可版本化的 Agent 平台，才谈得上把 Agent 放进发布/门禁/恢复流程**；业务层 Agent 的写权限、版本、质量信号最终收敛到平台层控制面。这与"智能化 CI/CD 的成熟度取决于平台层而非业务层数量"的结论一致（见 90_report 平台层章节）。
+
+**证据与置信度：** 平台层两平台状态见发现七；业务层两平台能力见发现一至六。分层为分析推断，置信度 medium-high。
+
+**反例：** 平台层与业务层的界限并非绝对 —— GitHub 侧治理面（AI Controls/MCP 策略）同时包含平台治理与业务 agent 策略；AWS 侧 AgentCore 生态的第三方 agent（非 AWS 业务 agent）未纳入本专题核验范围。
+
 ## 反例与限制汇总
 
 1. 没有任何独立第三方评测证明"上下文 vs 仓库内闭环"哪条路线更高效、更安全或更省成本。
 2. 所有效果数字（MTTR 改善、67.3% 解决率、Reviews 8-10 分钟）均为厂商自述。
-3. Azure SRE Agent 生命周期、Release Management 公告 URL、Azure DevOps 侧 GA 时间点存在证据缺口。
+3. Azure SRE Agent 生命周期、Release Management 公告 URL、Azure DevOps 侧 GA 时间点、Foundry Agent Service 精确 GA 公告日期存在证据缺口。
 4. 两家都允许客户通过 MCP/webhook/Actions 扩展写面，扩展后的安全边界由客户负责，不构成本专题核验的内建能力。
+5. 平台层对比以机制与状态口径为主；两平台质量闭环均有大量 preview 组件，跨平台成熟度对齐未被任何独立评测证明。
+6. Microsoft 平台层证据来自单厂商一手来源（Microsoft Learn/Security Blog），Agent 365 生态伙伴兑现程度未验证；AgentCore 侧来自 AWS 一手来源。
 
 ## 结论置信度清单
 
@@ -87,3 +133,7 @@ AWS 于 2025-11-07 同日停止 CodeGuru Reviewer 新关联与 CodeCatalyst 新�
 | 生命周期逐项拆分 | high | C01、C02、C09-C16 |
 | 效果数据为厂商自述 | high | 全部效果来源均为厂商 |
 | 端到端自主发布/恢复 | 不支持 | 证据缺口，无官方端到端事务证据 |
+| AgentCore 单产品双闭环 vs Microsoft 三层收敛 | high | C21-C23 + 一层一手来源 |
+| 质量闭环机制同构，发布/变现存在差异 | medium-high | 机制比对（分析）+ 官方差异事实 |
+| AgentCore 双控制面之桥在 Microsoft 侧落点为 GitHub Actions | medium | 双方均为 preview，端到端阻断未核验 |
+| 先有可治理 Agent 平台再谈业务 Agent | medium-high | 平台层+业务层证据分层比对 |
