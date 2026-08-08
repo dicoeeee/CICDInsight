@@ -17,7 +17,7 @@ confidence: medium-to-high
 
 ## 一句话结论
 
-2024—2026 年，智能体没有直接接管 CI/CD，而是先进入代码评审、失败修复、测试和发布准备，并在沙箱、最小权限凭据和外部门禁下逐步扩大执行权。**检查与门禁最先成熟，发布与恢复仍然证据不足；智能体负责理解、生成和调查，确定性系统继续负责验证与放行。** 已公开的量化效果主要集中在拉取请求吞吐、测试时长、故障调查、权限提示和启动延迟，生产发布成功率、变更失败率和完整恢复仍缺直接数字。
+2024—2026 年，智能体没有直接接管 CI/CD，而是先进入代码评审、失败修复、测试和发布准备，并在沙箱、最小权限凭据和外部门禁下逐步扩大执行权。**检查与门禁最先成熟，发布与恢复仍然证据不足；智能体负责理解、生成和调查，确定性系统继续负责验证与放行。** 已公开的比较性收益已经从编码扩展到构建、测试、平台支持、发布评审和故障调查；但新一代常驻智能体在生产放行、长期质量和完整恢复方面仍缺直接对照数字。
 
 ## 一、研究范围与口径
 
@@ -26,7 +26,7 @@ confidence: medium-to-high
 - **公司范围**：GitHub、Microsoft、AWS、Harness、字节（含火山引擎）、OpenAI、Anthropic。
 - **明确不做**：不做传统 CI 与智能化 CI 的过渡对比；不做传统 CI/CD 功能全量盘点；不做 MCP、命令行工具和智能体执行框架的协议级深研（见 [[00_charter|研究章程]] 非目标）。
 - **证据口径**：优先官方文档、官方工程博客、官方仓库和官方发布说明；厂商自述指标逐条标注，不外推为行业平均值；未核验项显式标记并保持阻塞；来源冲突显式保留。
-- **证据来源**：4 份研究底稿——[[00_sources/research-github-microsoft-cicd-trends-2026-08-07|GitHub/Microsoft]]、[[00_sources/research-aws-cicd-trends-2024-2026-2026-08-07|AWS]]、[[00_sources/research-openai-anthropic-cicd-trends-2026-08-07|OpenAI/Anthropic]]、[[00_sources/research-bytedance-cicd-2024-2026-trends-2026-08-07|字节]]——+ [[50_deepdives/harness-company/fact-table-2024-2026-2026-08-07|Harness 2024-2026 事实表]]和 [[50_deepdives/cicd-trends-2024-2026/research-evolution-panorama-2026-08-08|本次演进全景补充研究]]。底稿统一于 2026-08-07 访问核验，本次补充研究于 2026-08-08 复核。
+- **证据来源**：4 份研究底稿——[[00_sources/research-github-microsoft-cicd-trends-2026-08-07|GitHub/Microsoft]]、[[00_sources/research-aws-cicd-trends-2024-2026-2026-08-07|AWS]]、[[00_sources/research-openai-anthropic-cicd-trends-2026-08-07|OpenAI/Anthropic]]、[[00_sources/research-bytedance-cicd-2024-2026-trends-2026-08-07|字节]]——+ [[50_deepdives/harness-company/fact-table-2024-2026-2026-08-07|Harness 2024-2026 事实表]]、[[50_deepdives/cicd-trends-2024-2026/research-evolution-panorama-2026-08-08|本次演进全景补充研究]]和 [[50_deepdives/cicd-trends-2024-2026/research-agentic-cicd-effects-2026-08-08|五项重点能力效果研究]]。底稿统一于 2026-08-07 访问核验，本次补充研究于 2026-08-08 复核。
 
 ## 二、演进全景（2024 → 2026-08）
 
@@ -52,13 +52,42 @@ confidence: medium-to-high
 
 | 公司 | 实际使用结果 | 采用规模 | 研究或基准结果 | 效果对应的能力 | 口径与限制 |
 |---|---|---|---|---|---|
-| **GitHub** | Aspire 在 2026-05-03 至 06-02 的 30 天窗口内运行跨仓文档工作流 396 次，创建 82 个文档拉取请求，82 个全部合并；中位合并时间 44.8 小时，38% 在 24 小时内、96% 在 7 天内合并。 | 396 个已合并产品拉取请求触发 396 次工作流；82 次判断为需要文档。 | — | Agentic Workflows、安全输出和人工评审。 | GitHub 与 Microsoft Aspire 团队案例；对象是文档交付，不代表全部代码交付或无人评审。 |
+| **GitHub** | Agentic Workflows 优化后，5 个满足前后样本门槛的生产工作流有效令牌消耗下降 19%—62%；其中 Auto-Triage 在 109 次优化后运行中下降 62%，累计少消耗约 780 万有效令牌。Copilot cloud agent 启用仓库记忆后，拉取请求合并率由 83% 升至 90%。 | Aspire 的 396 次工作流运行创建 82 个文档拉取请求并全部合并；这是采用与接受规模，不作为前后提效结论。 | 两项 GitHub Copilot 随机试验分别报告：95 名开发者完成指定任务的平均时间由 2 小时 41 分钟降至 1 小时 11 分钟；202 名资深开发者使用 Copilot 后，通过全部 10 项单元测试的可能性提高 53.2%。 | 公司级 Copilot、Copilot cloud agent、Agentic Workflows。 | 三层产品和样本必须分开：Copilot 研究不能证明 Cloud Agent 或 Agentic Workflows 的单项效果；有效令牌下降只代表工作流运行成本变化。 |
 | **Microsoft** | Visma 在同时采用 GitHub Copilot、Azure DevOps 和 Visual Studio 后报告新代码开发最高加快 50%；Ahold Delhaize USA 的综合现代化案例报告交付速度最高提升 40%，更新由数周缩短至数小时。 | Ahold 将 800 多个仓库统一到 GitHub Enterprise；该数字是覆盖规模，不是单项能力效果。 | — | Copilot、Azure DevOps/GitHub、云平台和治理自动化的组合。 | 两个案例都由多产品与流程改造共同作用；没有 2026 年 Azure Repos 人工智能评审、自动修复或远程 MCP 的直接效果数字。 |
-| **AWS** | Rapyder 在 50 次调查中报告平均解决时间由 45 分钟降至 12 分钟，降幅 73%；根因判断准确率 92%、零误报，平均每次节省 30 分钟。 | 案例组织管理 500 多个 AWS 账户、每月 150 多起事件；这是业务规模，不是评测样本。 | — | AWS DevOps Agent 生产运维调查。 | 仅对应正式可用的生产运维能力；不能用于证明仍处于预览的发布管理或生产自动恢复效果。 |
-| **Harness** | Harness 在自有 Harness-Core 仓库的 3,000 个拉取请求上报告平均单元测试时间由 75 分钟降至 25 分钟；Morningstar 综合案例报告构建最高加快 5 倍。 | Morningstar 将约 36,000 条脚本流水线收敛为 50 个模板，并报告构建成功率接近 100%。 | — | 测试智能、缓存智能、云端执行和模板治理。 | 3,000 个拉取请求是同一仓库测量；Morningstar 为多项平台迁移共同结果，不能归因于 Worker Agents。 |
+| **AWS** | Rapyder 在 50 次调查中报告平均解决时间由 45 分钟降至 12 分钟，降幅约 73%（报告计算）；根因判断准确率 92%、零误报。Deriv 报告发布评审由数小时、偶尔一整天缩短至数分钟。 | Rapyder 管理 500 多个 AWS 账户、每月 150 多起事件；Deriv 称评审覆盖工程组织及多个 GitHub 组织中的每个拉取请求，但未披露拉取请求数量。 | — | AWS DevOps Agent 生产运维调查与发布管理。 | 前一组数字对应正式可用的生产运维能力；后一组对应预览阶段发布管理的单一客户结果，不能外推为发布成功率、变更失败率或生产自动恢复效果。 |
+| **Harness** | 历史同仓库基准中，Harness CI 的构建中位数比最近对手快 2—5 倍；Qrvey 构建由 90 分钟至数小时降至平均 12 分钟；United 同一代码的构建由约 22 分钟降至 5 分钟以内。Harness 的联合智能体内部改造又将响应时间由 40 秒降至 20 秒、令牌消耗降低 90%。 | Harness-Core 的测试智能测量覆盖 3,000 个拉取请求；某大型金融机构称，数月内由 Harness AI 分流 95% 的平台支持工单，避免了数万张工单。 | Wasimil 采用人工智能测试自动化后，测试失败率由约 50% 降至低于 10%，发布频率由每周两次提高到每日。 | CI Intelligence、Harness AI、人工智能测试自动化、CI/CD 平台。 | 基准、内部架构测量和客户迁移结果分别对应不同产品层；完整平台收益由执行资源、模板、治理、人工智能和流程迁移共同产生，不能归因于 Worker Agents。 |
 | **字节/火山引擎** | 尚未检索到持续交付 CP、AgentKit 或人工智能应用部署的公开生产收益数字。 | — | Repo2Run 在 420 个带单元测试的 Python 仓库上环境生成成功率为 86.0%；Trae Agent 在 SWE-bench Verified 上的一次尝试通过率（Pass@1）为 75.20%；MarsCode Agent 在 SWE-bench Lite 上解决 102/300 个问题，即 34%。 | Repo2Run、Trae Agent、MarsCode Agent。 | 均为字节研究团队的论文或开源基准，不是火山引擎持续交付产品的生产效果。 |
 | **OpenAI** | 一个内部产品仓库约 5 个月内由 3 名工程师驱动 Codex 开启并合并约 1,500 个拉取请求，平均每名工程师每天 3.5 个；部分团队使用 Symphony 后前三周已合并拉取请求数量增长 500%。 | 同一内部仓库约 100 万行代码，已有数百名内部用户；这些是产出和采用规模，不是质量指标。 | — | Codex 驱动的软件工程实践和 Symphony 常驻编排。 | 内部实践没有人工团队对照；500% 未披露团队数和绝对拉取请求数量，不能外推为普遍提效。 |
 | **Anthropic** | Claude Code 沙箱在内部使用中使权限提示减少 84%；Managed Agents 解耦推理与执行容器后，首次输出延迟中位数约下降 60%，95 分位数下降超过 90%。 | — | 自动模式完整两阶段分类器在真实流量 10,000 个样本上的误报率为 0.4%；在 52 个真实过度动作样本上的漏检率为 17%；在 1,000 个合成外泄样本上的漏检率为 5.7%。 | Claude Code 沙箱、自动模式和 Managed Agents。 | 权限提示和首次输出延迟不是流水线总耗时；17% 漏检率是明确残余风险，不能写成安全放行。 |
+
+#### 2.1.2 五项重点能力的比较性效果
+
+> 本节优先回答“相对什么、改变多少”。纯运行次数和拉取请求数量只保留为采用规模。GitHub 云端智能体的当前正式名称是 **GitHub Copilot cloud agent**，前身为 Copilot coding agent；Nx 不在七家公司主范围内，在此作为构建失败自愈的补充样本。所有数据按原发布口径记录，不用于跨厂商排名。
+
+##### 五项能力的直接比较结果
+
+| 能力 | 比较对象或基线 | 使用后 | 变化幅度 | 样本与时间窗 | 来源性质 | 归因边界 |
+|---|---|---|---|---|---|---|
+| **GitHub Agentic Workflows** | GitHub 对优化前后的有效令牌（Effective Tokens，ET）消耗做比较；只纳入优化前后各至少 8 次运行的工作流。 | Auto-Triage 在 109 次优化后运行中少消耗约 780 万 ET；其余四个工作流也出现持续下降。 | Auto-Triage 下降 62%；Daily Compiler Quality 下降 19%；Daily Community Attribution 下降 37%；Security Guard 下降 43%；Smoke Claude 下降 59%。Contribution Check 反而上升 5%。 | 12 个生产工作流中 9 个获得优化建议改动；结果发布于 2026-05-07，更新于 05-13。 | GitHub 在 `gh-aw` 与 `gh-aw-firewall` 仓库的第一方前后测量。[来源](https://github.blog/ai-and-ml/github-copilot/improving-token-efficiency-in-github-agentic-workflows/) | 证明的是智能体工作流的运行成本变化。文中只有轮次、输出量等过程信号，没有正确性基准，不能写成交付提速、质量提升或发布收益。 |
+| **AWS DevOps Agent** | Rapyder 使用前平均解决时间 45 分钟；Audible 以纯人工处理作比较；Deriv 过去的发布评审需数小时，偶尔一整天。 | Rapyder 平均解决时间 12 分钟、根因判断准确率 92%、零误报；Audible 中位解决时间 8.5 分钟，81% 的案例快于人工；Deriv 评审缩短至数分钟。 | Rapyder 下降约 73%、平均每次少 33 分钟（均为报告计算）；Audible 每起事件节省超过 100 分钟。 | Rapyder 披露 50 次调查；Audible 与 Deriv 未披露样本和观察窗口。 | AWS 客户页中的客户自述。[来源](https://aws.amazon.com/devops-agent/customers/) | Rapyder、Audible 对应生产故障调查；Deriv 对应预览阶段发布管理。不能由调查提速推导自动修复、发布成功率或变更失败率改善。 |
+| **Harness CI：历史同仓库基准** | 对 Kafka、RocketMQ、ZooKeeper 的同一批真实拉取请求，分别在 GitHub Actions、另一家 CI 与 Harness CI 运行相同构建。GitHub Actions 三个仓库均约 19 分钟。 | Harness 平均分别为 5 分钟、3 分 18 秒和 6 分钟；Kafka 需要运行的测试由约 16,000 个降到约 700 个。另按一名客户的 90 名工程师、每月 19,524 次构建估算，年费用为 Harness 14,057 美元、另一家 CI 28,115 美元、GitHub Actions 42,172 美元。 | 中位数比最近对手快 2—5 倍、比 GitHub Actions 快 3—4 倍；个别最小变更为 19—75 倍。按公开年费用计算，Harness 分别低约 50% 和 66.7%（报告计算）。 | 每个仓库超过 50 次拉取请求构建；费用模型假设每次平均 15 分钟、Harness 比对手快 2 倍；2022-11-16 发布，作为历史能力基线。 | Harness 厂商基准与费用模型。[来源](https://www.harness.io/blog/fastest-ci-tool) | 结果由测试智能、缓存智能和托管构建共同产生；费用是按公开单价和假设推算，不是实际发票；“最佳情况”可能没有测试，也不是 2026 年 Worker Agents 的效果。 |
+| **Harness CI：客户迁移前后** | Qrvey 的 Jenkins 构建需 90 分钟至数小时；United 同一代码构建约 22 分钟。 | Qrvey 平均 12 分钟；United 低于 5 分钟，并可在 50 秒生成 10 条流水线。 | Qrvey 案例标题概括为 8 倍；United 报告部署时间快 75%，流水线生成由数天或数周降至 50 秒。 | Qrvey 服务 100 多名工程师，迁移用时 3 个月；United 未披露构建样本数。 | Harness 客户案例。[Qrvey](https://www.harness.io/case-studies/qrvey-saves-hours-on-build-time-leading-to-happy-engineers)、[United](https://www.harness.io/case-studies/united-airlines-accelerates-deployments-harness) | Qrvey 同时将执行资源由 8 线程扩大到 30 多线程；United 同时采用并行执行、模板、治理和云迁移。结果能说明整体 CI/CD 改造，不能单独归因于人工智能。 |
+| **GitHub Copilot cloud agent** | 同一云端智能体未启用仓库记忆时，拉取请求合并率为 83%；产品旧版本的任务启动速度作为另一项基线。 | 启用仓库记忆后合并率为 90%；2026-03 的版本启动工作速度更快。 | 合并率提高 7 个百分点（报告计算）；官方称相对旧版本启动快 50%。 | 仓库记忆试验未披露样本量、窗口和任务分布；启动性能更新未披露绝对秒数和测量方法。 | GitHub 第一方对照试验与版本前后测量。[仓库记忆](https://github.blog/ai-and-ml/github-copilot/building-an-agentic-memory-system-for-github-copilot/)、[启动性能](https://github.blog/changelog/2026-03-19-copilot-coding-agent-now-starts-work-50-faster/) | 前者只证明仓库记忆的增量，后者只证明启动环节改善；都不是 Cloud Agent 相对人工开发的端到端交付效果。 |
+| **Nx Self-Healing CI** | 采用自愈、不稳定任务处理、缓存和任务拆分之前的绝对失败数和进入绿色状态时间未披露。 | 大型单一代码库中约 60% 的修复被接受，约三分之二的失败拉取请求获得“有效修复”；组合能力启用后失败更少、进入绿色状态更快。 | CI 失败最多减少 40%，大型项目进入绿色状态的时间降低 20%—50%。 | Nx 未披露代码库数量、绝对任务数和观察时间窗。 | Nx 厂商汇总。[2025 总结](https://nx.dev/blog/wrapping-up-2025)、[组合效果](https://nx.dev/blog/pr-review-is-the-bottleneck) | 60% 接受率和约三分之二有效修复的分母不同；20%—50% 与 40% 是平台组合结果，不能作为 Self-Healing 单项因果效果。 |
+
+##### 公司级辅助比较结果
+
+> 下表用于说明目标能力所在平台已经出现哪些比较性收益。它提供方向和度量参照，**不作为 Agentic Workflows、Cloud Agent 或 Worker Agents 的直接证明**。
+
+| 公司与产品层 | 比较对象或基线 | 使用后 | 变化幅度 | 样本与来源 | 归因边界 |
+|---|---|---|---|---|---|
+| **GitHub Copilot：任务速度** | 不使用 Copilot 的随机组完成 JavaScript HTTP 服务器任务平均用时 2 小时 41 分钟，完成率 70%。 | 使用组平均 1 小时 11 分钟，完成率 78%。 | 官方报告用时快 55%；完成率提高 8 个百分点（报告计算）。 | 95 名专业开发者随机分组；GitHub 第一方受控实验。[来源](https://github.blog/news-insights/research/research-quantifying-github-copilots-impact-on-developer-productivity-and-happiness/) | 单一规定任务的公司级 Copilot 研究，不代表 Cloud Agent、Agentic Workflows 或企业流水线整体提速。 |
+| **GitHub Copilot：代码质量** | 98 名未使用人工智能工具的有效提交作为对照。 | 104 名 Copilot 使用者的代码通过全部 10 项单元测试的可能性更高，盲审批准可能性也更高。 | 通过全部测试的可能性提高 53.2%；每个可读性问题对应的代码行数提高 13.6%；盲审批准可能性提高 5%。 | 202 份有效提交、1,293 次盲审；GitHub 第一方随机试验。[来源](https://github.blog/news-insights/research/does-github-copilot-improve-code-quality-heres-what-the-data-says/) | 衡量指定 Python 任务的功能性和人工评分，不是生产缺陷率或长期维护结果。 |
+| **GitHub Copilot：企业使用** | Accenture 的未使用组作为对照。 | 使用组产生更多拉取请求、合并率和成功构建数。 | 每名开发者的拉取请求数量提高 8.69%，拉取请求合并率提高 15%，成功构建数提高 84%。 | Accenture 随机对照；客户页披露 450 名使用者与 200 名对照者。[研究](https://github.blog/news-insights/research/research-quantifying-github-copilots-impact-in-the-enterprise-with-accenture/)、[样本](https://github.com/customer-stories/accenture) | 是 Copilot Business 的企业综合结果，不能归因到 2026 年 Cloud Agent、代码评审或 Agentic Workflows。 |
+| **Harness AI：智能体架构** | 最初由 20 多个子智能体组成，响应超过 40 秒，准确性不稳定。 | 统一为由知识图谱和工具目录支撑的单一智能体后，响应约 20 秒。 | 响应快 2 倍，令牌消耗降低 90%；“准确性更高”未公开数值。 | Harness 内部工程测量，未披露请求量与观察窗口。[来源](https://www.harness.io/blog/building-enterprise-ai) | 证明的是 Harness 自身智能体架构重构，不是客户交付速度，也不是 Worker Agents 的修复成功率。 |
+| **Harness AI：平台支持** | 大型金融机构原先由平台团队人工收集日志、解释策略和处理支持请求。 | 数月内大部分问题由开发者在工作流内自助解决。 | Harness 称分流 95% 的平台支持工单，避免数万张工单。 | 匿名金融机构客户案例，未披露原始工单总量和逐月曲线。[来源](https://www.harness.io/blog/harness-ai-helps-scale-platform-wide-support) | 反映知识图谱问答和平台自助支持，不等于 CI 构建、生产恢复或 Worker Agents 效果。 |
+| **Harness 人工智能测试自动化** | Wasimil 使用 Playwright 时约 50% 的测试处于失败状态，维护约 2 小时/天，每周发布两次。 | 失败率低于 10%，维护降至每天 45—60 分钟，改为每日发布。 | 失败率至少降低约 40 个百分点、维护时间减少约 50%—62.5%（均为报告计算）；发布频率提高到每日。 | Wasimil 客户迁移前后，未披露测试数和观察窗口。[来源](https://www.harness.io/case-studies/wasimil) | 是人工智能端到端测试产品效果；不能替代 CI 单测证据，也不能归因于 Worker Agents。 |
+| **Harness 完整交付平台** | Warehouse Group 的变更交付时间为 120 小时，流水线上线约需 6 周，生产部署每 1—2 周一次。 | 变更交付时间降至 1 小时；创建服务后约 30 分钟可部署至开发和测试环境；生产改为按需部署。 | 变更交付时间下降约 99.2%（报告计算）。 | Harness CD、Backstage、ServiceNow 和“黄金路径”共同作用的客户案例。[来源](https://www.harness.io/case-studies/warehouse-group-decreases-lead-time-changes-99-percent) | 是平台、流程与组织改造的组合结果，不能作为任何单一人工智能功能的收益。 |
 
 ### 2.2 七家公司逐一演进
 
@@ -70,11 +99,11 @@ confidence: medium-to-high
 - **产品功能与接入位置**：智能体覆盖持续分诊、文档维护、代码简化、测试改进、CI 失败调查、代码评审和代码扫描修复；制品证明覆盖来源证明、软件物料清单（SBOM）和离线/在线验证。智能体位于仓库、拉取请求和 Actions 内，不独立替代构建或发布系统。
 - **技术方案与控制边界**：Markdown 文件头配置编译为标准 Actions YAML 和锁定文件；智能体默认只读，在沙箱容器、工具白名单、网络隔离和智能体工作流防火墙内运行；写操作经安全输出进入预先批准的拉取请求或问题单任务；规则集、必需检查、签名和制品证明保持最终验证权。
 - **状态与禁止外推**：Agentic Workflows 为公开预览，代码评审的智能体技能和 MCP 为正式可用，Agentic Autofix 为公开预览。Microsoft Aspire 案例与 GitHub 指标属于第一方实践，不能外推为行业成功率。
-- **公开效果（厂商自述）**：Microsoft Aspire 团队公布的 30 天窗口（2026-05-03 至 06-02）内，396 个已合并产品拉取请求触发 396 次 Agentic Workflows；系统创建 82 个文档拉取请求并全部合并，中位合并时间 44.8 小时，38% 在 24 小时内、96% 在 7 天内完成。([GitHub 官方案例](https://github.blog/ai-and-ml/github-copilot/automating-cross-repo-documentation-with-github-agentic-workflows/))
-- **效果解读（分析推断）**：这组数字证明受控智能体工作流能够稳定参与跨仓文档交付，效果首先出现在低风险、可人工评审的任务；它不能证明全部代码交付提速，也不能把 100% 合并率解释为无需评审，因为案例明确采用草稿拉取请求和工程师评审。
+- **公开效果（厂商自述与第三方研究）**：效果证据分三层。第一，公司级 Copilot：95 名开发者随机试验中，规定任务的平均完成时间由 2 小时 41 分钟降至 1 小时 11 分钟，快 55%，完成率由 70% 升至 78%；202 名资深开发者试验中，使用组通过全部 10 项单元测试的可能性提高 53.2%；Accenture 对照研究报告拉取请求数量提高 8.69%、合并率提高 15%、成功构建数提高 84%。第二，Copilot cloud agent：仓库记忆对照试验中合并率由 83% 升至 90%，提高 7 个百分点（报告计算）；2026-03 的版本相对旧版启动工作快 50%，两项均未披露完整样本。第三，Agentic Workflows：5 个满足前后样本门槛的生产工作流在优化后少消耗 19%—62% 的有效令牌，其中 Auto-Triage 在 109 次优化后运行中下降 62%、累计少消耗约 780 万；Contribution Check 因工作负载变重反而上升 5%。Aspire 的 396 次运行、82 个文档拉取请求和 CI Doctor 的 9/13 个修复合并继续作为采用与接受结果，而非比较基线。([Copilot 速度试验](https://github.blog/news-insights/research/research-quantifying-github-copilots-impact-on-developer-productivity-and-happiness/)、[Copilot 质量试验](https://github.blog/news-insights/research/does-github-copilot-improve-code-quality-heres-what-the-data-says/)、[Accenture 研究](https://github.blog/news-insights/research/research-quantifying-github-copilots-impact-in-the-enterprise-with-accenture/)、[仓库记忆](https://github.blog/ai-and-ml/github-copilot/building-an-agentic-memory-system-for-github-copilot/)、[工作流成本](https://github.blog/ai-and-ml/github-copilot/improving-token-efficiency-in-github-agentic-workflows/)、[第三方公开仓库研究](https://arxiv.org/abs/2601.15195))
+- **效果解读（分析推断）**：GitHub 已经能从开发速度、代码功能性、拉取请求吞吐、云端智能体上下文增量和工作流运行成本五个角度做比较；但它们属于不同产品层。公司级 Copilot 的随机试验不能证明 Cloud Agent 或 Agentic Workflows 的效果，仓库记忆的 7 个百分点（报告计算）也不能写成云端智能体相对人工的提升。Agentic Workflows 当前最直接的前后证据是运行成本下降，尚缺交付时间、缺陷逃逸率和生产发布结果。
 - **演进判断（分析推断）**：GitHub 不是把 Actions 变成不确定的智能体，而是让智能体在 Actions 的身份、日志、权限和门禁模型中运行；智能体负责生成和调查，平台继续负责证明和放行。
 
-证据入口：[[00_sources/research-github-microsoft-cicd-trends-2026-08-07|GitHub/Microsoft 研究底稿]]、[[50_deepdives/cicd-trends-2024-2026/research-evolution-panorama-2026-08-08|演进全景补充研究]]。
+证据入口：[[00_sources/research-github-microsoft-cicd-trends-2026-08-07|GitHub/Microsoft 研究底稿]]、[[50_deepdives/cicd-trends-2024-2026/research-evolution-panorama-2026-08-08|演进全景补充研究]]、[[50_deepdives/cicd-trends-2024-2026/research-agentic-cicd-effects-2026-08-08|五项重点能力效果研究]]。
 
 #### 2.2.2 Microsoft：从确定性安全门禁到 Azure DevOps 的人工智能评审与身份升级
 
@@ -98,11 +127,11 @@ confidence: medium-to-high
 - **产品功能与接入位置**：生产运维能力覆盖事件调查、预防和按需可靠性任务；发布管理提供发布就绪审查和自主发布测试；流水线拓扑、代码依赖、记忆和自定义智能体补充交付与运行上下文。
 - **技术方案与控制边界**：DevOps Agent 是连接仓库、流水线与运行环境的旁路服务，不改写 CodePipeline/CodeBuild 编排；托管验证环境执行构建、运行和测试，并回写 GitHub 检查结果或 GitLab 合并请求审批；沙箱使用隔离微型虚拟机、出站白名单和只读 AWS 接口代理；系统会阻断敏感文件外泄和修改 AWS 资源的操作。
 - **状态与禁止外推**：生产运维能力与 AgentCore 正式可用，发布管理和沙箱处于预览；发布测试会向目标应用发送真实请求，包含写操作，只适用于可容忍探索性写入的环境。检查结果、合并请求审批或阻断结论不等于自动合并、部署或恢复授权；“Transform 构建于 AgentCore”仍未核验。
-- **公开效果（厂商自述）**：Rapyder 在 50 次 DevOps Agent 调查中报告平均解决时间由 45 分钟降至 12 分钟，降幅 73%；根因判断准确率 92%、零误报，平均每次节省 30 分钟，折算为每周约 25 个工程小时。该组织管理 500 多个 AWS 账户、每月处理 150 多起事件，但后两项是业务规模，不是评测样本。([AWS 客户案例](https://aws.amazon.com/devops-agent/customers/))
-- **效果解读（分析推断）**：AWS 当前最清楚的量化收益出现在正式可用的生产故障调查，而不是发布准备。不能把平均解决时间下降、根因判断准确率或节省工时延伸为发布管理预览能力的测试发现率，更不能据此声称生产自动恢复已经成立。
+- **公开效果（厂商自述）**：Rapyder 在 50 次 DevOps Agent 调查中报告平均解决时间由 45 分钟降至 12 分钟，降幅约 73%、平均每次节省 33 分钟（均为报告计算）；根因判断准确率 92%、零误报。Audible 报告事件解决时间中位数为 8.5 分钟，81% 的案例快于纯人工处理，每起事件节省超过 100 分钟，准确率为 84%。在发布准备侧，Deriv 称发布管理已经评审工程组织和多个 GitHub 组织中的每个拉取请求，将过去数小时、偶尔一整天的评审缩短至数分钟，并披露一次评审发现数据库权限缺口与内存泄漏。([AWS 客户案例](https://aws.amazon.com/devops-agent/customers/))
+- **效果解读（分析推断）**：AWS 的量化收益已从正式可用的生产故障调查延伸到预览阶段的发布评审，但证据强度不同：Rapyder 有 50 次调查样本，Audible 与 Deriv 未披露样本量；Deriv 证明的是评审等待缩短和具体风险被发现，不是发布成功率、变更失败率、自动生产放行或自动恢复已经改善。
 - **演进判断（分析推断）**：AWS 用同一智能体上下文连接流水线拓扑、代码依赖和运行事件；智能控制面位于传统流水线旁边，门禁结果再回到 GitHub、GitLab 或人工流程。
 
-证据入口：[[00_sources/research-aws-cicd-trends-2024-2026-2026-08-07|AWS 研究底稿]]、[[50_deepdives/cicd-trends-2024-2026/research-evolution-panorama-2026-08-08|演进全景补充研究]]。
+证据入口：[[00_sources/research-aws-cicd-trends-2024-2026-2026-08-07|AWS 研究底稿]]、[[50_deepdives/cicd-trends-2024-2026/research-evolution-panorama-2026-08-08|演进全景补充研究]]、[[50_deepdives/cicd-trends-2024-2026/research-agentic-cicd-effects-2026-08-08|五项重点能力效果研究]]。
 
 #### 2.2.4 Harness：从 CI 智能优化到编排、智能体执行与治理同平台
 
@@ -112,11 +141,11 @@ confidence: medium-to-high
 - **产品功能与接入位置**：Worker Agent 可作为持续集成、持续部署、基础设施管理、安全测试和供应链安全阶段中的流水线步骤，执行测试、扫描、部署或修复；有向无环图通过 `dependsOn` 支持扇出、汇聚和菱形依赖；Agent DLC 开始管理智能体的评测、配置、制品、部署和观测。
 - **技术方案与控制边界**：智能体在隔离 Docker 容器、虚拟机或自托管 Kubernetes 中运行；运行令牌权限取流水线声明授权范围与触发者角色权限的交集；OPA 可在保存和运行时限制模型、MCP、最大轮次与敏感变量；审批和审计仍是外部门禁。
 - **状态与禁止外推**：Worker Agents 已发布，但本报告采用“已可使用、独立正式可用标签未在对应文档中核验”的保守口径；有向无环图流水线为测试版；构建、测试、缓存智能和 Agent DLC 必须逐项报告状态，不能用一个“平台正式可用”覆盖。
-- **公开效果（厂商自述）**：Harness 在自有 Harness-Core 仓库的 3,000 个拉取请求上报告平均单元测试时间由 75 分钟降至 25 分钟。Morningstar 综合案例则报告构建最高加快 5 倍、约 36,000 条脚本流水线收敛为 50 个模板、构建成功率接近 100%，发布周期由 3—5 周缩短为每周、每日或每日多次。([Harness CI Intelligence](https://developer.harness.io/3k-docs/continuous-integration/use-ci/harness-ci-intelligence/)、[Morningstar 案例](https://www.harness.io/case-studies/morningstar-accelerates-innovation-and-reduces-developer-toil-in-a-compliant-way))
-- **效果解读（分析推断）**：测试耗时是同一仓库、明确能力下较直接的持续集成效率证据；Morningstar 数据则同时受到迁移、云端执行、测试智能、缓存智能和模板治理影响。两组数字都不能证明新发布的 Worker Agents 已普遍改善修复成功率或生产恢复时间。
+- **公开效果（厂商自述）**：效果证据也分三层。第一，CI 智能化：2022 年历史同仓库基准对 Kafka、RocketMQ 和 ZooKeeper 各运行 50 次以上真实拉取请求构建，Harness 中位数比最近对手快 2—5 倍、比 GitHub Actions 快 3—4 倍；同一材料基于一名客户的实际构建量和公开价格估算，Harness 年费用比另一家 CI 低约 50%、比 GitHub Actions 低约 66.7%（报告计算）；Harness-Core 的 3,000 个拉取请求中，平均单元测试时间由 75 分钟降至 25 分钟；Qrvey 构建由 90 分钟至数小时降至平均 12 分钟；United 同一代码由约 22 分钟降至 5 分钟以内。第二，Harness AI：内部将 20 多个子智能体合并为由知识图谱和工具目录支撑的单一智能体后，响应由 40 秒降至 20 秒，令牌消耗降低 90%；某大型金融机构称数月内由 Harness AI 分流 95% 的平台支持工单。第三，完整平台与人工智能测试：Wasimil 测试失败率由约 50% 降至低于 10%，维护由约 2 小时/天降至 45—60 分钟，发布由每周两次提高到每日；Warehouse Group 的变更交付时间由 120 小时降至 1 小时。([CI 历史基准与费用模型](https://www.harness.io/blog/fastest-ci-tool)、[Qrvey](https://www.harness.io/case-studies/qrvey-saves-hours-on-build-time-leading-to-happy-engineers)、[United](https://www.harness.io/case-studies/united-airlines-accelerates-deployments-harness)、[Harness AI 架构](https://www.harness.io/blog/building-enterprise-ai)、[平台支持](https://www.harness.io/blog/harness-ai-helps-scale-platform-wide-support)、[Wasimil](https://www.harness.io/case-studies/wasimil)、[Warehouse Group](https://www.harness.io/case-studies/warehouse-group-decreases-lead-time-changes-99-percent))
+- **效果解读（分析推断）**：Harness 的量化收益不再只集中在单元测试：已有构建与执行成本、平台自助支持、测试维护、发布频率和变更交付时间等多类结果。证据最扎实的是 CI Intelligence 和完整平台迁移的前后比较；Harness AI 的响应、令牌与工单数据提供了智能化收益信号，但样本披露较少。Worker Agents 仍缺首次修复成功率、人工接管率、平均恢复时间、缺陷逃逸率和生产结果，不能借用其他层的数据补齐。
 - **演进判断（分析推断）**：Harness 最鲜明的变化是把智能体作为流水线原生节点，并把评测、策略和追踪一并产品化；优势来自同平台闭环，而不是智能体自身拥有更高发布权。
 
-证据入口：[[50_deepdives/harness-company/fact-table-2024-2026-2026-08-07|Harness 事实表]]、[[50_deepdives/cicd-trends-2024-2026/research-evolution-panorama-2026-08-08|演进全景补充研究]]。
+证据入口：[[50_deepdives/harness-company/fact-table-2024-2026-2026-08-07|Harness 事实表]]、[[50_deepdives/cicd-trends-2024-2026/research-evolution-panorama-2026-08-08|演进全景补充研究]]、[[50_deepdives/cicd-trends-2024-2026/research-agentic-cicd-effects-2026-08-08|五项重点能力效果研究]]。
 
 #### 2.2.5 字节/火山引擎：从云原生持续交付到人工智能应用与智能体运行环境交付
 
@@ -161,16 +190,16 @@ confidence: medium-to-high
 
 #### 2.2.8 跨公司效果归纳（分析推断）
 
-1. **最先被量化的是等待时间、任务吞吐和人工摩擦。** 已公开数字集中在拉取请求数量与合并时间、测试时长、故障调查时间、权限提示和首次输出延迟；这些对象容易记录，也能在合并或生产变更前保留人工与确定性门禁。
-2. **生产发布与完整恢复仍缺直接结果。** AWS 的平均解决时间数据只对应故障调查，Harness 的构建数据不等于部署效果，字节的论文基准不等于火山产品收益，OpenAI 的已合并拉取请求也不等于生产上线成功。
-3. **治理不仅产生效率，也暴露残余风险。** Anthropic 的 84% 权限提示减少说明边界内自治可以减少人工确认，但 17% 真实过度动作漏检率说明分类器不能成为最终授权者；这与 GitHub 草稿拉取请求和 AWS 只读调查的外部门禁设计一致。
-4. **数字不能横向排名。** 各家公司分别测量文档拉取请求、开发时间、平均解决时间、单元测试、论文基准、已合并拉取请求和分类器错误率；单位、样本、时间窗与产品阶段不同，只能用于理解各自能力首先改变了什么。
+1. **比较性收益已经从编码扩展到构建、测试、平台支持和部分部署流程。** GitHub 的随机试验覆盖任务时间、测试通过和成功构建；Harness 的前后数据覆盖构建等待、测试维护、平台支持工单、发布频率和变更交付时间；AWS 与 Nx 分别覆盖故障调查和失败自愈。公开数字不再只是“做了多少次”，而开始回答“相对原流程改变多少”。
+2. **最稳定的变化仍是减少等待和重复人工处理。** GitHub Agentic Workflows 的直接比较结果是有效令牌下降，Harness AI 的直接结果是响应时间和令牌下降，客户案例则集中在构建等待、维护时间与支持工单。这些证据说明智能化先减少可观察的等待和重复劳动，尚不能统一证明长期质量或业务结果。
+3. **越接近新一代常驻智能体，直接结果反而越少。** Cloud Agent 只有仓库记忆和启动环节的增量测量；Harness Worker Agents 仍缺首次修复成功率、人工接管率、平均恢复时间和生产结果。Deriv 的发布评审虽由数小时缩短至数分钟，也没有发布成功率、变更失败率或回滚数据。
+4. **产品层级和来源类型必须先分开，再谈趋势。** 公司级 Copilot 研究不能证明 Agentic Workflows，Harness 完整平台迁移不能证明 Worker Agents；随机试验、内部前后测量、客户迁移和厂商基准也不能互换。不同单位、样本和时间窗只能用于理解各自场景，不形成跨厂商投资回报或成熟度排名。
 
 ### 2.3 CI/CD 阶段维度演进
 
 > 本节把公司产品重新映射到六类 CI/CD 阶段。阶段聚类不是产品菜单：同一产品可以跨多个阶段，但每个阶段只讨论它承担的作业、技术机制、执行权和外部门禁。
 
-事实索引沿用 2.2 的五个证据入口；新增的发布、恢复和度量锚点回链 [[50_deepdives/cicd-trends-2024-2026/research-evolution-panorama-2026-08-08|演进全景补充研究]]。
+事实索引沿用 2.2 的五个证据入口；新增的发布、恢复和度量锚点回链 [[50_deepdives/cicd-trends-2024-2026/research-evolution-panorama-2026-08-08|演进全景补充研究]]与 [[50_deepdives/cicd-trends-2024-2026/research-agentic-cicd-effects-2026-08-08|五项重点能力效果研究]]。
 
 | CI/CD 阶段聚类 | 2024 形态 | 2025 变化 | 2026-08 形态 | 代表公司/产品 | 技术方案与门禁 | 成熟度判断 |
 |---|---|---|---|---|---|---|
@@ -188,7 +217,7 @@ confidence: medium-to-high
 - **2026**：GitHub 代码评审的智能体技能和 MCP 正式可用，Agentic Autofix 进入公开预览；Microsoft 将评审/修复以有限公开预览接入 Azure Repos；AWS 发布管理预览能力检查标准偏离、依赖影响和访问控制；Harness AI SAST 为测试版；claude-code-action 支持拉取请求评审。
 - **技术变化**：输入从单文件差异扩大到仓库规则、依赖图、MCP/技能、流水线拓扑和组织标准；输出从自然语言建议扩展到行内问题、修复拉取请求、检查结果与合并请求审批。
 - **执行权与门禁**：智能体通常拥有读取、评论和提出补丁的权限；合并权仍由规则集、必需状态检查、合并请求审批、OPA 或人工持有。AWS 检查结果只有被配置为必需检查时才能阻断合并。
-- **公开效果与缺口（厂商自述）**：GitHub Aspire 案例在 30 天内由 396 次工作流生成并合并 82 个文档拉取请求，中位合并时间 44.8 小时；Microsoft 综合案例报告开发最高加快 50% 或交付速度最高提升 40%；OpenAI 内部实践报告约 1,500 个拉取请求和部分团队前三周增长 500%。前者是文档评审，后两者受多产品或内部工作方式共同影响，均不能直接证明代码缺陷减少。
+- **公开效果与缺口（厂商自述与第三方研究）**：GitHub 公司级 Copilot 随机试验中，95 名开发者完成规定任务的平均时间由 2 小时 41 分钟降至 1 小时 11 分钟、完成率由 70% 升至 78%；另一项 202 名资深开发者试验中，通过全部单元测试的可能性提高 53.2%，盲审批准可能性提高 5%。Accenture 对照研究又报告拉取请求数量提高 8.69%、合并率提高 15%、成功构建数提高 84%。在 Cloud Agent 层，仓库记忆使合并率由 83% 升至 90%；第三方公开仓库研究则观察到 Copilot 智能体拉取请求整体合并率为 43.04%，其中 CI、文档、功能、测试和性能任务分别为 63%、61%、38%、37% 和 27%。这些数据来自不同产品与样本，只能分别说明编码辅助、上下文增量和任务类型差异，不能把公司级收益归因给云端智能体或证明生产缺陷减少。
 - **成熟度、趋势与反例（分析推断）**：检查/评审是最先出现明确正式产品的智能体环节，但不同平台状态不一致；字节研究资产不能写成生产评审产品，人工智能发现也不能代替 CodeQL/SAST 或组织策略。
 
 #### 2.3.2 构建、测试与失败修复
@@ -198,7 +227,7 @@ confidence: medium-to-high
 - **2026**：Copilot 云端智能体可修复失败的 Actions 检查；AWS 发布管理在托管验证环境执行构建、运行和测试，并提供会发送真实请求的发布测试；Harness Worker Agents、人工智能测试与评测进入流水线；Symphony 重试不稳定检查，OpenAI 官方示例库提供迭代修复示例；Anthropic 执行框架引入规划、生成和评估分工。
 - **技术变化**：优化对象从缓存、镜像层缓存、测试选择和执行资源，扩展为“隔离环境中的生成—执行—评估—修复循环”；定向评测、独立评分器、Playwright MCP 和探索式测试增加非确定性验证，但最终仍需确定性测试结果。
 - **执行权与门禁**：智能体可在工作区、容器或微型虚拟机内修改文件、运行构建和测试；网络域名、云接口、凭据与写请求需额外限制。失败修复必须重新执行测试和已配置的必需检查，不能凭智能体自评写回成功。
-- **公开效果与缺口（厂商自述/第一方研究）**：Harness 在 3,000 个拉取请求上将平均单元测试时间由 75 分钟降至 25 分钟；Repo2Run 在 420 个 Python 仓库上的环境生成成功率为 86.0%，Trae Agent 在 SWE-bench Verified 上的一次尝试通过率为 75.20%。Harness 数字属于持续集成内部测量，字节数字属于研究基准；公开材料仍缺智能体修复进入生产后对缺陷逃逸率和变更失败率的长期测量。
+- **公开效果与缺口（厂商自述/第一方研究）**：GitHub 的 Accenture 对照研究报告成功构建数提高 84%，但这是公司级 Copilot 结果，不是 Cloud Agent 修复效果。Harness 2022 年历史同仓库基准在 Kafka、RocketMQ 和 ZooKeeper 各运行 50 次以上构建，报告中位数比最近对手快 2—5 倍；按客户构建量和公开价格形成的费用模型中，Harness 年费用比另一家 CI 低约 50%、比 GitHub Actions 低约 66.7%（报告计算）。Harness-Core 的 3,000 个拉取请求中平均单元测试时间由 75 分钟降至 25 分钟；Qrvey 由 90 分钟至数小时降至平均 12 分钟，United 同一代码由约 22 分钟降至 5 分钟以内。Wasimil 的人工智能测试自动化又把测试失败率由约 50% 降至低于 10%，维护由约 2 小时/天降至 45—60 分钟。作为范围外补充，Nx 称约三分之二的失败拉取请求获得有效修复、约 60% 的修复被接受，平台组合使 CI 失败最多减少 40%、进入绿色状态时间降低 20%—50%。这些指标分别来自厂商基准、估算模型、客户迁移、人工智能测试和组合能力，不能合成单一“智能化 CI 收益”，也仍缺长期缺陷逃逸率。
 - **成熟度、趋势与反例（分析推断）**：传统构建测试优化已较成熟，智能体修复处于正式版、预览版、测试版、示例和研究混合状态。火山构建加速服务下线说明单点加速产品可能收窄，但官方未披露原因，不能推导远端构建路线失败。
 
 #### 2.3.3 制品、签名与供应链可信
@@ -218,7 +247,7 @@ confidence: medium-to-high
 - **2026**：AWS 发布管理预览能力提供发布就绪审查与自主发布测试；Harness Worker Agent 可位于持续部署阶段，Agent DLC 增加智能体部署；火山 CP 支持 YAML/OAM 商用及 AgentKit 部署/更新任务。
 - **技术变化**：声明式 YAML/OAM/Helm 和环境拓扑继续承担部署事实源；智能体位于发布准备、测试计划生成和部署步骤中；审批、金丝雀发布、部署验证、渐进式发布与回滚保持确定性控制。
 - **执行权与门禁**：智能体可以生成部署清单、执行预发布测试或作为受控部署步骤，但生产凭据、环境审批、必需检查和回滚策略必须由平台外部授予。AWS 发布测试会产生真实写请求，必须限定环境。
-- **公开效果与缺口**：本专题没有找到 AWS 发布管理预览、Harness Worker Agents 部署步骤或火山 AgentKit 发布后的直接生产发布成功率、变更失败率或回滚率。Microsoft 与 Morningstar 的综合案例包含部署改善，但无法归因到本节某一项新智能体能力，因此不作为发布自治效果。
+- **公开效果与缺口（厂商自述）**：Deriv 称 AWS 发布管理将过去数小时、偶尔一整天的评审缩短至数分钟，并披露发现数据库权限缺口和内存泄漏的实例。Harness 完整平台客户中，United 同一代码的 CI 构建由约 22 分钟降至 5 分钟以内，客户页将整体概括为部署时间快 75%；Warehouse Group 的变更交付时间由 120 小时降至 1 小时、生产部署由每 1—2 周一次改为按需；Wasimil 的发布频率由每周两次提高到每日。这些结果均由模板、并行执行、治理、测试和流程迁移共同产生，不能归因于 Worker Agents。AWS 与 Harness 案例都没有提供新智能体的生产发布成功率、变更失败率或回滚率；火山 AgentKit 也仍缺直接结果。
 - **成熟度、趋势与反例（分析推断）**：部署工具本身成熟，智能体主要在发布准备和运行环境交付处扩张；没有一手资料证明本样本存在通用、正式可用、无人批准的生产发布。CodeDeploy 回滚是重新部署旧版本，且不会自动反转脚本造成的全部外部副作用。
 
 #### 2.3.5 运行反馈、故障调查与恢复
@@ -238,7 +267,7 @@ confidence: medium-to-high
 - **2026**：GitHub 使用安全输出、防火墙和独立威胁检测任务；Harness 使用声明授权范围与触发者角色权限的交集、OPA、审批和 AgentTrace；Microsoft 推进 Entra 工作负载身份；AWS 增加时序策略和限流；OpenAI 用 `WORKFLOW.md` 和隔离工作区编排；Anthropic 用分类器、密钥保管库/代理和会话日志管理长时智能体。
 - **技术变化**：静态角色权限扩展为短生命周期身份、按会话和动作授权、调用顺序约束、数据新鲜度、网络/文件白名单、策略即代码和可恢复审计事件；有向无环图、动态流水线和常驻执行框架则改变任务编排位置。
 - **执行权与门禁**：有效权限由触发主体、声明授权范围、临时凭据、沙箱策略和外部门禁共同决定。智能体自我判断、MCP/命令行工具可调用、“已可使用”或产品正式可用，都不构成组织级授权。
-- **公开效果与缺口（厂商自述）**：Anthropic 沙箱使内部权限提示减少 84%，Managed Agents 首次输出延迟中位数约下降 60%；自动模式在三组样本上同时公开 0.4% 误报率、17% 真实过度动作漏检率和 5.7% 合成外泄漏检率。OpenAI 则报告部分团队使用 Symphony 后前三周已合并拉取请求增长 500%。这些数字说明治理和编排可以减少等待并扩大吞吐，也说明自动授权仍有可测量的残余风险。
+- **公开效果与缺口（厂商自述）**：GitHub 将 12 个生产 Agentic Workflows 纳入成本审计，5 个满足前后样本门槛的工作流在优化后有效令牌下降 19%—62%，但 Contribution Check 因工作负载变化上升 5%；这说明编排层需要持续测量成本和工作量，而不能只统计执行次数。Harness 将 20 多个子智能体整合为单一智能体后，响应由 40 秒降至 20 秒、令牌消耗降低 90%；某大型金融机构称 Harness AI 分流 95% 的平台支持工单。Anthropic 沙箱使内部权限提示减少 84%，Managed Agents 首次输出延迟中位数约下降 60%，但自动模式仍披露 17% 的真实过度动作漏检率；OpenAI 报告部分团队使用 Symphony 后前三周已合并拉取请求增长 500%。这些数字共同说明编排可以降低运行成本、等待和人工确认，也说明结果质量、错误扩散和生产授权仍需外部门禁。
 - **成熟度、趋势与反例（分析推断）**：治理正在从“流程配置”上移到“智能体在本次会话中的连续行为”；这是跨公司可观察到的机制收敛，但各平台术语、状态和可用性不同，不能写成统一行业标准。
 
 ### 2.4 技术方案：三种智能体运行路线与一条共同验证链
@@ -292,9 +321,9 @@ flowchart LR
 4. **执行权从只读扩展到受控写入，生产放行权仍由外部机制掌握**。权限通常按“只读 → 沙箱内变更 → 安全输出或检查结果 → 受控合并”扩张；限定范围身份、凭据外置、网络限制、时序策略和审计追踪是扩权前提。MCP/命令行工具可调用、智能体自评或产品正式可用，都不等于组织授权。
 5. **发布与恢复的自治证据明显弱于评审、测试和故障调查**。代码评审和生产运维已出现明确正式产品，发布准备仍有预览、地域和环境限制；恢复证据多停留在任务重试、会话恢复和版本回滚。本样本截至 2026-08 未核验到端到端正式产品，不表示业界绝对不存在。
 6. **“平台嵌入与治理闭环更抗收窄”只能作为工作假设**。本样本中，嵌入 Actions、流水线、规则集和 AgentCore 的能力持续扩张，而独立构建加速、CodeGuru 新关联、开发工具入口和执行引擎实现出现下线、迁移或停止支持；但样本量小且官方多数未说明原因，不能写成市场因果定律或成熟度排名。
-7. **当前公开收益最集中于缩短等待、提高吞吐和减少人工确认**。文档拉取请求合并时间、单元测试耗时、故障调查时间、权限提示和首次输出延迟都已有数字；这些指标共同指向“把人从等待和重复确认中移开”，但还不能证明长期质量同步提高。
-8. **越接近生产放行，公开结果越少**。评审、构建测试和故障调查已有案例或内部测量；制品安全结果、智能体发布成功率、变更失败率、自动回滚正确率和业务状态恢复仍是缺口。能力正式可用或进入预览不能替代结果数据。
-9. **不同厂商数字只能纵向理解，不能横向比较**。拉取请求、分钟、准确率、一次尝试通过率、误报率和漏检率对应不同对象，样本和时间窗也不一致；本报告用它们判断“能力首先改变了哪个环节”，不据此计算跨厂商投资回报或成熟度排名。
+7. **比较性收益已经从编码扩展到构建、测试、平台支持和部分部署流程**。GitHub 的随机试验显示任务时间、测试通过和成功构建变化；Harness 的基准与客户案例显示构建等待、测试维护、支持工单、发布频率和变更交付时间变化；AWS 与 Nx 则分别提供故障调查和失败自愈结果。当前最一致的方向仍是缩短等待、提高任务吞吐和减少重复人工处理，不能据此假定长期质量同步提高。
+8. **新一代智能体的直接效果弱于其底层平台和相邻能力**。Agentic Workflows 已能量化有效令牌下降，但尚无交付时间和生产结果；Cloud Agent 只有仓库记忆与启动环节的增量；Harness Worker Agents 仍缺首次修复成功率、人工接管率、平均恢复时间和生产结果。公司级 Copilot、Harness CI/CD 或人工智能测试的收益只能作为平台背景，不能移接给这些新能力。
+9. **越接近生产放行，结果指标仍越少，而且不同厂商数字不能横向排名**。评审、构建测试、平台支持和故障调查已有对照或前后数据，发布准备也出现客户时延结果；制品安全结果、智能体发布成功率、变更失败率、自动回滚正确率和业务状态恢复仍是缺口。随机试验、厂商基准、客户迁移和内部测量的分母不同，只能纵向理解各自场景。
 
 **对企业的直接含义**：2026 年优先落地的不是“让智能体直接发布生产”，而是选择一个低风险入口，例如 CI 失败调查、代码评审、测试补强或文档/问题单自动化；先建立沙箱、短生命周期凭据、外部必需检查或 OPA 策略、独立评测和可审计输出，再逐步扩大到发布准备。任何进入合并、部署或恢复的动作都必须保留确定性门禁和人工升级路径。
 
@@ -472,7 +501,7 @@ GitHub 文档工作流 396 次运行/82 个已合并拉取请求、AWS 平均解
 
 ### 证据强度总述
 
-关键主张均可回链 [[00_sources/research-github-microsoft-cicd-trends-2026-08-07|GitHub/Microsoft]]、[[00_sources/research-aws-cicd-trends-2024-2026-2026-08-07|AWS]]、[[00_sources/research-openai-anthropic-cicd-trends-2026-08-07|OpenAI/Anthropic]]、[[00_sources/research-bytedance-cicd-2024-2026-trends-2026-08-07|字节]] 研究底稿、[[50_deepdives/harness-company/fact-table-2024-2026-2026-08-07|Harness 事实表]]与 [[50_deepdives/cicd-trends-2024-2026/research-evolution-panorama-2026-08-08|本次演进全景证据笔记]]；存在性/机制类主张证据强度高，量化成效类主张为厂商自述，演进归因/路线归类为分析推断（已标注置信度）。
+关键主张均可回链 [[00_sources/research-github-microsoft-cicd-trends-2026-08-07|GitHub/Microsoft]]、[[00_sources/research-aws-cicd-trends-2024-2026-2026-08-07|AWS]]、[[00_sources/research-openai-anthropic-cicd-trends-2026-08-07|OpenAI/Anthropic]]、[[00_sources/research-bytedance-cicd-2024-2026-trends-2026-08-07|字节]] 研究底稿、[[50_deepdives/harness-company/fact-table-2024-2026-2026-08-07|Harness 事实表]]、[[50_deepdives/cicd-trends-2024-2026/research-evolution-panorama-2026-08-08|本次演进全景证据笔记]]与 [[50_deepdives/cicd-trends-2024-2026/research-agentic-cicd-effects-2026-08-08|五项重点能力效果研究]]；存在性/机制类主张证据强度高，量化成效类主张主要为厂商自述，并补充一项第三方公开仓库观察研究，演进归因/路线归类为分析推断（已标注置信度）。
 
 ## 七、汇报可用性判定
 
