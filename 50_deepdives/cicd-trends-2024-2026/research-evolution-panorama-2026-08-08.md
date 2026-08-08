@@ -91,6 +91,35 @@ confidence: high-for-listed-facts
 - 交付性能和恢复并不存在可直接横比的单一“平台指标”。R2 将 DORA 指标绑定在 GitLab 的 environment 与 incident 数据模型，R3 只披露 release frequency/success，R5 还特别区分 CPU time 与 wall-clock time。跨产品比较前需要先统一生产环境、事件关联、聚合函数、并行处理和观察窗口。
 - 可证明的恢复机制主要是“重试、回退到已知 revision、保留失败记录”，而不是对任意外部副作用的全自动逆转：R4 是明确的产品级限制，R3 的 rollback 同样以新的 rollout 表达。任何“自愈/完全恢复”结论都须另有针对业务状态和外部依赖的证据。
 
+## 五、企业能力发布后的量化效果证据
+
+> [!note] 口径与使用边界
+> 本节允许记录厂商自述、官方客户案例、内部实践和原始论文实验，但逐条标注其性质。**实际使用结果**是明确部署或使用某能力后的内部/客户观察；**采用规模**只说明运行量、拉取请求数或仓库数，不等于效率或质量提升；**研究/基准**只说明受控数据集上的实验结果，不等于生产交付收益。A 表示同一能力的前后测或受控比较，B 表示明确使用该能力的案例；“相关 B”表示同时采用多项能力，不能归因给其中单项。单位、对象、时间窗和聚合方式不同，所有数字都**不能跨公司比较、排名或外推为行业平均值**。
+
+| 公司 / 能力 | 效果类型与证据关系 | 原始数字 | 样本与时间窗 | 生命周期 / 发布日期 | 适用边界 | 官方来源 |
+|---|---|---|---|---|---|---|
+| GitHub / Agentic Workflows | 采用规模 + 交付效率；实际使用结果，直接 **B** | Aspire 的 `pr-docs-check` 运行 **396** 次，创建 **82** 个文档拉取请求；**82/82（100%）** 合并；文档拉取请求的中位合并时间为 **44.8 小时**，**38% / 96%** 分别在 24 小时 / 7 天内合并。 | Microsoft Aspire 13.3/13.4；滚动 30 天窗口为 2026-05-03 至 06-02；396 个产品拉取请求对应 396 次运行。 | Agentic Workflows：**Public Preview**，2026-06-11；案例发布 2026-07-08。 | 证明受控智能体工作流在跨仓文档交付中的运行量与合并结果；不证明所有代码交付提速，也不证明智能体自动合并。 | [案例](https://github.blog/ai-and-ml/github-copilot/automating-cross-repo-documentation-with-github-agentic-workflows/) · [发布](https://github.blog/changelog/2026-06-11-github-agentic-workflows-is-now-in-public-preview/) |
+| Microsoft / GitHub Copilot + Azure DevOps + Visual Studio | 交付效率；实际使用结果，**相关 B** | Visma 称采用三者后“新代码开发最高快 **50%**”。 | Visma；案例覆盖 188 家子公司、1.8m 客户，但受影响开发者样本与观察期未披露，仅称采用后不久。 | 案例发布 2024-06-05；案例未逐项标示产品生命周期。 | Copilot、Azure DevOps、Visual Studio 与既有工具共同采用，不能归因于 Azure DevOps 或 Copilot 的单项能力。 | [Microsoft 客户案例](https://www.microsoft.com/en/customers/story/1774868194783832907-visma-visual-studio-professional-services-en-norway) |
+| Microsoft / Azure + GitHub Enterprise、Actions、Copilot 与安全能力 | 交付效率 + 质量/稳定性；实际使用结果，**相关 B** | Ahold 称交付速度最多提升 **40%**；更新从数周缩至数小时；统一 **800 多个**仓库。 | Ahold Delhaize USA；三年现代化项目；官方称为“早期结果”，未披露单项能力对照组。 | 案例发布 2025-11-18；案例未逐项标示产品生命周期。 | 云迁移、AKS、GitHub、人工智能与治理自动化同时改变；800 多个仓库是采用规模，40% 不能写为 Copilot、Actions 或 Azure Repos 单项效果。 | [Microsoft 客户案例](https://www.microsoft.com/en/customers/story/25672-ahold-delhaize-usa-azure) |
+| AWS / DevOps Agent | 交付效率 + 质量/稳定性；实际使用结果，直接 **B** | Rapyder 报告平均解决时间（MTTR）**45→12 分钟（-73%）**；**50** 次评估调查中根因准确率 **92%**、零误报；平均每次节省 **30 分钟**，约每周回收 **25** 工程小时。 | Rapyder 的 50 次调查；其 500 多个 AWS 账户和每月 150 多起事件是运行规模，不是实验样本。 | Production Operations **GA**，2026-03-31；客户页未标发布日期。 | 明确与 CloudWatch、Slack 集成；属于事件调查效果，不能移作 Release Management Preview 的发布效果。 | [客户页](https://aws.amazon.com/devops-agent/customers/) · [GA 公告](https://aws.amazon.com/about-aws/whats-new/2026/03/aws-devops-agent-generally-available/) |
+| AWS / DevOps Agent | 交付效率 + 质量/稳定性；实际使用结果，直接 **B** | Axrail 在 **5** 个生产 Lambda 事件中均定位根因；平均解决时长 **15–20→7.6 分钟**，平均解决时间下降 **50%**；估计每月回收 **20–25** 工程小时。 | 5 个生产 Lambda 事件；运营 200 多个 AWS 账户，“每月 100 多起事件”是业务规模。 | Production Operations **GA**，2026-03-31；客户页未标发布日期。 | 小样本客户案例；“估计的工程小时”不作为已实现成本节约。 | [客户页](https://aws.amazon.com/devops-agent/customers/) |
+| Harness / Test Intelligence | 交付效率 + 成本；实际使用结果，直接 **A** | Harness-Core 的 **3,000** 个拉取请求：平均单元测试时长 **75→25 分钟**，即减少 **50 分钟**；按公开值计算约减少 **66.7%**。 | 自家最大仓库；3,000 个拉取请求；统计时间窗未披露。 | 当前 CI Intelligence 文档；Test Intelligence 在该页未单独标生命周期，文档最后更新 2026-07-02。 | 同一仓库启用前后对比，且仅为单元测试选择；不能延伸为完整流水线实际经过时间或质量提升。 | [Harness CI Intelligence](https://developer.harness.io/3k-docs/continuous-integration/use-ci/harness-ci-intelligence/) |
+| Harness / Test Intelligence + Cache Intelligence + 平台迁移 | 交付效率 + 质量/稳定性；实际使用结果，**相关 B** | Morningstar 报告构建最多快 **5 倍**（小时→分钟），并将 **36,000** 条流水线收敛为 **50** 个模板；构建成功率称“接近 **100%**”。 | Morningstar；时间窗、成功率分母和每项能力的贡献未披露。 | 案例页未标发布日期或各能力生命周期。 | 云执行、模板、缓存、Test Intelligence 及迁移共同作用；不能将 5 倍或近 100% 归因给 Test Intelligence。 | [Harness 客户案例](https://www.harness.io/case-studies/morningstar-accelerates-innovation-and-reduces-developer-toil-in-a-compliant-way) |
+| 字节 / MarsCode Agent | 研究/基准；直接 **A** | 原始论文 v2 表 2 明确记录 SWE-bench Lite 共解决 **102/300 = 34%**，文件定位准确率为 **265/300 = 88.3%**。仓库既有底稿中的 **39.33%** 未得到原论文支持，本次审计不再采用。 | 300 个 SWE-bench Lite 实例；原始论文实验。 | **Research**；论文 v1 2024-09-02、v2 2024-09-04。 | 34% 是论文基准修复率，不是字节或火山引擎生产 CI/CD 效果；不得与不同版本 SWE-bench 或其他基准直接比较。 | [MarsCode 原始论文 PDF](https://arxiv.org/pdf/2409.00899) |
+| 字节 / Repo2Run | 交付效率 + 质量/稳定性；研究/基准，直接 **A** | 在 **420** 个带单测的 Python 仓库上，可执行测试环境构建成功率 **86.0%**；论文称较 SWE-agent 高 **77.0%**。 | 自建 420 仓库基准；论文实验。 | **Research / 开源**；论文首发 2025-02-19。 | 是环境配置与 Dockerfile 生成的实验，不是火山引擎持续交付产品或客户流水线的效果。 | [Repo2Run 原始论文](https://arxiv.org/abs/2502.13681) |
+| 字节 / Trae Agent | 质量/稳定性；研究/基准，直接 **A** | SWE-bench Verified 一次尝试通过率（Pass@1）为 **75.20%**；相对四种基线的平均 Pass@1 提升 **10.22%**。 | SWE-bench Verified；摘要未列出该评测样本量。 | **Research / 开源**；论文首发 2025-07-31。 | 受控问题单修复基准；不等于生产修复成功率、CI 通过率或发布可靠性。 | [Trae Agent 原始论文](https://arxiv.org/abs/2507.23370) |
+| OpenAI / Codex Harness Engineering | 采用规模 + 交付效率；实际使用结果，直接 **B** | 约 **5** 个月内，**3** 名工程师驱动 Codex 开启并合并约 **1,500** 个拉取请求，平均 **3.5 个拉取请求/工程师/日**；仓库约 **100 万** 行代码。 | 一个内部产品仓库，自 2025-08 起；文章称有内部日活用户和外部早期测试者。 | 内部实践，不是独立产品生命周期；案例发布 2026-02-11。 | 无人工编写代码的专门工作法；没有传统团队对照，不能写为 Codex 的通用效率倍数。 | [OpenAI 工程文章](https://openai.com/index/harness-engineering/) |
+| OpenAI / Symphony | 交付效率；实际使用结果，直接 **B** | OpenAI 部分团队在采用后的前 **3 周**，已合并拉取请求数量增加 **500%**。 | “部分团队”；绝对拉取请求数、团队数和对照口径未披露。 | **Draft v1 / engineering preview**；2026-04-27。 | 可表述为内部观察；不能外推为 Symphony 的普遍产出或质量提升。 | [OpenAI 工程文章](https://openai.com/index/open-source-codex-orchestration-symphony/) |
+| OpenAI / Codex 驱动的 Tax AI 改进闭环 | 交付效率 + 质量/稳定性；实际使用结果，**相关 B** | 试点处理 **7,000** 份税表；草拟准确率最高 **97%**；吞吐约 **+50%**；达到至少 75% 字段正确的税表占比在 6 周内从 **25% 升至 86%**。 | 30+ 会计师事务所；合作约 6 个月；“this tax season”。 | **Pilot**；2026-05-27。 | Codex、人工复核、评测和 Tax AI 产品共同作用；可作“评测驱动修复闭环”案例，不能写成 CI/CD 发布效果。 | [OpenAI 工程文章](https://openai.com/index/building-self-improving-tax-agents-with-codex/) |
+| Anthropic / Claude Code Sandboxing | 安全/治理 + 交付效率；实际使用结果，直接 **B** | 内部使用中，安全沙箱使权限弹窗减少 **84%**。 | 内部使用；样本量、时间窗和人工审批对照细节未披露。 | sandbox runtime 为 **Beta / Research Preview**；2025-10-20。 | 证明审批摩擦减少，不证明整体研发或 CI 时长改善。 | [Anthropic 工程文章](https://www.anthropic.com/engineering/claude-code-sandboxing) |
+| Anthropic / Claude Code Auto Mode | 安全/治理；研究/基准，直接 **A** | 完整两阶段分类器：真实内部流量误报率（FPR）**0.4%**（n=**10,000**）；真实过度动作漏检率（FNR）**17%**（n=**52**）；合成外泄漏检率 **5.7%**（n=**1,000**）。 | 三个数据集；未披露收集时间窗。 | 官方文章未给 GA/Preview 标签；2026-03-25。 | **17% 漏检率是残余风险**，不能把低误报率写成安全放行或替代高风险人工审查。 | [Anthropic 工程文章](https://www.anthropic.com/engineering/claude-code-auto-mode) |
+| Anthropic / Managed Agents | 交付效率；内部架构前后测，直接 **A** | 推理与执行容器解耦后，首次输出延迟中位数（p50）约减少 **60%**，95 分位数（p95）减少超过 **90%**。 | 内部架构改造前后；会话数和时间窗未披露。 | 官方文章未给 GA/Preview 标签；2026-04-08。 | 衡量智能体启动延迟，不是 CI 流水线总耗时、构建时长或部署时长。 | [Anthropic 工程文章](https://www.anthropic.com/engineering/managed-agents) |
+
+### 基于来源的推断（非来源事实）
+
+- 本节的 A 类证据主要来自 Harness、字节与 Anthropic 的受控实验或前后测；B 类主要来自 GitHub、Microsoft、AWS、OpenAI 的内部或客户实践。两类都属于厂商一手材料，但所能支持的结论不同：A 可陈述该实验口径内的测量差异，B 只能陈述该案例在明确使用能力后的观察。
+- 因而，较稳妥的跨公司结论是“厂商已经发布可量化的局部证据”，而不是“智能体整体提高了 CI/CD 效率或可靠性”。同一张表中的拉取请求数量、平均解决时间、一次尝试通过率、误报/漏检率、测试耗时和首次输出延迟不是同一指标。
+
 ## 可审计的趋势小结（仅限本笔记证据范围）
 
 1. **运行时编排在增加，但实现层不同。** E1 的 build-time step upload、E2/E3 的受管 Agent step、E4 的 release management 与 E5 的长时 scheduler 都有明确一手证据；它们不是同一个标准，也不共享同一授权模型。
@@ -104,12 +133,13 @@ confidence: high-for-listed-facts
 |---|---|
 | 官方当前文档未显示首次发布日或 lifecycle | 标为“未标明”；不伪造 2024—2026 内的首次时间或 GA。Buildkite、Dagger、CodeDeploy、Cloud Deploy、GitLab 指标均属此类。 |
 | Agent 的“生产自动发布/恢复”授权 | 本次所列一手资料没有证明通用的、端到端且无人批准的生产发布授权；A3 还是 Preview。保持 evidence gap。 |
-| 跨厂商成效、ROI、失败率或成熟度排名 | 未收集可比较的独立测量；厂商博客中的单点数据即使存在也不用于本笔记的行业结论。保持 evidence gap。 |
+| 跨厂商成效、ROI、失败率或成熟度排名 | 本笔记已收集厂商自述的案例、内部实践和研究/基准数字（见第五节），但它们的对象、时间窗、聚合函数和对照关系不同，仍未形成可比较的独立测量。可以记录单点证据，不得据此做跨厂商排名、相减或行业结论。 |
 | 供应链证明与部署策略的自动绑定 | S1/S2 与 S3/S4 是不同产品路径；本次没有发现可证明其跨厂商自动衔接的标准化一手材料。保持 evidence gap。 |
 | “动态编排”是否比静态流水线更可靠 | E1 明确指出动态输出必须额外验证、留存和防注入，但没有提供跨平台因果测量。不得写成可靠性提升事实。 |
 
 ## 来源访问记录
 
 - **访问日期**：2026-08-08（Asia/Shanghai）。
-- **来源类型**：厂商产品文档、官方发布公告/工程博客、厂商维护的官方 GitHub 源码库；未使用二手媒体文章支撑本文事实。
+- **来源类型**：厂商产品文档、官方发布公告/工程博客、厂商维护的官方 GitHub 源码库、厂商原始研究论文；未使用二手媒体文章支撑本文事实。
+- **本次补充复核**：GitHub Agentic Workflows/Aspire 案例、Microsoft Visma 与 Ahold 案例、AWS DevOps Agent 客户页与 GA 公告、Harness CI Intelligence 与 Morningstar 案例、OpenAI Codex/Symphony/Tax AI 工程文章、Anthropic Sandboxing/Auto Mode/Managed Agents 工程文章，以及 ByteDance MarsCode、Repo2Run、Trae Agent 原始论文。MarsCode 原始论文 v2 表 2 明确为 102/300（34%）；既有底稿中的 39.33% 未得到该原文支持，本次审计不再采用。
 - **审计提示**：页面型文档会更新；复核时应以本文件的日期、直接 URL 和显式生命周期标签为准。对“状态未标明”的条目，应重新查看 release notes / feature availability 页面，而不是由当前文档的存在推断产品阶段。
