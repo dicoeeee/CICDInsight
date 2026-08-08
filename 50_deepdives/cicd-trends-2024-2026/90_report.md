@@ -8,7 +8,7 @@ tags:
   - report
 topic_id: cicd-trends-2024-2026
 status: complete
-as_of: 2026-08-07
+as_of: 2026-08-08
 presentation_ready: false
 confidence: medium-to-high
 ---
@@ -17,28 +17,242 @@ confidence: medium-to-high
 
 ## 一句话结论
 
-2024-2026 年，GitHub、Harness、AWS、Microsoft、字节、OpenAI、Anthropic 的智能化 CI/CD 沿八条线同时演进：能力形态深化（建议→执行→编排）、环节逐级扩散（检查/评审→门禁→发布准备）、自治等级抬升（只读→受控执行→受控合并）、产品状态密集转正（2026 年多产品 GA/Preview）、执行形态分化（编译进流水线／旁路服务／常驻编排）、治理对象移向 Agent 身份与持续行为（temporal policies/复合身份/状态化授权）、验证机制前置智能化（分类器+eval 门禁）而最终权威保持确定性、生命周期收窄集中于单点/入口型而嵌入平台控制面型存活；**检查与门禁环节最先成熟，发布与恢复仍被硬边界拦截**，且诸家独立收敛于"沙箱+凭据外置"这一执行权前提与"Agent 不得自证"这一验证约束。
+2024—2026 年，智能体没有直接接管 CI/CD，而是先进入代码评审、失败修复、测试和发布准备，并在沙箱、最小权限凭据和外部门禁下逐步扩大执行权。**检查与门禁最先成熟，发布与恢复仍然证据不足；智能体负责理解、生成和调查，确定性系统继续负责验证与放行。**
 
 ## 一、研究范围与口径
 
-- **观察窗口**：2024-01 至 2026-08-07（`as_of: 2026-08-07`）。
-- **研究对象**：智能化 CI/CD —— 编码完成后的检查、门禁、构建、制品、部署、发布、恢复环节中引入 AI/Agent 能力（推理、生成、自主执行、门禁判断、编排）的形态。编码辅助不是主线，但编码 Agent 进入 CI/CD 环节（CI 修复、评审、护送合并）属于本专题。
+- **观察窗口**：2024-01 至 2026-08-08（`as_of: 2026-08-08`）。
+- **研究对象**：智能化 CI/CD——在编码完成后的检查、门禁、构建、制品、部署、发布和恢复环节中引入人工智能或智能体能力，包括推理、生成、自主执行、门禁判断和编排。编码辅助不是主线，但编码智能体进入 CI/CD 环节，例如修复 CI、参与评审和护送合并，属于本专题。
 - **公司范围**：GitHub、Microsoft、AWS、Harness、字节（含火山引擎）、OpenAI、Anthropic。
-- **明确不做**：不做"传统 CI vs 智能"的过渡对比；不做传统 CI/CD 功能全量盘点；不做 MCP/CLI/Agent Harness 协议级深研（见 [[00_charter|Charter]] 非目标）。
-- **证据口径**：优先官方文档、官方工程博客、官方仓库、官方 release notes；厂商自述指标逐条标注，不外推为行业平均值；`unverified` 项显式标记并保持阻塞；来源冲突显式保留。
-- **证据来源**：4 份研究底稿——[[00_sources/research-github-microsoft-cicd-trends-2026-08-07|GitHub/Microsoft]]、[[00_sources/research-aws-cicd-trends-2024-2026-2026-08-07|AWS]]、[[00_sources/research-openai-anthropic-cicd-trends-2026-08-07|OpenAI/Anthropic]]、[[00_sources/research-bytedance-cicd-2024-2026-trends-2026-08-07|字节]]——+ [[50_deepdives/harness-company/fact-table-2024-2026-2026-08-07|Harness 2024-2026 事实表]]。全部链接于 2026-08-07 访问核验。
+- **明确不做**：不做传统 CI 与智能化 CI 的过渡对比；不做传统 CI/CD 功能全量盘点；不做 MCP、命令行工具和智能体执行框架的协议级深研（见 [[00_charter|研究章程]] 非目标）。
+- **证据口径**：优先官方文档、官方工程博客、官方仓库和官方发布说明；厂商自述指标逐条标注，不外推为行业平均值；未核验项显式标记并保持阻塞；来源冲突显式保留。
+- **证据来源**：4 份研究底稿——[[00_sources/research-github-microsoft-cicd-trends-2026-08-07|GitHub/Microsoft]]、[[00_sources/research-aws-cicd-trends-2024-2026-2026-08-07|AWS]]、[[00_sources/research-openai-anthropic-cicd-trends-2026-08-07|OpenAI/Anthropic]]、[[00_sources/research-bytedance-cicd-2024-2026-trends-2026-08-07|字节]]——+ [[50_deepdives/harness-company/fact-table-2024-2026-2026-08-07|Harness 2024-2026 事实表]]和 [[50_deepdives/cicd-trends-2024-2026/research-evolution-panorama-2026-08-08|本次演进全景补充研究]]。底稿统一于 2026-08-07 访问核验，本次补充研究于 2026-08-08 复核。
 
 ## 二、演进全景（2024 → 2026-08）
 
-| 公司 | 2024 起点 | 2025 中间态 | 2026-08 状态 | 演进主线 |
+> **本章的读法**：时间阶段是跨公司样本的归纳，不是任何一家厂商的官方路线图；产品、功能、日期和生命周期是来源事实，均回链到一手底稿或官方页面；“跨阶段”“更可能”“收敛”等表述是基于这些事实的分析推断。正文统一使用“智能体”指代通用 Agent；产品名、协议缩写和代码字段保留原文。状态统一译为正式可用（GA）、有限正式可用（Limited GA）、预览（Preview）、公开预览（Public Preview）、有限公开预览（Limited Public Preview）、技术预览（Technical Preview）、公开测试（Public Beta）、测试版（Beta）、早期试用（Early Access）、研究预览（Research Preview）和试点（Pilot），这些状态不能相互替代。
+
+### 2.1 公司维度总览
+
+> 表中的“2024 起点”是本专题观察窗口内能够回链的一手证据起点，不代表公司在 2024 年才开始建设 CI/CD。没有足够证据的年份明确写为“本专题未形成可核验事件”，不以模型记忆补齐。
+
+| 公司 | 2024 起点 | 2025 变化 | 2026-08 状态 | 代表产品与功能 | 核心技术方案 | 演进判断（分析推断） |
+|---|---|---|---|---|---|---|
+| **GitHub** | 制品证明（Artifact Attestations）从公开测试版更新为正式可用，随后支持一次证明多个制品；持久提交签名验证正式可用；CodeQL 扫描 Actions 工作流漏洞进入公开预览。 | Copilot 代码评审智能体、智能体模式（Agent Mode）和 MCP 于 2025-04-04 面向全部 VS Code 用户；Actions 细粒度权限正式可用，OIDC 增加 `check_run_id`。 | Agentic Workflows 由技术预览进入公开预览；代码评审的智能体技能和 MCP 正式可用；智能修复功能进入公开预览；Copilot 云端智能体可处理失败的 Actions 检查。 | Actions、Agentic Workflows、Copilot 代码评审/修复、制品证明。 | Markdown 文件头配置编译为 Actions 锁定文件；沙箱、智能体工作流防火墙、安全输出（Safe Outputs）、规则集、必需检查、OIDC 与来源证明。 | 从“制品和门禁可验证”演进到“把智能体纳入仓库控制面”，但智能体输出仍受确定性门禁约束。 |
+| **Microsoft** | 本专题未形成独立的 2024 人工智能里程碑；可核验底座是 GHAzDO 的密钥、CodeQL 代码和依赖扫描，以及 Azure DevOps 分支策略。 | 本专题未形成独立的 2025 产品事件链；GitHub 与 Microsoft 联合开发的 Agentic Workflows 路线在 2026 年公开。 | Azure Repos 的 Copilot 评审/修复处于有限公开预览；远程 Azure DevOps MCP 服务器处于公开预览；Entra 工作负载身份处于预览；GHAzDO 状态检查和托管研发运维资源池正式可用。 | Azure Repos、Azure Pipelines、GHAzDO、远程 MCP 服务器、Entra 工作负载身份。 | 人工智能评审/修复接入代码库和工作项；MCP 提供上下文入口；确定性扫描和分支策略保持门禁权威；服务主体和托管身份替代长期 PAT。 | 从“安全扫描与分支策略”扩展到“人工智能评审、MCP 和工作负载身份”，证据不支持“Azure DevOps 整体迁移到 GitHub”。 |
+| **AWS** | CodePipeline、CodeBuild、CodeDeploy 的当前官方能力仍以确定性编排、构建、部署和回滚为主；2024 年人工智能增量存在证据缺口。 | Amazon Bedrock AgentCore 于 2025-10-13 正式可用；CodeGuru Reviewer 于 2025-11-07 停止新建仓库关联。 | DevOps Agent 的生产运维能力正式可用；发布管理和沙箱处于预览；AgentCore 托管执行框架和运行实例正式可用，并新增状态化策略。 | AWS DevOps Agent、AgentCore、CodePipeline/CodeBuild/CodeDeploy、AWS Transform。 | 旁路智能体连接仓库、流水线和运行环境；托管验证环境、检查结果、合并请求审批、Lambda 微型虚拟机、只读 AWS 接口代理和时序策略。 | 不改写传统流水线，而是在交付前后增加共享上下文、验证和调查控制面；发布授权仍在外部。 |
+| **Harness** | 缓存智能（Cache Intelligence）与托管镜像层缓存正式可用；测试/构建智能、自托管缓存、OIDC 等从早期试用起步。 | 执行兼容性扩展到 GitHub Actions 和 Bitrise 步骤，自托管 Kubernetes OIDC 等能力继续完善。 | 构建、测试和缓存智能形成正式版/测试版组合；有向无环图流水线处于测试版；Worker Agents 已发布；智能体交付生命周期（Agent DLC）扩展到人工智能测试/评测、智能体部署、防火墙和追踪。 | Harness CI/CD、CI Intelligence、DAG Pipelines、Worker Agents、Agent DLC。 | 智能体作为流水线步骤；隔离容器或虚拟机；运行令牌权限取“声明授权范围与触发者角色权限的交集”；OPA 策略和审批；`dependsOn` 定义依赖；智能体产物与追踪记录进入平台。 | 从“构建测试优化”演进到“编排、智能体执行和治理同平台”，但各子能力生命周期不能被一个总括的正式可用标签覆盖。 |
+| **字节/火山引擎** | 持续交付 CP 增加制品上传/下载、Webhook、并发锁、人工卡点；人工智能推理应用部署进入邀测。 | 人工智能应用部署正式可用，并增加 mGPU 和分布式部署；CP V1、构建加速服务先后下线；Helm、灰度发布、应用性能监控等继续扩展。 | YAML 流水线与 OAM 商用；Nydus、IRSA、AgentKit 部署/更新任务进入 CP；SE Lab 持续公开智能体、环境生成和测试研究。 | 持续交付 CP、OAM/Kubernetes/Helm、AgentKit、Trae Agent、Repo2Run、AEGIS。 | 图形化和 YAML 双通道；异步调度与资源锁；Tekton 私有资源池；Kubernetes/OAM/Helm 交付；AgentKit 部署智能体运行环境。 | 产品主线是云原生应用与人工智能应用交付，研究主线是智能体软件工程；两者尚无证据证明已组成内部生产级智能化 CI/CD。 |
+| **OpenAI** | 本专题未形成可核验的 2024 年独立 CI/CD 产品里程碑。 | 本专题现有一手材料未形成独立的 2025 年 CI/CD 产品事件链。 | 公开 Codex 驱动的软件工程内部实践、Symphony 规范草案第一版/工程预览、Windows 沙箱和 Tax AI 试点；官方示例库提供 CI 修复与评审示例。 | Codex、Symphony、Codex 沙箱、Tax AI、官方示例库。 | 任务跟踪系统作为控制面；每个任务使用隔离工作区；`WORKFLOW.md` 对策略进行版本管理；无界面运行环境；定向评测、回归测试和独立评分器。 | 从“编码智能体”演进到“任务级常驻编排与外部评估”，公开证据止于合并附近，未证明直接生产发布。 |
+| **Anthropic** | 本专题未形成可核验的 2024 年独立 CI/CD 产品里程碑。 | Claude Code 沙箱以测试版/研究预览发布；长时智能体执行框架研究引入初始化器、增量会话和上下文重置。 | 自动模式（auto mode）、Managed Agents 与 claude-code-action 已发布；工程披露进一步覆盖凭据外置、会话恢复、渐进灰度和产品评测。 | Claude Code 沙箱、auto mode、Managed Agents、claude-code-action。 | bubblewrap/Seatbelt 操作系统隔离、Unix 套接字网络代理、分类器审批、密钥保管库/凭据代理、可重建容器与持久会话事件日志。 | 从“受控命令执行”演进到“审批自动化和可恢复执行框架”，但独立生命周期标签与生产发布授权仍需逐项核验。 |
+
+### 2.2 七家公司逐一演进
+
+#### 2.2.1 GitHub：从供应链证据化到仓库原生智能体控制面
+
+- **2024 时间线（来源事实）**：制品证明于 2024-05-02 进入公开测试，官方原文更新为 2024-06-25 正式可用；12 月支持一次证明多个制品。持久提交签名验证于 2024-12-10 正式可用，CodeQL 扫描 Actions 工作流漏洞于 2024-12-17 进入公开预览。
+- **2025 时间线（来源事实）**：Copilot 代码评审智能体、智能体模式和 MCP 于 2025-04-04 面向全部 VS Code 用户；Actions 自定义仓库角色的细粒度权限于 2025-06-26 正式可用；OIDC 令牌于 2025-11 增加 `check_run_id`，将身份与具体检查关联。
+- **2026 时间线（来源事实）**：Agentic Workflows 由 2026-02-13 技术预览进入 2026-06-11 公开预览；Agentic Autofix 于 2026-07-10 进入公开预览；代码评审的智能体技能和 MCP 于 2026-07-29 正式可用；Copilot 云端智能体可处理失败的 Actions 检查。
+- **产品功能与接入位置**：智能体覆盖持续分诊、文档维护、代码简化、测试改进、CI 失败调查、代码评审和代码扫描修复；制品证明覆盖来源证明、软件物料清单（SBOM）和离线/在线验证。智能体位于仓库、拉取请求和 Actions 内，不独立替代构建或发布系统。
+- **技术方案与控制边界**：Markdown 文件头配置编译为标准 Actions YAML 和锁定文件；智能体默认只读，在沙箱容器、工具白名单、网络隔离和智能体工作流防火墙内运行；写操作经安全输出进入预先批准的拉取请求或问题单任务；规则集、必需检查、签名和制品证明保持最终验证权。
+- **状态与禁止外推**：Agentic Workflows 为公开预览，代码评审的智能体技能和 MCP 为正式可用，Agentic Autofix 为公开预览。Microsoft Aspire 案例与 GitHub 指标属于第一方实践，不能外推为行业成功率。
+- **演进判断（分析推断）**：GitHub 不是把 Actions 变成不确定的智能体，而是让智能体在 Actions 的身份、日志、权限和门禁模型中运行；智能体负责生成和调查，平台继续负责证明和放行。
+
+证据入口：[[00_sources/research-github-microsoft-cicd-trends-2026-08-07|GitHub/Microsoft 研究底稿]]、[[50_deepdives/cicd-trends-2024-2026/research-evolution-panorama-2026-08-08|演进全景补充研究]]。
+
+#### 2.2.2 Microsoft：从确定性安全门禁到 Azure DevOps 的人工智能评审与身份升级
+
+- **2024 时间线（证据边界）**：本专题现有一手材料未单列 2024 年 Azure DevOps 人工智能产品事件；GHAzDO 的密钥扫描、CodeQL 代码扫描、依赖扫描与分支策略构成后续人工智能评审接入时的确定性底座。
+- **2025 时间线（证据边界）**：本专题未形成独立的 2025 年 Azure DevOps 人工智能事件链；不以 GitHub 产品发布日期反推 Azure DevOps 同期可用性。
+- **2026 时间线（来源事实）**：远程 Azure DevOps MCP 服务器于 2026-03-31 进入公开预览；Copilot 代码评审与自动修复于 2026-06-17 进入有限公开预览；Entra 工作负载身份服务连接同日进入预览；高级安全状态检查与 CodeQL 默认设置已经正式可用。
+- **产品功能与接入位置**：Copilot 在 Azure Repos 拉取请求中评审并为 CodeQL 告警生成修复；Azure Boards 可将工作项交给编码智能体；远程 MCP 为开发工具和智能体提供 Azure DevOps 上下文；GHAzDO 继续把安全发现映射成分支策略和状态检查。
+- **技术方案与控制边界**：人工智能评审/修复位于代码库、工作项和 MCP 连接层，扫描与分支策略位于确定性门禁层；服务主体和托管身份逐步替代 PAT/长期密钥，增强审计与最小权限。
+- **状态与禁止外推**：评审/修复为有限公开预览，远程 MCP 为公开预览，工作负载身份为预览；GHAzDO 与安全状态检查正式可用。现有证据不能证明“Microsoft 仓库整体迁移到 GitHub”或 MCP 服务器的开源属性。
+- **演进判断（分析推断）**：Microsoft 保留 Azure DevOps 的交付和治理对象，在其上叠加 GitHub 系人工智能能力与托管 MCP；关键变化是上下文和身份接入，而不是更换流水线执行器。
+
+证据入口：[[00_sources/research-github-microsoft-cicd-trends-2026-08-07|GitHub/Microsoft 研究底稿]]。
+
+#### 2.2.3 AWS：从确定性流水线到交付前后的旁路智能体
+
+- **2024 时间线（证据边界）**：CodePipeline、CodeBuild、CodeDeploy 当前官方能力页仍以工作流编排、构建/测试、蓝绿或滚动部署、健康跟踪与回滚为主；本轮未能核验 2024—2025 年的人工智能增量公告，因此只将它们作为确定性基线，不写成“期间不存在人工智能能力”。
+- **2025 时间线（来源事实）**：Amazon Bedrock AgentCore 于 2025-10-13 正式可用，提供通用智能体运行与治理底座；CodeGuru Reviewer 于 2025-11-07 停止新建仓库关联，体现旧入口收窄，而不是整个 AWS 代码检查能力消失。
+- **2026 时间线（来源事实）**：DevOps Agent 生产运维能力于 2026-03-31 正式可用；发布管理于 2026-06-17 进入预览且仅限 `us-east-1`；AgentCore 托管执行框架同日正式可用；沙箱于 2026-07-23 进入预览；运行实例于 2026-08-06 正式可用，时序策略与限流同日公告，但没有独立状态标签。
+- **产品功能与接入位置**：生产运维能力覆盖事件调查、预防和按需可靠性任务；发布管理提供发布就绪审查和自主发布测试；流水线拓扑、代码依赖、记忆和自定义智能体补充交付与运行上下文。
+- **技术方案与控制边界**：DevOps Agent 是连接仓库、流水线与运行环境的旁路服务，不改写 CodePipeline/CodeBuild 编排；托管验证环境执行构建、运行和测试，并回写 GitHub 检查结果或 GitLab 合并请求审批；沙箱使用隔离微型虚拟机、出站白名单和只读 AWS 接口代理；系统会阻断敏感文件外泄和修改 AWS 资源的操作。
+- **状态与禁止外推**：生产运维能力与 AgentCore 正式可用，发布管理和沙箱处于预览；发布测试会向目标应用发送真实请求，包含写操作，只适用于可容忍探索性写入的环境。检查结果、合并请求审批或阻断结论不等于自动合并、部署或恢复授权；“Transform 构建于 AgentCore”仍未核验。
+- **演进判断（分析推断）**：AWS 用同一智能体上下文连接流水线拓扑、代码依赖和运行事件；智能控制面位于传统流水线旁边，门禁结果再回到 GitHub、GitLab 或人工流程。
+
+证据入口：[[00_sources/research-aws-cicd-trends-2024-2026-2026-08-07|AWS 研究底稿]]、[[50_deepdives/cicd-trends-2024-2026/research-evolution-panorama-2026-08-08|演进全景补充研究]]。
+
+#### 2.2.4 Harness：从 CI 智能优化到编排、智能体执行与治理同平台
+
+- **2024 时间线（来源事实）**：缓存智能与 Harness Cloud 托管镜像层缓存于 2024-05 正式可用；测试智能、构建智能、自托管缓存、OIDC 自托管构建等从早期试用起步；不稳定测试隔离、日志、构建资源和 Git 克隆能力持续完善。
+- **2025 时间线（来源事实）**：GitHub Actions/Bitrise 步骤于 2025-08 进入步骤库；Harness Cloud 资源规格在 2025-12 调整，自托管 OIDC、执行兼容性与缓存后端继续扩展。现有证据尚未把 2025 年写成智能体产品化年份。
+- **2026 时间线（来源事实）**：Gradle/Bazel 构建智能、测试智能和缓存智能正式可用，Maven 构建智能为测试版；有向无环图流水线于 2026-06 处于测试版；Worker Agents 于 2026-06-30 发布并称“已可使用”；Agent DLC 于 2026-07 扩展人工智能评测、测试、智能体部署、防火墙与追踪。
+- **产品功能与接入位置**：Worker Agent 可作为持续集成、持续部署、基础设施管理、安全测试和供应链安全阶段中的流水线步骤，执行测试、扫描、部署或修复；有向无环图通过 `dependsOn` 支持扇出、汇聚和菱形依赖；Agent DLC 开始管理智能体的评测、配置、制品、部署和观测。
+- **技术方案与控制边界**：智能体在隔离 Docker 容器、虚拟机或自托管 Kubernetes 中运行；运行令牌权限取流水线声明授权范围与触发者角色权限的交集；OPA 可在保存和运行时限制模型、MCP、最大轮次与敏感变量；审批和审计仍是外部门禁。
+- **状态与禁止外推**：Worker Agents 已发布，但本报告采用“已可使用、独立正式可用标签未在对应文档中核验”的保守口径；有向无环图流水线为测试版；构建、测试、缓存智能和 Agent DLC 必须逐项报告状态，不能用一个“平台正式可用”覆盖。
+- **演进判断（分析推断）**：Harness 最鲜明的变化是把智能体作为流水线原生节点，并把评测、策略和追踪一并产品化；优势来自同平台闭环，而不是智能体自身拥有更高发布权。
+
+证据入口：[[50_deepdives/harness-company/fact-table-2024-2026-2026-08-07|Harness 事实表]]、[[50_deepdives/cicd-trends-2024-2026/research-evolution-panorama-2026-08-08|演进全景补充研究]]。
+
+#### 2.2.5 字节/火山引擎：从云原生持续交付到人工智能应用与智能体运行环境交付
+
+- **2024 时间线（来源事实）**：持续交付 CP 增加制品上传/下载、镜像源 Webhook、合并请求触发、并发锁、人工卡点和部分会签；人工智能推理应用部署于 2024-04 进入邀测，托管应用正式开放。
+- **2025 时间线（来源事实）**：人工智能应用部署于 2025-03 正式可用，并增加 mGPU 共享与大模型分布式部署；V1 于 2025-07-31 下线并完成向 V2 迁移；构建加速服务于 2025-09-25 因“产品调整”下线；灰度发布、Helm、应用性能监控与多云模板继续扩展。
+- **2026 时间线（来源事实）**：Nydus、IRSA、AgentKit 部署/更新任务于 2026-03 进入 CP；流水线 YAML 创建与 OAM 于 2026-04 商用；SE Lab 持续公开 Trae Agent、Repo2Run、AEGIS、SGo-Oracle 等智能体、环境生成和测试研究。
+- **产品功能与接入位置**：CP 覆盖编译、单元测试、SonarQube、镜像与制品、Kubernetes/OAM/Helm、灰度/分批/滚动发布、人工卡点、失败重试和并发锁；AgentKit 解决智能体运行环境的部署更新，而不是让智能体接管 CP 编排。
+- **技术方案与控制边界**：图形化与 YAML 双通道；异步调度与资源锁控制并发；私有构建资源池使用 Tekton Webhook；应用交付以 Kubernetes YAML、OAM 和 Helm 为载体。研究项目生成 Dockerfile、修复问题单和生成测试判定器，不等于平台生产门禁。
+- **状态与禁止外推**：CP、人工智能应用部署、YAML/OAM 正式可用；AgentKit 为已发布任务，具体智能化 CI/CD 权限边界未公开。构建加速下线原因只写“产品调整”，不能据此判断分布式构建路线失败；内部单体仓库、Bazel、Rspack 演进仍缺一手证据。
+- **演进判断（分析推断）**：火山引擎的产品演进重心是“交付对象从普通云原生应用扩展到人工智能应用和智能体运行环境”；字节研究资产加速转向智能体软件工程，但产品与研究尚不能画成一条已证实的生产链路。
+
+证据入口：[[00_sources/research-bytedance-cicd-2024-2026-trends-2026-08-07|字节/火山引擎研究底稿]]。
+
+#### 2.2.6 OpenAI：从编码智能体到任务单驱动的常驻编排
+
+- **2024—2025 时间线（证据边界）**：本专题现有一手材料未形成 2024 或 2025 年独立的 CI/CD 产品事件链；不以 Codex 的一般产品记忆补写发布时间，也不把官方示例库当成托管 CI/CD 产品。
+- **2026 时间线（来源事实）**：OpenAI 于 2026-02-11 披露 Codex 驱动的软件工程内部实践；Symphony 于 2026-04-27 以规范草案第一版/工程预览公开；Windows 沙箱于 2026-05-13 发布；Tax AI 于 2026-05-27 以试点案例披露定向评测闭环。
+- **产品功能与接入位置**：Symphony 从 Linear 等任务跟踪系统读取任务，为每个任务创建隔离工作区，持续观察 CI、按需变基、解决冲突、重试不稳定检查，并护送拉取请求进入“待合并（Merging）”；官方示例库提供 CI 自动修复、迭代修复、代码评审和 GitLab 安全质量示例；Tax AI 用生产运行记录生成评测目标。
+- **技术方案与控制边界**：`WORKFLOW.md` 对调度策略进行版本管理；无界面的 Codex 运行环境执行任务；并发上限、重试/状态协调和结构化日志维持长时运行；Windows 沙箱默认无网络并限制工作区写入；定向评测、回归套件和独立评分器与被修代码分离，验证失败不合并。
+- **状态与禁止外推**：Symphony 为规范草案第一版/工程预览，Tax AI 为试点；官方示例库不是产品正式可用的证明。内部拉取请求数量和 Tax AI 指标均为厂商自述；公开证据止于合并附近，未证明智能体拥有生产发布权。
+- **演进判断（分析推断）**：OpenAI 把任务跟踪系统提升为智能体控制面，让 CI 成为长时任务循环中的校验信号；其价值主张偏向任务吞吐与已合并拉取请求数量，但最终验证仍依赖独立测试和评分器。
+
+证据入口：[[00_sources/research-openai-anthropic-cicd-trends-2026-08-07|OpenAI/Anthropic 研究底稿]]、[[50_deepdives/cicd-trends-2024-2026/research-evolution-panorama-2026-08-08|演进全景补充研究]]。
+
+#### 2.2.7 Anthropic：从沙箱执行到审批自动化与可恢复执行框架
+
+- **2024 时间线（证据边界）**：本专题现有一手材料未形成可核验的 2024 年独立 CI/CD 产品事件，不补写传统产品起点。
+- **2025 时间线（来源事实）**：Claude Code 沙箱于 2025-10-20 以测试版/研究预览发布，使用操作系统原语实现文件系统和网络隔离；长时智能体执行框架研究于 2025-11-26 公开初始化器、增量会话、Git 检查点与上下文重置。
+- **2026 时间线（来源事实）**：自动模式于 2026-03-25 发布；Managed Agents 于 2026-04-08 发布；2026-05 的隔离机制披露进一步说明 gVisor、Seatbelt/bubblewrap、虚拟机与凭据外置边界；claude-code-action 当前仓库提供拉取请求评审、问题单实现与计划任务能力。
+- **产品功能与接入位置**：自动模式用提示词注入探针和两阶段会话分类器代替部分逐动作审批，并以默认阻断规则拦截强制推送、外发凭据、直接推送主分支和绕过前置检查的部署；Managed Agents 将执行框架、容器/工具与会话事件日志解耦；claude-code-action 将 Claude Code 放进用户自己的 GitHub 执行器。
+- **技术方案与控制边界**：Linux bubblewrap/macOS Seatbelt 限制文件系统；网络经 Unix 套接字代理按域名放行；Git/OAuth 令牌在沙箱外由代理或密钥保管库管理；容器死亡可重新创建，执行框架崩溃可通过持久会话恢复；连续风险拒绝会升级人工或终止无界面进程。
+- **状态与禁止外推**：沙箱为测试版/研究预览；auto mode、Managed Agents 与 claude-code-action 已发布，但本报告不把工程文章的发布自动换算为独立正式可用标签。分类器指标、延迟改善与自治时长均为第一方测量；官方未证明智能体直接执行生产发布。
+- **演进判断（分析推断）**：Anthropic 的重心是把审批、执行环境和会话恢复做成执行框架能力，使智能体可长时运行；相比直接扩大发布权，它优先工程化隔离与可恢复性。
+
+证据入口：[[00_sources/research-openai-anthropic-cicd-trends-2026-08-07|OpenAI/Anthropic 研究底稿]]、[[50_deepdives/cicd-trends-2024-2026/research-evolution-panorama-2026-08-08|演进全景补充研究]]。
+
+### 2.3 CI/CD 阶段维度演进
+
+> 本节把公司产品重新映射到六类 CI/CD 阶段。阶段聚类不是产品菜单：同一产品可以跨多个阶段，但每个阶段只讨论它承担的作业、技术机制、执行权和外部门禁。
+
+事实索引沿用 2.2 的五个证据入口；新增的发布、恢复和度量锚点回链 [[50_deepdives/cicd-trends-2024-2026/research-evolution-panorama-2026-08-08|演进全景补充研究]]。
+
+| CI/CD 阶段聚类 | 2024 形态 | 2025 变化 | 2026-08 形态 | 代表公司/产品 | 技术方案与门禁 | 成熟度判断 |
+|---|---|---|---|---|---|---|
+| **变更理解、代码检查与评审** | CodeQL、SonarQube 等确定性扫描进入工作流；签名和状态检查提供变更证据。 | Copilot 代码评审智能体、智能体模式和 MCP 让人工智能进入拉取请求评审；字节研究开始覆盖问题单修复与缺陷复现。 | GitHub 代码评审的智能体技能和 MCP 正式可用；Agentic Autofix 进入公开预览；Azure Repos 评审/修复处于有限公开预览；AWS 发布就绪审查、Harness AI SAST 和 Anthropic Action 扩大评审范围。 | GitHub、Microsoft、AWS、Harness、Anthropic、字节研究。 | 仓库上下文/依赖图 → 人工智能发现或补丁 → 检查结果、合并请求审批、规则集、OPA 或人工确认。 | 评审是智能体产品化最成熟的环节之一，但正式版与预览版并存；“能建议修复”不等于“可以合并”。 |
+| **构建、测试与失败修复** | 缓存、镜像层缓存、测试选择、构建资源、失败重试与私有执行池是主线。 | 沙箱、OIDC 与环境生成开始让智能体在受控环境运行；Repo2Run 等研究覆盖可执行环境生成。 | Copilot 云端智能体修复失败检查；AWS 托管验证与发布测试处于预览；Harness Worker Agents/人工智能测试、OpenAI 修复循环/Symphony、Anthropic 长时执行框架形成智能体修复循环。 | Harness、GitHub、AWS、OpenAI、Anthropic、字节/火山。 | 隔离工作区、容器或微型虚拟机 → 构建/测试 → 定向评测或分类器 → 失败修复与重跑。 | 确定性构建测试大多正式可用；智能体修复和探索式测试状态更混合，且需要隔离网络与写操作。 |
+| **制品、签名与供应链可信** | GitHub 制品证明从公开测试更新为正式可用，并支持一次证明多个制品；持久签名验证正式可用；火山 CP 增加制品上传/下载。 | OIDC、细粒度权限与代码到云端的制品风险可见性扩大身份和风险关联。 | GitHub 增加只读缓存、恶意工作流暂扣等防护；Harness 提供免密钥签名、SLSA 与智能体制品跟踪；GHAzDO 安全门禁正式可用。 | GitHub、Microsoft、Harness、火山 CP。 | 来源证明、软件物料清单、签名 + OIDC/工作负载身份 + 策略和检查；智能体只能生成或使用证据，验证由独立工具完成。 | 供应链的确定性证据最成熟；智能体与制品证据的自动绑定仍缺少跨产品统一链路。 |
+| **部署、发布准备与渐进式发布** | 火山 CP 已有人工卡点、分批/滚动发布并开始邀测人工智能应用部署；Cloud Deploy/CodeDeploy 当前文档提供确定性审批、金丝雀发布与回滚锚点。 | 火山人工智能应用部署正式可用，灰度、Helm、OAM 等交付对象扩展；AgentCore 正式可用，提供智能体运行环境底座。 | AWS 发布管理处于预览；Harness Worker Agents 可执行部署步骤并增加智能体部署；火山 YAML/OAM/AgentKit 完善人工智能应用和智能体运行环境交付。 | AWS、Harness、火山/字节；Google Cloud Deploy、AWS CodeDeploy 作确定性反例锚点。 | 声明式清单/YAML/OAM/Helm → 发布就绪审查/验证 → 审批 → 金丝雀/分批/滚动 → 回滚。 | 确定性部署能力成熟，智能体发布准备多为预览或刚发布；本专题未证实端到端无人生产发布。 |
+| **运行反馈、故障调查与恢复** | 流水线失败重试、健康跟踪和版本回滚为主要恢复机制，智能调查证据较少。 | Anthropic 长时执行框架研究引入检查点和上下文重置；传统回滚仍以重新部署已知版本为主。 | AWS 生产运维能力正式可用；Symphony 处理变基、冲突和不稳定检查重试；Managed Agents 支持容器重建与会话重放；AgentCore 增加持久运行环境。 | AWS、OpenAI、Anthropic；CodeDeploy/Cloud Deploy 作恢复语义锚点。 | 拓扑、记忆和事件日志 → 调查与建议 → 重试、状态协调、环境重建或重新部署 → 重新经过门禁。 | 事件调查已出现正式产品，任务恢复能力快速增强；业务状态完全恢复和自主生产修复仍是证据缺口。 |
+| **贯穿式治理、身份、策略与智能体编排** | 手工审批、资源锁、签名、分支策略和静态角色权限约束确定性流程。 | OIDC、细粒度权限、沙箱和 AgentCore 等将身份与执行环境分离。 | 安全输出、声明授权范围与触发者角色权限的交集、OPA、Entra 工作负载身份、时序策略、分类器、密钥保管库/代理、`WORKFLOW.md` 和有向无环图/常驻执行框架形成会话级控制面。 | GitHub、Microsoft、AWS、Harness、OpenAI、Anthropic、火山 CP。 | 策略即代码 + 短生命周期身份 + 网络/文件边界 + 审计追踪 + 外部必需检查/审批。 | 治理机制正在从“是否允许流水线”扩展为“本次智能体会话能做什么”；生命周期和账户可用性差异最大。 |
+
+#### 2.3.1 变更理解、代码检查与评审
+
+- **2024**：可核验变化仍以确定性扫描和证据为主。GitHub 将 Actions 工作流漏洞纳入 CodeQL 公开预览；火山 CP 通过 SonarQube 步骤执行代码扫描。多数公司没有充分证据证明人工智能已经进入最终评审门禁。
+- **2025**：GitHub Copilot 代码评审智能体、智能体模式和 MCP 面向全部 VS Code 用户；字节 SE Lab 的 MarsCode Agent、AEGIS、Trae Agent 等开始覆盖问题单解决、缺陷复现和自动修复，但属于研究或开源资产。
+- **2026**：GitHub 代码评审的智能体技能和 MCP 正式可用，Agentic Autofix 进入公开预览；Microsoft 将评审/修复以有限公开预览接入 Azure Repos；AWS 发布管理预览能力检查标准偏离、依赖影响和访问控制；Harness AI SAST 为测试版；claude-code-action 支持拉取请求评审。
+- **技术变化**：输入从单文件差异扩大到仓库规则、依赖图、MCP/技能、流水线拓扑和组织标准；输出从自然语言建议扩展到行内问题、修复拉取请求、检查结果与合并请求审批。
+- **执行权与门禁**：智能体通常拥有读取、评论和提出补丁的权限；合并权仍由规则集、必需状态检查、合并请求审批、OPA 或人工持有。AWS 检查结果只有被配置为必需检查时才能阻断合并。
+- **成熟度、趋势与反例（分析推断）**：检查/评审是最先出现明确正式产品的智能体环节，但不同平台状态不一致；字节研究资产不能写成生产评审产品，人工智能发现也不能代替 CodeQL/SAST 或组织策略。
+
+#### 2.3.2 构建、测试与失败修复
+
+- **2024**：Harness 缓存智能与托管镜像层缓存正式可用，测试/构建智能从早期试用起步；火山 CP 提供编译、单元测试、缓存、私有构建资源池和失败重试；字节构建加速仍提供远端执行与缓存。
+- **2025**：Harness 的构建/测试智能逐步形成正式版与测试版组合；Repo2Run 开源并研究从仓库生成可执行环境；Claude Code 沙箱以测试版/研究预览提供文件系统和网络隔离，为智能体无人值守运行命令建立边界。
+- **2026**：Copilot 云端智能体可修复失败的 Actions 检查；AWS 发布管理在托管验证环境执行构建、运行和测试，并提供会发送真实请求的发布测试；Harness Worker Agents、人工智能测试与评测进入流水线；Symphony 重试不稳定检查，OpenAI 官方示例库提供迭代修复示例；Anthropic 执行框架引入规划、生成和评估分工。
+- **技术变化**：优化对象从缓存、镜像层缓存、测试选择和执行资源，扩展为“隔离环境中的生成—执行—评估—修复循环”；定向评测、独立评分器、Playwright MCP 和探索式测试增加非确定性验证，但最终仍需确定性测试结果。
+- **执行权与门禁**：智能体可在工作区、容器或微型虚拟机内修改文件、运行构建和测试；网络域名、云接口、凭据与写请求需额外限制。失败修复必须重新执行测试和已配置的必需检查，不能凭智能体自评写回成功。
+- **成熟度、趋势与反例（分析推断）**：传统构建测试优化已较成熟，智能体修复处于正式版、预览版、测试版、示例和研究混合状态。火山构建加速服务下线说明单点加速产品可能收窄，但官方未披露原因，不能推导远端构建路线失败。
+
+#### 2.3.3 制品、签名与供应链可信
+
+- **2024**：GitHub 制品证明从公开测试更新为正式可用，并支持一次证明多个制品；持久提交签名验证正式可用；火山 CP 增加制品上传/下载。制品可信开始从“保存结果”转向“保存来源和身份”。
+- **2025**：GitHub Actions 细粒度权限正式可用，OIDC 增加 `check_run_id`；GitHub 与 Microsoft Defender 的代码到云端制品风险可见性进入公开预览。身份、检查运行和云端风险开始被关联。
+- **2026**：GitHub 增加不可信触发器只读缓存、恶意工作流暂扣待审批等防投毒机制；Harness 功能清单记录免密钥签名、非容器 SLSA 来源证明和 GitLab 软件物料清单/SLSA/签名验证为有限正式可用，并在 Agent DLC 中跟踪智能体制品；GHAzDO 状态检查正式可用。
+- **技术变化**：来源证明、软件物料清单、Sigstore、签名、OIDC/工作负载身份与策略/检查组成独立证据链；智能体可以触发证明、读取软件物料清单或提出修复，但验证工具和门禁必须独立于智能体输出。
+- **执行权与门禁**：签名权限、`id-token: write`、证明写入和制品发布应分离；不可信工作流只能读取缓存或等待批准。MCP/命令行工具能访问制品，并不等于获得签名、上传或发布权限。
+- **成熟度、趋势与反例（分析推断）**：供应链的确定性机制比智能体编排更成熟，是智能体扩权时最适合作为硬证据的层次；本专题没有证明跨厂商制品证明、部署策略和智能体决策已经自动衔接成统一闭环。
+
+#### 2.3.4 部署、发布准备与渐进式发布
+
+- **2024**：火山 CP 已提供人工卡点、并发锁、失败重试、分批/滚动发布，并在 2024-04 邀测人工智能推理应用部署；Google Cloud Deploy 与 AWS CodeDeploy 的当前官方文档提供审批、金丝雀发布、部署验证、蓝绿/滚动与回滚机制，但未用当前页面反推其首次发布时间。
+- **2025**：火山人工智能应用部署正式可用，增加 mGPU/分布式部署、灰度发布、Helm 与多云模板；AgentCore 正式可用，为部署和运行智能体提供通用底座，但不是 CI/CD 发布编排器。
+- **2026**：AWS 发布管理预览能力提供发布就绪审查与自主发布测试；Harness Worker Agent 可位于持续部署阶段，Agent DLC 增加智能体部署；火山 CP 支持 YAML/OAM 商用及 AgentKit 部署/更新任务。
+- **技术变化**：声明式 YAML/OAM/Helm 和环境拓扑继续承担部署事实源；智能体位于发布准备、测试计划生成和部署步骤中；审批、金丝雀发布、部署验证、渐进式发布与回滚保持确定性控制。
+- **执行权与门禁**：智能体可以生成部署清单、执行预发布测试或作为受控部署步骤，但生产凭据、环境审批、必需检查和回滚策略必须由平台外部授予。AWS 发布测试会产生真实写请求，必须限定环境。
+- **成熟度、趋势与反例（分析推断）**：部署工具本身成熟，智能体主要在发布准备和运行环境交付处扩张；没有一手资料证明本样本存在通用、正式可用、无人批准的生产发布。CodeDeploy 回滚是重新部署旧版本，且不会自动反转脚本造成的全部外部副作用。
+
+#### 2.3.5 运行反馈、故障调查与恢复
+
+- **2024**：主要能力仍是流水线失败重试、部署健康跟踪、版本回滚和保留运行记录；本专题没有形成跨公司人工智能故障调查产品时间线。
+- **2025**：Anthropic 长时执行框架研究使用 Git 检查点、进度文件和上下文重置处理长任务恢复；这属于研究方法，不是生产发布恢复产品。CodeDeploy/Cloud Deploy 继续以新的部署或发布批次回退到已知版本。
+- **2026**：AWS DevOps Agent 生产运维能力正式可用，覆盖事件调查、预防和按需可靠性任务；Symphony 持续观察 CI、执行变基、解决冲突和重试不稳定检查；Managed Agents 通过重新创建容器和会话事件日志恢复；AgentCore 运行实例支持更长会话。
+- **技术变化**：恢复对象从单次任务或版本扩展到工作区、执行框架、会话和上下文；流水线拓扑、记忆、事件日志和结构化报告支撑诊断，重试、状态协调、环境重建和重新部署执行恢复动作。
+- **执行权与门禁**：AWS 原生工具和沙箱接口代理默认不修改基础设施，缓解建议需由外部流程应用；任务恢复后仍要重跑构建、测试和发布门禁。会话恢复只证明智能体能继续工作，不证明业务状态已恢复。
+- **成熟度、趋势与反例（分析推断）**：事件调查已进入正式产品，智能体任务恢复也形成明确工程方案；端到端生产修复、业务补偿和自动恢复服务目标仍缺乏可核验证据。CodeDeploy 不反向撤销部署脚本副作用，是“回滚不等于完全恢复”的直接反例。
+
+#### 2.3.6 贯穿式治理、身份、策略与智能体编排
+
+- **2024**：人工卡点、资源锁、签名、分支策略、静态角色权限和敏感值遮蔽约束确定性流程；治理对象主要是“流水线和步骤是否允许执行”。
+- **2025**：GitHub Actions 细粒度权限、OIDC、私有网络与 Anthropic 沙箱将身份、网络和文件系统边界拆开；AgentCore 正式可用，提供智能体运行与治理平台；凭据开始从智能体进程外置。
+- **2026**：GitHub 使用安全输出、防火墙和独立威胁检测任务；Harness 使用声明授权范围与触发者角色权限的交集、OPA、审批和 AgentTrace；Microsoft 推进 Entra 工作负载身份；AWS 增加时序策略和限流；OpenAI 用 `WORKFLOW.md` 和隔离工作区编排；Anthropic 用分类器、密钥保管库/代理和会话日志管理长时智能体。
+- **技术变化**：静态角色权限扩展为短生命周期身份、按会话和动作授权、调用顺序约束、数据新鲜度、网络/文件白名单、策略即代码和可恢复审计事件；有向无环图、动态流水线和常驻执行框架则改变任务编排位置。
+- **执行权与门禁**：有效权限由触发主体、声明授权范围、临时凭据、沙箱策略和外部门禁共同决定。智能体自我判断、MCP/命令行工具可调用、“已可使用”或产品正式可用，都不构成组织级授权。
+- **成熟度、趋势与反例（分析推断）**：治理正在从“流程配置”上移到“智能体在本次会话中的连续行为”；这是跨公司可观察到的机制收敛，但各平台术语、状态和可用性不同，不能写成统一行业标准。
+
+### 2.4 技术方案：三种智能体运行路线与一条共同验证链
+
+下图是基于上述产品事实抽象出的**分析模型**，不是任何厂商公布的统一参考架构：
+
+~~~mermaid
+flowchart LR
+    E["问题单 / 拉取请求 / 发布 / 故障事件"] --> C["上下文与计划<br/>仓库 · 依赖 · 流水线拓扑"]
+    C --> X["智能体执行边界<br/>工作区 · 沙箱 · 容器 · 微型虚拟机"]
+    X --> V["构建 / 测试 / 扫描 / 定向评测"]
+    V --> S["制品与证据<br/>来源证明 · 软件物料清单 · 报告 · 追踪"]
+    S --> G["外部门禁<br/>必需检查 · 合并请求审批 · OPA · 人工审批"]
+    G --> M["合并 / 部署 / 发布授权"]
+    M --> O["观测 / 调查 / 恢复"]
+    O -. "反馈与新证据" .-> C
+    P["贯穿式策略<br/>身份 · 凭据 · 网络 · 审计"] -. "约束" .-> X
+    P -. "约束" .-> G
+    P -. "约束" .-> O
+~~~
+
+| 路线 | 代表产品 | 执行位置与输出契约 | 解决的问题 | 不能推导的结论 |
 |---|---|---|---|---|
-| GitHub | Copilot 助手建议 + Artifact Attestations 多 subject/持久签名 GA（2024-12） | Copilot Agent Mode+MCP GA（2025-04）；gh-aw 技术预览（2026-02） | gh-aw Public Preview、Copilot Code Review GA、Agentic Autofix Preview | 把 Agent 编译进 Actions 控制面 |
-| Microsoft | GHAzDO 确定性扫描（Secret/CodeQL/Dependency） | Remote MCP Server Preview（2026-03）；Apple Silicon agents 引入 GitHub-hosted 命名 | Copilot Code Reviews/Autofix Limited Preview（2026-06）、Entra workload identity | 把 GitHub 系智能能力移植进 Azure DevOps，安全先行 |
-| AWS | DevOps Agent 只读调查（先于产品化的内部能力） | Production ops GA（2026-03-31） | Release Management Preview（us-east-1）、Sandbox Preview、AgentCore 平台 GA | 从只读调查向发布前审查/受控执行前移 |
-| Harness | 传统 CI 基础设施优化（Cache/Build Intelligence、Git Clone、OIDC） | Test Intelligence 转 GA；DAG Pipelines Beta | Worker Agents GA（2026-06-30）、Agent DLC、DAG Phase 2 | 编排与智能同平台 |
-| 字节 | 传统流水线 CP + Fastbot2/Hawkeye 测试工具论文 | AI 应用部署 GA（2025-03）、Trae/Repo2Run 开源 | YAML/OAM（2026-04）、AgentKit 部署、SE Lab 转向 LLM Agent | 产品化交付 + 研究资产双轨 |
-| OpenAI | 终端 Codex Agent | Symphony 开发中（2026-02 内部披露 harness engineering） | Symphony Experimental（2026-04-27）、Windows sandbox GA、Tax AI Pilot | 任务追踪器即控制平面 |
-| Anthropic | 终端 Claude Code | sandbox Beta（2025-10-20）、长时 harness 研究 | auto mode GA（2026-03-25）、Managed Agents GA（2026-04-08） | 审批与执行环境自动化 |
+| **嵌入式流水线** | GitHub Agentic Workflows、Harness Worker Agents | 智能体作为 Actions 锁定文件或流水线步骤运行；通过安全输出、限定权限令牌、OPA 和审批约束写操作 | 复用既有执行器、日志、审计、权限和阶段拓扑，把智能体变成可观测的交付节点 | 智能体成为流水线步骤不代表它拥有发布权；产品正式可用也不代表所有账户已启用或所有子能力正式可用 |
+| **旁路验证服务** | AWS DevOps Agent、Azure DevOps 远程 MCP/Copilot | 智能体在独立服务或托管验证环境中读取仓库和流水线，返回检查结果、合并请求审批、行内问题或报告 | 不改造确定性 CI/CD 引擎即可增加依赖分析、发布就绪审查和探索式测试 | 检查结果只说明能接入门禁；是否阻塞、自动触发或写入生产环境，取决于配置和预览限制 |
+| **常驻编排器 / 托管执行框架** | OpenAI Symphony、Anthropic Managed Agents | 问题单或任务状态驱动长时智能体；工作区、执行框架、工具容器和会话日志分离，支持重试、变基和恢复 | 将一次性 CI 任务提升为任务级执行循环，降低人工盯守并处理不稳定检查、冲突和上下文恢复 | 任务完成或进入待合并状态不等于生产发布成功；Symphony 是规范草案第一版/工程预览，Anthropic 公开材料也未给出端到端生产发布授权 |
+| **证据与治理层** | 制品证明、GHAzDO、AWS AgentCore 策略、Harness OPA/AgentTrace | 来源证明、签名、身份、策略、审计和评测结果作为独立证据；智能体只能提交结果，最终由门禁验证 | 将“模型说可以”变成“可验证证据满足门槛”，解决凭据、供应链、合规和回溯问题 | 证据层增强了可审计性，但不能自动证明模型结论正确，也不能替代人工或外部裁决机制 |
+
+**共同技术链（跨产品归纳）**可以拆成六个可独立替换的模块：
+
+1. **意图与策略**：GitHub 的 Markdown 文件头配置、OpenAI 的 `WORKFLOW.md`、Harness 流水线 YAML、火山 CP YAML/OAM，把目标、触发器、权限和输出约定纳入版本管理。
+2. **上下文装配**：仓库、问题单/拉取请求、依赖图、流水线拓扑、记忆、制品与运行数据进入智能体上下文；上下文是否新鲜直接影响评审结论，不能仅凭模型回答。
+3. **受控执行**：沙箱、容器、微型虚拟机、私有执行器和网络白名单限定文件、命令、域名和云接口；“默认只读”是多个产品的共同基线。
+4. **身份与凭据**：安全输出、限定权限令牌、OIDC/Entra 工作负载身份、Git 代理、密钥保管库和 AgentCore 策略将凭据移出模型上下文，按会话和动作授予最小权限。
+5. **双轨验证**：确定性构建、测试、扫描和签名继续提供硬证据；分类器、定向评测、独立评分器和探索式测试负责扩大前置检查，不把智能体自评当成最终裁决。
+6. **受控写入与恢复**：评论、草稿拉取请求、修复拉取请求、检查结果和审计事件是低风险输出；变基、不稳定检查重试、容器重建和会话重放解决可恢复性，但恢复后仍需重新经过外部门禁。
+
+**交叉技术锚点（不改变本专题公司范围）**：Buildkite Dynamic Pipelines 允许脚本在运行中的构建任务内上传或替换尚未开始的步骤，并用 `depends_on` 控制顺序，但官方页面未标明首次发布日期或生命周期；Dagger Functions/Modules 将带类型输入/输出的容器化函数和 Git 标签版本化模块作为可复用交付单元，当前文档也未标明本窗口内的首次发布时间。它们说明“动态编排”和“可组合执行单元”并非智能体产品独有，但不能据此推断成熟度或与智能化 CI/CD 等价。([Buildkite Dynamic Pipelines](https://buildkite.com/docs/pipelines/configure/dynamic-pipelines)、[Dagger Functions](https://docs.dagger.io/core-concepts/functions/)、[Dagger Modules](https://docs.dagger.io/features/modules))
+
+**发布与恢复的确定性锚点**：Google Cloud Deploy 官方能力页列出审批、金丝雀发布、部署验证、自动推进、重试和回滚；AWS CodeDeploy 的回滚是将此前版本作为一次新部署重新发布，并不反向撤销部署脚本已经产生的全部外部副作用。因此“有回滚”只能证明存在版本恢复机制，不能写成“任意生产状态可完全恢复”。([Cloud Deploy](https://cloud.google.com/deploy)、[CodeDeploy 回滚](https://docs.aws.amazon.com/codedeploy/latest/userguide/deployments-rollback-and-redeploy.html))
+
+**度量锚点**：GitLab 价值流分析将部署频率、变更前置时间、服务恢复时间和变更失败率作为 DORA 维度，但其定义依赖环境、故障事件、部署事件和聚合规则；Harness 的智能节省指标还区分处理器时间与实际经过时间。因此本报告只把“证据完整性、恢复语义、可合并性”作为趋势观察维度，不把不同厂商页面上的分钟数直接相减或排名。([GitLab Value Stream Analytics](https://docs.gitlab.com/user/group/value_stream_analytics/)、[GitLab DORA 指标](https://docs.gitlab.com/user/analytics/dora_metrics/)、[Harness CI Intelligence](https://developer.harness.io/docs/continuous-integration/use-ci/harness-ci-intelligence/))
+
+### 2.5 趋势总结：真正上移的是控制面，不是放行权
+
+以下结论是对 2024—2026 样本的**分析推断**，不是任何一家厂商的市场份额或行业平均值：
+
+1. **智能体从单点辅助进入任务级和控制面级编排**。Copilot 评审、Agentic Autofix、Worker Agent 属于步骤或阶段级；AWS 发布管理属于旁路任务级；Symphony、Managed Agents 由问题单和会话驱动跨任务循环。形态上移不等于成熟度同步上移。
+2. **确定性 CI/CD 成为智能体的验证和执行底座**。GitHub 明确 Agentic Workflows 用来增强而非替代构建、测试和发布；AWS 把审查结果映射为必需检查；Harness 用 OPA 和审批约束 Worker Agent。可观察到的共同结构是“智能体负责理解、探索与生成，确定性系统负责证明与放行”。
+3. **产品路线分为嵌入式、旁路式和常驻编排式**。平台厂商倾向把智能体编译或嵌入流水线，云厂商倾向通过独立服务与检查结果或合并请求审批接入，人工智能公司倾向把问题单、工作区、执行框架和会话组成常驻循环。三条路线可以组合，不是互斥的厂商标签。
+4. **执行权从只读扩展到受控写入，生产放行权仍由外部机制掌握**。权限通常按“只读 → 沙箱内变更 → 安全输出或检查结果 → 受控合并”扩张；限定范围身份、凭据外置、网络限制、时序策略和审计追踪是扩权前提。MCP/命令行工具可调用、智能体自评或产品正式可用，都不等于组织授权。
+5. **发布与恢复的自治证据明显弱于评审、测试和故障调查**。代码评审和生产运维已出现明确正式产品，发布准备仍有预览、地域和环境限制；恢复证据多停留在任务重试、会话恢复和版本回滚。本样本截至 2026-08 未核验到端到端正式产品，不表示业界绝对不存在。
+6. **“平台嵌入与治理闭环更抗收窄”只能作为工作假设**。本样本中，嵌入 Actions、流水线、规则集和 AgentCore 的能力持续扩张，而独立构建加速、CodeGuru 新关联、开发工具入口和执行引擎实现出现下线、迁移或停止支持；但样本量小且官方多数未说明原因，不能写成市场因果定律或成熟度排名。
+
+**对企业的直接含义**：2026 年优先落地的不是“让智能体直接发布生产”，而是选择一个低风险入口，例如 CI 失败调查、代码评审、测试补强或文档/问题单自动化；先建立沙箱、短生命周期凭据、外部必需检查或 OPA 策略、独立评测和可审计输出，再逐步扩大到发布准备。任何进入合并、部署或恢复的动作都必须保留确定性门禁和人工升级路径。
 
 ## 三、八条演进主线（逐条展开）
 
@@ -46,20 +260,20 @@ confidence: medium-to-high
 
 **阶段证据**：
 
-- **2024（建议层）**：AI 以助手身份停在终端，产出建议与补丁，不直接控制流水线。GitHub 为 Copilot 助手 + 供应链签名起步；OpenAI/Anthropic 为终端编码 Agent（Codex、Claude Code）。
-- **2025—2026H1（执行层）**：Agent 获得沙箱内执行权，能修 CI、生成 PR、自动评审。代表：GitHub gh-aw 2026-02-13 技术预览→2026-06-11 Public Preview（Markdown 编译为标准 Actions YAML，在 Actions 内运行编码 Agent）；AWS DevOps Agent 从只读调查走向 Sandbox 执行（2026-07-23 Preview）；Anthropic sandbox（2025-10-20 Beta，文件系统+网络双隔离）。
-- **2026H2（编排层）**：Agent 获得跨任务编排权。代表：OpenAI Symphony（2026-04-27 Experimental，issue 追踪器变控制平面，Agent 常驻 watch CI/rebase/重试 flaky/护送 PR）；Harness Autonomous Worker Agents GA（2026-06-30，Pipeline Step 作 reasoning agent）；Anthropic Managed Agents GA（2026-04-08，常驻 harness）。
+- **2024（建议与确定性底座）**：本专题可核验变化集中在 GitHub 供应链签名、Harness 构建测试智能和火山 CP 确定性流水线；人工智能主要提供建议或局部辅助，尚无足够证据证明它已普遍控制流水线。本专题现有 OpenAI/Anthropic 一手材料未形成 2024 年独立产品事件，不把终端智能体的一般产品记忆补写为该年里程碑。
+- **2025—2026 上半年（执行层）**：智能体获得沙箱内执行权，能修复 CI、生成拉取请求和自动评审。代表：GitHub gh-aw 从 2026-02-13 技术预览进入 2026-06-11 公开预览（Markdown 编译为标准 Actions YAML，在 Actions 内运行编码智能体）；AWS DevOps Agent 从只读调查走向沙箱执行（2026-07-23 预览）；Anthropic 沙箱于 2025-10-20 以测试版发布，提供文件系统和网络双重隔离。
+- **2026 下半年（编排层）**：智能体获得跨任务编排权。代表：OpenAI Symphony（2026-04-27 规范草案第一版/工程预览，任务跟踪系统成为控制面，智能体持续观察 CI、执行变基、重试不稳定检查并护送拉取请求）；Harness Worker Agents 于 2026-06-30 发布（官方公告称已可使用，独立正式可用标签未核验，以流水线步骤运行推理智能体）；Anthropic Managed Agents 于 2026-04-08 发布（常驻执行框架，独立正式可用标签未在工程文章中核验）。
 
-**边界与限制**：编排层目前只有 OpenAI 标注 Experimental，其余仍处 Preview/刚 GA；是否大面积生产化未被独立验证。三层台阶的"演进比例"是分析推断，形态存在性为官方证据。
+**边界与限制**：编排层的官方状态标签并不统一：Symphony 是规范草案第一版，Worker Agents 的发布公告称可用但未在同一材料中标注正式可用，Managed Agents 的工程文章也未单列正式可用标签；是否大面积生产化未被独立验证。三层台阶的“演进比例”是分析推断，形态存在性为官方证据。
 
 ### 主线 2：环节扩散 —— 检查/评审最先，发布/恢复最后
 
 **阶段证据**：
 
-1. **检查/评审最先成熟**：Copilot Code Review Agent GA（2026-07-29）；Anthropic auto mode GA（2026-03-25）；AWS DevOps Agent 事件调查 GA（2026-03-31）。
-2. **门禁/CI 修复居中**：GitHub Copilot cloud agent 修 Actions checks（2026-07-23）；Agentic Autofix for Code Scanning Public Preview（2026-07-10）；Copilot CLI 在 Actions 免 PAT（2026-07-02）。
-3. **发布准备靠后**：AWS release readiness（2026-06-17 Preview，仅 us-east-1）；Azure Copilot Code Reviews（2026-06-17 Limited Public Preview）。
-4. **发布/恢复最薄**：无一家公开"生产发布端到端自治"；恢复环节智能化多为研究/内部（Anthropic harness 研究、OpenAI Tax AI Pilot）。
+1. **检查/评审最先进入可用产品**：Copilot 代码评审智能体正式可用（2026-07-29）；Anthropic 自动模式于 2026-03-25 发布（独立正式可用标签未核验）；AWS DevOps Agent 事件调查正式可用（2026-03-31）。
+2. **门禁/CI 修复居中**：GitHub Copilot 云端智能体修复 Actions 检查（2026-07-23）；代码扫描智能修复进入公开预览（2026-07-10）；Copilot 命令行工具在 Actions 中免 PAT（2026-07-02）。
+3. **发布准备靠后**：AWS 发布就绪审查于 2026-06-17 进入预览且仅限 `us-east-1`；Azure Copilot 代码评审于 2026-06-17 进入有限公开预览。
+4. **发布/恢复最薄**：本专题样本未核验到公开的“生产发布端到端自治”；恢复环节智能化多为研究或内部实践（Anthropic 执行框架研究、OpenAI Tax AI 试点）。
 
 **判断**：这是跨公司最稳定的演进事实——智能化沿管道的扩散顺序与"人类最信任的环节呈现"一致。**限制**：环节先后是"证据密度"观察，非各环节部署成效的独立测量。
 
@@ -67,9 +281,9 @@ confidence: medium-to-high
 
 **阶段证据**：
 
-- **只读/调查（2024-2025 主流）**：AWS DevOps Agent 事件调查默认不突变基础设施/应用（例外：建 ticket/support case）；缓解建议由人审阅后应用。
-- **沙箱内受控执行（2025-2026）**：GitHub gh-aw 默认只读 + sandbox 容器 + Agent Workflow Firewall + Safe Outputs 独立写；AWS Sandbox 用 Lambda MicroVM 隔离 + AWS API 代理只读 + 出站 allowlist；OpenAI Codex 默认无网络、workspace 内可写；Anthropic 双边界沙箱 + 凭据永不进沙箱 + scoped git token。四家独立收敛于同一控制模型。
-- **边界内受控合并（2026，仅部分公司）**：OpenAI Symphony 护送 PR 至合并（ticket→Merging 状态无需人盯）；但发布端在 2026-08 依然是所有公司的硬边界——GitHub 官方"PR 永不自动合并"、AWS"审查/修复 PR 不等于自动合并或部署"、Anthropic auto mode block rules 拦截"直接推 main／绕过 pre-check 部署"、OpenAI 证据止于 PR 合并。
+- **只读/调查（2024—2025 主流）**：AWS DevOps Agent 事件调查默认不修改基础设施或应用（例外是创建工单或支持请求）；缓解建议由人审阅后应用。
+- **沙箱内受控执行（2025—2026）**：GitHub gh-aw 默认只读，使用沙箱容器、智能体工作流防火墙和独立安全输出；AWS 沙箱使用 Lambda 微型虚拟机隔离、只读 AWS 接口代理和出站白名单；OpenAI Codex 默认无网络、只允许写入工作区；Anthropic 使用双重边界沙箱、凭据外置和限定范围的 Git 令牌。四家独立收敛于同一控制模型。
+- **边界内受控合并（2026，仅部分公司）**：OpenAI Symphony 护送拉取请求进入待合并状态，无需人持续盯守；但本专题样本中，发布端仍是证据最薄、外部控制最强的边界——GitHub Aspire 公开案例只创建草稿且不自动合并，AWS 审查或修复拉取请求不等于自动合并或部署，Anthropic 自动模式会拦截直接推送主分支和绕过前置检查的部署，OpenAI 证据止于拉取请求合并。
 
 **判断**：边界机制是智能化 CI/CD 从"建议"升格为"执行"的结构性门槛，不是某家特色；"发布自治"是明确的产品边界而非能力不足。
 
@@ -79,17 +293,17 @@ confidence: medium-to-high
 
 | 能力 | 状态 | 时间 |
 |---|---|---|
-| gh-aw（GitHub Agentic Workflows） | Public Preview | 2026-06-11 |
-| Autonomous Worker Agents（Harness） | GA | 2026-06-30 |
-| AgentCore Managed Harness（AWS） | GA | 2026-06-17 |
-| AgentCore Runtime instances（AWS） | GA | 2026-08-06 |
-| Copilot Code Review Agent Skills + MCP（GitHub） | GA | 2026-07-29 |
-| Claude Code auto mode（Anthropic） | GA | 2026-03-25 |
-| Managed Agents（Anthropic） | GA | 2026-04-08 |
-| Claude Code on the web（Anthropic） | GA | 2025-10-20 |
-| Codex Windows sandbox（OpenAI） | GA | 2026-05-13 |
+| gh-aw（GitHub Agentic Workflows） | 公开预览 | 2026-06-11 |
+| Autonomous Worker Agents（Harness） | 已发布；独立正式可用标签未核验 | 2026-06-30 |
+| AgentCore Managed Harness（AWS） | 正式可用 | 2026-06-17 |
+| AgentCore Runtime instances（AWS） | 正式可用 | 2026-08-06 |
+| Copilot 代码评审智能体技能 + MCP（GitHub） | 正式可用 | 2026-07-29 |
+| Claude Code 自动模式（Anthropic） | 已发布；独立正式可用标签未核验 | 2026-03-25 |
+| Managed Agents（Anthropic） | 已发布；独立正式可用标签未核验 | 2026-04-08 |
+| Claude Code on the web（Anthropic） | 已发布；独立生命周期标签未核验 | 2025-10-20 |
+| Codex Windows 沙箱（OpenAI） | 随产品发布；独立正式可用标签未核验 | 2026-05-13 |
 
-**收窄证据（2024-2026）**：字节构建加速下线（2025-09-25）、火山 CP V1 下线（2025-07-31）、AWS CodeGuru 停新关联（2025-11-07）、Amazon Q Developer IDE 扩展 EoS（2027-04-30）、Harness DLite 撤销（HOSTED_BUILDS_SUNSET_DLITE）、WIF Azure DevOps issuer 退役（2027 Q2）。
+**收窄证据（2024—2026）**：字节构建加速下线（2025-09-25）、火山 CP V1 下线（2025-07-31）、AWS CodeGuru 停新关联（2025-11-07）、Amazon Q Developer 开发工具扩展停止支持（2027-04-30）、Harness DLite 被替换（`HOSTED_BUILDS_SUNSET_DLITE`）、Azure DevOps 的 WIF 签发方计划退役（2027 年第二季度）。
 
 **判断**：评估演进必须同时看转正与下线；智能化的失败与迭代并存，生命周期同样有收窄一面。
 
@@ -97,100 +311,100 @@ confidence: medium-to-high
 
 | 路线 | 代表 | 逻辑 |
 |---|---|---|
-| 编译进流水线 | GitHub gh-aw（Markdown→Actions 锁文件）、Harness Worker Agents（Pipeline Step） | 让 Agent 成为流水线的受管节点，复用 Actions/Pipeline 的权限、日志、沙箱体系 |
-| 旁路 Agent 服务 | AWS（DevOps Agent 独立服务，不内建/不改造 CodePipeline/CodeBuild）、Microsoft（Remote Azure DevOps MCP Server 2026-03-31 Preview） | 在不动确定性引擎的前提下前移 Agent 能力 |
-| 常驻编排器 | OpenAI Symphony（issue 追踪器即控制平面）、Anthropic Managed Agents（常驻 harness） | 把 Agent 提升为任务级编排者 |
+| 编译进流水线 | GitHub gh-aw（Markdown→Actions 锁定文件）、Harness Worker Agents（流水线步骤） | 让智能体成为流水线的受管节点，复用 Actions/流水线的权限、日志和沙箱体系 |
+| 旁路智能体服务 | AWS（DevOps Agent 独立服务，不内建或改造 CodePipeline/CodeBuild）、Microsoft（远程 Azure DevOps MCP 服务器于 2026-03-31 进入预览） | 在不改动确定性引擎的前提下前移智能体能力 |
+| 常驻编排器 | OpenAI Symphony（任务跟踪系统即控制面）、Anthropic Managed Agents（常驻执行框架） | 把智能体提升为任务级编排者 |
 
-**判断**（分析推断）：平台厂商倾向"编译进流水线"，AI 公司倾向"常驻编排"，云厂商倾向"旁路移植"。同类公司走不同路线，路线归类是分析推断。
+**判断**（分析推断）：平台厂商倾向“编译进流水线”，人工智能公司倾向“常驻编排”，云厂商倾向“旁路接入”。同类公司走不同路线，路线归类是分析推断。
 
-### 主线 6：治理演进 —— 从"治理流程"到"治理 Agent 身份与持续行为"
+### 主线 6：治理演进 —— 从“治理流程”到“治理智能体身份与持续行为”
 
 **阶段证据**：
 
-- **2024（治理流程）**：分支保护、required checks、人工审批——治理的是流水线与权限规则。
-- **2025—2026H1（治理凭据与执行边界）**：scoped token、凭据外置、只读代理、沙箱——治理的是 Agent 的"手"（能碰什么）。Copilot CLI 在 Actions 免 PAT（2026-07-02，自动化身份打通）；Entra workload identity service connection Preview（2026-06-17）；Anthropic 凭据永不进沙箱、MCP token 放 vault 经代理按 session 取用。
-- **2026（治理持续行为与状态化授权）**：AWS temporal policies（要求工作流顺序、tool 参数恰等于先前调用输出、特权操作前人工批准、数据新鲜度）+ rate limiting（按 OAuth/IAM 作用域限制 requests/tokens/concurrent，2026-08-06 公告）；Harness Runtime Token=声明 grant∩触发人 RBAC 交集、OPA 生成物进 Audit Trail 标 `ai_generated:true`、AgentTrace；GitHub Safe Outputs 独立 Job 持最小写权限。
+- **2024（治理流程）**：分支保护、必需检查和人工审批，治理的是流水线与权限规则。
+- **2025—2026 上半年（治理凭据与执行边界）**：限定权限令牌、凭据外置、只读代理和沙箱，治理的是智能体能接触什么。Copilot 命令行工具在 Actions 中免 PAT（2026-07-02，打通自动化身份）；Entra 工作负载身份服务连接于 2026-06-17 进入预览；Anthropic 凭据不进入沙箱，MCP 令牌放在密钥保管库中并由代理按会话取用。
+- **2026（治理持续行为与状态化授权）**：AWS 时序策略要求工作流顺序、工具参数与前序输出一致、特权操作前人工批准以及数据新鲜度；限流按 OAuth/IAM 范围限制请求、令牌和并发。Harness 运行令牌权限取声明授权与触发者角色权限的交集，OPA 生成物进入审计记录并标记 `ai_generated:true`；GitHub 安全输出由独立任务持有最小写权限。
 
-**判断**：治理重心从"流程"移向"Agent 行为"，但治理权威仍分散在外部控制面（Ruleset/OPA/Approval/身份），无一家把治理权交给 Agent 自管。C13 佐证：审批机制从"人工逐个审批"演进为"模型分类器/策略门禁"（Anthropic auto mode 93% 批准率背景下、GitHub Ruleset+required checks、AWS required status check）。
+**判断**：治理重心从“流程”移向“智能体行为”，但治理权威仍分散在外部控制面，例如规则集、OPA、审批和身份系统；本专题未观察到把治理权完全交给智能体自管的产品证据。审批机制正从“人工逐个审批”演进为“模型分类器或策略门禁”，但最终授权仍由外部控制面持有。
 
 ### 主线 7：验证机制演进 —— 最终权威保持确定性，前置验收智能化
 
 **演进路径**：
 
-1. **人工逐个审批 / 确定性 gate（2024）**：CodeQL、分支规则、status check 是唯一验收者。
-2. **Agent 产出接入 gate（2025—2026）**：AWS BLOCK/Check Run/缓解建议/修复 PR 均不等于自动合并/部署/恢复授权——BLOCK 需映射 required status check 才阻断合并，GitLab 走 MR approval rule；GitHub Ruleset/Required Check 持有合并权威（"PR 永不自动合并"）；Harness OPA/Approval 是硬 Gate、AI Rules 只是软引导。
-3. **模型分类器 + eval 门禁（2026）**：Anthropic auto mode（阶段 1 单 token 快速过滤 + 阶段 2 CoT 复核 + 输入层 prompt-injection probe）；OpenAI Tax AI（targeted eval + 回归套件 + grader，验证不通过不予合并，证据不明确路由回人工）；AWS release readiness（托管验证环境 build/run/test + 护栏：凭据暴露阻断、敏感文件外泄检测、mutative AWS 操作阻断、顺序阶段强制）；GitHub Agentic Autofix（修复+重跑验证）。
+1. **人工逐个审批和确定性门禁（2024）**：CodeQL、分支规则和状态检查是验收者。
+2. **智能体产出接入门禁（2025—2026）**：AWS 的阻断结论、检查结果、缓解建议和修复拉取请求都不等于自动合并、部署或恢复授权；阻断结论需要映射为必需状态检查才能阻止合并，GitLab 通过合并请求审批规则控制。GitHub 规则集和必需检查持有合并权威，公开的 Aspire 案例只创建草稿且不自动合并；Harness OPA 和审批是硬门禁，人工智能规则只是软引导。
+3. **模型分类器与评测门禁（2026）**：Anthropic 自动模式先快速过滤，再进行推理复核，输入层另有提示词注入探针；OpenAI Tax AI 使用定向评测、回归套件和独立评分器，验证不通过不合并，证据不明确时转人工；AWS 发布就绪审查在托管环境中构建、运行和测试，并阻断凭据暴露、敏感文件外泄、修改 AWS 资源的操作和乱序执行；GitHub Agentic Autofix 在修复后重跑验证。
 
-**贯穿约束**："Agent 不得自证"——Anthropic 强化 harness 自评/eval 分离是关键杠杆（A8）；Tax AI 的 grader 独立于被修的 Codex（O14）；GitHub Safe Outputs 由独立 Job 持最小写权限执行。**判断**：智能化演进的是"前置验收"，不是"最终放行权"的转移；最终权威仍由确定性 gate 与人持有。
+**贯穿约束**：“智能体不得自证”——Anthropic 将执行框架自评与外部评测分离；Tax AI 的评分器独立于被修的 Codex；GitHub 安全输出由持有最小写权限的独立任务执行。**判断**：智能化演进的是“前置验收”，不是“最终放行权”的转移；最终权威仍由确定性门禁和人持有。
 
 ### 主线 8：生命周期收窄 —— 单点/入口型收窄，嵌入平台控制面型存活
 
 **收窄/下线侧（多为独立单点工具或入口）**：
 
 - 字节构建加速（独立分布式编译+缓存，2025-09-25 下线）——单环节效率工具，不改变流水线控制面。
-- AWS CodeGuru Reviewer（独立代码评审单点，2025-11-07 停新关联）——可被旁路 Agent 服务（DevOps Agent/Transform）覆盖。
-- Amazon Q Developer IDE 插件（IDE 入口，EoS 2027-04-30）——**入口收窄**，Q Developer 未整体下线，属"入口级"而非"能力死亡"。
+- AWS CodeGuru Reviewer（独立代码评审单点，2025-11-07 停新关联）——可被旁路智能体服务（DevOps Agent/Transform）覆盖。
+- Amazon Q Developer 开发工具插件（2027-04-30 停止支持）——**入口收窄**，Q Developer 未整体下线，属于入口调整而不是能力消失。
 - Harness DLite（执行引擎实现替换）——**实现替换**，非能力下线。
-- 字节 CP V1（版本迁移）、WIF Azure DevOps issuer（身份机制迁移）——**生命周期正常收窄**。
+- 字节 CP V1（版本迁移）、Azure DevOps 的 WIF 签发方（身份机制迁移）——**生命周期正常收窄**。
 
-**转正/存活侧（多为嵌入平台控制面/治理闭环）**：gh-aw（编译进 Actions）、Worker Agents（Pipeline Step）、Code Quality（Ruleset 门禁闭环，仓库既有证据 GA 2026-07-20）、auto mode/Managed Agents（产品内建）、AgentCore（平台底座）。
+**转正/存活侧（多为嵌入平台控制面/治理闭环）**：gh-aw（编译进 Actions）、Worker Agents（流水线步骤）、Code Quality（规则集门禁闭环，仓库既有证据为 2026-07-20 正式可用）、自动模式/Managed Agents（产品内建）、AgentCore（平台底座）。
 
-**判断**（分析推断，样本小：6 收窄 vs 7 转正）：改变"调度/治理/验证"的嵌入型能力存活并转正，解决单环节效率的独立工具型能力价值被稀释（易被 Agent 顺带完成或旁路服务替代）。限制：多款下线产品官方未详述原因（字节仅"产品调整"）；必须区分"入口收窄/实现替换/版本迁移"与"能力死亡"。
+**判断**（分析推断，样本小：6 项收窄、7 项转正）：改变“调度、治理和验证”的嵌入型能力持续存活并转正，解决单环节效率的独立工具价值可能被智能体顺带完成或被旁路服务替代。限制是多款下线产品的官方说明没有给出具体原因；必须区分入口收窄、实现替换、版本迁移与能力消失。
 
 ## 四、一致性判断（跨公司比较）
 
 ### 共性（6 条）
 
-1. **环节扩散顺序一致**：检查/评审最先成熟，发布/恢复最后（Copilot Review GA、auto mode GA、DevOps Agent 调查 GA → 发布准备 Preview → 发布/恢复无一家公开）。
+1. **环节扩散顺序一致**：检查/评审最先进入可用产品，发布/恢复最后（Copilot 评审正式可用、自动模式已发布、DevOps Agent 调查正式可用 → 发布准备仍处预览 → 本专题未核验到发布/恢复端到端自治）。
 2. **边界机制一致**：沙箱 + 凭据外置 + 只读默认 + 外部门禁，GitHub/AWS/OpenAI/Anthropic 四家独立收敛。
-3. **2026 转正节奏趋同**：gh-aw、Worker Agents、AgentCore、Copilot Review、auto mode、Managed Agents 集中在 2026 H1-H2 转正。
-4. **策略入库方向一致**：OpenAI WORKFLOW.md、GitHub gh-aw Markdown+frontmatter、Anthropic AGENTS.md/Rules/Hooks（既有 Claude Code 文档证据）、Harness Pipeline YAML Git 化——格式互不兼容。
-5. **治理对象同步移向"Agent 身份与行为"**：状态化授权（temporal policies）、权利交集模型（Runtime Token=grant∩RBAC）、AI 产出可审计标记（ai_generated:true/AgentTrace）。
-6. **验证最终权威保持确定性、前置验收智能化**："Agent 输出只有接入外部控制才成为 Gate"（AWS）、合并权力仍在 Ruleset（GitHub）、OPA/Approval 是硬门禁（Harness）。
+3. **2026 发布节奏趋同，但不能把“已发布”都写成正式可用**：gh-aw、Worker Agents、AgentCore、Copilot 评审、自动模式和 Managed Agents 集中在 2026 年上半年至下半年出现明确发布或状态更新，其中只有部分能力有明确正式可用标签。
+4. **策略入库方向一致**：OpenAI 使用 `WORKFLOW.md`，GitHub gh-aw 使用 Markdown 和文件头配置，Anthropic 使用 `AGENTS.md`、规则和钩子，Harness 使用纳入 Git 版本管理的流水线 YAML；格式互不兼容。
+5. **治理对象同步移向“智能体身份与行为”**：状态化授权、运行令牌权限交集模型、人工智能产出的可审计标记和 AgentTrace 都在约束智能体的连续行为。
+6. **最终验证权保持确定性，前置验收走向智能化**：智能体输出只有接入外部控制才成为门禁；GitHub 规则集持有合并权力，Harness OPA 和审批是硬门禁。
 
 ### 差异（3 条）
 
-1. **起点不同**：平台厂商从流水线内部长出来（GitHub 编译进 Actions、Harness 编排即产品、AWS 旁路服务），AI 公司从终端 Agent 长出来（OpenAI/Anthropic 以终端 Agent 为执行主体）。
+1. **起点不同**：平台厂商从流水线内部长出来（GitHub 编译进 Actions、Harness 编排即产品、AWS 旁路服务），人工智能公司从终端智能体长出来（OpenAI/Anthropic 以终端智能体为执行主体）。
 2. **执行形态路线不同**：编译进流水线（GitHub/Harness）、旁路前移（AWS/Microsoft）、常驻编排（OpenAI/Anthropic）。
-3. **发布自治边界披露程度不同**：Anthropic 明确 block rules（直接推 main/绕过 pre-check 部署），GitHub 明确"永不自动合并"，AWS 明确"审查不等于授权"，OpenAI 未公开端到端声明。
+3. **发布自治边界披露程度不同**：Anthropic 明确阻断直接推送主分支和绕过前置检查的部署；GitHub Aspire 公开案例明确只创建草稿且不自动合并；AWS 明确审查不等于授权；OpenAI 未公开端到端声明。
 
 ### 冲突保留（显式）
 
-1. **Harness macOS 全局排队**：Release Notes v1.150.0 标"已发布"（CI-23880）vs Feature Availability 仍标 `GLOBAL_QUEUEING_ENABLED` Beta——口径差异（逐 cluster 渐进部署 vs 注册表生命周期状态），汇报中避免混用。
-2. **AWS Release Management 日期**：文档历史 2026-06-11 vs 公告 2026-06-17，按公告日期为准。
+1. **Harness macOS 全局排队**：发布说明 v1.150.0 标记“已发布”（CI-23880），但功能可用性清单仍把 `GLOBAL_QUEUEING_ENABLED` 标为测试版——这可能来自逐集群渐进部署与注册表生命周期状态的口径差异，汇报中避免混用。
+2. **AWS 发布管理日期**：文档历史为 2026-06-11，公告为 2026-06-17，按公告日期记录。
 3. **字节"无 2024+ CI/CD 编排级开源"**：受 GitHub 搜索 API 限流影响置信度为中（G5），不得写死"业界不存在"。
 
 ## 五、对企业的新增启示（分析推断，非厂家结论）
 
 ### 启示 1：采用点按"环节信任度"排序
 
-- **立即可用（GA/生产可用）**：检查/门禁层——评审（Copilot Code Review）、供应链门禁（Artifact Attestations/SLSA）、事件调查（DevOps Agent production ops）。
-- **Preview 观察**：发布准备层——AWS release readiness（仅 us-east-1）、Azure Copilot Code Reviews。
-- **不应作为依赖点**：发布自治——2026-08 无一家 GA，企业不应把"Agent 自动发布"写进依赖清单。
+- **可立即采用（正式可用）**：检查/门禁层——Copilot 代码评审、制品证明/SLSA 供应链门禁、DevOps Agent 事件调查。
+- **保持观察（预览）**：发布准备层——AWS 发布就绪审查（仅 `us-east-1`）、Azure Copilot 代码评审。
+- **不应作为依赖点**：发布自治——截至 2026-08，本专题未核验到端到端正式产品，企业不应把“智能体自动发布”写进依赖清单。
 
-### 启示 2：引入 Agent 执行权前先建立边界机制
+### 启示 2：引入智能体执行权前先建立边界机制
 
-四家独立收敛的模型提示"沙箱 + 最小权限凭据 + 策略门禁"是执行权的前提，不是可选项。落地清单：只读默认、凭据外置（scoped token/免 PAT 身份）、沙箱隔离、Safe Outputs 独立写、外部策略门禁。
+四家独立收敛的模型提示，“沙箱 + 最小权限凭据 + 策略门禁”是执行权的前提，不是可选项。落地清单包括：默认只读、凭据外置（限定权限令牌或免 PAT 身份）、沙箱隔离、安全输出由独立任务写入，以及外部策略门禁。
 
-### 启示 3：把治理重心从"流程"移到"Agent 行为"
+### 启示 3：把治理重心从“流程”移到“智能体行为”
 
-治理清单应从"分支保护/审批"扩展到：Agent 身份、最小权限凭据、状态化授权（顺序/参数一致/特权批准/数据新鲜度）、AI 产出可审计标记。可参考三类机制：AWS temporal policies、Harness Runtime Token=grant∩RBAC、GitHub Safe Outputs 独立 Job。
+治理清单应从“分支保护/审批”扩展到智能体身份、最小权限凭据、状态化授权（顺序、参数一致、特权批准、数据新鲜度）和人工智能产出的可审计标记。可参考三类机制：AWS 时序策略、Harness 运行令牌权限交集模型、GitHub 安全输出独立任务。
 
 ### 启示 4：验证上保持"前置验收智能化、最终权威确定性"
 
-可引入分类器/eval 门禁加速前置验收（auto mode 式分类器、Tax AI 式 targeted eval、release readiness 式护栏），但合并/发布权力继续由 Ruleset/OPA/Approval/外部检查持有，并坚持"Agent 不自评"（自评与外部 eval 分离、批判者独立于被修者）。
+可引入分类器和评测门禁加速前置验收，例如自动模式分类器、Tax AI 定向评测和发布就绪审查护栏；但合并和发布权力继续由规则集、OPA、审批和外部检查持有，并坚持“智能体不自评”，即自评与外部评测分离，批判者独立于被修者。
 
 ### 启示 5：选型优先"嵌入平台控制面/治理闭环"的智能化能力
 
-生命周期数据显示，改变调度/治理/验证的嵌入型能力（Pipeline Step、Actions 控制面、Ruleset 门禁闭环）在存活并转正，独立单点效率工具（构建加速、单点代码评审、IDE 入口）价值易被稀释。同时区分"入口收窄/实现替换/版本迁移"与"能力死亡"，不因入口调整误判产品状态。
+生命周期数据显示，改变调度、治理和验证的嵌入型能力（流水线步骤、Actions 控制面、规则集门禁闭环）持续存活并转正，独立单点效率工具（构建加速、单点代码评审、开发工具入口）的价值更容易被稀释。同时应区分入口收窄、实现替换、版本迁移与能力消失，不因入口调整误判产品状态。
 
 ### 启示 6：不以外推利润率采信厂商指标
 
-Symphony 500%（landed PR）、auto mode 93% 批准率/17% FNR/0.4% FPR、Harness TI 提速、AWS MTTR/Reviews 8-10 分钟等均为厂商自述或第一方研究，方向可用、数值不可直接用于企业 ROI 测算。
+Symphony 已合并拉取请求增长 500%、自动模式 93% 批准率/17% 漏检率/0.4% 误报率、Harness 测试智能提速、AWS 平均恢复时间和 8—10 分钟审查耗时等，均为厂商自述或第一方研究。方向可参考，数值不能直接用于企业投资回报测算。
 
 ### 启示 7：跟踪的收敛信号
 
-工作流策略入库（WORKFLOW.md 类）、恢复环节自治是否出现 GA、状态化授权（temporal policies）是否从 AWS 扩散到其他平台——是判断下一阶段演进的三类观察点。
+工作流策略是否进入仓库版本管理（如 `WORKFLOW.md`）、恢复环节自治是否出现正式产品、状态化授权是否从 AWS 扩散到其他平台，是判断下一阶段演进的三类观察点。
 
 ## 六、证据与限制
 
@@ -198,28 +412,28 @@ Symphony 500%（landed PR）、auto mode 93% 批准率/17% FNR/0.4% FPR、Harnes
 
 | 缺口 | 状态 |
 |---|---|
-| 字节内部 CI 平台（Monorepo/Bazel/Rspack）2024+ 披露 | codes.bytedance.com 不可访问，无一手来源 |
+| 字节内部 CI 平台（单体仓库/Bazel/Rspack）2024 年以来的披露 | codes.bytedance.com 不可访问，无一手来源 |
 | Microsoft 仓库迁移到 GitHub 官方范围/时间表 | 无一手来源，旁证（Aspire 用 gh-aw、GitHub-hosted Agents）不足以证明 |
-| OpenAI/Anthropic "Agent 直接执行生产发布"端到端 | 无一家公开，证据止于 PR 合并 |
-| AWS Transform → AgentCore 构建依赖 | unverified，禁止画边 |
+| OpenAI/Anthropic “智能体直接执行生产发布”端到端 | 本专题未核验到，证据止于拉取请求合并附近 |
+| AWS Transform → AgentCore 构建依赖 | 未核验，禁止画出依赖关系 |
 | 恢复环节端到端自治案例 | 恢复闭环证据不足 |
-| 编排层生产化证据 | Symphony Experimental、Worker Agents 刚 GA |
+| 编排层生产化证据 | Symphony 规范草案第一版/工程预览；Worker Agents 已发布，但独立正式可用标签未核验 |
 
 ### 方法限制
 
 - "环节密度"是证据数量而非成效验证。
 - 发布端自治为"未观察到"而非"被证明不存在"。
-- 厂商自述指标已逐项标注（Symphony 500%、auto mode 93% 等），不外推为行业平均值。
-- 2026 年 changelog 多条条目仅从列表页采集标题与日期，未逐条打开正文核对细节（证据强度"中"）。
+- 厂商自述指标已逐项标注（Symphony 500%、自动模式 93% 等），不外推为行业平均值。
+- 2026 年发布记录中的多条信息只从列表页采集标题与日期，未逐条打开正文核对细节，因此证据强度为中。
 
 ### 证据强度总述
 
-关键主张均可回链 [[00_sources/research-github-microsoft-cicd-trends-2026-08-07|GitHub/Microsoft]]、[[00_sources/research-aws-cicd-trends-2024-2026-2026-08-07|AWS]]、[[00_sources/research-openai-anthropic-cicd-trends-2026-08-07|OpenAI/Anthropic]]、[[00_sources/research-bytedance-cicd-2024-2026-trends-2026-08-07|字节]] 研究底稿与 [[50_deepdives/harness-company/fact-table-2024-2026-2026-08-07|Harness 事实表]]；存在性/机制类主张证据强度高，量化成效类主张为厂商自述，演进归因/路线归类为分析推断（已标注置信度）。
+关键主张均可回链 [[00_sources/research-github-microsoft-cicd-trends-2026-08-07|GitHub/Microsoft]]、[[00_sources/research-aws-cicd-trends-2024-2026-2026-08-07|AWS]]、[[00_sources/research-openai-anthropic-cicd-trends-2026-08-07|OpenAI/Anthropic]]、[[00_sources/research-bytedance-cicd-2024-2026-trends-2026-08-07|字节]] 研究底稿、[[50_deepdives/harness-company/fact-table-2024-2026-2026-08-07|Harness 事实表]]与 [[50_deepdives/cicd-trends-2024-2026/research-evolution-panorama-2026-08-08|本次演进全景证据笔记]]；存在性/机制类主张证据强度高，量化成效类主张为厂商自述，演进归因/路线归类为分析推断（已标注置信度）。
 
-## 七、Presentation-ready 判定
+## 七、汇报可用性判定
 
 `presentation_ready: false`。
 
-- **原因**：编排层（Symphony Experimental、Worker Agents 刚 GA）生产化证据不足；发布/恢复端到端证据缺口未闭合；引用 OpenAI/Anthropic 量化指标须保留"厂商自述"。
+- **原因**：编排层（Symphony 规范草案第一版/工程预览、Worker Agents 已发布但独立正式可用标签未核验）生产化证据不足；发布/恢复端到端证据缺口未闭合；引用 OpenAI/Anthropic 量化指标时必须保留“厂商自述”标记。
 - **候选页面主张（修复后可用）**："智能化 CI/CD 的演进遵循稳定顺序——检查/门禁最先成熟、执行权以边界机制为前提、发布自治仍是硬边界；2026 年密集转正但编排层证据仍薄。"
 - **晋级路径**：先补"编排层生产证据"或缩小主张范围为"检查/门禁层演进"；若需引用厂商指标，须完成逐项独立核验。
