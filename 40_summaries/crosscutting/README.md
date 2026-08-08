@@ -5,7 +5,7 @@ tags:
   - synthesis/crosscutting
 status: complete
 workflow: batch-insight
-as_of: 2026-07-16
+as_of: 2026-08-08
 ---
 
 # Agentic CI/CD 横向变化总结
@@ -113,6 +113,22 @@ Qodo 的专业 Reviewer、AWS 的多 Agent 根因调查、GitLab Flow 和早期�
 Harness 的产品组合正好对应这三类边界：Code Quality/AutoFix 主要通过 PR；Worker Agent 进入 Pipeline；AI SRE 将动态 Scribe/RCA 与预定义 Runbook 分开。其经验不是让所有步骤 Agent 化，而是把概率推理嵌入可审批、可复验、可回退的确定性结构。
 
 ## 三、人员角色与能力的变化
+
+### 核心职责分层：交付能力前台化，交付知识后台产品化
+
+新增的 Agent 工作台证据把既有角色变化进一步具体化。WorkBuddy 直接展示团长拆解、多专家并行和整合交付；ChatGPT Work 与 Codex 展示目标、项目上下文、Subagent 和候选产物工作面；WorkBuddy Enterprise 与 ChatGPT Workspace Agents 又把专家、Skill、App、版本、分享、发布和成员权限留给管理员/Builder。这些产品机制共同支持一个中高置信结构判断：
+
+> **交付能力正在通过 Agent 工作台前台化给开发者；发布与运维能力则适合在后台沉淀为 Skill、专家团与治理规则。**
+
+该判断必须分成三层：
+
+| 层 | 当前职责 | 接受边界 |
+|---|---|---|
+| 开发者工作台 | 目标、上下文、过程观察、候选产物审查 | 开发者对业务意图和服务结果负责 |
+| 通用 Agent Harness | 专家、Skill、工具、身份、权限、调度、评测、预算、审计和生命周期 | 发布/运维/SRE/平台/安全共同经营；主 Agent 不自授权 |
+| 确定性 CI/CD 控制面 | Test、Scan、Policy、Signature、Approval、SLO、Release、Rollback | 外部 Oracle/批准者最终接受或拒绝 |
+
+当前产品只能证明开发者自助入口和后台供给机制已经出现；“发布/运维人员已普遍完成岗位迁移”仍是未验证趋势。详细证据、反例和 RACI 见 [[50_deepdives/agent-workbench/README|Agent 工作台、专家团与交付角色重构专题]]。
 
 ### 1. 开发者
 
