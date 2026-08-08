@@ -23,7 +23,7 @@ audience:
 **观察窗口：** 2025-07-01—2026-08-08，重点关注 2026 年
 **趋势展望：** 2027—2028 年
 **研究范围：** 编码完成后的代码评审、安全与测试、构建出包、制品与版本、环境与部署、发布、发布后验证与恢复
-**证据基础：** 81 条核心一手资料，78 个深度 Source Brief；商业平台、大型公司内部实践、高影响力开源项目、原始研究与治理资料
+**证据基础：** 81 条核心一手资料，81 个深度 Source Brief；商业平台、大型公司内部实践、高影响力开源项目、原始研究与治理资料
 
 > [!abstract] 一句话结论
 > Agent 不会在未来两年替代 CI/CD；它会成为覆盖现有 CI/CD 之上的“推理与行动层”。确定性的流水线、测试、策略、制品和发布控制继续充当执行骨架与安全 Oracle，竞争重心转向上下文、受控工具、身份授权、反馈速度和可证明结果。
@@ -112,11 +112,7 @@ Harness 的公开效果也需要同样校准：通用 Worker Agent 的大型企�
 
 Agent 让开发者减少查日志、重复修配置和机械评审，但增加了写清意图与验收条件、审查 Agent 计划、判断业务语义和承担最终责任的要求。平台团队从模板与门户建设者转为 Agent Runtime、Context/Tool Plane、权限、预算和评测的运营者；QA 转向测试 Oracle 与风险模型；安全团队新增 Agent 身份、委托链、工具供应链和提示注入治理；SRE 转向 Runbook、SLO 和恢复边界设计。
 
-Agent 工作台让这条变化线更具体。WorkBuddy、ChatGPT Work 和 Codex 已经能够证明开发者/最终用户可从统一工作面提交复杂目标、补充项目上下文、观察专家或 Subagent 并审查候选产物；WorkBuddy Enterprise 与 ChatGPT Workspace Agents 则证明专家、Skill、App、版本、分享、发布和成员权限可以在后台由管理员或 Builder 经营。由此形成新的候选观点：
-
-> **交付能力正在前台化给开发者，发布与运维能力则在后台沉淀为 Skill、专家团与治理规则。**
-
-这里的“正在”是跨产品机制形成的方向判断，不是跨企业岗位事实。目标 operating model 是三层分权：开发者工作台消费交付能力，通用 Agent Harness 供应和运营专家体系，确定性 CI/CD 控制面继续用 Test、Scan、Policy、Signature、Approval、SLO 与 Rollback 接受或拒绝候选动作。发布、运维、SRE 和平台人员的价值重心可从逐单执行上移到 Harness 设计、评测、权限、异常升级和生命周期治理；尚不能据此声称岗位消失、职责迁移已经普及或开发者能够绕过生产责任分离。详见 [[50_deepdives/agent-workbench/90_report|Agent 工作台、专家团与交付角色重构专题报告]]。
+Agent 工作台产品已经公开了可逐项核验的功能组合。WorkBuddy 提供 Task、Project、Expert/Expert Team、Skill、Connector、Automation 和文件/变更/预览产物；ChatGPT Work 提供 Local/Cloud 长任务、Projects 和可审查结果，Work/Codex 支持 Subagent；Claude Cowork 提供 Local/Remote Session、Project Memory、Plugin Subagent 和 Scheduled Task。GitLab Duo、Harness Inc. Worker Agents、GitHub Agentic Workflows 与 Octopus Claude Agent Step 则分别把 Agent 放入 CI/CD Flow、Pipeline Step、Actions Workflow 和 Deployment/Runbook Step。后四者的 MR、Output Variable、PR 或命令结果仍需项目规则、后续 Pipeline、Required Check 或部署流程接受。详见 [[50_deepdives/agent-workbench/90_report|Agent 工作台产品功能与控制边界事实报告]]。
 
 对 278,790 条评审对话的 2026 年研究发现，人类更常补充上下文、测试和知识传递，Agent 建议也存在较高的不采纳与错误/替代修复比例，说明“人类负责高语境判断”仍是必要分工。[原始论文](https://arxiv.org/abs/2603.15911)
 

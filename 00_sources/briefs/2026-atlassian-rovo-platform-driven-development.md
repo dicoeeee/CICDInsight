@@ -1,77 +1,60 @@
 ---
-title: Atlassian Rovo Dev Driven Development
-source_id: atlassian-rovo-platform-driven-development-2026-04-23
+title: Atlassian Rovo Agents、Subagents、Skills 与治理
+source_id: atlassian-rovo-platform-driven-development-2026
 organization: Atlassian
-source_type: official-engineering-practice
-published: 2026-04-23
-verified: 2026-07-14
-availability: case-study
-confidence: medium
+source_type: official-docs
+published: null
+verified: 2026-08-08
+availability: official-docs-no-unified-stage
+confidence: high
 geography:
   - global
 lifecycle_stages:
   - code-review
-  - testing-gates
-  - build
-  - deployment
-  - release
+  - cross-cutting
 tool_categories:
-  - coding-agent
-  - ci-pipeline
-  - testing
-  - infrastructure-deployment
+  - agent-runtime-orchestration
+  - developer-workflow
   - governance
 company_topics:
-  - Atlassian
-  - Rovo Dev
+  - Atlassian Rovo
 autonomy_levels:
+  - L1
   - L2
-  - L3
 tags:
   - research/agentic-cicd
   - evidence/source-brief
 ---
 
-# Atlassian Rovo Dev Driven Development
+# Atlassian Rovo Agents、Subagents、Skills 与治理
 
-## 来源
+## 一手来源
 
-- 标题：Rovo Dev Driven Development — How we built a platform in 4 weeks
-- 组织或项目：Atlassian
-- 发布日期：2026-04-23
-- 链接：[Atlassian Blog](https://www.atlassian.com/blog/rovo/rovo-dev-platform-driven-development)
-- 来源类型：第一方工程师实践复盘
-- 能力状态：内部实践案例
+- [Rovo Agents](https://support.atlassian.com/rovo/docs/agents/)，页面未标日期；访问 2026-08-08。
+- [Create and edit agents](https://support.atlassian.com/rovo/docs/create-and-edit-agents/)，页面未标日期；访问 2026-08-08。
+- [Agent permissions and governance](https://support.atlassian.com/rovo/docs/rovo-agent-permissions-and-governance/)，页面未标日期；访问 2026-08-08。
+- [Rovo Dev Agent Skills](https://support.atlassian.com/rovo/docs/extend-rovo-dev-cli-with-agent-skills/)，页面未标日期；访问 2026-08-08。
 
-## 一句话结论
+## 功能事实
 
-当 Agent 承担大量实现工作后，Atlassian 工程实践把安全重心从逐行阅读代码转向 CI/CD、分片、RBAC/JIT、渐进发布和 AI 编写的端到端测试。
+| 字段 | 官方公开事实 |
+|---|---|
+| 入口 | Rovo Chat、Jira/JSM/JPD/Confluence、Automation Rule、Studio 和 Rovo Dev CLI |
+| Agent | 可用自然语言或表单配置 Identity、Description、Behavior、Conversation Starter |
+| Subagent | 为不同条件配置 Instructions、Knowledge 和 Tools；默认 Subagent 在无其他匹配时使用 |
+| Knowledge | 可连接 Confluence、Jira、Google Drive、Deep Research 或 Web Search 等来源 |
+| Tools | Agent 可在用户确认和既有权限范围内创建、编辑或组织 Atlassian 对象 |
+| Skills | Rovo Dev 使用 `SKILL.md`；支持 Built-in、User、Project Scope 和优先级 |
+| 管理 | Owner/Admin 编辑 Agent；Studio Admin 可限制谁能创建 Agent |
+| 权限 | Agent 不授予额外数据权限；用户只能看到和操作自己已有权限范围内的数据 |
 
-## 可核验事实
+## 状态与边界
 
-- 作者描述的工作流包括创建 PR、等待 CI、修复分支构建问题，再处理 PR Bot 评论。
-- 风险控制强调 CI/CD Pipeline、变更 Sharding、RBAC/JIT、Progressive Rollout 和 Canary。
-- 作者明确提出“如果阅读代码，优先阅读测试”的新评审习惯。
-- Rovo Dev 能操作 Bitbucket 与 Pipeline，创建 PR、读取 Diff 和监控 Build。
-- “四周建成平台”和“完全由 LLM 构建”为单一团队第一方叙述，不是受控研究。
+- 所列页面没有统一标注 Rovo Agents/Subagents 的 GA/Beta/Preview 状态。
+- Subagent 配置不证明公开了并行调度、隔离或质量基准。
+- 用户权限继承不等于全局管理员或生产发布批准。
+- Rovo 面向 Atlassian 工作面与开发 CLI；官方资料没有证明它是 CI/CD 原生发布控制面。
 
-## CI/CD 相关性
+## 专题入口
 
-- 涉及阶段：评审、测试、构建、部署和渐进发布。
-- 工具类别：Agent 驱动开发、CI 证据、隔离执行和发布控制。
-- 自主等级：L2—L3。
-- 涉及角色：开发者、平台工程师、安全团队和评审者。
-
-## 对洞察的价值
-
-该案例直接触及人员与流程变化：代码阅读的重要性相对下降，测试证据、权限边界、变更大小和渐进发布的重要性上升。
-
-## 限制与待验证项
-
-- 单个团队经验可能存在幸存者偏差和宣传色彩。
-- 缺少缺陷率、返工量和长期维护成本数据。
-
-## 可引用判断
-
-- Agent 大幅提高实现速度后，人类控制点可能从“审查每一行代码”迁移到“审查意图、测试证据、权限和发布风险”。
-
+[[50_deepdives/agent-workbench/30_case-map|终端工作台与治理对照矩阵]]

@@ -64,7 +64,7 @@ as_of: 2026-08-08
 | [[50_deepdives/qovery/README|Qovery LLM/CI/CD]] | Agent 可操作的交付控制面 | AI Copilot、MCP、Skills、Code-to-Environment、部署诊断、Preview、RDE/Agent Workflow 与权限边界 | Qovery 全产品采购、基础模型 Benchmark、把 closed workflow 当 GA | complete |
 | [[50_deepdives/llm-era-cicd-infrastructure/README|大模型时代的 CI/CD 基础设施]] | 跨基础设施技术变化 | 代码仓、流水线、构建系统、制品仓，以及身份、证据、审计和成本控制 | 单一产品教程、基础模型能力比较、LLMOps | complete |
 | Skill / Rules / Hooks | 知识与行为资产 | 组织知识封装、发现与加载、版本、测试、供应链和生命周期 | Harness 推理架构、底层 CLI 实现 | proposed |
-| [[50_deepdives/agent-workbench/README|Agent 工作台、专家团与通用 Agent Harness]] | 使用入口、推理运行与组织供给 | 开发者工作台、专家团/Subagent、Skill/上下文/权限供给、三层五角色、RACI、评测和 CI/CD 外部门禁 | Harness Inc. 公司产品线、单个协议或 Skill 的完整标准研究 | complete |
+| [[50_deepdives/agent-workbench/README|Agent 工作台产品功能与控制边界]] | 工作台、Agent 构建治理与 CI/CD 原生 Agent | WorkBuddy、ChatGPT Work/Codex、Claude Cowork、GitLab Duo、Harness Inc. Worker Agents、GitHub Agentic Workflows 的入口、配置、协作、产物、权限、状态和限制 | 产品事实之外的企业方案、采用效果或采购排名；相关旧假设仅保存在隔离附录 | complete |
 
 CLI 与 MCP 仅在选型边界发生交叉，统一比较见 [[50_deepdives/cli-vs-mcp-decision-guide|CLI 与 MCP 可替代性决策指南]]，不将两者合并为一个专题。规范案例仍保存在 [[05_case_library/README|案例库]]，可被多个独立专题引用。
 

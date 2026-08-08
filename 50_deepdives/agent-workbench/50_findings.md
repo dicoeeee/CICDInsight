@@ -1,78 +1,89 @@
 ---
-title: Agent 工作台、专家团与交付角色重构分析发现
+title: Agent 工作台产品功能事实摘要
 tags:
   - research/agentic-cicd
   - research/findings
   - topic/agent-workbench
 status: complete
 as_of: 2026-08-08
-confidence: medium-high
+confidence: high
 ---
 
-# Agent 工作台、专家团与交付角色重构分析发现
+# Agent 工作台产品功能事实摘要
 
-## 发现一：工作台改变的是交付能力的消费接口
+## 1. 三个通用工作台公开了不同的任务与项目模型
 
-WorkBuddy、ChatGPT Work 和 Codex 的共同变化，不是把聊天框做得更长，而是把目标、项目上下文、任务状态、过程问询和产物放到同一个工作面。开发者不再需要先知道每一条发布脚本、日志查询和平台入口，能够以“我要把这个版本准备到可发布”“解释失败并形成候选修复”之类目标发起任务。
+- WorkBuddy 以 Task 和 Project 组织工作，公开任务状态、项目指令、资料、专家、Skill、连接器和项目资产库。[WorkBuddy 项目](https://www.workbuddy.cn/docs/workbuddy/From-Beginner-to-Expert-Guide/Function-Description/Project)
+- ChatGPT Work 以 Chat、Project 和 Goal 组织长任务，并区分 Local 与 Cloud；Codex CLI 在终端中读取、修改当前工程并运行命令。[ChatGPT Work](https://learn.chatgpt.com/docs/get-started-with-work)、[Projects](https://learn.chatgpt.com/docs/projects)、[Codex CLI](https://learn.chatgpt.com/docs/codex/cli)
+- Claude Cowork Project 使用本地文件、Instructions、Context 和 Project-scoped Memory；当前不支持 Cloud Sync、Team/Enterprise Project Sharing 或 Claude Code 使用。[Cowork Projects](https://support.claude.com/en/articles/14116274-organize-your-tasks-with-projects-in-claude-cowork)
 
-这是**产品机制事实上的组合与跨案例分析推断**，置信度 `medium-high`。它不证明所有 CI/CD 产品已经统一采用这一入口，也不证明复杂度真的消失；复杂度只是从前台转移到通用 Agent Harness 和控制面。
+这些对象名称相似但数据范围、执行位置和分享能力不同。
 
-## 发现二：专家团的本质是可观察的任务图，不是多个聊天机器人
+## 2. 专业 Agent 协作至少存在四种公开形态
 
-WorkBuddy 用“团长拆解—专家并行—整合交付”给出最显式的专家团证据；OpenAI 用主会话—Subagent 线程—汇总结果给出另一种实现。能够称为专家团，至少需要：
-
-1. 明确的任务边界和主责 Agent；
-2. 可独立执行的子任务；
-3. 差异化的角色、指令、模型、上下文和工具；
-4. 可检查的交接物和冲突处理；
-5. 统一的最终产物和责任回链。
-
-该判断为**跨案例分析推断**，置信度 `medium-high`。如果多个 Agent 只是重复读取同一上下文、并发修改同一文件或相互投票，它可能比单 Agent 更慢、更贵且更难审计。
-
-## 发现三：真正稀缺的不是“会创建 Agent”，而是能经营通用 Agent Harness 契约
-
-Skill 或专家的人设只是入口。企业级供给还需要：
-
-- 版本与依赖：唯一 ID、语义版本、兼容范围、变更记录和撤回；
-- 行为测试：离线任务集、回归评测、失败样本和人工抽检；
-- 工具契约：Schema、身份、Scope、Timeout、Error、幂等、审计和成本；
-- 上下文产品：Owner、时效、数据分级、最小披露和污染检测；
-- 运行治理：沙箱、并发、预算、停止条件、升级和 Incident Lineage；
-- 生命周期：发布、观察、弃用、回滚和责任人。
-
-这是**企业 operating-model 建议**，置信度 `medium-high`。WorkBuddy Enterprise 的版本、发布状态、成员权限与下架机制，以及 Workspace Agents 的 Builder/Admin 权限提供了产品支持，但行业尚无统一成熟度标准。
-
-## 发现四：发布、运维与平台人员更适合成为“能力供给者”
-
-传统逐单模式把知识留在工单、Runbook 和个人经验中：开发者提出请求，发布或运维人员手工执行。目标模式把稳定知识编码为 Skill、专家定义、工具接口、评测集和升级规则，让开发者自助发起任务；发布、运维、SRE、平台和安全团队经营边界与异常。
-
-这不是简单“左移给开发者”，而是双向变化：
-
-- 前台：开发者承担更明确的业务意图、验收标准、候选结果审查和服务 Owner 责任；
-- 后台：交付支持团队承担更多产品设计、契约治理、权限、评测、异常升级和生命周期责任。
-
-该结论是**企业 operating-model 建议与中置信趋势推断**，不是已发生岗位事实。DORA 的平台即开发者内部产品、Golden Path 与从基础设施工单转向平台产品的研究提供结构基础，但没有测量 Agent 专家体系对岗位工时的具体影响。
-
-## 发现五：确定性 CI/CD 控制面必须与 Agent Harness 分层
-
-Agent 擅长理解上下文、规划、诊断、生成候选变更和解释证据；它不应自行决定自己的结果已满足发布标准。Harness Inc. 证明 Agent 可以成为 Pipeline Step，GitHub 证明 Agentic Workflow 仍受 Safe Outputs、Ruleset 和 Required Checks 约束。
-
-因此应区分：
-
-- **建议权：** 主 Agent 和专业 Agent；
-- **执行权：** 受限工具、Runner、Pipeline 和短期身份；
-- **接受权：** Test、Scan、Policy、Signature、Approval、SLO、环境保护和授权人员。
-
-该控制边界属于**产品事实支持的企业建议**，置信度 `high`。低风险、可逆动作可以预授权自动执行，但授权来源仍是外部策略，不是 Agent 的自我判断。
-
-## 发现六：“更多给开发使用”必须拆成当前态与目标态
-
-| 状态 | 可以怎么写 | 不能怎么写 |
+| 产品 | 公开协作形态 | 已知限制 |
 |---|---|---|
-| 当前产品可证明 | 开发者已可通过代码库/项目工作面提交复杂目标、观察 Subagent、审查候选产物 | 企业已普遍把发布和运维工作交给开发者 |
-| 目标 operating model | 企业可把交付知识沉淀为通用 Agent Harness，让开发者自助消费，把发布/运维能力转向供给和治理 | 开发者可绕过审批、生产责任分离或独立 Oracle |
-| 尚待验证岗位趋势 | 这是值得跟踪的组织演进方向 | 发布/运维岗位会消失，或大多数企业已完成转型 |
+| WorkBuddy | 团长拆解，多个专家并行执行并整合 | 未公开依赖图、失败恢复和隔离细节 |
+| ChatGPT Work / Codex | 主任务启动专业 Subagent 并汇总 | Work 限 eligible accounts；并行写入可能冲突 |
+| Claude Cowork | Plugin 可打包并调用只在 Cowork 运行的 Subagents | 官方资料未公开通用任务图或 CI/CD 协作模型 |
+| GitLab Duo Agent Platform | Custom Flow 组合多个 Agent 完成开发任务 | 不同 Flow 与治理功能的生命周期不同 |
 
-## 综合判断
+来源：[WorkBuddy 专家](https://cloud.tencent.com/document/product/1831/134393)、[OpenAI Subagents](https://learn.chatgpt.com/docs/agent-configuration/subagents)、[Cowork Plugins](https://support.claude.com/en/articles/13837440-use-plugins-in-claude)、[GitLab Platform](https://docs.gitlab.com/user/duo_agent_platform/)
 
-**交付能力前台化，交付知识后台产品化，发布接受继续控制面化。** 这比“Agent 接管 CI/CD”更准确：开发者获得了新的自助入口，平台和运维获得了新的供给对象，而企业没有因此失去确定性门禁。
+## 3. Skill、Plugin、Connector 和 Agent Catalog 是不同配置对象
+
+- WorkBuddy Skill 封装脚本和工作流，Connector 封装认证、MCP/CLI 与工具过滤，Expert 描述角色和方法。[WorkBuddy 技能](https://cloud.tencent.com/document/product/1831/134432)
+- OpenAI 将 ChatGPT Workspace Skills、本地文件系统 Skills 和 Plugins 分开管理；所有权、分享、安装和 Connector 授权不会随文件移动自动迁移。[OpenAI Enterprise Skills](https://learn.chatgpt.com/docs/enterprise/skills)
+- Claude Plugin 将 Skills、Connectors、Hooks 和 Subagents 打包；组织可通过 Marketplace 分发。[Claude Plugins](https://support.claude.com/en/articles/13837433-manage-plugins-for-your-organization)
+- GitLab 支持 `AGENTS.md`、Agent Skills、Custom Flow 和 MCP 配置；Harness Inc. 使用版本化 Agent Definition 与 Pipeline Inputs。[GitLab Customize](https://docs.gitlab.com/user/duo_agent_platform/customize/)、[Harness Configuration](https://developer.harness.io/docs/platform/harness-ai/core-capabilities/in-your-pipelines/worker-agent/configuration/)
+
+配置对象可安装、可引用或可调用，不代表它已获得外部系统权限或通过质量验证。
+
+## 4. 产物从文件延伸到仓库对象和 Pipeline 变量
+
+| 产物类型 | 产品事实 |
+|---|---|
+| 文件、变更和预览 | WorkBuddy 右侧栏分开展示产物、Workspace File、Change 和 Preview |
+| 文件、分析、工作流结果 | ChatGPT Work 返回可供用户审查和使用的结果 |
+| 文件、报告和定时任务历史 | Claude Cowork 按 Session 保存任务结果 |
+| Commit、MR、Review、CI 修复 | GitLab Agent/Flow 在项目中产生开发对象 |
+| Output Variable | Harness Inc. Worker Agent 把结构化值交给后续 Condition、Approval 或 Notification |
+| Issue、Comment、PR | GitHub Agentic Workflow 通过 Safe Output 的隔离 Job 写入仓库 |
+
+产物类型说明交接接口，不说明内容正确或已经通过后续 Gate。
+
+## 5. CI/CD 原生接入集中在四个产品面
+
+- GitLab UI Flow 通过 CI/CD Runner 执行，Fix CI/CD Pipeline Flow 和 Convert to GitLab CI/CD Flow 直接面向 Pipeline。[GitLab Flow execution](https://docs.gitlab.com/user/duo_agent_platform/flows/execution/)
+- Harness Inc. Worker Agent 是 Pipeline Step，输入来自 Pipeline Context，输出可传给后续 Step。[Harness Configuration](https://developer.harness.io/docs/platform/harness-ai/core-capabilities/in-your-pipelines/worker-agent/configuration/)
+- GitHub Agentic Workflows 将 Markdown 编译为 Actions `.lock.yml`，用声明式 Safe Output 提议 Issue、Comment 或 PR。[GitHub About](https://docs.github.com/en/enterprise-cloud@latest/copilot/concepts/agents/about-github-agentic-workflows)
+- Octopus Claude Agent Step 在 Deployment Process 或 Runbook 中运行 Claude Code，并保存 Task Log、Token、Cost 和 Transcript。[Octopus Agent Step](https://octopus.com/docs/octopus-ai/claude-agent-step)
+
+WorkBuddy、ChatGPT Work 和 Claude Cowork 的官方产品文档没有直接证明它们是 CI/CD 原生发布控制面。
+
+## 6. 权限、身份和审计能力按执行面分开
+
+- WorkBuddy 使用用户授权、权限模式、Connector 工具过滤和企业专家分发控制。
+- ChatGPT Work 使用权限模式与 Workspace 角色；Compliance API 和 Workspace Analytics 是不同产品接口。
+- Claude Cowork 区分 Local/Remote Session、文件夹授权、远程网络策略和 OpenTelemetry；Cowork Activity 当前不进入 Compliance API/Audit Logs/Data Export。
+- GitLab 区分远程 Flow Composite Identity 与 IDE/CLI 用户身份，并按执行面提供 Sandbox、Network 和 Human-in-the-loop 控制。
+- Harness Inc. 通过 Parent RBAC、Declared Grant、Connector/Agent Tool Allowlist 和 Runtime 隔离缩小权限。
+- GitHub 将高权限 Secret 和写操作放在 Agent Runtime 外的隔离 Actions Job 中，仓库 Ruleset 继续独立执行。
+
+## 7. 生命周期不能按平台整体继承
+
+| 产品 | 必须保留的状态边界 |
+|---|---|
+| WorkBuddy | 产品正式发布；专家团、Skill、连接器等单项能力阶段未声明 |
+| OpenAI | Workspace Agents 为 Research Preview；Work/Codex/Projects 分产品面记录 |
+| Claude Cowork | Remote Beta；Computer Use Research Preview |
+| GitLab | Platform 18.8 GA；部分 Tool Governance、Audit、CI Expert 等能力为 Beta/Experiment |
+| Harness Inc. | 文档可用；子能力没有统一生命周期标签 |
+| GitHub Agentic Workflows | Public Preview |
+| Octopus Claude Agent Step | Alpha |
+
+## 事实结论
+
+截至 2026-08-08，可由官方资料直接确认的产品功能包括：长任务和项目上下文、专家/Subagent/Flow 协作、Skill/Plugin/Connector 扩展、文件与仓库产物、定时或事件触发、权限和管理员控制，以及在 GitLab、Harness Inc.、GitHub 和 Octopus 中出现的 CI/CD/部署原生 Agent 入口。
+
+官方资料尚不能提供统一的跨产品质量、效率、成本或人员配置影响结论。

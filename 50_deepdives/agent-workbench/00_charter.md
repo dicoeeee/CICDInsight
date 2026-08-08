@@ -1,5 +1,5 @@
 ---
-title: Agent 工作台、专家团与交付角色重构研究边界
+title: Agent 工作台产品功能与控制边界研究边界
 tags:
   - research/agentic-cicd
   - research/charter
@@ -9,66 +9,79 @@ as_of: 2026-08-08
 confidence: high
 ---
 
-# Agent 工作台、专家团与交付角色重构研究边界
+# Agent 工作台产品功能与控制边界研究边界
 
-## 决策问题
+## 研究问题
 
-面向 CTO、研发效能负责人和平台工程负责人，本专题回答三个决策问题：
+本专题回答四类事实问题：
 
-1. WorkBuddy、ChatGPT Work、Codex、Workspace Agents 等产品是否能够佐证“Agent 工作台 + 专家团”成为新的工作入口；
-2. 这种入口如何与编码完成后的构建、发布准备、诊断、恢复和生产门禁连接；
-3. 发布、运维、SRE 与平台人员的职责应如何从逐单执行上移为通用 Agent Harness 的设计和运营。
+1. 各产品提供哪些用户入口、配置对象和任务状态？
+2. 各产品如何接收上下文、组织 Agent 协作并调用 Skill、工具或连接器？
+3. 各产品交付什么产物，采用什么身份、权限、管理员控制和审计机制？
+4. 哪些功能直接接入 CI/CD，哪些只是在通用工作台或 Agent 运行平台中存在？
 
-## 核心主张
+## 研究对象
 
-> **Agent 工作台把交付能力变成开发者可自助消费的服务；发布与运维人员则从流程执行者逐步转为 Agent 专家体系和安全边界的设计者。**
+### 核心详写
 
-该主张拆成两种证据状态：
+- Tencent WorkBuddy。
+- ChatGPT Work、Codex、ChatGPT Projects 和 Workspace Agents，保持产品面分离。
+- Claude Cowork。
+- GitLab Duo Agent Platform。
+- Harness Inc. Worker Agents。
+- GitHub Agentic Workflows。
 
-- **当前可证明：** 已有产品分别提供开发者/最终用户工作台、多专家或 Subagent、共享上下文、Skill/App、Builder/Admin 权限和外部 CI/CD 控制边界。
-- **需要谨慎推断：** 企业应据此重构 operating model；但跨企业采用率、岗位时间分配和组织普及程度尚未验证。
+### 功能矩阵对照
 
-## 术语锁定
+- Microsoft Copilot Studio。
+- Google Gemini Enterprise Agent Platform。
+- Atlassian Rovo。
+- Amazon Bedrock AgentCore。
+- Octopus Claude Agent Step。
 
-- **Agent 工作台：** 用户提交目标、选择/连接上下文、观察计划和子任务、补充信息、审查产物并批准候选动作的交互面。
-- **专家：** 具有特定角色、指令、方法、上下文和工具范围的 Agent 配置。
-- **专家团：** 由主 Agent/团长按任务图协调多个专业 Agent 的协作机制。
-- **通用 Agent Harness：** 管理 Agent、Skill、上下文、工具、身份、沙箱、权限、评测、交接、预算、审计和生命周期的运行与治理层。
-- **Harness Inc.：** CI/CD 厂商。全文出现时写公司名，不与通用 Agent Harness 混淆。
-- **外部 Oracle：** 对候选动作给出可接受/不可接受判定的确定性测试、扫描、策略、签名、SLO、审批者或生产控制系统。
+## 比较字段
 
-## 研究范围
+| 字段 | 需要回答的事实 |
+|---|---|
+| 状态 | 产品整体和单项能力分别处于 GA、Preview、Beta、Alpha、Research Preview、Experiment 还是未声明 |
+| 入口 | Web、桌面、CLI、IDE、Pipeline、Repository、Runbook 或 API |
+| 配置对象 | Project、Agent、Expert、Skill、Flow、Workflow、Pipeline Step、Connector 等 |
+| 上下文 | 文件、项目指令、仓库、知识源、任务历史、变量或前序日志如何进入任务 |
+| 任务流程 | 创建、规划、执行、暂停、继续、失败、完成、归档等公开状态与交互 |
+| 协作 | 专家团、Subagent、Custom Flow、多 Agent 委派或顺序串接的公开机制 |
+| 扩展 | Skill、Plugin、MCP、Connector、CLI、Tool 与 Engine 的配置方式 |
+| 触发 | 手动、定时、Webhook、Artifact、Manifest、Issue、Pull Request 或 Pipeline 事件 |
+| 产物 | 文件、变更、预览、变量、Issue、评论、PR、报告或日志 |
+| 权限 | 用户身份、服务身份、凭据、工具范围、审批、沙箱和网络边界 |
+| 管理审计 | 版本、发布、可见范围、清单、日志、Trace、成本或合规记录 |
+| 限制 | 官方明确限制，以及文档未公开但不能自行补全的内容 |
 
-### 包含
+## 不包含
 
-- WorkBuddy 的专家、专家团、Skill/MCP、项目与权限机制；
-- ChatGPT Work、Codex、ChatGPT Projects、Subagents、Workspace Agents 的产品边界；
-- Harness Inc. Worker Agents、GitHub Agentic Workflows 对 CI/CD 控制边界的桥接；
-- DORA 对高质量平台、AI 放大效应和安全路径的组织启示；
-- 三层五角色架构、职责迁移 RACI 和企业试点门禁。
+- 不判断哪一个产品总体最好，也不形成采购排序。
+- 不从产品功能推导企业人员配置或采用效果。
+- 不把厂商案例数据外推为行业平均效果。
+- 不把 Agent 可调用工具、生成产物或给出结构化结果写成生产发布授权。
+- 不制作 PPTX，也不复述传统 CI/CD 的完整流程。
 
-### 不包含
+## 证据规则
 
-- WorkBuddy、ChatGPT Work 或 Codex 的完整采购对比；
-- 将 Tencent CodeBuddy 的 IDE/CI 集成无条件归入 WorkBuddy；
-- 将 Workspace Agents 的 Research Preview 治理能力写成 ChatGPT Work 全面 GA 能力；
-- 预测岗位数量、裁员比例或发布/运维职能消失；
-- 用 Agent 自我判断替代 Test、Scan、Policy、Signature、Approval、SLO 或人工 Oracle；
-- 制作 PPTX 或开展生产写入实验。
+- 功能、日期、版本、生命周期和限制优先使用官方产品文档、官方发布说明和官方仓库。
+- 每个原子功能主张必须精确回链；主题相关但不能证明具体功能的页面不进入 Evidence Map。
+- 产品整体状态与单项能力状态分开；单项未标状态时写“未声明”。
+- 厂商案例、厂商性能数字和推荐语保留其来源口径，不改写成跨产品事实。
+- 找不到一手证据时记录 `unverified` 或证据缺口，不从相邻产品推断。
 
-## 验收标准
+## 完成标准
 
-1. 至少两个独立一手来源证明最终用户入口与 Builder/Admin 供给控制相互分离；
-2. 至少一个 CI/CD 原生案例证明 Agent 输出仍受确定性门禁或 Required Checks 接受；
-3. 每个核心 Claim 分类为产品事实、跨案例推断、企业建议或未验证岗位趋势；
-4. WorkBuddy、ChatGPT Work、Codex、Workspace Agents、Harness Inc. 的产品边界不混写；
-5. RACI 不给主 Agent 或专业 Agent 默认生产审批责任；
-6. 明确 Skill/专家的版本、测试、权限、成本、Owner 和生命周期治理；
-7. 逐主张审计、URL、Frontmatter、Wikilink 与 `git diff --check` 通过后，才保持 `presentation_ready: true`。
+- 六个核心产品均覆盖统一记录字段，并有独立功能详章。
+- 五个补充产品进入事实矩阵，至少记录入口、配置、协作、权限、状态和边界。
+- Evidence Map 的每一行包含官方 URL、页面日期或核验日期、能力状态和不可外推边界。
+- 正文不出现人员职责表或企业落地建议；此类旧内容只保存在隔离附录。
+- 下游索引、横向洞察、主报告和候选页不再传播旧的组织主张。
 
-## 证据与时间窗口
+## 时间窗口
 
-- `as_of`: 2026-08-08；
-- 产品状态以当前官方文档、Release Notes、Changelog 为准；
-- 厂商自述只能证明机制或厂商记录的场景，不外推为行业效果；
-- “未检索到”只记录为证据缺口，不表述为行业不存在。
+- `as_of`: 2026-08-08。
+- 重点核验 2026 年公开产品文档；仍有效的早期架构或规范页面可作为补充。
+- `refresh_after`: 2026-09-08，或任一 Preview/Beta/Alpha 能力状态变化时提前刷新。

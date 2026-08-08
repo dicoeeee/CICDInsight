@@ -1,63 +1,86 @@
 ---
-title: Agent 工作台、专家团与交付角色重构逐主张事实审计
+title: Agent 工作台产品功能逐主张事实审计
 tags:
   - research/agentic-cicd
   - research/fact-audit
   - topic/agent-workbench
 status: passed
 as_of: 2026-08-08
-confidence: medium-high
+confidence: high
 ---
 
-# Agent 工作台、专家团与交付角色重构逐主张事实审计
+# Agent 工作台产品功能逐主张事实审计
 
-## 审计结果
+## 审计范围
 
-- **核心 Claim：** 17 项；15 项通过事实、分析或建议分类审计，1 项岗位普及趋势保持 `unverified`，1 项“多专家必然更优”被反例拒绝；
-- **独立证据族：** Tencent、OpenAI、Harness Inc.、GitHub、DORA 五组一手来源；
-- **使用层与供给层分离：** WorkBuddy 的用户召唤/企业管理员专家管理，以及 OpenAI 的 Work/Codex 使用面与 Workspace Agents Builder/Admin 面分别提供独立证据；
-- **CI/CD 控制边界：** Harness Inc. 的 Agent Pipeline Step 与 GitHub 的 Safe Outputs、Ruleset、Required Checks 提供直接桥接；
-- **产品状态：** WorkBuddy 产品已正式发布但专家团单项阶段未标；ChatGPT Work 正式发布并分批开放；Workspace Agents 为 Research Preview；GitHub Agentic Workflows 为 Public Preview；
-- **命名边界：** “通用 Agent Harness”与 Harness Inc. 全文消歧；WorkBuddy 与 Tencent CodeBuddy、ChatGPT Work 与 Codex/Workspace Agents 不混写；
-- **组织结论：** 角色迁移只作为 operating-model 建议和中置信推断，不作为岗位事实。
-- **URL 与格式：** 10 个新增官方 URL 于 2026-08-08 可访问；新文件 Frontmatter 可解析、Wikilink 目标存在、无尾随空白，`git diff --check` 通过。
+- 六个核心产品详章。
+- 五个补充产品 Case Map。
+- Source Brief、研究证据日志、专题报告和下游候选页。
+- URL、页面日期、产品/能力状态、产品边界和 CI/CD 接受边界。
 
-## 页面主张—证据—限制核对
+## 功能覆盖审计
 
-| 页面主张组成 | 直接证据 | 推理类型 | 必须保留的限制 | 结果 |
-|---|---|---|---|---|
-| 交付能力正在通过 Agent 工作台前台化给开发者 | WorkBuddy 任务/专家团工作面；ChatGPT Work 长任务；Codex 代码库与 Subagent | 跨案例分析推断 | 只能证明产品入口，不证明企业普遍采用 | passed |
-| 发布与运维能力可在后台沉淀为 Skill、专家团与治理规则 | WorkBuddy Enterprise 专家版本/权限；Workspace Agents Builder/Admin；DORA 平台即产品 | operating-model 建议 | “可/应”而非“已经普遍完成”；需版本、测试、权限、成本和生命周期 | passed |
-| Agent 负责候选动作，CI/CD 平台继续最终接受 | Harness Inc. Agent Step；GitHub Safe Outputs、Ruleset、Required Checks | 事实支持的控制边界 | 不允许 Agent 自批；低风险自动化也必须来自外部预授权 | passed |
+| 产品 | 状态 | 入口 | 配置 | 上下文 | 任务 | 协作 | 扩展 | 触发 | 产物 | 权限 | 管理/审计 | 限制 |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| WorkBuddy | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
+| ChatGPT Work/Codex/Workspace Agents | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
+| Claude Cowork | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
+| GitLab Duo Agent Platform | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
+| Harness Inc. Worker Agents | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
+| GitHub Agentic Workflows | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
 
-## 逐项禁语检查
+## 产品状态审计
 
-| 禁止或高风险表述 | 处理结果 |
+| 主张 | 审计结果 | 保留的限制 |
+|---|---|---|
+| WorkBuddy 4.5.0 正式发布 | 通过 | 不外推为全部细分能力 GA |
+| Workspace Agents Research Preview | 通过 | 不回填为 Work/Codex GA 能力 |
+| Claude Remote Beta / Computer Use Research Preview | 通过 | Local、Remote、Computer Use 分开 |
+| GitLab Platform 18.8 GA | 通过 | 单项 Beta/Experiment 保留独立状态 |
+| Harness Inc. Worker Agents | 通过，使用“官方文档能力；统一状态未声明” | 不自行判定 GA |
+| GitHub Agentic Workflows Public Preview | 通过 | 全文随关键主张保留 |
+| Octopus Claude Agent Step Alpha | 通过 | 不建议关键无人值守自动化、无中途批准 |
+
+## 产品边界审计
+
+| 边界 | 审计结果 |
 |---|---|
-| “发布或运维岗位将消失” | 未使用；明确标为无证据 |
-| “开发者可以绕过生产责任分离” | 未使用；RACI 将接受权留给外部 Oracle/批准者 |
-| “多 Agent 一定更可靠/高效” | 明确拒绝；保留 WorkBuddy 成本与 OpenAI 冲突反例 |
-| “会创建 Skill 就具备平台工程能力” | 未使用；增加版本、评测、权限、成本和生命周期门禁 |
-| “WorkBuddy 是 CI/CD 控制面” | 未使用；标明其 CI/CD 接受边界未被官方证明 |
-| “Workspace Agents 已 GA” | 未使用；保持 Research Preview |
-| “GitHub Agentic Workflows 已 GA” | 未使用；保持 Public Preview |
+| WorkBuddy 与 CodeBuddy 不混用 | 通过 |
+| Work、Projects、Codex、Subagents、Workspace Agents 分开 | 通过 |
+| Cowork 与 Claude Code 分开 | 通过 |
+| 通用 Harness 与 Harness Inc. 公司名分开 | 通过 |
+| GitLab Platform GA 与子能力状态分开 | 通过 |
+| GitHub Agent Job、Safe Output 与 Ruleset/Required Check 分开 | 通过 |
+
+## CI/CD 接受边界审计
+
+| 产品 | Agent 产物 | 独立接受边界 | 审计结果 |
+|---|---|---|---|
+| WorkBuddy | 文件、变更、预览 | 用户与外部系统流程 | 未写成 CI/CD 发布授权 |
+| ChatGPT Work/Codex | 文件、分析、代码差异 | 用户审查、测试与仓库规则 | 未写成发布授权 |
+| Claude Cowork | 文件、报告、命令/应用结果 | 用户与外部系统流程 | 未写成 CI/CD 发布授权 |
+| GitLab | Commit、MR、Review、CI 修复 | Approval、Pipeline、Branch/Deployment Rule | 已保留 |
+| Harness Inc. | Output Variable、分析或生成结果 | Condition、Approval、Policy、Deployment Step | 已保留 |
+| GitHub | Issue、Comment、PR | Ruleset、Required Checks、Review、Environment Rule | 已保留 |
+| Octopus | 命令/文件结果、Log、Transcript | Deployment/Runbook 后续 Step 与人工流程 | 已保留 |
+
+## 禁语与内容类型审计
+
+人员职责变化、组织分层、职责分工表和企业落地建议只允许出现在 `95_appendix-operating-model-hypotheses.md`。
+
+正文允许记录厂商产品角色名、管理员功能和用户操作，但不得从中推导企业人员配置或采用效果。
 
 ## Presentation-ready 决定
 
-**结论：通过。** 可使用以下单一页面主张：
+- 当前状态：`passed`；专题 `presentation_ready: true`。
+- 该决定仅允许制作具名产品功能与控制边界矩阵；不把 Preview/Beta/Alpha 能力改写成 GA，也不表示候选页已经制作。
+- 保留的证据缺口继续显示在专题 README、各产品详章和 Evidence Map，不影响已经精确回链的功能事实。
 
-> **交付能力正在通过 Agent 工作台前台化给开发者，发布与运维能力则在后台沉淀为 Skill、专家团与治理规则。**
+## 验证记录
 
-页面必须同时呈现“三层五角色”或等价控制关系，并在页脚标明：
-
-> 产品机制事实支持该 operating model；跨企业岗位迁移幅度尚未验证。Agent 只生成计划、分析和候选动作，最终接受仍由 Test、Scan、Policy、Signature、Approval、SLO 与 Rollback 控制面决定。
-
-## 不阻塞 Presentation 的剩余缺口
-
-- 跨企业岗位工时与组织结构的纵向数据；
-- 多专家相对单 Agent 的独立质量/成本基准；
-- WorkBuddy 专家团单项生命周期标签和生产 CI/CD 成功数据；
-- ChatGPT Work Subagent 的账户覆盖率；
-- 从工作台候选产物到生产放行的端到端实测。
-
-这些缺口阻止“行业普及率、ROI、岗位替代、生产自治”页面，但不推翻“产品形态 + 目标 operating model + 外部控制边界”这一页。
+- [x] 十份 Source Brief 完成事实化改写，Claude、Microsoft、Google 三份新增简报已纳入索引；独立 Source Brief 机械计数为 81。
+- [x] 全量官方 URL 首轮校验均返回 HTTP 2xx；最终复扫时 Google 与 OpenAI 文档域出现传输超时，链接未变化且已由首轮校验和官方页面复核确认。
+- [x] 26 个专题/简报 Frontmatter 可解析，21 个范围内文档的 Wikilink 目标存在。
+- [x] 六个核心产品覆盖统一功能字段；GitHub 未公开的多 Agent 协作与专用审计接口明确记录为 `not-stated`。
+- [x] 下游横向洞察、主报告、候选页和 Source Map 已改为具名产品功能事实；规定禁语在隔离附录外零命中。
+- [x] Standards 与 Spec 双轴复审的内容问题全部关闭；提交前 `git diff --check` 通过。

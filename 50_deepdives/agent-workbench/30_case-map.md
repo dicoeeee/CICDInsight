@@ -1,58 +1,58 @@
 ---
-title: Agent 工作台、专家团与交付控制案例地图
+title: Agent 工作台与 CI/CD Agent 产品功能矩阵
 tags:
   - research/agentic-cicd
   - research/case-map
   - topic/agent-workbench
 status: complete
 as_of: 2026-08-08
-confidence: medium-high
+confidence: high
 ---
 
-# Agent 工作台、专家团与交付控制案例地图
+# Agent 工作台与 CI/CD Agent 产品功能矩阵
 
-## 比较口径
+## 比较规则
 
-案例不按“功能数量”排名，而按三种责任比较：谁消费能力、谁供应 Agent 能力、谁最终接受交付动作。产品状态只描述当前证据，不将 Research Preview 或 Public Preview 写成 GA。
+- 三张表按产品公开入口分组，不代表成熟度排序。
+- “有”只表示官方文档存在对应功能，不表示不同产品实现等价。
+- 每行保留产品或单项能力状态；无标签时写“未声明”。
+- 详细原子证据见 [[50_deepdives/agent-workbench/20_evidence-map|Evidence Map]]。
 
-| 案例 | 开发者 / 用户工作面 | 通用 Agent Harness 供给与治理 | 专家协作 | CI/CD 接受边界 | 状态与证据强度 | 对主张的作用 |
+## A. 终端 Agent 工作台
+
+| 产品 | 入口与配置对象 | 上下文和任务 | 协作与扩展 | 产物 | 权限/管理 | 状态与边界 |
 |---|---|---|---|---|---|---|
-| Tencent WorkBuddy | 自然语言任务、项目上下文、过程与产物 | 企业管理员上传、版本化、启停、分类并按成员下发专家；Skill/MCP 受授权 | 显式团长拆解、分配、并行、整合 | 未证明内建 Required Checks、签名、发布审批或 SLO | 产品 2026-03-04 正式发布；专家团单项阶段未标；官方文档 high | 证明工作台与专家团形态，并证明专家管理可从使用入口分离 |
-| ChatGPT Work | 长任务、项目文件/来源、过程观察、改方向、重要动作确认、成品交付 | 工作区计划、Plugin/App 和项目策略约束可用能力 | 合资格账户可调用专业 Subagent | 未证明是 CI/CD 放行控制面 | 2026-07-09 发布后分批开放；官方文档 high | 证明最终用户工作面和主会话整合并行结果 |
-| Codex | 代码目录/Workspace、Diff、测试与工程任务 | AGENTS.md、Skill、自定义 Agent、权限和本地/云执行环境 | 专业 Subagent 并行，主任务汇总 | 仓库 CI、Required Checks、Review 和部署环境继续外置 | 当前产品文档；官方文档 high | 证明“更多给开发使用”可以落在真实代码库入口 |
-| ChatGPT Workspace Agents | 组织成员调用共享、可计划执行的 Agent | Builder 配置 Apps、Skills、指令；Admin 用 RBAC 控制启用、构建、分享和发布 | 当前证据重点是共享 Agent，不等同于专家团 | 连接系统权限与动作确认仍独立 | Research Preview；官方 Cookbook high | 证明后台 Builder/Admin 供给面，但成熟度不能回填给 ChatGPT Work |
-| Harness Inc. Worker Agents | 开发/平台人员在 Pipeline 中消费预配置 Agent Step | 指令、模型、MCP、上下文、权限、Runtime、Marketplace 资产 | 可实现专业步骤组合，但不以“专家团”作为核心证据 | Pipeline、短期权限、Tool Allowlist、外部 Oracle | Worker Agents 平台总览 GA；部分权限路径需目标账户验证 | 证明通用 Agent Harness 可以被 CI/CD 平台化并嵌入流水线 |
-| GitHub Agentic Workflows | 仓库维护者用 Markdown 描述 Agent 任务并审查输出 | Enterprise/Repo 管理员控制 Actions、Reusable Workflow、Runner 和 Ruleset | 可选择不同 Agent 引擎；不是本专题的专家团主证据 | 默认只读、Safe Outputs、Ruleset、Required Checks、部署保护 | Public Preview；官方文档 high | 证明 Agent 候选输出不等于合并或发布授权 |
-| DORA Platform Engineering | 开发者通过 Golden Path 自助构建、测试、部署和诊断 | 平台团队把工具链和流程作为开发者内部产品运营 | 不直接研究多 Agent | 高质量平台提供自动化、标准化与安全路径 | 原始研究 / 官方能力页；medium-high | 为“开发者是客户，平台团队从工单转向产品供给”提供组织机制基础 |
+| WorkBuddy | Desktop/Web；Task、Project、Expert、Skill、Connector、Automation | 工作目录、文件、项目指令、资料库；公开任务状态和停止/继续 | Expert Team 团长拆解；Skill、MCP/CLI Connector | 文件、变更、预览、PPT/PDF/文档 | 权限模式；企业专家版本、可见范围、白/黑名单 | 产品已正式发布；细分能力阶段未声明；非 CI/CD 原生控制面 |
+| ChatGPT Work | Desktop/Web/Mobile；Chat、Goal | 用户文件、批准的工具和同一 Chat 的任务上下文；Local/Cloud 分开 | eligible account 可调用 Subagent；可使用 Plugin | 文件、分析或工作流结果 | Work 权限模式；Workspace Admin 可限制访问和模式 | 已公开发布；不是 CI/CD 原生控制面 |
+| ChatGPT Projects | ChatGPT Project；Project Instructions、Files、Sources | Project 内的 chats、files、sources 与 instructions | 可容纳 Chat 与 Work，但不是 Agent 编排对象 | 项目内会话和材料 | 继承 ChatGPT Workspace 的分享与访问设置 | 是 ChatGPT 上下文容器；不直接取得本地 Codex 目录 |
+| Codex CLI | 终端；当前工程目录 | 工程文件和命令执行上下文 | 可调用自定义 Subagent 和本地 Skill | 代码差异与命令结果 | 文件、命令和批准边界按 CLI 配置执行 | 工程执行面；不等同 ChatGPT Project 或 Workspace Agent |
+| Workspace Agents | ChatGPT Workspace；Agent Instructions、Apps、Skills | 连接服务的数据与 Workspace 配置 | Apps、Skills、计划运行与共享 | Agent 运行结果 | Admin 控制创建、分享、发布和动作范围 | Research Preview；不能回填为 Work/Codex GA 功能 |
+| Claude Cowork | Desktop/Web/Mobile；Session、Project、Plugin、Scheduled Task | 文件、URL、Connector、Project Instructions 与 Memory | Plugin 打包 Skills、Connectors、Hooks、Subagents | 文件、报告、任务历史 | Local/Remote 隔离、应用/文件许可、组织网络与 Plugin 控制、OTel | Remote Beta；Computer Use Research Preview；当前无 Compliance API 覆盖 |
 
-## 产品形态，而非单一赢家
+## B. Agent 构建、运行与治理平台
 
-```mermaid
-flowchart LR
-  W1["WorkBuddy\n显式专家团"] --> P["工作台 + 通用 Agent Harness + 控制面"]
-  W2["ChatGPT Work / Codex\n目标、上下文、Subagent"] --> P
-  W3["Workspace Agents\nBuilder / Admin 治理"] --> P
-  C1["Harness Inc.\nAgent Pipeline Step"] --> P
-  C2["GitHub\nSafe Outputs + Required Checks"] --> P
-  D["DORA\nPlatform as product"] --> P
-```
+| 产品 | 构建/目录对象 | 协作与运行 | 工具和上下文 | 治理/评测 | 状态 | 与核心产品的边界 |
+|---|---|---|---|---|---|---|
+| Microsoft Copilot Studio | Agent、Topic、Action、Flow、Connector、Agent Library | Generative Orchestration、Multi-step Logic、Branch/Approval、外部发布 | Knowledge Source、Prebuilt/Custom Connector | Agent Inventory、Compliance Hub、Test Set/Rubric、ALM、DLP、RBAC、审计 | 具体能力逐项核验；部分 2026 能力 Preview | 是 Maker/Developer 构建治理平台，不等同 WorkBuddy 专家团或 CI/CD Gate；[官方对比](https://learn.microsoft.com/en-us/microsoft-365/copilot/extensibility/copilot-studio-experience) |
+| Google Gemini Enterprise Agent Platform | Managed Agent、Agent Studio/Garden、Skill、Tool Registry、Gateway | ADK 多 Agent、Managed Runtime、Memory | API、MCP/A2A、Artifact/Sandbox、企业数据 | Unique Identity、Gateway、Observability、Evaluation/Optimization | Runtime/Observability 等逐项 GA；部分评测/优化 Preview | 是 Agent Build/Scale/Govern 平台，不是终端 CI/CD 控制面；[Agents overview](https://docs.cloud.google.com/gemini-enterprise-agent-platform/agents) |
+| Atlassian Rovo | Rovo Agent、Subagent、Tool、Knowledge、Automation、Rovo Dev Skill | Agent 根据 Subagent 条件委派；Chat、Jira/Confluence、Automation、CLI | Jira/Confluence/Drive 知识；Tools；`SKILL.md` | Agent 创建权限、Owner/Admin 编辑、原数据权限继承 | 页面未统一标 GA/Preview | 面向 Atlassian 工作面与开发 CLI；不证明长任务或发布控制面；[Rovo Agents](https://support.atlassian.com/rovo/docs/agents/) |
+| Amazon Bedrock AgentCore | Harness、Runtime、Memory、Gateway、Identity、Policy、Evaluation | Managed Agent Loop 或自带 Framework；支持 Multi-agent Runtime | MCP/API Gateway、Browser、Code Interpreter、Memory | Cedar Policy、IAM、Trace/Logs、Evaluations、Observability | Runtime/Gateway/Identity/Policy/Observability 与 Evaluations 等逐项 GA | 是通用 Agent 运行底座，不是终端工作台或 CI/CD Gate；[[50_deepdives/amazon-bedrock-agentcore/README|既有专题]] |
 
-这些案例不是同层替代品：WorkBuddy 与 ChatGPT Work/Codex 更接近使用面，Workspace Agents 更接近组织供给面，Harness Inc. 与 GitHub 更接近交付运行和接受面，DORA 提供 operating-model 研究背景。
+## C. CI/CD、仓库与部署原生 Agent
 
-## 关键反例
+| 产品 | 原生入口 | 配置对象和触发 | Agent 执行/协作 | 输出与后续 | 控制边界 | 状态 |
+|---|---|---|---|---|---|---|
+| GitLab Duo Agent Platform | GitLab UI、IDE、CLI、API、CI/CD Runner | Agent、Flow、Skill、`AGENTS.md`、`agent-config.yml`；Issue/Project/API | Custom Flow 组合 Agent；UI Flow 远程 CI/CD，IDE 本地 | Commit、MR、Review、CI/CD 修复、Session/Job Log | Composite Identity、Sandbox、Network Policy、Project Approval/Pipeline Rule | Platform 18.8 GA；部分 Agent/Flow/Governance 为 Beta/Experiment |
+| Harness Inc. Worker Agents | Harness Pipeline Agent Step | Versioned Agent Definition、Typed Inputs、Trigger、MCP；Webhook/Artifact/Manifest/Schedule | 单 Agent Step 或多个 Agent 按 Pipeline 顺序串接 | Output Variable 供 Condition、Approval、Notification、后续 Step | Parent RBAC 与 Grant/Allowlist 交集；独立 Pipeline Gate | 官方文档可用；细分能力状态未统一声明 |
+| GitHub Agentic Workflows | Repository + GitHub Actions | Markdown/frontmatter 编译为 `.lock.yml`；Repo Event/Schedule/Web/CLI | 只读 Agent Job；Engine 与 Tool 可配置 | Safe Output 创建 Issue、Comment、PR | 隔离写 Job、Secret 外置、Ruleset/Required Checks 独立 | Public Preview |
+| Octopus Claude Agent Step | Deployment Process 或 Runbook Step | Project/Environment/Release/Variable/前序 Log；Worker/Target | Claude Code 只读调查或执行 Target Command | Task Log、Token、Cost、完整 Transcript、文件/命令结果 | Sandbox 可选；未授权 Tool 失败；无中途批准 | Alpha；官方不建议关键无人值守自动化；[官方文档](https://octopus.com/docs/octopus-ai/claude-agent-step) |
 
-### 多 Agent 不天然优于单 Agent
+## 事实边界汇总
 
-- WorkBuddy 官方提示专家团通常消耗单专家 3—5 倍积分；
-- OpenAI 官方提示 Subagent 使用更多 Token，并提醒并行写任务会增加冲突；
-- Harness Inc. 既有产品演进中存在从多个子 Agent 收敛到统一 Agent 的反向案例，见 [[00_sources/briefs/2026-harness-ai-devops-agent|Harness AI DevOps Agent]]。
-
-因此，专家拆分必须由任务独立性、上下文隔离、评测结果和单位成功成本决定。
-
-### 供给层不等于中央团队包办
-
-DORA 同时强调平台的可扩展贡献模型。Harness 设计者应维护契约、门禁和共享骨架，领域团队可以贡献自己的 Skill、专家知识和任务集；否则平台团队会重新成为工单瓶颈。
-
-### 自助不等于无审批
-
-开发者可以自助启动构建准备、诊断和候选修复，但测试、策略、签名、环境保护、变更授权和回滚决策仍可由独立系统或人员执行。自助提高的是入口效率，不是取消责任分离。
+| 问题 | 已有产品事实 | 尚不能写成事实 |
+|---|---|---|
+| 是否有长任务/项目工作面 | WorkBuddy、ChatGPT Work、Claude Cowork 公开了任务、项目或长任务能力 | 所有工作台共享同一任务状态或上下文模型 |
+| 是否有专业 Agent 协作 | WorkBuddy Expert Team、OpenAI Subagents、Cowork Plugin Subagents、GitLab Custom Flow 均有公开机制 | 多 Agent 必然优于单 Agent |
+| 是否能沉淀可复用能力 | 多产品公开 Skill、Plugin、Agent Catalog、Expert 或 Flow | Skill/Agent 包自动安全、正确或具备平台工程质量 |
+| 是否原生接入 CI/CD | GitLab Flow、Harness Pipeline Step、GitHub Actions Workflow、Octopus Deployment Step 有直接产品入口 | 通用工作台自动具备发布权限 |
+| 是否有治理与审计 | 产品分别公开权限、目录、身份、日志、Trace 或合规接口 | 任一产品已经覆盖企业全部审计与职责分离要求 |

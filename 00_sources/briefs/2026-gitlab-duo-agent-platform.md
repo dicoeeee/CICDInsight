@@ -1,11 +1,11 @@
 ---
-title: GitLab Duo Agent Platform
+title: GitLab Duo Agent Platform 功能、执行与状态边界
 source_id: gitlab-duo-agent-platform-docs-2026
 organization: GitLab
 source_type: official-docs
 published: null
-verified: 2026-07-28
-availability: ga
+verified: 2026-08-08
+availability: ga-platform-with-mixed-features
 confidence: high
 geography:
   - global
@@ -32,47 +32,42 @@ tags:
   - evidence/source-brief
 ---
 
-# GitLab Duo Agent Platform
+# GitLab Duo Agent Platform 功能、执行与状态边界
 
-## 来源
+## 一手来源
 
-- 标题：GitLab Duo Agent Platform
-- 组织或项目：GitLab
-- 链接：[GitLab Docs](https://docs.gitlab.com/user/duo_agent_platform/)
-- 来源类型：官方产品文档
-- 能力状态：GitLab 18.8 起 GA；部分治理与自定义能力仍为 Beta 或 Experiment
+| 页面 | 日期/状态 | 直接支持的功能 |
+|---|---|---|
+| [Platform overview](https://docs.gitlab.com/user/duo_agent_platform/) | 18.2 Beta、18.8 GA；访问 2026-08-08 | GA/Beta/Experiment 功能表、Agents 与 Flows |
+| [Flow execution](https://docs.gitlab.com/user/duo_agent_platform/flows/execution/) | GitLab 18.3 引入；访问 2026-08-08 | UI/CI 与 IDE/Local 执行、Runner、Duo CLI、WebSocket、Sandbox |
+| [Agent config](https://docs.gitlab.com/user/duo_agent_platform/flows/agent_config_yml/) | 页面未标日期；访问 2026-08-08 | Image、Setup Script、Network Policy、默认分支读取 |
+| [Customize](https://docs.gitlab.com/user/duo_agent_platform/customize/) | 页面未标日期；访问 2026-08-08 | Rules、`AGENTS.md`、MR Instructions、Agent Skills、Custom Flow、MCP |
+| [Flows API](https://docs.gitlab.com/api/duo_agent_platform_flows/) | 页面未标日期；访问 2026-08-08；Create Flow 为 Experiment | Goal、Context、Privileges、Environment、Catalog Version、问询开关 |
+| [Execution variables](https://docs.gitlab.com/user/duo_agent_platform/flows/execution_variables/) | 页面未标日期；访问 2026-08-08 | Composite Identity、Token 与变量范围 |
+| [Security threats](https://docs.gitlab.com/user/duo_agent_platform/security_threats/) | 页面未标日期；访问 2026-08-08 | Surface-specific Sandbox、Network、Identity、人类批准与 Sanitization |
 
-## 一句话结论
+## 功能事实
 
-GitLab 正把统一 DevSecOps 数据面升级为 Agent 编排与治理控制面，并用 Agent、Flow、MCP、目录、审批和审计覆盖从代码到安全修复的多种任务。
+| 字段 | 官方公开事实 |
+|---|---|
+| 状态 | Platform 在 18.8 GA；Platform Page 仍把 Tool Governance、AI Audit、CI Expert 等列为 Beta/Experiment |
+| 入口 | GitLab UI、IDE Extension、Duo CLI 与 API；UI Flow 使用 CI/CD，IDE Flow 本地执行 |
+| 配置 | Agent、Flow、AI Catalog Item、`AGENTS.md`、Agent Skill、Custom Flow、MCP、`agent-config.yml` |
+| 上下文 | Repository、Issue、MR、Goal、Additional Context、Project Rule、Skill 与 Review Instruction |
+| 协作 | Custom Flow 组合多个 Agent；GA 表包含 Developer、Code Review、Fix CI/CD 等 Flow |
+| CI/CD | UI Flow 使用 Runner；Fix CI/CD Pipeline Flow 和 Convert to GitLab CI/CD Flow 直接面向 Pipeline |
+| 执行 | Runner 下载 Duo CLI，经 WebSocket 连接 Workflow Service 并执行文件/Git Tool |
+| 隔离 | Remote Flow 可用 Sandbox 和 Network Policy；IDE/CLI Local 使用不同边界 |
+| 身份 | Remote Flow 使用 Service Account 与 Triggering User 的 Composite Identity |
+| 产物 | Commit、MR、Review、CI Fix、Session 和 Job Log |
 
-## 可核验事实
+## 状态与接受边界
 
-- Agent Platform 在 GitLab 18.8 GA，可用于 GitLab.com、Self-Managed 和 Dedicated。
-- Foundational Flows 包括 Fix CI/CD Pipeline、Convert to GitLab CI/CD、Code Review、SAST Vulnerability Resolution 和 SAST False Positive Detection。
-- Agent 可访问代码、Issue、MR、CI/CD Job 日志和漏洞信息。
-- Custom Flows、工具级审批、AI 审计报告、外部 MCP Server 等能力按版本和套餐处于不同成熟状态。
-- 支持自托管 Agent Platform 和自托管模型，服务受监管行业的数据与模型控制需求。
-- Custom Flows 于 GitLab 19.2（2026-07-16）GA；Issue、MR、评论提及和 Pipeline Event 可成为 Flow 入口。
-- Flow 使用触发人与服务账号的 Composite Identity，实际权限取两者交集，并保留发起人/服务账号归因。
+- Platform GA 不覆盖所有 Agent、Flow、Tool Governance 或 Audit 能力。
+- `agent-config.yml` 只从默认分支读取；其他分支中的文件被忽略。
+- Remote Flow 与 IDE/CLI Local Agent 的权限、网络和隔离不能互相补全。
+- Agent 生成 Commit/MR/CI Fix 不等于 Approval、Pipeline、Merge 或 Deployment Rule 已通过。
 
-## CI/CD 相关性
+## 专题入口
 
-- 涉及阶段：代码评审、安全、门禁和 CI 故障处理。
-- 工具类别：一体化 DevSecOps、Agent 编排、AI 资产目录和治理。
-- 自主等级：L0—L3。
-- 涉及角色：开发、平台、CI、安全、合规和 GitLab 管理员。
-
-## 对洞察的价值
-
-GitLab 是“全生命周期上下文就是 Agent 平台壁垒”的典型路线，也提供了自托管、BYOM、工具审批和统一审计等企业治理样本。
-
-## 限制与待验证项
-
-- GA 指平台总体可用，不代表所有列出的 Agent 与治理功能均已 GA。
-- 需要按具体 GitLab 版本核验客户可用能力和 Credits 成本。
-- AI Audit Event Report 等治理能力仍可能处于 Beta/Experiment，不能宣称 Prompt 与全部 Tool 往返已完整审计。
-
-## 可引用判断
-
-- 当代码、流水线、安全发现和协作数据已经集中在同一平台时，Agent 平台的竞争点会从模型能力转向上下文、治理和工作流闭环。
+[[50_deepdives/agent-workbench/43_gitlab-duo-agent-platform|GitLab Duo Agent Platform 功能详章]]

@@ -1,11 +1,11 @@
 ---
-title: Harness Worker Agents
+title: Harness Inc. Worker Agents 功能与 Pipeline 边界
 source_id: harness-worker-agents-2026-07-08
-organization: Harness
+organization: Harness Inc.
 source_type: official-docs
 published: 2026-07-09
-verified: 2026-07-22
-availability: ga
+verified: 2026-08-08
+availability: official-docs-no-unified-feature-stage
 confidence: high
 geography:
   - global
@@ -33,56 +33,40 @@ tags:
   - evidence/source-brief
 ---
 
-# Harness Worker Agents
+# Harness Inc. Worker Agents 功能与 Pipeline 边界
 
-## 来源
+## 一手来源
 
-- 标题：Worker Agents
-- 组织或项目：Harness
-- 发布或更新日期：2026-07-20；2026-07-22 复核
-- 链接：[Harness Developer Hub](https://developer.harness.io/docs/platform/harness-ai/core-capabilities/in-your-pipelines/harness-agents/)
-- 来源类型：官方产品文档
-- 能力状态：平台总览列为 GA；账户入口、细粒度权限和部分功能仍可能需要管理员、Support 或 Feature Flag
+| 页面 | 页面日期/核验 | 直接支持的功能 |
+|---|---|---|
+| [Harness Agents](https://developer.harness.io/3k-docs/ai/harness-agents/) | 更新 2026-07-22；访问 2026-08-08 | Catalog、Definition、Pipeline Stage、Version、Container Execution |
+| [Worker Agent configuration](https://developer.harness.io/docs/platform/harness-ai/core-capabilities/in-your-pipelines/worker-agent/configuration/) | 更新 2026-07-22；访问 2026-08-08 | Inputs、Agent Settings、Trigger、Output、Reasoning Turns |
+| [Example agents](https://developer.harness.io/docs/platform/harness-ai/core-capabilities/in-your-pipelines/worker-agent/example-agents/) | 更新 2026-07-23；访问 2026-08-08 | IaC Safety 与 Spec/Plan/Code Pipeline 示例 |
+| [Worker Agent security](https://www.harness.io/blog/how-we-secured-ai-worker-agents-in-harness) / [Identity and permissions](https://www.harness.io/blog/identity-and-permissions-for-ai-worker-agents-in-harness) | 发布 2026-07-13/16；访问 2026-08-08 | Process/Secret/Network 隔离、Principal/Grant 与 Tool Allowlist |
 
-## 一句话结论
+## 功能事实
 
-Harness 把 Agent 做成流水线中的可复用治理步骤，可插入 CI、CD、IaC、STO、SCS 或自定义阶段，而不是只作为流水线外部的聊天助手。
+| 字段 | 官方公开事实 |
+|---|---|
+| 入口 | Account/Organization/Project Agent Catalog 与 Pipeline Worker Agent Step |
+| 定义 | Name、Description、Instructions、Model Connector、MCP、Typed Inputs、Environment Variables、Maximum Reasoning Turns |
+| 版本 | Pipeline 用 `agentName: name@version` 引用目录定义，并通过 Inputs/Agent Settings 注入参数 |
+| 上下文 | Harness Expression、Pipeline Input、前序 Output、Artifact/Manifest、Secret Reference |
+| 触发 | Manual、Webhook、Artifact、Manifest、Schedule；具体 Principal Context 依 Trigger 而异 |
+| 协作 | 多个 Agent 可按 Pipeline 顺序串接；官方示例展示 Specification、Plan、Code 三段 |
+| 产物 | `$HARNESS_OUTPUT`/Output Variable 供后续 Condition、Approval、Notification 或 Step 使用 |
+| 示例 | IaC Plan Safety 输出 `APPROVE/REVIEW/REJECT` 候选值；开发者在 Merge 前审查生成物 |
+| 权限 | Parent RBAC 与 Declared Grant 取交集；MCP Tool 受 Connector 与 Agent Allowlist 交集 |
+| 隔离 | Container/VM、Agent/Broker/Egress 用户、Host-bound Secret Placeholder 与 Network Control |
 
-## 可核验事实
+## 状态与接受边界
 
-- Worker Agent 由 Instructions、Model Connector 和可选 MCP Servers 组成。
-- 可作为步骤加入 CI、CD、IaCM、安全测试和软件供应链阶段。
-- Agent 通过 Instructions、Harness Expressions、Inputs、Workspace/文件、环境变量和显式 MCP Connector 获取上下文；当前文档不证明任意 Custom Worker 自动装载全量 Knowledge Graph。
-- 可使用 Harness Managed Anthropic/OpenAI Connector，也可自带 Anthropic、Bedrock Anthropic 或 OpenAI Connector。
-- CI、STO、SCS、IaCM 可使用 Harness Cloud Runtime；CD/Custom Stage 需要 Containerized Step Group；也可通过 Delegate 在客户 Kubernetes 中运行。
-- Marketplace 分为 Managed、Certified 和 Community；用途覆盖 Review、AutoFix、Coverage、Manifest、Flag Cleanup、Zero-day、IaCM 和 Library Upgrade。
-- 7 月 20 日 Worker 页面称存在 Principal 时，Harness 资源权限是触发人 RBAC 与声明 Grant 的交集；7 月 15 日 Agent permissions 页面又称 Token 独立于 Pipeline Author，当前文档存在直接冲突。
-- 未声明 `permissions` block 时会注入文档化默认只读权限；声明 block 后默认项不再合并，Managed LLM Connector 还需显式 `ai_llm_gateway: access`。
-- Permission 位于 Stage 或 Containerized Step Group，Scoped Token 会注入组内每个 Step，而不只进入 Agent 内核。
-- 第三方 Tool Intersection 与逐次 Attribution 主要由官方工程博客披露，产品文档缺少同粒度配置/导出说明。
+- 官方页面没有为所有 Worker Agent 子能力提供统一 GA/Preview/Beta 标签。
+- 使用前置条件、Model Connector、Secret 与 Pipeline Permission 依账户配置。
+- Event Trigger 不总能继承人类 Principal 的 Scoped Token。
+- Output Variable 与示例分类值是 Pipeline 数据，不等于 Test、Policy、Approval 或 Deployment 已通过。
+- 厂商示例只证明配置可表达，不是跨客户效果数据。
 
-## CI/CD 相关性
+## 专题入口
 
-- 涉及阶段：几乎覆盖编码完成后的全部交付阶段。
-- 工具类别：流水线、Agent 运行时、模型与工具连接、治理。
-- 自主等级：L1—L3；实际级别取决于步骤权限和工具配置。
-- 涉及角色：平台工程师、DevOps、安全与合规团队、流水线维护者。
-
-## 对洞察的价值
-
-它代表“Agent 成为流水线一等步骤”的平台路线，并把提示词、模型、工具和权限组合为可复用的企业资产。
-
-## 限制与待验证项
-
-- 文档没有提供跨客户的任务成功率或稳定性数据。
-- 细粒度 Permission/Token Injection 仍需确认 `HARNESS_TOKEN_INJECT` 是否在目标账户开启。
-- 7 月 15 日与 7 月 20 日权限文档在 Principal、默认权限和资源范围上冲突，必须在目标 Cluster 验证 Effective Permission、Token Subject 与 Audit Principal。
-- Webhook、Schedule、Artifact、Manifest 等 Trigger 发起的 Run 当前不能继承某个触发人的 scoped token；事件驱动高风险动作必须单独评估身份与审批。
-- Scoped Token 对 Stage/Step Group 内所有 Step 生效，混合脚本/插件会扩大 Blast Radius，应拆最小独立组。
-- Managed LLM 在 2026-08 后将单独计费，试点成本不能按当前包含窗口外推。
-- Marketplace 等级不等于客户自己的生产安全认证。
-
-## 可引用判断
-
-- Agent 平台化的一项标志，是能够像普通流水线步骤一样被复用、授权、审计和组合。
-- 通用 Agent 的生产边界由 Pipeline、短期权限子集、Tool Allowlist 和外部 Oracle 共同决定，而不由 Prompt 本身决定。
+[[50_deepdives/agent-workbench/44_harness-worker-agents|Harness Inc. Worker Agents 功能详章]]

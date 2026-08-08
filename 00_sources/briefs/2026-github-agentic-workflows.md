@@ -1,16 +1,17 @@
 ---
-title: About GitHub Agentic Workflows
-source_id: github-agentic-workflows-docs-2026
+title: GitHub Agentic Workflows 功能、编译与 Safe Output 边界
+source_id: github-agentic-workflows-2026
 organization: GitHub
-source_type: official-docs-and-changelog
-published: 2026-06-11
-verified: 2026-07-28
-availability: preview
+source_type: official-docs-and-project-docs
+published: 2026-02-13
+verified: 2026-08-08
+availability: public-preview
 confidence: high
 geography:
   - global
 lifecycle_stages:
   - code-review
+  - security-compliance
   - testing-gates
   - build
 tool_categories:
@@ -29,49 +30,41 @@ tags:
   - evidence/source-brief
 ---
 
-# About GitHub Agentic Workflows
+# GitHub Agentic Workflows 功能、编译与 Safe Output 边界
 
-## 来源
+## 一手来源
 
-- 标题：About GitHub Agentic Workflows
-- 组织或项目：GitHub
-- 链接：[GitHub Enterprise Cloud Docs](https://docs.github.com/en/enterprise-cloud%40latest/copilot/concepts/agents/about-github-agentic-workflows)
-- 来源类型：官方产品文档
-- 能力状态：Public Preview；[2026-06-11 官方 Changelog](https://github.blog/changelog/2026-06-11-github-agentic-workflows-is-now-in-public-preview/)
+| 页面 | 状态/核验 | 直接支持的功能 |
+|---|---|---|
+| [About Agentic Workflows](https://docs.github.com/en/enterprise-cloud@latest/copilot/concepts/agents/about-github-agentic-workflows) | 页面未标日期；访问 2026-08-08；Public Preview | 产品状态、Markdown、Trigger、Engine、Safe Output 与 Actions 执行 |
+| [gh-aw project docs](https://github.github.com/gh-aw/) | 页面未标日期；访问 2026-08-08 | Compile、Sandbox、Network、Engine 与 CLI |
+| [Architecture](https://github.github.com/gh-aw/introduction/architecture/) | 页面未标日期；访问 2026-08-08 | 只读 Agent Job、隔离写 Job、Secret 与 Threat Detection |
+| [Safe Outputs](https://github.github.com/gh-aw/reference/safe-outputs/) | 页面未标日期；访问 2026-08-08 | Issue、Comment、PR 等声明式写出口 |
+| [Permissions](https://github.github.com/gh-aw/reference/permissions/) | 页面未标日期；访问 2026-08-08 | Token/API Scope |
+| [Ruleset rules](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets/available-rules-for-rulesets) | 页面未标日期；访问 2026-08-08 | PR、Review、Required Check 与 Deployment Gate |
 
-## 一句话结论
+## 功能事实
 
-GitHub 将 Agentic Workflows 定位为运行在 GitHub Actions 上的仓库级智能自动化层，用自然语言描述需要判断的任务，但继续依靠编译后的 Actions 工作流、最小权限和受控输出执行。
+| 字段 | 官方公开事实 |
+|---|---|
+| 状态 | 当前 Public Preview；2026-02-13 公告曾标 Technical Preview |
+| Source | `.md` 由 YAML Frontmatter 与 Markdown Instructions 组成 |
+| Compile | `gh aw compile` 生成 Hardened `.lock.yml` GitHub Actions Workflow |
+| 触发 | Repository Event、Schedule、Web UI 或 `gh aw` CLI |
+| 配置 | Trigger、Permissions、Network、Tools、Safe Outputs、Engine |
+| Engine | 可配置 Copilot、Claude、Codex、Gemini 等；非默认 Engine 可能需要 Secret |
+| 执行 | Agent Job 默认只读，在 Container/Sandbox 和 Network Policy 下运行 |
+| 产物 | Safe Output Proposal 由隔离下游 Job 验证并创建 Issue、Comment、PR 等 |
+| Secret | 高权限 Secret 保留在 Agent Runtime 外的受控 Job |
+| 外部 Gate | Ruleset 可独立要求 PR、Review、Required Check、Deployment Success 与指定 Check 来源 |
 
-## 可核验事实
+## 状态与接受边界
 
-- 工作流以 Markdown 编写，由 YAML frontmatter 定义触发器、权限和安全输出，再编译为 `.lock.yml` GitHub Actions 工作流。
-- 支持 GitHub Copilot、Anthropic Claude、OpenAI Codex 和 Google Gemini 等不同执行引擎。
-- 默认只读；写操作只能通过声明的 `safe-outputs`，敏感凭证不暴露给 Agent 运行时。
-- 运行环境包含沙箱、网络限制和威胁检测，可产出 Issue、评论或 PR 供人审。
-- 官方列出的场景包括 CI 失败调查、测试覆盖改进、文档维护和仓库状态报告。
-- 2026-06-11 后可使用 Actions 内置 `GITHUB_TOKEN` 请求 Copilot，并按 Run 查看与限制 Actions 分钟和 AI Credits；不再必须维护长期 PAT。
-- 2026-07-23 GitHub Issues 增加 Rationale、Confidence 与可选 Approval，但[官方明确说明这些 Approval 是工作流便利而非服务器端安全边界](https://github.blog/changelog/2026-07-23-agent-automation-controls-in-github-issues-in-public-preview/)。
+- Source Markdown 与 Compiled `.lock.yml` 都需要审查并提交默认分支。
+- Safe Output 是写入控制，不证明输出正确。
+- Agent Job 或 Safe Output 不自动成为 Required Check，也不替代 Ruleset、Review 或 Environment Protection。
+- PR 创建后的下游 CI 触发取决于 Token、Event 和 Repository 配置。
 
-## CI/CD 相关性
+## 专题入口
 
-- 涉及阶段：代码评审、测试与门禁、CI 故障诊断。
-- 工具类别：代码仓、流水线、Agent 编排与治理。
-- 自主等级：L1—L3，取决于允许的安全输出和人工审批。
-- 涉及角色：开发者、仓库维护者、平台工程师、安全治理人员。
-
-## 对洞察的价值
-
-这是“确定性 CI/CD 之外增加 Continuous AI 层”的代表模式，说明 Agent 任务可以自然语言化，但执行边界仍需要编译期策略和确定性控制。
-
-详细使用方法、技术架构、CI Doctor、多仓编排和 Release Readiness 实践见 [[50_deepdives/github-agentic-workflows/90_report|GitHub Agentic Workflows 深度报告]]。
-
-## 限制与待验证项
-
-- 仍为公开预览，接口和计费可能变化。
-- 官方文档证明能力存在，但尚不能证明大规模生产效果。
-- Issue Confidence/Approval 仍为 Public Preview，且不能替代 Repository Permission、Safe Output、Ruleset 或 Required Check。
-
-## 可引用判断
-
-- Agentic Workflow 并不等于取消确定性流水线，而是在流水线上增加能够理解上下文和提出行动的受控决策层。
+[[50_deepdives/agent-workbench/45_github-agentic-workflows|GitHub Agentic Workflows 功能详章]]

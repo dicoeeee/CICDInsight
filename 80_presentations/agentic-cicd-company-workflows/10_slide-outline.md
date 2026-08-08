@@ -19,7 +19,7 @@ status: draft
 | 04 | AWS AgentCore × DevOps Agent | LF3 已批准；按用户要求暂停右侧与底部，只评审左侧 AgentCore Evaluations 机制方案 | `left-mechanism-solution-proposed` |
 | 05 | CI 自愈能力 | 从失败分类到独立复验与有界写回，形成可信自愈闭环 | 可编辑评审版已生成、待确认 |
 | 06 | CLI / MCP 选型 | 软件交付的 Agent 接口走向互补：CLI 走向结构化输出与 Skill 复用，MCP 接入走向渐进发现与按需加载 | 可编辑最终版已归档、事实审计与视觉验收完成 |
-| 07 | Agent 工作台与专家团 | 交付能力正在通过 Agent 工作台前台化给开发者，发布与运维能力则在后台沉淀为 Skill、专家团与治理规则 | `deep-dive-ready / 未制作` |
+| 07 | Agent 工作台与 CI/CD Agent 产品功能矩阵 | WorkBuddy、ChatGPT Work、Claude Cowork 提供任务、项目、专业 Agent 与产物工作面；GitLab、Harness Inc.、GitHub 提供 CI/CD/仓库原生 Agent 接入并保留外部接受规则 | `deep-dive-ready / 未制作` |
 
 ## 可选扩展页
 
@@ -30,7 +30,7 @@ status: draft
 - 部署与变更管理：Plan、Policy、Approval、Runbook 如何组成生产行动边界。
 - 中国厂商：评审、CloudOps 与企业研发 Agent 的差异化路线。
 
-第 07 页已通过 Deep Dive 的逐主张事实审计，可以进入后续页面结构审批；它仍是候选页，本轮不制作 PPTX。页面必须同时展示开发者工作台、通用 Agent Harness、确定性 CI/CD 控制面，并标注跨企业岗位迁移幅度尚未验证。
+第 07 页已完成具名产品功能矩阵的 Deep Dive 门禁。页面只展示入口、配置对象、任务/协作、扩展、产物、权限和 CI/CD 接入，不展示产品事实之外的企业方案；本轮不制作 PPTX。
 
 ## 待决策
 

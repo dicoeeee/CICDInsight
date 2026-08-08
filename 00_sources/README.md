@@ -10,7 +10,7 @@ as_of: 2026-08-08
 # 信息源与 Source Brief
 
 > [!info] 三条作业流共享的 L0 证据层
-> [[00_sources/agentic-cicd-source-landscape|Agentic CI/CD source landscape]] 收录 81 条 2025-07-01—2026-07-14 核心一手资料。每条均包含组织、日期、URL、来源类型、能力状态、八阶段标签、工具类别、地域、关键事实、价值和置信度/局限，因此本身就是一组结构化 Brief。[[00_sources/source-pruning-2026-07-14|信息源精简审计]]记录从 107 条候选源缩减到 80 条核心源、再增补 CLI-Anything 形成当前 81 条核心源的过程；[[00_sources/incremental-source-research-2026-07-14|增量研究记录]]保留前期排重和选源过程。下列 78 个独立 Source Brief（另加模板）对高频主题做进一步展开，可能引用核心登记之外的补充材料。
+> [[00_sources/agentic-cicd-source-landscape|Agentic CI/CD source landscape]] 收录 81 条 2025-07-01—2026-07-14 核心一手资料。每条均包含组织、日期、URL、来源类型、能力状态、八阶段标签、工具类别、地域、关键事实、价值和置信度/局限，因此本身就是一组结构化 Brief。[[00_sources/source-pruning-2026-07-14|信息源精简审计]]记录从 107 条候选源缩减到 80 条核心源、再增补 CLI-Anything 形成当前 81 条核心源的过程；[[00_sources/incremental-source-research-2026-07-14|增量研究记录]]保留前期排重和选源过程。下列 81 个独立 Source Brief（另加模板）对高频主题做进一步展开，可能引用核心登记之外的补充材料。
 
 本目录只维护可追溯事实，不决定所有事实都必须进入 Deep Dive。批量洞察可直接从本层更新分类视图和主报告；单对象研究则把相关证据映射到专题 Claim；Presentation 通过 Deep Dive 使用这些事实。
 
@@ -22,15 +22,18 @@ as_of: 2026-08-08
 - 厂商效果数据保留“厂商自述/第一方研究”标签，不外推为行业因果结论。
 - 开源 Star 仅用于关注度快照，不作为生产成熟度证明。
 
-## Agent 工作台、专家团与能力供给
+## Agent 工作台、Agent 构建与产品功能
 
-- [[00_sources/briefs/2026-tencent-workbuddy-agent-workbench|Tencent WorkBuddy Agent 工作台、专家与专家团]]
-- [[00_sources/briefs/2026-openai-chatgpt-work-codex-workspace-agents|ChatGPT Work、Codex 与 Workspace Agents]]
-- [[00_sources/research-agent-workbench-expert-team-2026-08-08|Agent 工作台、专家团与交付角色重构一手证据研究]]
+- [[00_sources/briefs/2026-tencent-workbuddy-agent-workbench|Tencent WorkBuddy 产品功能与权限边界]]
+- [[00_sources/briefs/2026-openai-chatgpt-work-codex-workspace-agents|ChatGPT Work、Codex、Projects 与 Workspace Agents 产品边界]]
+- [[00_sources/briefs/2026-anthropic-claude-cowork|Claude Cowork 产品功能、执行位置与审计边界]]
+- [[00_sources/briefs/2026-microsoft-copilot-studio-agent-governance|Microsoft Copilot Studio Agent 构建、测试与治理]]
+- [[00_sources/briefs/2026-google-gemini-enterprise-agent-platform|Google Gemini Enterprise Agent Platform 功能与状态]]
+- [[00_sources/research-agent-workbench-expert-team-2026-08-08|Agent 工作台与 CI/CD Agent 产品功能一手证据日志]]
 
 ## GitHub 与 Microsoft
 
-- [[00_sources/briefs/2026-github-agentic-workflows|GitHub Agentic Workflows]]
+- [[00_sources/briefs/2026-github-agentic-workflows|GitHub Agentic Workflows 功能、编译与 Safe Output 边界]]
 - [[00_sources/briefs/2026-github-cloud-agent-repository-control-plane|GitHub Cloud Agent Repository Control Plane]]
 - [[00_sources/briefs/2026-github-artifact-attestations-slsa|GitHub Artifact Attestations 与 SLSA]]
 - [[00_sources/briefs/2026-github-gh-aw-open-source|github/gh-aw]]
@@ -42,9 +45,9 @@ as_of: 2026-08-08
 
 ## GitLab 与 Harness
 
-- [[00_sources/briefs/2026-gitlab-duo-agent-platform|GitLab Duo Agent Platform]]
+- [[00_sources/briefs/2026-gitlab-duo-agent-platform|GitLab Duo Agent Platform 功能、执行与状态边界]]
 - [[00_sources/briefs/2026-harness-ai-platform|Harness AI Platform 2026 能力总览]]
-- [[00_sources/briefs/2026-harness-worker-agents|Harness Worker Agents]]
+- [[00_sources/briefs/2026-harness-worker-agents|Harness Inc. Worker Agents 功能与 Pipeline 边界]]
 - [[00_sources/briefs/2026-harness-worker-agent-security|Harness Worker Agent 隔离、身份与权限]]
 - [[00_sources/briefs/2026-harness-code-quality-agents|Harness Code Quality Agents]]
 - [[00_sources/briefs/2026-harness-ai-devops-agent|Harness DevOps Agent]]
@@ -70,7 +73,7 @@ as_of: 2026-08-08
 ## 代码评审、质量、安全与测试
 
 - [[00_sources/briefs/2026-atlassian-rovo-code-review-study|Atlassian Rovo Code Review Study]]
-- [[00_sources/briefs/2026-atlassian-rovo-platform-driven-development|Atlassian Platform-driven Development]]
+- [[00_sources/briefs/2026-atlassian-rovo-platform-driven-development|Atlassian Rovo Agents、Subagents、Skills 与治理]]
 - [[00_sources/briefs/2026-qodo-agentic-code-review|Qodo Agentic Code Review]]
 - [[00_sources/briefs/2026-snyk-agent-fix-architecture|Snyk Agent Fix]]
 - [[00_sources/briefs/2025-sonar-foundation-agent|Sonar Foundation Agent]]
@@ -109,7 +112,7 @@ as_of: 2026-08-08
 - [[00_sources/briefs/2025-sonatype-guide-supply-chain|Sonatype Guide 供应链情报]]
 - [[00_sources/briefs/2026-github-dependabot-agent-remediation|Dependabot 到 Coding Agent 修复闭环]]
 - [[00_sources/briefs/2026-terraform-mcp-server|Terraform MCP 自治分层]]
-- [[00_sources/briefs/2026-octopus-agentic-deployment|Octopus Agentic Deployment]]
+- [[00_sources/briefs/2026-octopus-agentic-deployment|Octopus Claude Agent Step 功能与 Alpha 边界]]
 - [[00_sources/briefs/2026-spacelift-intelligence|Spacelift Intelligence]]
 - [[00_sources/briefs/2026-akuity-agents-gitops-operations|Akuity Agents for GitOps]]
 - [[00_sources/briefs/2026-holmesgpt-sre-agent|HolmesGPT SRE Agent]]

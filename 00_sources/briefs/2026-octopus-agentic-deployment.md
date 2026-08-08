@@ -1,27 +1,26 @@
 ---
-title: Octopus Agentic Deployment 与 Claude Agent Step
+title: Octopus Claude Agent Step 功能与 Alpha 边界
 source_id: octopus-agentic-deployment-2026
 organization: Octopus Deploy
-source_type: official-docs-and-announcement
-published: 2026-06-04
-verified: 2026-07-14
-availability: mixed
+source_type: official-docs
+published: 2026-07-07
+verified: 2026-08-08
+availability: alpha
 confidence: high
 geography:
-  - australia
   - global
 lifecycle_stages:
-  - stage-6
-  - stage-7
-  - stage-8
+  - deployment
+  - release
+  - operations
 tool_categories:
   - deployment
-  - release-orchestration
-  - pipeline-agent-step
   - runbook
+  - agent-runtime-orchestration
 company_topics:
-  - octopus-deploy
+  - Octopus Deploy
 autonomy_levels:
+  - L1
   - L2
   - L3
 tags:
@@ -29,43 +28,33 @@ tags:
   - evidence/source-brief
 ---
 
-# Octopus Agentic Deployment 与 Claude Agent Step
+# Octopus Claude Agent Step 功能与 Alpha 边界
 
-## 来源
+## 一手来源
 
-- 标题：Octopus Intelligence Agent App integration with GitHub；Claude Agent Step
-- 发布或更新日期：2026-06-04；Agent Step 2026-07-07
-- 链接：[GitHub Agent HQ 集成](https://octopus.com/blog/octopus-intelligence-integration-with-github-agent-hq)；[Claude Agent Step 文档](https://octopus.com/docs/octopus-ai/claude-agent-step)
-- 来源类型：官方公告与产品文档
-- 能力状态：Agent App 可用；Claude Agent Step 为 Alpha
+- [Claude Agent Step](https://octopus.com/docs/octopus-ai/claude-agent-step)，更新 2026-07-07；访问 2026-08-08；Alpha。
+- [Claude Agent Step Tools](https://octopus.com/docs/octopus-ai/claude-agent-step/tools)，页面未标日期；访问 2026-08-08。
 
-## 一句话结论
+## 功能事实
 
-Agent 已经从部署平台外部的聊天入口进入原生发布步骤，但 Octopus 自身仍用沙箱、工具白名单、预算和 Alpha 警告约束其生产自治。
+| 字段 | 官方公开事实 |
+|---|---|
+| 入口 | Deployment Process 或 Runbook 中的 Claude Agent Step |
+| 执行位置 | Worker 或 Deployment Target 上运行 Claude Code |
+| 上下文 | Project、Environment、Release、Variable、前序 Step Log 和 Output |
+| 模式 | 只读调查或在 Target 上执行命令；可启用 Sandbox |
+| 工具 | 内置 Octopus MCP、额外 MCP Server、Skills、文件、命令和 Web Tool |
+| 权限 | 未授权 Tool Call 被拒绝并导致 Step 失败；无中途交互批准 |
+| 记录 | Task Log、Token、Cost 和完整 Transcript |
+| 失败语义 | 非零退出、非成功终态、Tool 拒绝或显式 Fail Skill 才失败；Agent 正常退出可能仍显示成功 |
 
-## 可核验事实
+## 状态与接受边界
 
-- Agent App 可从 GitHub 查询 PR 的部署状态、调查失败、调用 Runbook 并重部署受影响租户。
-- Claude Code 可作为部署 Process 或 Runbook 的原生 Step，获得环境、发布、变量和前序日志上下文。
-- Agent Step 支持工具白名单、隔离、提示注入预检、Token/轮次预算和完整会话审计。
-- Agent 可发出失败信号让确定性部署流程停止；正常退出本身不等于任务成功。
+- 产品为 Alpha，官方明确不建议用于关键、无人值守自动化。
+- Agent Step 进入 Deployment/Runbook 不表示可以绕过 Project、Environment 或 Target 权限。
+- Task Log 和 Transcript 记录过程，不判断任务目标是否真正完成。
+- 重要结果需要后续确定性检查；当前没有中途批准机制。
 
-## CI/CD 相关性
+## 专题入口
 
-- 涉及阶段：环境/部署、发布/变更、发布后验证与恢复。
-- 工具类别：持续交付、Agent Step、MCP、Runbook。
-- 自主等级：L2—L3。
-- 涉及角色：发布工程、平台工程、SRE、开发者。
-
-## 对洞察的价值
-
-补齐了“发布阶段只有建议或 Preview”的证据空白：Agent Step 已真实出现，但关键发布自治仍是 Alpha 或批准后执行，成熟度不应上调到普遍 L4。
-
-## 限制与待验证项
-
-- 官方要求不要把 Alpha Step 用于关键无人值守自动化。
-- 尚无运行中人工审批和长期生产可靠性数据。
-
-## 可引用判断
-
-- 发布平台正在把 Agent 变成一等步骤，但确定性成功条件、审批和回退仍是生产边界。
+[[50_deepdives/agent-workbench/30_case-map|CI/CD 与部署原生 Agent 对照矩阵]]

@@ -112,51 +112,23 @@ Qodo 的专业 Reviewer、AWS 的多 Agent 根因调查、GitLab Flow 和早期�
 
 Harness 的产品组合正好对应这三类边界：Code Quality/AutoFix 主要通过 PR；Worker Agent 进入 Pipeline；AI SRE 将动态 Scribe/RCA 与预定义 Runbook 分开。其经验不是让所有步骤 Agent 化，而是把概率推理嵌入可审批、可复验、可回退的确定性结构。
 
-## 三、人员角色与能力的变化
+## 三、Agent 产品的用户面、配置面与接受面
 
-### 核心职责分层：交付能力前台化，交付知识后台产品化
+### Agent 工作台与 CI/CD Agent 的公开产品功能
 
-新增的 Agent 工作台证据把既有角色变化进一步具体化。WorkBuddy 直接展示团长拆解、多专家并行和整合交付；ChatGPT Work 与 Codex 展示目标、项目上下文、Subagent 和候选产物工作面；WorkBuddy Enterprise 与 ChatGPT Workspace Agents 又把专家、Skill、App、版本、分享、发布和成员权限留给管理员/Builder。这些产品机制共同支持一个中高置信结构判断：
+截至 2026-08-08，具名产品资料可直接确认以下功能：WorkBuddy 提供 Task、Project、Expert/Expert Team、Skill、Connector、Automation 和文件/变更/预览产物；ChatGPT Work 提供 Local/Cloud 长任务、Projects 和可审查结果，Work/Codex 可调用 Subagent；Claude Cowork 提供 Local/Remote Session、Project Memory、Plugin Subagent 和 Scheduled Task。三者的执行位置、上下文和权限模型不同，官方资料没有把它们描述为 CI/CD 原生发布控制面。
 
-> **交付能力正在通过 Agent 工作台前台化给开发者；发布与运维能力则适合在后台沉淀为 Skill、专家团与治理规则。**
+CI/CD 原生入口出现在另外四个产品面：GitLab Duo Flow 可通过 CI/CD Runner 执行；Harness Inc. Worker Agent 是 Pipeline Step；GitHub Agentic Workflow 编译为 Actions Workflow 并通过 Safe Output 写入 Issue、Comment 或 PR；Octopus Claude Agent Step 位于 Deployment Process 或 Runbook。它们生成的 MR、变量、PR 或命令结果仍由项目规则、后续 Pipeline Step、Required Check 或部署流程决定是否接受。详细功能、状态和证据边界见 [[50_deepdives/agent-workbench/README|Agent 工作台产品功能与控制边界专题]]。
 
-该判断必须分成三层：
+### 三类产品表面
 
-| 层 | 当前职责 | 接受边界 |
+| 产品表面 | 具名产品公开功能 | 产品边界 |
 |---|---|---|
-| 开发者工作台 | 目标、上下文、过程观察、候选产物审查 | 开发者对业务意图和服务结果负责 |
-| 通用 Agent Harness | 专家、Skill、工具、身份、权限、调度、评测、预算、审计和生命周期 | 发布/运维/SRE/平台/安全共同经营；主 Agent 不自授权 |
-| 确定性 CI/CD 控制面 | Test、Scan、Policy、Signature、Approval、SLO、Release、Rollback | 外部 Oracle/批准者最终接受或拒绝 |
+| 用户任务面 | WorkBuddy 提供 Task、Project、Expert/Expert Team、Skill、Connector、Automation；ChatGPT Work 提供 Local/Cloud 长任务、Projects 和 Subagents；Claude Cowork 提供 Local/Remote Session、Project Memory、Plugin Subagent 和 Scheduled Task | 三者的任务状态、上下文来源、执行位置和权限模式各不相同；官方资料未将其定义为 CI/CD 发布控制面 |
+| 配置与管理面 | WorkBuddy 企业版管理专家 ID、版本、启用状态和可见范围；OpenAI Workspace Admin 管理 Work 访问、权限模式和 Workspace Agent 的共享/动作范围；Cowork 组织管理员管理 Plugin 分发、网络和 OpenTelemetry；GitLab、Harness Inc. 与 GitHub 分别通过项目、目录/Pipeline 和仓库配置管理 Agent | 产品公开的目录、版本、身份、权限或日志能力不能跨产品补全，也不表示全部单项能力处于 GA |
+| CI/CD 接受面 | GitLab Flow 可进入 CI/CD Runner；Harness Inc. Worker Agent 作为 Pipeline Step；GitHub Agentic Workflow 编译为 Actions Workflow；Octopus Claude Agent Step 位于 Deployment Process 或 Runbook | Agent 生成的 MR、变量、PR 或命令结果仍由项目规则、后续 Pipeline Step、Required Check、Review、Environment Rule 或部署流程决定是否接受 |
 
-当前产品只能证明开发者自助入口和后台供给机制已经出现；“发布/运维人员已普遍完成岗位迁移”仍是未验证趋势。详细证据、反例和 RACI 见 [[50_deepdives/agent-workbench/README|Agent 工作台、专家团与交付角色重构专题]]。
-
-### 1. 开发者
-
-减少：逐条查日志、重复修配置、机械补测试和低价值评审。
-
-增加：描述意图与验收条件、选择或修正 Agent 计划、判断业务语义、审查证据、处理异常和对最终变更负责。开发者需要理解模型不确定性、工具权限和 Agent 生成代码的安全风险。
-
-### 2. 平台工程与研发效能团队
-
-从“做一个门户和模板”转为“运营 Agent 工作环境”。新增职责包括上下文产品、Tool/MCP/CLI/Skill 目录、长尾工具接口改造、Agent Runtime、权限与预算、黄金评测集、回放、失败分类和自治等级运营。接口生成器可以降低接入成本，但平台团队仍需与工具 Owner、安全团队共同验收命令语义、危险动作和版本生命周期。
-
-高质量平台是 Agent 规模化的前提。DORA 研究提示，平台薄弱时，AI 可能提高产出同时恶化稳定性。参考 [[00_sources/briefs/2026-dora-platform-engineering-ai|DORA Platform Engineering]]。
-
-### 3. QA 与测试工程
-
-从主要编写测试步骤转为设计风险模型、测试意图、Oracle、数据和覆盖策略；评估 Agent 是否只是让当前测试变绿，还是改善长期可维护性。需要维护未来测试、变异测试、真实失败回放和 Agent 生成测试的质量基线。
-
-### 4. 安全、合规与 IAM
-
-新增 Agent 身份、任务级授权、委托链、工具供应链、Prompt Injection、数据边界、模型与 Skill 版本审计。安全团队需要将 Policy 放到模型外部执行，同时为低风险自动修复设计可操作的例外和批准机制。
-
-### 5. SRE、运维与发布管理
-
-从跨工具收集信息转为设计 SLO、Runbook、恢复边界和验证 Agent 调查；保留事件指挥、业务风险取舍和高影响动作审批。发布经理从状态汇总者转向风险与证据设计者。
-
-### 6. 工程管理者
-
-需要避免用生成代码量、Agent 使用率或节省工时作为唯一目标。管理者应关注交付稳定性、人工认知负荷、失败类型、责任是否清晰和平台瓶颈，并允许团队在证据不足时降低自治等级。
+对应原子事实、状态与官方链接见 [[50_deepdives/agent-workbench/20_evidence-map|功能证据矩阵]]，十一产品对照见 [[50_deepdives/agent-workbench/30_case-map|产品功能矩阵]]。
 
 ## 四、治理与安全的变化
 
