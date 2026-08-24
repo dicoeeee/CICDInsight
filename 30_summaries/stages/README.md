@@ -5,7 +5,7 @@ tags:
   - synthesis/stages
 status: complete
 workflow: batch-insight
-as_of: 2026-07-16
+as_of: 2026-08-09
 ---
 
 # Agentic CI/CD 八阶段维度总结
@@ -128,13 +128,13 @@ Tricentis、Harness、CircleCI、GitHub/GitLab 均覆盖部分能力。Harness A
 
 ### 证据与成熟度
 
-CI 诊断和修复已从单一 L2 场景分化：GitHub CI Doctor、GitLab Fix Pipeline 和 CircleCI Chunk 的主要安全出口是诊断、Suggestion 或 PR；Harness CI Autofix 与 Nx Self-Healing CI 已展示“修复—重触发/重跑—写回分支”的 SH3 机制，Nx 还能按 Task 白名单 Auto-apply。它们仍不能被统称为全仓自治：Merge、完整 Required Checks 与生产发布继续外置，跨语言、跨平台、硬件相关和非确定性构建仍难。参考 [[00_sources/briefs/2026-circleci-chunk-agent|CircleCI Chunk]]、[[00_sources/briefs/2026-githubnext-agentics-examples|GitHub Next Examples]]、[[00_sources/briefs/2026-nx-self-healing-ci|Nx Self-Healing CI]]。
+CI 诊断和修复已从单一 L2 场景分化：GitHub CI Doctor 是 Public Preview 框架中的参考调查 Workflow，GitLab Fix Flow GA 但停在 Suggestion/MR；GitHub Agentic Autofix 在 Code Scanning 微域用 CodeQL 复验，CircleCI Chunk Beta 把候选接回 Validation Pipeline，Harness Worker Autofix 描述受治理的 Build 重触发循环，Nx 明确复跑原失败 Task 并可对白名单任务 Auto-apply。Buildkite 当前提供 Retry、Test State 与 Agent/MCP 底座，本轮材料未证明原生通用补丁闭环。它们仍不能被统称为全仓自治：Merge、完整 Required Checks 与生产发布继续外置。参考 [[50_deepdives/cicd-self-healing/35_company-mechanism-audit|六家公司机制审计]]。
 
 成熟实践先用失败分类器把 Code、Flaky、Transient、Runner/Cache、External 和 Unknown 分流：瞬态故障进入有限重试/重调度快环，代码与配置进入 Agent 复现和 Fix-forward 慢环，Unknown 停止并接管。测试、扫描和 Policy 必须由 Agent 外部身份执行，禁止以 Skip、Ignore 或降阈值换取绿灯。完整方法见 [[50_deepdives/cicd-self-healing/90_report|CI/CD 问题自愈深度报告]]。
 
-GitHub Agentic Workflows 给出了可复用的复杂链路：确定性 Step 先收集并裁剪 Workflow Run、Job Log、Commit 和 Runner 信息；只读 Agent 做根因假设；结果通过 Diagnostic Issue 或 Fix PR Safe Output 外化；原 Required Checks 再次验证。多仓时再由 Orchestrator 派发每仓 Worker，而不是给单 Agent 全组织写权限。详见 [[50_deepdives/github-agentic-workflows/90_report#场景 1：CI Failure Diagnosis 与 Fix PR|CI Failure 实践]]。
+GitHub Agentic Workflows 给出了可复用的复杂链路：确定性 Step 先收集并裁剪 Workflow Run、Job Log、Commit 和 Runner 信息；只读 Agent 做根因假设；结果通过 Diagnostic Issue 或 Safe Output 外化。PR 是否触发原 Required Checks 取决于 Token、Event 和仓库配置，不能由 Safe Output 自动补全。多仓时再由 Orchestrator 派发每仓 Worker，而不是给单 Agent 全组织写权限。详见 [[50_deepdives/github-agentic-workflows/90_report#场景 1：CI Failure Diagnosis 与 Fix PR|CI Failure 实践]]。
 
-Harness 提供另一种平台原生组合：DevOps Agent 的 Error Analyzer 生成根因/修复建议，Code Quality AutoFix 通过分支/PR 交付，通用 Worker Agent 作为 Pipeline Step 承载开放式修复循环，而原 Build/Test/Scan/OPA 继续做 Oracle。Worker Runtime 的 Secret/Network 隔离和单次委托权限提高了 L3 的工程可行性，但不改变“禁止自动 Merge、禁止 Agent 弱化 Gate”的上限。见 [[50_deepdives/harness-company/90_report#5.4 Worker Runtime：假设 Agent 已被攻陷|Harness Runtime 原理]]。
+Harness 提供另一种平台原生组合：Code Quality AutoFix 通过分支/PR 交付，通用 Worker Agent 作为 Pipeline Step 承载受 Max Turns 限制的修复循环。RBAC、OPA、Approval、Audit 与 Scoped Credential 控制谁能执行什么，但它们不是软件正确性 Oracle；本轮公开一手材料未证明所有 AutoFix/Worker 修复都会运行完整 Required Checks。见 [[50_deepdives/harness-company/90_report#5.4 Worker Runtime：假设 Agent 已被攻陷|Harness Runtime 原理]]。
 
 ### 建议指标
 

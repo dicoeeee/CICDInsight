@@ -4,8 +4,8 @@ source_id: nx-self-healing-ci-2026-04-22
 organization: Nx
 source_type: official-docs-and-product-blog
 published: 2026-04-22
-verified: 2026-07-15
-availability: ga
+verified: 2026-08-09
+availability: available-current-docs-no-stage-label
 confidence: high
 geography:
   - global
@@ -34,8 +34,9 @@ tags:
 - 标题：[AI-Powered Self-Healing CI](https://nx.dev/docs/features/ci-features/self-healing-ci)、[Self-Healing CI Now Suggests What to Auto-Apply](https://nx.dev/blog/self-healing-ci-auto-apply-suggestions)
 - 组织或项目：Nx / Nx Cloud
 - 关键更新日期：2026-04-22
+- 访问日期：2026-08-09
 - 来源类型：官方产品文档与官方博客
-- 能力状态：Nx Cloud 正式文档能力；具体套餐、区域和自托管条件需按部署核验
+- 能力状态：官方称 Hobby、Team、Enterprise 计划可用；当前页面未给整套能力统一 GA/Preview 标签
 
 ## 一句话结论
 
@@ -49,12 +50,13 @@ Nx 把自愈权绑定到 CI Task 和 PR 分支：Agent 利用 Project Graph 与 
 - Protected Branch 不生成修复；可通过 Task Pattern 指定允许和禁止修复的任务。
 - `SELF_HEALING.md` 可定义 Off-limits Area、Fix Preference、Predefined Fix 和上下文。
 - Auto-apply 只对组织选定的 Task 自动把验证后的修改推回 PR Branch；2026-04 增加基于实际历史的候选建议。
+- Flaky Task 与代码修复分流：检测到 Flaky 后可通过空提交重新触发 PR CI；这恢复执行，不证明 Flaky 根因已消除。
 
 ## CI/CD 相关性
 
 - 涉及阶段：测试门禁、编译和构建。
 - 工具类别：Build Graph、Task Orchestration、CI Failure Remediation。
-- 自主等级：分析与 Patch 为 L1—L2；是否需要人批准写回取决于 Auto-apply 配置。Merge/Deploy 权仍在外部。
+- 自主等级：分析与 Patch 为 L1—L2；即使 Auto-apply 自动写入 PR Branch，Merge/Deploy 权仍在外部。
 - 自愈完整度：默认 SH3；白名单 Auto-apply 在 PR 分支微域可达到局部 SH4。
 
 ## 对洞察的价值
@@ -66,6 +68,7 @@ Nx 把自愈权绑定到 CI Task 和 PR 分支：Agent 利用 Project Graph 与 
 - 核心 Nx 项目开源不代表 Self-Healing CI 服务本身开源。
 - 官方文档证明机制，不提供跨客户错误修复率、缺陷逃逸率和总成本。
 - 只重跑失败 Task 仍不能替代仓库完整 Required Checks 和业务语义审查。
+- 官方页面未细化 VCS 写身份和 Token Scope，精确权限仍需部署侧核验。
 
 ## 可引用判断
 

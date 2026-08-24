@@ -5,7 +5,7 @@ tags:
   - research/findings
   - scenario/self-healing
 status: complete
-as_of: 2026-07-15
+as_of: 2026-08-09
 confidence: high
 ---
 
@@ -19,7 +19,7 @@ Agent 只擅长在不完整信号下提出假设和候选动作。真正闭环�
 
 ## F2：2026 年的产业成熟顺序是“诊断 → PR → 分支闭环 → 生产 Runbook”
 
-GitHub、GitLab 和 CircleCI 已把调查和修复 PR 产品化；Nx 和 Harness 展示验证后写回/循环重跑；Akuity 将动作限定到 Runbook、Scope 与批准；AWS 的生产产品仍明确不执行 Remediation。行业并非同时到达同一自治水平。
+GitHub 把 Preview 调查框架与 Code Scanning 安全微闭环分开；GitLab Fix Flow GA 但停在 Suggestion/MR；CircleCI Chunk 以 Beta 形态把候选接回 Validation Pipeline；Nx 明确复验原失败 Task；Harness 公开受治理的 Build 重触发循环；Buildkite 当前更像 Retry、Test Data 与 Agent/MCP 底座。行业并非同时到达同一闭环终点。
 
 **置信度：高（机制），中（跨企业效果）。** 公开资料以厂商一手材料为主，缺少统一基准。
 
@@ -33,7 +33,7 @@ Agent 会朝可见的奖励优化。若唯一目标是 CI Green，它可能修�
 
 代码缺陷、Flaky Test、瞬态网络、Runner/缓存、外部依赖、配置和未知错误需要完全不同的动作。如果没有分类，Retry 会掩盖缺陷，代码 Agent 会“修”基础设施，缓存清理会扩大影响。分类器应允许输出 `unknown`，并以证据而非自然语言自信度决定动作。
 
-**置信度：高。** CircleCI 与 Nx 已把瞬态/Flaky/Agent 机器失败分别处理。
+**置信度：高。** GitLab、CircleCI、Harness、Nx、Buildkite 都提供结构化或有限 Retry/隔离机制，但这些快环均不自动等于根因修复。
 
 ## F5：快环恢复与慢环根因修复应分开
 
@@ -43,7 +43,7 @@ Agent 会朝可见的奖励优化。若唯一目标是 CI Green，它可能修�
 
 ## F6：PR 是当前最重要的“安全缓冲区”，但不是安全证明
 
-PR 提供 Diff、Review、Required Check、Owner 和回退入口，所以成为 GitHub、GitLab、Harness、CircleCI、Nx、Dependabot 和 HolmesGPT 的共同交付面。但 Agent PR 仍可能改变测试语义、扩大范围或带来长期维护问题；Merge Rate 只能说明工作流接受度，不能证明修复正确。
+PR/MR 提供 Diff、Review、Required Check、Owner 和回退入口，所以成为 GitHub Agentic Autofix、GitLab Fix Flow、Harness、CircleCI、Nx、Dependabot 和 HolmesGPT 的共同交付面。但 Agent PR 仍可能改变测试语义、扩大范围或带来长期维护问题；Merge Rate 只能说明工作流接受度，不能证明修复正确。
 
 **置信度：高。** 2026 年 Agent PR 实证研究也提示 Merge Outcome 不是充分的能力/质量指标。
 
@@ -76,3 +76,9 @@ Agent 会增加复现、候选尝试、测试、扫描和回放次数。Time-to-
 CI-Repair-Bench 在 567 个真实 CI 故障、103 个仓库和 12 类错误上，以原始完整 CI 重跑验证修复；最佳受测模型只达到 18.9%。这不否定 Nx/Harness 等在筛选任务上的产品价值，反而说明应对白名单 Lint/Type/Sync、依赖、环境和配置分别建立 repair@1、完整 CI、人工接受和长期复发指标，不能用一个总自愈率掩盖难度差异。
 
 **置信度：中高。** 研究是 2026 年原始预印本，仍需同行评审和企业私有任务复现。
+
+## F12：六家平台的差异不是“谁更智能”，而是闭环停在哪里
+
+GitHub 的强证据来自 Safe Output 和 CodeQL 微域；GitLab 把失败上下文交付为 Suggestion/MR；CircleCI 把候选接回 Validation Pipeline；Harness 把 Agent 放进 RBAC、OPA、Approval 和 Audit 的 Pipeline；Nx 把自治缩小到失败 Task 与 PR Branch；Buildkite 提供 Retry、Test State 和可组合 Agent/MCP 底座。用同一个“是否支持 AI 自愈”布尔值比较它们，会同时丢失验证粒度、身份边界和生命周期。
+
+**置信度：高（机制），中（效果）。** 六家公司官方材料足以证明机制差异，但没有统一的 Repair@1、完整 Required Checks、长期复发和总成本基准。

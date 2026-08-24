@@ -4,7 +4,7 @@ source_id: gitlab-duo-agent-platform-docs-2026
 organization: GitLab
 source_type: official-docs
 published: null
-verified: 2026-08-08
+verified: 2026-08-09
 availability: ga-platform-with-mixed-features
 confidence: high
 geography:
@@ -38,13 +38,13 @@ tags:
 
 | 页面 | 日期/状态 | 直接支持的功能 |
 |---|---|---|
-| [Platform overview](https://docs.gitlab.com/user/duo_agent_platform/) | 18.2 Beta、18.8 GA；访问 2026-08-08 | GA/Beta/Experiment 功能表、Agents 与 Flows |
-| [Flow execution](https://docs.gitlab.com/user/duo_agent_platform/flows/execution/) | GitLab 18.3 引入；访问 2026-08-08 | UI/CI 与 IDE/Local 执行、Runner、Duo CLI、WebSocket、Sandbox |
-| [Agent config](https://docs.gitlab.com/user/duo_agent_platform/flows/agent_config_yml/) | 页面未标日期；访问 2026-08-08 | Image、Setup Script、Network Policy、默认分支读取 |
-| [Customize](https://docs.gitlab.com/user/duo_agent_platform/customize/) | 页面未标日期；访问 2026-08-08 | Rules、`AGENTS.md`、MR Instructions、Agent Skills、Custom Flow、MCP |
-| [Flows API](https://docs.gitlab.com/api/duo_agent_platform_flows/) | 页面未标日期；访问 2026-08-08；Create Flow 为 Experiment | Goal、Context、Privileges、Environment、Catalog Version、问询开关 |
-| [Execution variables](https://docs.gitlab.com/user/duo_agent_platform/flows/execution_variables/) | 页面未标日期；访问 2026-08-08 | Composite Identity、Token 与变量范围 |
-| [Security threats](https://docs.gitlab.com/user/duo_agent_platform/security_threats/) | 页面未标日期；访问 2026-08-08 | Surface-specific Sandbox、Network、Identity、人类批准与 Sanitization |
+| [Platform overview](https://docs.gitlab.com/user/duo_agent_platform/) | 18.2 Beta、18.8 GA；访问 2026-08-09 | GA/Beta/Experiment 功能表、Agents 与 Flows |
+| [Flow execution](https://docs.gitlab.com/user/duo_agent_platform/flows/execution/) | GitLab 18.3 引入；访问 2026-08-09 | UI/CI 与 IDE/Local 执行、Runner、Duo CLI、WebSocket、Sandbox |
+| [Agent config](https://docs.gitlab.com/user/duo_agent_platform/flows/agent_config_yml/) | 页面未标日期；访问 2026-08-09 | Image、Setup Script、Network Policy、默认分支读取 |
+| [Customize](https://docs.gitlab.com/user/duo_agent_platform/customize/) | 页面未标日期；访问 2026-08-09 | Rules、`AGENTS.md`、MR Instructions、Agent Skills、Custom Flow、MCP |
+| [Flows API](https://docs.gitlab.com/api/duo_agent_platform_flows/) | 页面未标日期；访问 2026-08-09；Create Flow 为 Experiment | Goal、Context、Privileges、Environment、Catalog Version、问询开关 |
+| [Execution variables](https://docs.gitlab.com/user/duo_agent_platform/flows/execution_variables/) | 页面未标日期；访问 2026-08-09 | Composite Identity、Token 与变量范围 |
+| [Security threats](https://docs.gitlab.com/user/duo_agent_platform/security_threats/) | 页面未标日期；访问 2026-08-09 | Surface-specific Sandbox、Network、Identity、人类批准与 Sanitization |
 
 ## 功能事实
 
@@ -71,3 +71,5 @@ tags:
 ## 专题入口
 
 [[50_deepdives/agent-workbench/43_gitlab-duo-agent-platform|GitLab Duo Agent Platform 功能详章]]
+
+CI 失败修复的专项证据见 [[00_sources/briefs/2026-gitlab-fix-cicd-pipeline-flow|GitLab Duo Fix CI/CD Pipeline Flow]]；Platform GA 不能替代对 Flow 输出、完整 Pipeline 复验和 MR 门禁的逐项判断。

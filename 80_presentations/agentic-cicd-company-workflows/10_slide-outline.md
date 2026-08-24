@@ -4,6 +4,7 @@ tags:
   - research/agentic-cicd
   - deliverable/presentation
 status: draft
+as_of: 2026-08-09
 ---
 
 # Slide Outline
@@ -18,6 +19,7 @@ status: draft
 | 03 | GitLab | GitLab 公司页；主张待公司 Deep Dive 形成 | `blocked-by-deep-dive` |
 | 04 | AWS AgentCore × DevOps Agent | LF3 已批准；按用户要求暂停右侧与底部，只评审左侧 AgentCore Evaluations 机制方案 | `left-mechanism-solution-proposed` |
 | 05 | CI 自愈能力 | 从失败分类到独立复验与有界写回，形成可信自愈闭环 | 可编辑评审版已生成、待确认 |
+| 05B | 六家公司 CI 自愈总览 | CI 自愈的分水岭不是能否解释红灯，而是候选修复能否经过独立复验后被有界写回 | `deep-dive-ready / visual pending` |
 | 06 | CLI / MCP 选型 | 软件交付的 Agent 接口走向互补：CLI 走向结构化输出与 Skill 复用，MCP 接入走向渐进发现与按需加载 | 可编辑最终版已归档、事实审计与视觉验收完成 |
 | 07 | Agent 工作台与 CI/CD Agent 产品功能矩阵 | WorkBuddy、ChatGPT Work、Claude Cowork 提供任务、项目、专业 Agent 与产物工作面；GitLab、Harness Inc.、GitHub 提供 CI/CD/仓库原生 Agent 接入并保留外部接受规则 | `deep-dive-ready / 未制作` |
 

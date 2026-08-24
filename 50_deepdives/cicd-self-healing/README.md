@@ -8,7 +8,7 @@ tags:
   - research/deep-dive
   - scenario/self-healing
 status: complete
-as_of: 2026-07-15
+as_of: 2026-08-09
 topic_id: cicd-self-healing
 topic_type: scenario
 stages:
@@ -19,13 +19,13 @@ stages:
   - post-release-operations
 confidence: high
 presentation_ready: true
-refresh_after: 2026-09-15
+refresh_after: 2026-10-09
 ---
 
 # CI/CD 问题自愈专题
 
 > [!abstract] 当前判断
-> CI/CD 自愈不是“让 Agent 看见红灯后随便改到绿”，而是一个有边界的控制系统：先分类失败，再把证据、候选修复、独立验证、受控执行、观察与回退连接起来。2026 年业界最成熟的是 CI 失败的诊断和修复 PR；自动验证、写回 PR 分支正在成熟；生产环境中的真正闭环仍只适合预批准、低爆炸半径 Runbook。
+> CI/CD 自愈不是“让 Agent 看见红灯后随便改到绿”，而是一个有边界的控制系统：先分类失败，再把证据、候选修复、独立验证、受控执行、观察与回退连接起来。截至 2026-08-09，六家代表方案分别停在重试底座、诊断、Suggestion/PR、原 Task 复验或受治理循环；产品状态不能替代闭环判级。
 
 ## 关键结论
 
@@ -35,6 +35,7 @@ refresh_after: 2026-09-15
 4. 测试、扫描、策略、签名和 SLO 必须由 Agent 外部定义；允许 Agent 修改 Oracle，就会出现“门禁变绿、问题未愈”。
 5. AWS DevOps Agent 等生产调查产品可以自动启动调查并生成缓解计划，但官方明确不代替操作员执行，属于 SH1—SH2，不应写成生产 L4 自愈。
 6. 近期最值得试点的是可复现的 Lint/Type/Build/Dependency 失败、明确瞬态错误和非生产 GitOps Runbook；Flaky Test、跨仓回归和生产恢复需要更严格的分流与停止条件。
+7. 六家公司没有同一种“自愈产品”：GitHub 把通用调查与安全微闭环分开，GitLab 停在 Suggestion/MR，CircleCI、Harness、Nx 以不同粒度接回验证，Buildkite 当前更像 Agent 的 CI 底座。
 
 ## 专题导航
 
@@ -44,11 +45,14 @@ refresh_after: 2026-09-15
 | Question Tree | 完成 | [[50_deepdives/cicd-self-healing/10_question-tree|问题树]] |
 | Evidence Map | 完成 | [[50_deepdives/cicd-self-healing/20_evidence-map|证据矩阵]] |
 | Case Map | 完成 | [[50_deepdives/cicd-self-healing/30_case-map|案例比较]] |
+| Company Mechanism Audit | 完成 | [[50_deepdives/cicd-self-healing/35_company-mechanism-audit|六家公司机制审计]] |
 | Labs | 已设计、未执行 | [[50_deepdives/cicd-self-healing/40_labs/README|验证实验]] |
 | Findings | 完成 | [[50_deepdives/cicd-self-healing/50_findings|分析发现]] |
 | Playbook | 完成 | [[50_deepdives/cicd-self-healing/60_playbook|企业实践手册]] |
 | Report | 完成 | [[50_deepdives/cicd-self-healing/90_report|完整报告]] |
 | Research Evidence | 完成 | [[50_deepdives/cicd-self-healing/research-evidence|一手证据底稿]] |
+| Six-company Research | 完成 | [[50_deepdives/cicd-self-healing/research-six-company-mechanisms-2026-08-09|六家公司一手研究底稿]] |
+| Fact Audit | 完成 | [[50_deepdives/cicd-self-healing/70_fact-audit|逐主张事实审计]] |
 
 ## 上下游关系
 

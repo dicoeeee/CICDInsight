@@ -5,7 +5,7 @@ tags:
   - research/charter
   - scenario/self-healing
 status: complete
-as_of: 2026-07-15
+as_of: 2026-08-09
 ---
 
 # CI/CD 问题自愈研究边界
@@ -26,7 +26,7 @@ as_of: 2026-07-15
 
 ## 重点观察对象
 
-GitHub Agentic Workflows/CI Doctor、GitLab Fix CI/CD Pipeline、Harness AutoFix/Worker Agents、Nx Self-Healing CI、CircleCI Chunk、Snyk Agent Fix、GitHub Dependabot Agent Remediation、BrowserStack Self-Heal、Akuity Agents、HolmesGPT 和 AWS DevOps Agent。
+本轮六家公司主审计对象为：GitHub Actions Rerun、Agentic Workflows/CI Doctor、Agentic Autofix；GitLab CI Retry 与 Fix CI/CD Pipeline Flow；CircleCI Automatic Rerun 与 Chunk；Harness Failure Strategy、Code Quality AutoFix 与 Worker Agents；Nx Flaky Retry 与 Self-Healing CI；Buildkite Retry、Test Engine、失败分析插件与 Agent/MCP 底座。Snyk、Dependabot、BrowserStack、Akuity、HolmesGPT 和 AWS DevOps Agent 继续作为专项对照。
 
 ## 非目标
 
@@ -39,8 +39,10 @@ GitHub Agentic Workflows/CI Doctor、GitLab Fix CI/CD Pipeline、Harness AutoFix
 
 ## 观察口径
 
-- 观察日：2026-07-15；重点来源为 2025 年下半年以后，优先 2026 年材料；
+- 观察日：2026-08-09；重点来源为 2025 年下半年以后，优先 2026 年材料；
 - 产品事实优先官方文档、官方工程博客、官方仓库和原始研究；
 - 厂商效果指标明确标记为第一方自述，不外推为行业因果结论；
 - “实验已设计”和“实验已执行”严格分开；本专题实验尚未执行；
 - 自愈完整度用 `SH0—SH4`，行动权限继续用仓库统一的 `L0—L4`，两者不混用。
+- 平台、Flow、Agent、Endpoint、插件和参考实现分别记录生命周期；“已文档化”不自动等于 GA。
+- 未检索到的能力只写“本轮公开一手材料未证明”，不写成产品不存在。

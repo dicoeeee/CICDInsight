@@ -8,24 +8,24 @@ tags:
   - research/report
   - scenario/self-healing
 status: complete
-as_of: 2026-07-15
+as_of: 2026-08-09
 confidence: high
 ---
 
 # CI/CD 问题自愈深度洞察报告
 
-**观察日：** 2026-07-15<br>
+**观察日：** 2026-08-09<br>
 **重点时间窗：** 2025 年下半年至 2026 年<br>
 **覆盖阶段：** 测试/门禁、编译/构建、依赖与安全、部署/发布、发布后恢复<br>
 **核心问题：** 如何让 CI/CD 故障从“自动发现”走向“可验证、可回退、有边界的恢复”
 
 > [!summary] 一句话判断
-> 2026 年 CI/CD 自愈已经从日志摘要进入“诊断—Patch/PR—自动复验”的实用阶段，但真正的生产闭环仍很稀缺。企业近期不应追求一个能处理所有红灯的 Agent，而应把自治批准到具体的“故障类别 × 环境 × 动作”，用独立 Oracle、短期身份、有限重试、Circuit Breaker 和回退把每个微闭环做实。
+> 2026 年 CI/CD 自愈已经从日志摘要进入“诊断—Patch/PR—局部复验”的实用阶段，但六家公司停在不同闭环终点，真正的生产闭环仍很稀缺。企业近期不应追求一个能处理所有红灯的 Agent，而应把自治批准到具体的“故障类别 × Task × 分支/环境 × 动作”，用独立 Oracle、短期身份、有限重试、Circuit Breaker 和回退把每个微闭环做实。
 
 ## 一、核心结论
 
 1. **“自愈”是闭环完整度，不是产品名。** 自动调查是 SH1，生成 PR 是 SH2，在隔离区由原 Gate 复验是 SH3，自动动作后持续观察并能回退才是 SH4。
-2. **当前产业主流是 SH1—SH3。** GitHub、GitLab、CircleCI 已把 CI 调查和修复 PR 产品化；Nx 和 Harness 正把自动复验、分支写回与有界循环产品化；生产 SH4 主要存在于预批准 Runbook 和非生产范围。
+2. **当前产业主流是 SH1—SH3，但状态与闭环不能合并。** GitHub Agentic Workflows/Autofix 为 Public Preview，GitLab Fix Flow GA，CircleCI Chunk Beta，Harness/Nx/Buildkite 的相关能力需按子能力记录；产品阶段不自动决定 SH 等级。
 3. **权限等级与自愈完整度正交。** 一个 Agent 可在临时分支完成 SH3，但对主分支仍只有 L2；自动启动生产调查不意味着拥有 L3/L4 处置权。
 4. **失败分类比修复生成更关键。** 代码缺陷、Flaky、网络、Runner、缓存、外部依赖和部署漂移的正确动作完全不同；不分类会导致 Retry Storm、错误 Patch 和故障掩盖。
 5. **Agent 不得控制自己的成功判据。** 测试、静态扫描、Policy、签名、Required Check 和 SLO 由独立身份运行；禁止通过 Skip、Ignore、阈值下调或更换测试集制造“伪绿灯”。
@@ -57,29 +57,33 @@ flowchart LR
 |---|---|---|---|
 | SH0 感知 | 检测、聚合、告警 | 事件和证据包 | 传统 CI Event、SLO Alert |
 | SH1 诊断 | 分类、根因假设、建议 | Diagnostic Issue/Report | GitHub CI Doctor 的调查、AWS DevOps Agent |
-| SH2 候选修复 | 生成 Patch、Suggestion、PR 或 Plan | 可审查变更 | GitLab Fix Pipeline、Dependabot Agent、CircleCI Chunk |
-| SH3 验证修复 | 隔离执行候选，由外部 Gate 复验并写回受限目标 | 已验证 PR Branch/Runbook Result | Nx Self-Healing、Harness CI Autofix |
+| SH2 候选修复 | 生成 Patch、Suggestion、PR 或 Plan | 可审查变更 | GitLab Fix Pipeline、Dependabot Agent、Harness Code Quality AutoFix |
+| SH3 验证修复 | 隔离执行候选，由外部 Gate 复验并写回受限目标 | 已验证 PR Branch/Runbook Result | GitHub Agentic Autofix 安全微域、CircleCI Chunk、Nx Self-Healing、Harness Worker Autofix（按模板） |
 | SH4 有界闭环 | 自动触发、执行预授权动作、观察并回退 | 自动恢复与完整审计 | Nx 白名单 Auto-apply 的 PR 微域、非生产 GitOps Runbook |
 
 ### SH 与 L 不能合并
 
 本仓库统一的 `L0—L4` 描述 Agent 的行动权限；`SH0—SH4` 描述恢复链条完整度。两者必须分别记录：
 
-- GitHub CI Doctor 可以做深入调查并创建 PR，因此是 SH1—SH2、通常 L2；
-- Nx 可以在 PR 分支生成修复、重跑失败 Task 并自动写回，因此是 SH3，白名单 Auto-apply 在 PR 域接近 SH4；但 Merge/Deploy 仍由外部系统决定，整体并非生产 L4；
+- GitHub CI Doctor 是 SH1 的官方参考调查 Workflow；Agentic Autofix 在 Code Scanning 微域达到 SH3/L2，两者不能聚合为通用 CI 自愈；
+- Nx 可以在 PR 分支生成修复、重跑失败 Task 并自动写回，因此是 SH3，白名单 Auto-apply 在 PR 微域可达到局部 SH4；但 Merge/Deploy 仍由外部系统决定，整体并非生产 L4；
 - AWS DevOps Agent 会自动启动调查并生成 Mitigation Plan，但官方明确说明不替操作员执行 Remediation，因此是 SH1—SH2，而不是 L3/L4。
 
 ## 三、2026 年业界实践到了哪里
 
 ### 1. CI 调查与修复 PR：已成为主流产品形态
 
-[GitHub CI Doctor](https://github.github.com/gh-aw/blog/2026-01-13-meet-the-workflows-quality-hygiene/) 读取失败 Workflow、日志和历史模式，创建诊断 Issue 并可提出修复 PR。GitHub 自报 13 个提案中有 9 个合并；这个数字反映其内部接受情况，不是自动修复正确率。Agentic Workflows 的更重要价值，是让 Agent 只读分析，再通过 Safe Outputs 将 Issue/PR 写动作交给独立 Job。
+[GitHub CI Doctor](https://github.github.com/gh-aw/blog/2026-01-13-meet-the-workflows-quality-hygiene/) 读取失败 Workflow、日志和历史模式，主要创建诊断 Issue/建议。它是 Agentic Workflows Public Preview 框架中的官方参考 Workflow，不是 GitHub Actions 内建通用根因分类器；GitHub 自报的早期提案合并数字是接受度，不是修复正确率。Agentic Workflows 的核心边界，是让 Agent 只读分析，再通过 Safe Outputs 将 Issue/PR 写动作交给独立 Job。
 
-[GitLab Fix CI/CD Pipeline Flow](https://docs.gitlab.com/user/duo_agent_platform/flows/foundational_flows/fix_pipeline/) 会读取 Pipeline Log、Exit Code、MR Diff、仓库和脚本错误；对 MR 内文件给 Inline Suggestion，超出 Diff 时创建新 MR。它已经 GA，但产品行为仍是“诊断并提出/交付变更”，最终应用、完整复验和合并不应被省略。
+[GitHub Agentic Autofix](https://github.blog/changelog/2026-07-10-agentic-autofix-for-code-scanning-alerts-in-public-preview/) 则是另一条更窄的安全修复链：Code Scanning Alert 作为确定性 Finding，Agent 生成补丁并使用 CodeQL 反馈迭代，最终创建 Draft PR。它可判为安全微域 SH3，但 Scanner 复验不等于完整 PR CI 或业务正确。
 
-[CircleCI Chunk](https://circleci.com/blog/fix-bugs-faster-with-circlecis-chunk-ai-agent/) 的差异化上下文是跨运行 Build History、Test Result 和 Failure Pattern。其 2026-06 Changelog 显示 Chunk 已能直接用 Git Tool 提交并开 PR，也能在 Prompt 已预授权时为瞬态/基础设施失败重跑 Pipeline，否则先询问用户。这是“按失败类型分流”的重要进步，但代码修复与基础设施重跑应分别评测。
+[GitLab Fix CI/CD Pipeline Flow](https://docs.gitlab.com/user/duo_agent_platform/flows/foundational_flows/fix_pipeline/) 会读取 Pipeline Log、Exit Code、MR Diff、仓库和脚本错误；对 MR 内文件给 Inline Suggestion，超出 Diff 时创建新 MR。Flow 在 18.8 GA、MR Suggestion 在 19.2 GA，但当前官方文档未直接证明候选变更前自动重跑原完整 Pipeline，因此仍判 SH2；最终应用、复验和合并不应被省略。
 
-[Harness Code Quality Agents](https://developer.harness.io/3k-docs/platform/getting-started/agents/code-quality/) 把 Remediation Agent 与 Coding Agent 分开，读取失败日志、生成 Root Cause、修改代码并创建 `ai-autofix` PR。Harness 最新 Worker Agent 实践进一步描述：CI Autofix 可重触发 Build 并循环，直到通过或达到 Max Turns。机制已经达到 SH3 形态，但跨语言、跨客户正确率仍缺少独立数据。
+[CircleCI Chunk](https://circleci.com/docs/guides/toolkit/chunk-setup-and-overview/) 的差异化上下文是跨运行 Build History、Test Result、Configuration 和 Failure Pattern。官方 Changelog 已证明候选会推到分支并触发 Pipeline，失败后继续尝试；受保护分支创建 Draft PR，Validation Pipeline 失败则关闭。代码路径可判 SH3，但仍为 Beta，且 Validation Pipeline 是否覆盖全部 Required Checks 取决于客户配置。瞬态/基础设施重跑只有在 Prompt 预授权时自动执行，应与代码修复分别评测。
+
+[Harness Code Quality Agents](https://developer.harness.io/3k-docs/platform/getting-started/agents/code-quality/) 把 Remediation Agent 与 Coding Agent 分开，读取失败日志、生成 Root Cause、修改代码并创建 `ai-autofix` PR；这条旧 Run Step/API 路径使用 PAT、模型密钥和 Git Connector。最新 Worker Autofix 则描述 PR Branch 写入、重触发 Build 和 Max Turns，并运行在 RBAC、OPA、Approval、Audit 与 Scoped Credential 约束下。两种执行面不能共享权限结论；本轮公开一手材料也未证明自动覆盖仓库全部 Required Checks。
+
+[Buildkite](https://buildkite.com/docs/platform/ai-agents) 提供 Retry、Test Engine、失败分析插件、Model Provider 和 MCP，使 Agent 能读取 Build State/Log 并触发受 Token Scope 限制的 Run。[官方 PR Build Fixer 参考实现](https://buildkite.com/resources/blog/building-ai-powered-ci-workflows-three-practical-examples/)证明客户可以组合出 SH3 流程：人工标签触发、MCP 读日志、容器内修复、新建 PR、等待 Build 并在失败时迭代，最终由人合并。但平台当前内建能力更准确的定位仍是 Agent 的 CI 证据/执行底座；本轮公开一手材料未证明原生通用补丁、PR 与独立复验闭环。
 
 ### 2. 自动复验和分支写回：正在成为“真正可用”的分界线
 
@@ -92,6 +96,8 @@ flowchart LR
 - 对历史上表现安全的 Task，可配置 Auto-apply，Nx 还会根据实际记录提出候选。
 
 这不是“全仓无人值守”，而是把自治缩小到某一类 Task 和 PR 分支。它提供了一个可复制原则：**先把行动权绑定 Task，再讨论 Auto-apply。**
+
+Nx 官方称 Self-Healing CI 面向多个计划可用，但当前页面未给整套能力统一 GA/Preview 标签，因此本报告使用“已发布、官方未标统一阶段”，不补写 GA。
 
 ### 3. 安全与依赖：确定性发现 + Agent 适配 + 再扫描
 
@@ -151,8 +157,8 @@ AWS 2026-07 的[组合参考架构](https://aws.amazon.com/blogs/devops/automate
 |---|---|---|
 | 稳定代码/类型/编译失败 | Base/Head 复现 → 最小 Patch → 完整 Gate → PR | SH3，L2 |
 | Flaky Test | 重复采样 → 标记 Flake → 隔离建议/Owner Issue | 自动重跑有限；测试修改 L2 |
-| 瞬态网络/外部 5xx | 指数退避、最多一次或两次、全局预算 | SH4 快环，但无代码权 |
-| Runner/磁盘/镜像 | 重调度或换干净 Runner，清本 Run Scope 缓存 | SH4 快环，禁止全局清理 |
+| 瞬态网络/外部 5xx | 指数退避、最多一次或两次、全局预算 | 执行级有界快环；不升级代码根因修复等级 |
+| Runner/磁盘/镜像 | 重调度或换干净 Runner，清本 Run Scope 缓存 | 执行级有界快环；禁止全局清理，不计代码根因修复 |
 | 依赖/安全 | Analyzer → Patch → Re-scan + Test → PR | SH3，L2 |
 | Pipeline 配置 | Schema/Lint/Dry-run → 最小配置 PR | SH3，L2；Secret/Prod Job 人批 |
 | GitOps 漂移/部署异常 | Diff → Policy → Canary/Runbook → SLO → 回退 | 非生产可 SH4；生产 L3 |
@@ -418,7 +424,10 @@ CI/CD 自愈的正确建设顺序是：
 
 - [[50_deepdives/cicd-self-healing/20_evidence-map|Claim—Evidence—Gap 矩阵]]
 - [[50_deepdives/cicd-self-healing/30_case-map|厂商与开源案例比较]]
+- [[50_deepdives/cicd-self-healing/35_company-mechanism-audit|六家公司机制审计]]
 - [[50_deepdives/cicd-self-healing/40_labs/README|验证实验设计]]
 - [[50_deepdives/cicd-self-healing/50_findings|分析发现与置信度]]
 - [[50_deepdives/cicd-self-healing/60_playbook|企业实施 Playbook]]
 - [[50_deepdives/cicd-self-healing/research-evidence|一手研究底稿]]
+- [[50_deepdives/cicd-self-healing/research-six-company-mechanisms-2026-08-09|六家公司机制核验底稿]]
+- [[50_deepdives/cicd-self-healing/70_fact-audit|逐主张事实审计]]

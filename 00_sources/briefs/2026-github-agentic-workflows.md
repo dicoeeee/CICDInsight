@@ -4,7 +4,7 @@ source_id: github-agentic-workflows-2026
 organization: GitHub
 source_type: official-docs-and-project-docs
 published: 2026-02-13
-verified: 2026-08-08
+verified: 2026-08-09
 availability: public-preview
 confidence: high
 geography:
@@ -36,12 +36,13 @@ tags:
 
 | 页面 | 状态/核验 | 直接支持的功能 |
 |---|---|---|
-| [About Agentic Workflows](https://docs.github.com/en/enterprise-cloud@latest/copilot/concepts/agents/about-github-agentic-workflows) | 页面未标日期；访问 2026-08-08；Public Preview | 产品状态、Markdown、Trigger、Engine、Safe Output 与 Actions 执行 |
-| [gh-aw project docs](https://github.github.com/gh-aw/) | 页面未标日期；访问 2026-08-08 | Compile、Sandbox、Network、Engine 与 CLI |
-| [Architecture](https://github.github.com/gh-aw/introduction/architecture/) | 页面未标日期；访问 2026-08-08 | 只读 Agent Job、隔离写 Job、Secret 与 Threat Detection |
-| [Safe Outputs](https://github.github.com/gh-aw/reference/safe-outputs/) | 页面未标日期；访问 2026-08-08 | Issue、Comment、PR 等声明式写出口 |
-| [Permissions](https://github.github.com/gh-aw/reference/permissions/) | 页面未标日期；访问 2026-08-08 | Token/API Scope |
-| [Ruleset rules](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets/available-rules-for-rulesets) | 页面未标日期；访问 2026-08-08 | PR、Review、Required Check 与 Deployment Gate |
+| [About Agentic Workflows](https://docs.github.com/en/enterprise-cloud@latest/copilot/concepts/agents/about-github-agentic-workflows) | 页面未标日期；访问 2026-08-09；Public Preview | 产品状态、Markdown、Trigger、Engine、Safe Output 与 Actions 执行 |
+| [gh-aw project docs](https://github.github.com/gh-aw/) | 页面未标日期；访问 2026-08-09 | Compile、Sandbox、Network、Engine 与 CLI |
+| [Architecture](https://github.github.com/gh-aw/introduction/architecture/) | 页面未标日期；访问 2026-08-09 | 只读 Agent Job、隔离写 Job、Secret 与 Threat Detection |
+| [Safe Outputs](https://github.github.com/gh-aw/reference/safe-outputs/) | 页面未标日期；访问 2026-08-09 | Issue、Comment、PR 等声明式写出口 |
+| [Permissions](https://github.github.com/gh-aw/reference/permissions/) | 页面未标日期；访问 2026-08-09 | Token/API Scope |
+| [Ruleset rules](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets/available-rules-for-rulesets) | 页面未标日期；访问 2026-08-09 | PR、Review、Required Check 与 Deployment Gate |
+| [CI Doctor reference workflow](https://github.github.com/gh-aw/blog/2026-01-13-meet-the-workflows-quality-hygiene/) | 发布 2026-01-13；访问 2026-08-09 | 失败日志、历史模式、诊断 Issue 与早期内部样本 |
 
 ## 功能事实
 
@@ -64,6 +65,8 @@ tags:
 - Safe Output 是写入控制，不证明输出正确。
 - Agent Job 或 Safe Output 不自动成为 Required Check，也不替代 Ruleset、Review 或 Environment Protection。
 - PR 创建后的下游 CI 触发取决于 Token、Event 和 Repository 配置。
+- CI Doctor 是可安装、可修改的官方参考 Workflow，不是 GitHub Actions 内建的通用根因分类器或自动修复产品。
+- CI Doctor 的内部提案/合并样本只能说明早期接受情况，不能当作修复正确率。
 
 ## 专题入口
 

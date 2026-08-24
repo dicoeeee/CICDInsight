@@ -4,7 +4,7 @@ source_id: harness-code-quality-agents-2026-07-02
 organization: Harness
 source_type: official-docs
 published: 2026-07-02
-verified: 2026-07-22
+verified: 2026-08-09
 availability: mixed
 confidence: high
 geography:
@@ -35,6 +35,7 @@ tags:
 - 标题：Code Quality Agents
 - 组织或项目：Harness
 - 发布或更新日期：2026-07-15；2026-07-22 复核
+- 访问日期：2026-08-09
 - 链接：[Harness Developer Hub](https://developer.harness.io/3k-docs/platform/getting-started/agents/code-quality/)
 - 来源类型：官方产品文档
 - 能力状态：职责已正式文档化；Code Repository PR Agent、Code Quality Pipeline 示例与 Marketplace Worker 是不同入口/实现，整体状态按 `mixed` 处理
@@ -69,6 +70,7 @@ Harness 用三个专业 Agent 把 PR 评审、测试生成和 CI 失败修复连
 - 缺少不同语言、仓库规模和失败类型下的独立成功率数据。
 - “自动修复”最终仍通过 PR 交付，不等于无人值守合并。
 - Agent 不应修改或跳过用来证明其修复成功的原始 CI Gate。
+- 官方文档所称 Build Validation 不证明自动执行仓库全部 Required Checks；本轮公开一手材料未证明 AutoFix 自动合并或部署。
 - 需核验示例镜像的 Owner、固定版本/Digest、签名、SBOM、PAT/LLM Key 注入路径，以及旧 PR/API 实现与 Managed Worker 的迁移关系。
 
 ## 可引用判断

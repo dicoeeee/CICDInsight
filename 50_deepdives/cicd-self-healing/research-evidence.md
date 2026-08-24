@@ -8,11 +8,11 @@ tags:
   - self-healing
   - deep-dive
 status: complete
-as_of: 2026-07-15
+as_of: 2026-08-09
 topic_id: cicd-self-healing
 topic_type: scenario
 source_policy: primary-only
-time_window: 2025-07-01/2026-07-15
+time_window: 2025-07-01/2026-08-09
 confidence: medium-high
 ---
 
@@ -22,7 +22,7 @@ confidence: medium-high
 
 ## 0. 摘要结论
 
-1. **“发现问题并给建议”不等于自愈。** 截至 2026-07-15，市场上大多数 agentic CI/CD 产品默认停留在诊断、生成补丁或创建 PR；能在隔离环境验证并受控写回的较少，能在生产环境形成无人工逐次确认的闭环更少。
+1. **“发现问题并给建议”不等于自愈。** 截至 2026-08-09，六家公司代表方案分别停在确定性重试、诊断、Suggestion/MR、验证后 Draft PR、原失败 Task 复验或受治理 Build 循环；能在生产环境形成无人工逐次确认的通用闭环仍缺少公开证据。
 2. **真正可落地的是“有界自愈”，不是通用自治。** 当前最成熟的闭环集中在低歧义、可逆、有强判定器的场景：格式化/静态检查、部分构建失败、依赖或漏洞修复、已知瞬态基础设施故障、GitOps 漂移回归、基于 SLO 的金丝雀终止与回滚。
 3. **Agent 负责提出候选，独立控制器负责判定。** 候选修复必须由 agent 无法修改的独立 oracle 验证；“流水线变绿”只证明既有检查通过，不证明功能、性能、安全或业务语义正确。
 4. **应拆成快慢两条环。** 快环处理恢复服务或恢复流水线，例如重试、重新调度、回滚、回归声明态；慢环做根因分析、代码修复、测试补强和 PR。把两者混成一个万能 agent，会放大权限、延迟和误修风险。
@@ -89,10 +89,10 @@ confidence: medium-high
 | 格式、lint、生成文件不同步 | 确定性 fixer → 重跑原检查 | 白名单内可 SH4 写回 PR 分支 | 让 LLM 任意重写代码 |
 | 编译/类型错误 | 定位最小影响集 → patch → 编译与相关测试 → PR | 通常 SH3；低风险仓库可限次 SH4 | 只凭错误文本直接合并 |
 | 单测/集成测试失败 | 复现 → 判断产品缺陷/测试缺陷/环境故障 → 修复 → 原测试+回归集 | 通常 SH2–SH3 | 删除、skip、放宽断言来变绿 |
-| Flaky test | 多次/跨执行器复现 → 归因 → 修复；短期 quarantine 必须有 owner 和到期日 | 重跑可 SH4，但“重跑通过”仅恢复吞吐 | 无限重试或把 flaky 当修复完成 |
+| Flaky test | 多次/跨执行器复现 → 归因 → 修复；短期 quarantine 必须有 owner 和到期日 | 有界重跑只计执行恢复；根因修复仍需独立复验 | 无限重试或把 flaky 当修复完成 |
 | 依赖/漏洞 | 专用分析器 → agent 生成候选 → 同一分析器复验 → 全量功能测试 → PR | SH2–SH3 | 只验证漏洞告警消失 |
 | 流水线/构建配置 | 在复制的 CI 环境回放；策略检查；PR | SH3 | 在主分支直接实验配置 |
-| Runner、缓存、网络、外部服务 | 识别瞬态信号 → 有预算的重试/换节点/清缓存/降级 | 已知动作可 SH4 | 修改业务代码“适配”短暂故障 |
+| Runner、缓存、网络、外部服务 | 识别瞬态信号 → 有预算的重试/换节点/清缓存/降级 | 可形成执行级有界快环；不等同代码根因修复 | 修改业务代码“适配”短暂故障 |
 | GitOps 声明态漂移 | 控制器把 live state 拉回 Git desired state | 确定性 SH4 | 让 agent 在集群手改且不回写 Git |
 | 金丝雀指标异常 | 指标阈值控制器停止推进并回滚 | 确定性 SH4 | 让 LLM 自行解释指标后决定继续放量 |
 | 生产事件 | 快环执行预批准的回滚/降级/扩容；慢环 RCA → fix-forward PR | 快环可局部 SH4，代码修复通常 SH2–SH3 | 允许通用 agent 以集群管理员身份自由操作 |
@@ -101,12 +101,12 @@ confidence: medium-high
 
 | 案例 | 领域 | 默认闭环/人工边界 | 成熟度判断 | 关键证据与限制 |
 |---|---|---|---|---|
-| GitHub CI Doctor | CI 诊断 | 失败后读日志、分类、查相似问题，创建诊断 issue/评论 | SH1，偶尔衔接 SH2 | 官方 workflow 是 `read-all` 加 safe outputs，并不直接修改代码；官方博客的 13 个建议中 9 个 PR 合并是早期内部样本、自报 |
+| GitHub CI Doctor | CI 诊断 | 失败后读日志、分类、查相似问题，创建诊断 issue/评论 | 默认 SH1；配置 Safe Output 后可衔接 SH2 | 官方 workflow 是 `read-all` 加 safe outputs，并不直接修改代码；官方博客的 13 个建议中 9 个 PR 合并是早期内部样本、自报 |
 | GitLab Fix CI/CD Pipeline | CI 修复 | 分析失败，生成 inline suggestion 或新 MR；人审合并 | SH2 | 只处理日志末尾 150 KiB；沙箱中依赖安装不一定能验证；AGENTS.md 不保证遵循 |
-| CircleCI Chunk | CI/测试/配置 | UI 给分析并由用户决定是否开 PR；已知瞬态故障可按 prompt 预授权重跑 | 代码修复 SH2；瞬态重跑局部 SH4 | “90% flaky 分析可开 PR”“约 60% 修复”均是私测/客户自报，缺少方法；当前文档仍标 Beta |
-| Harness CI Autofix / Worker Agents | CI 修复 | 读失败日志、改 PR 分支、重触发构建，限次迭代；合并/发布可加审批门 | SH3；PR 分支内可局部 SH4 | 有沙箱、短期 scoped token、OPA、审计和 max-turn；2026-06 发布材料，缺少跨客户独立效果数据 |
+| CircleCI Chunk | CI/测试/配置 | 代码候选推分支并运行 Validation Pipeline；受保护分支创建 Draft PR；瞬态故障可按 Prompt 预授权重跑 | 代码路径 SH3；重跑只计执行恢复 | Validation Pipeline 是否覆盖全部 Required Checks 取决于客户配置；当前文档仍标 Beta |
+| Harness CI Autofix / Worker Agents | CI 修复 | 读失败日志、改 PR 分支、重触发 Build，限次迭代；合并/发布可加审批门 | SH2—SH3；批准 Worker Action 可 L3 | 旧 AutoFix 与 Managed Worker 执行面不能合并；完整 Required Checks 未获证明；缺少跨客户独立效果数据 |
 | Nx Self-Healing CI | CI 修复 | 默认建议审批；对白名单任务、高置信且已验证的修复可自动推送 PR 分支 | 默认 SH3；局部 SH4 | 中央配置任务白/黑名单；保护分支不生成修复；可 revert；适合格式、lint、编译等有强检查的任务 |
-| Buildkite AI PR fixer 示例 | CI 修复 | 标签触发，MCP 取日志，容器内修复，推新分支/PR，等待 CI 并迭代；人工合并 | SH3 | 可检查的官方实践示例，不是默认平台能力或效果基准 |
+| [Buildkite 官方 PR Build Fixer](https://buildkite.com/resources/blog/building-ai-powered-ci-workflows-three-practical-examples/) | CI 修复 | 标签触发，MCP 取日志，容器内修复，推新分支/PR，等待 CI 并迭代；人工合并 | SH3 | 可检查的官方实践示例，不是默认平台能力或效果基准 |
 | Snyk Agent Fix | 安全修复 | 多候选 → 静态引擎过滤/复验 → 推荐修复；用户必须审阅 | SH2–SH3 | 安全 oracle 能证明该漏洞不再命中，不能证明业务逻辑；旧文档称暂不支持跨文件修复；新架构指标为自评 |
 | Dependabot + coding agent | 依赖/安全 | 分析 advisory 和依赖使用，创建 draft PR 并尝试修测试；人审 | SH2 | GitHub 明确警告建议可能不完整、错误或引入新问题；确定性 Dependabot 与 agent 应分层使用 |
 | BrowserStack Self-Healing | 测试维护 | 用历史成功上下文替换失效 locator，继续执行；可应用 locator 或开 PR | locator 范围 SH3 | 必须已有成功执行；元素真正不存在、系统/WebDriver 故障仍应失败。其“可能掩盖真实问题”是风险推断，不是官方原话 |
@@ -257,19 +257,22 @@ HolmesGPT 的 Kubernetes remediation MCP 提供更直接的安全范式：读和
 | 日期 | 来源 | 强度 | 直接支持的事实 | 局限/备注 |
 |---|---|---:|---|---|
 | 2026-01-13 | [GitHub: Meet the workflows—Quality & hygiene](https://github.github.com/gh-aw/blog/2026-01-13-meet-the-workflows-quality-hygiene/) | B | CI Doctor 调查失败并创建诊断 issue；早期 13 个建议中 9 个 PR 合并 | 效果数字为 GitHub 内部早期自报，样本很小 |
-| 持续更新，访问 2026-07-15 | [GitHub CI Doctor workflow 源文件](https://github.com/githubnext/agentics/blob/main/workflows/ci-doctor.md) | A | `workflow_run` 触发、`read-all`、safe outputs、失败分类、去重；输出 issue/评论而非直接改码 | 示例/官方 workflow，不代表所有自定义 agentic workflow |
-| 持续更新，访问 2026-07-15 | [GitHub Agentic Workflows: Triggering CI](https://github.github.com/gh-aw/reference/triggering-ci/) | A | 默认 `GITHUB_TOKEN` 产生的 PR/事件通常不会触发新的 workflow，需专门触发策略 | 是闭环实现细节，不是效果评测 |
-| GA 18.8；19.1/19.2 更新 | [GitLab: Fix CI/CD Pipeline flow](https://docs.gitlab.com/user/duo_agent_platform/flows/foundational_flows/fix_pipeline/) | A | 读失败日志和代码，生成 suggestion/MR；只处理末尾 150 KiB；沙箱验证有限 | 当前 UI only；文档不证明会完整重跑原 CI |
+| 持续更新，访问 2026-08-09 | [GitHub CI Doctor workflow 源文件](https://github.com/githubnext/agentics/blob/main/workflows/ci-doctor.md) | A | `workflow_run` 触发、`read-all`、safe outputs、失败分类、去重；输出 issue/评论而非直接改码 | 官方参考 Workflow，不是 Actions 内建通用 RCA/修复器 |
+| 2026-07-10；访问 2026-08-09 | [GitHub Agentic Autofix Public Preview](https://github.blog/changelog/2026-07-10-agentic-autofix-for-code-scanning-alerts-in-public-preview/) | A-/B | Code Scanning Alert、Agent Patch、CodeQL 反馈迭代、Draft PR | Public Preview；Scanner 复验不等于完整 PR CI/业务正确 |
+| 持续更新，访问 2026-08-09 | [GitHub Agentic Workflows: Triggering CI](https://github.github.com/gh-aw/reference/triggering-ci/) | A | 默认 `GITHUB_TOKEN` 产生的 PR/事件通常不会触发新的 workflow，需专门触发策略 | 是闭环实现细节，不是效果评测 |
+| GA 18.8；19.2 更新；访问 2026-08-09 | [GitLab: Fix CI/CD Pipeline flow](https://docs.gitlab.com/user/duo_agent_platform/flows/foundational_flows/fix_pipeline/) | A | 读失败日志和代码，生成 Suggestion/MR；只处理末尾 150 KiB；沙箱验证有限 | 文档不证明会完整重跑原 Pipeline/Required Checks |
 | 2026-03-19 | [GitLab 18.10: Agentic SAST vulnerability resolution](https://about.gitlab.com/blog/gitlab-18-10-brings-ai-native-triage-and-remediation/) | B | 读漏洞代码、生成修复、自动测试、开 MR；要求人审 | Beta/厂商发布，无公开独立成功率 |
 | 2026-06-30 | [Harness: Autonomous Worker Agents](https://www.harness.io/blog/introducing-autonomous-worker-agents) | B | 沙箱、scoped token、OPA、审批、审计；CI Autofix 修 PR 分支、重跑并限次迭代 | 发布材料；效果与失败率未公开 |
 | 2026-07-02 | [Harness Code Quality Agents](https://developer.harness.io/3k-docs/platform/getting-started/agents/code-quality/) | A | Review、Coverage、Autofix；Autofix 从日志诊断并由 coding agent 开 PR | 基础文档未明确 basic Autofix 的独立完整重跑链 |
 | 2025-10-14 | [Nx: What’s new in Self-Healing CI](https://nx.dev/blog/whats-new-in-nx-self-healing-ci) | B | 默认审批，支持对白名单任务自动应用；验证成功后推送 PR；Git 可 revert | 第一方产品材料，无独立大样本评测 |
-| 持续更新，访问 2026-07-15 | [Nx Self-Healing CI documentation](https://nx.dev/docs/features/ci-features/self-healing-ci) | A | 保护分支、任务白/黑名单、flaky 重试、高置信+已验证才自动应用 | “高置信”校准方法未公开 |
+| 持续更新，访问 2026-08-09 | [Nx Self-Healing CI documentation](https://nx.dev/docs/features/ci-features/self-healing-ci) | A | 保护分支、任务白/黑名单、flaky 重试、高置信+已验证才自动应用 | “高置信”校准方法未公开；页面未给统一 GA 标签 |
 | 2025-09-23 | [CircleCI: Introducing Chunk](https://circleci.com/blog/introducing-chunk/) | C | 能分析 flaky/red build/config 并开 PR；私测 90% 可开 PR、客户称约 60% 修复 | 厂商/客户自报，缺样本、基线和成功定义；当前文档仍标 Beta |
 | 2026-01-28 | [CircleCI: Fix bugs faster with Chunk](https://circleci.com/blog/fix-bugs-faster-with-circlecis-chunk-ai-agent/) | B | 使用构建历史、测试、模式和代码；用户决定是否开 PR并在合并前审阅 | 官方使用说明，不是闭环评测 |
+| 2025-11-05 / 2026-03-29；访问 2026-08-09 | [CircleCI: Pipeline Validation](https://circleci.com/changelog/chunk-now-validates-changes-by-running-your-ci-pipeline/) / [Draft PR](https://circleci.com/changelog/chunk-now-auto-creates-prs-on-protected-branches/) | A-/B | 推分支触发 Pipeline；失败继续修；受保护分支创建 Draft PR，Validation 失败关闭 | Chunk 仍为 Beta；Validation Pipeline 是否覆盖全部 Required Checks 取决于配置 |
 | 2026-06-02 | [CircleCI Changelog](https://circleci.com/changelog/) | B | 瞬态/基础设施失败可重跑；prompt 可预授权自动重跑；可靠性修复可开 PR | 行为受 prompt 和 Beta 产品变化影响 |
 | 2026-06-05 | [CircleCI: Agentic validation needs different infrastructure](https://circleci.com/blog/agentic-validation-needs-different-infrastructure/) | B | microVM sidecar、快照、microbuild、patch 同步；完整 CI 仍作批准门 | 3x token/10–20x core cost 是内部测量；明确非完全 hermetic |
-| 2025-12-01 | [Buildkite: AI-powered CI workflows—three examples](https://buildkite.com/resources/blog/building-ai-powered-ci-workflows-three-practical-examples/) | A-/B | 标签触发 PR fixer，MCP 读日志，容器修复、开后续 PR、等待 CI、迭代 | 可复用实例，不是平台默认能力或成功率研究 |
+| 2025-12-01；访问 2026-08-10 | [Buildkite: AI-powered CI workflows—three examples](https://buildkite.com/resources/blog/building-ai-powered-ci-workflows-three-practical-examples/) | A-/B | 标签触发 PR fixer，MCP 读日志，容器修复、开后续 PR、等待 CI、迭代 | 可复用实例，不是平台默认能力或成功率研究 |
+| 持续更新，访问 2026-08-09 | [Buildkite: AI agents in Pipelines](https://buildkite.com/docs/platform/ai-agents) | A | Retry、Test Engine、Plugins、Model Provider、MCP 读 Build/Log 并可触发受 Scope 限制的 Run | 页面未标整体阶段；本轮材料未证明原生通用 Patch/PR/复验闭环 |
 | 持续更新，访问 2026-07-15 | [Snyk: Fix code vulnerabilities automatically](https://docs.snyk.io/scan-with-snyk/snyk-code/manage-code-vulnerabilities/fix-code-vulnerabilities-automatically) | A | 多候选由静态引擎排名/过滤；要求始终审阅；建议可能破坏应用；不支持跨文件 | 文档可能描述旧版边界，需与新架构发布日期区分 |
 | 2026-04-27 | [Snyk: Agent Fix agentic architecture](https://snyk.io/blog/snyk-agent-fix-agentic-architecture/) | B | 35k 漏洞/专家修复动态示例；失败候选反馈重试；安全、逻辑和 golden tests 评测 | 性能结论均为厂商自评；新架构计划 2026-05-26 到达 |
 | 2026-04-07 | [GitHub: Dependabot alerts assignable to AI agents](https://github.blog/changelog/2026-04-07-dependabot-alerts-are-now-assignable-to-ai-agents-for-remediation/) | B | coding agent 可针对 alert 开 draft PR 并尝试修测试；明确要求人审和验证 | 发布说明，无修复成功率；多 agent 建议仍需比较 |
@@ -296,6 +299,7 @@ HolmesGPT 的 Kubernetes remediation MCP 提供更直接的安全范式：读和
 5. **生产 agent SH4 缺乏公开规模化证据。** 当前最可信的生产闭环仍是声明态控制器、SLO 回滚和预定义 runbook，而不是通用 agent 自由写生产。
 6. **prompt injection 与供应链攻击实测不足。** 产品文档强调最小权限和审批，但公开的红队、绕过率、恶意日志/PR 评测很少。
 7. **数据库、状态迁移和跨仓库修复是明显空白。** 这些场景可逆性差、验证昂贵、责任边界复杂，不应从单仓 PR 修复能力直接外推。
+8. **六家公司完整 CI 口径仍不一致。** GitLab 与 Harness 未直接证明完整 Required Checks；Nx 明确只重跑失败 Task；CircleCI 取决于 Validation Pipeline；Buildkite 没有产品级通用补丁闭环。
 
 ## 12. 研究支持的最小实施契约
 

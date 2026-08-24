@@ -5,7 +5,7 @@ tags:
   - research/question-tree
   - scenario/self-healing
 status: complete
-as_of: 2026-07-15
+as_of: 2026-08-09
 ---
 
 # CI/CD 问题自愈问题树
@@ -89,3 +89,13 @@ mindmap
 | Time-to-Green 不是唯一指标 | 同时统计错误修复、缺陷逃逸、复发、接管和成本 |
 | 一次成功不能证明生产成熟 | 使用历史回放、影子运行、故障注入和持续漂移监控 |
 | 自治必须可降级 | 达到错误率、成本、权限或环境异常阈值时自动退回只读模式 |
+
+## Q6：六家公司怎样公平比较？
+
+| 比较问题 | 验收标准 |
+|---|---|
+| 平台是否把重跑、诊断和修复混为一个产品能力？ | 分别记录确定性 Retry、Agent 诊断、候选修复和验证写回 |
+| 复验覆盖到哪里？ | 明确区分原失败 Task、Scanner、Validation Pipeline、全部 Required Checks 与业务语义 |
+| 谁拥有写入和最终接受权？ | 分离 Agent、写 Job、Service Account、PR/MR、Review、Merge 与 Deployment 身份 |
+| 生命周期是否被过度聚合？ | 平台、Flow、Agent、Endpoint、插件和参考实现分别标 GA/Preview/Beta/阶段未标 |
+| 公开材料没有证明的环节如何写？ | 保留 `unverified` 或“本轮公开一手材料未证明”，不补全成确定结论 |
