@@ -4,7 +4,7 @@ tags:
   - research/agentic-cicd
   - evidence/source
 status: active
-as_of: 2026-08-09
+as_of: 2026-08-29
 ---
 
 # 信息源与 Source Brief
@@ -30,6 +30,7 @@ as_of: 2026-08-09
 - [[00_sources/briefs/2026-microsoft-copilot-studio-agent-governance|Microsoft Copilot Studio Agent 构建、测试与治理]]
 - [[00_sources/briefs/2026-google-gemini-enterprise-agent-platform|Google Gemini Enterprise Agent Platform 功能与状态]]
 - [[00_sources/research-agent-workbench-expert-team-2026-08-08|Agent 工作台与 CI/CD Agent 产品功能一手证据日志]]
+- [[00_sources/research-multica-industry-real-use-cases-2026-08-29|Multica 与业界真实使用场景一手证据底稿]]
 
 ## GitHub 与 Microsoft
 

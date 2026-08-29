@@ -7,7 +7,7 @@ tags:
   - research/agentic-cicd
   - research/deep-dive
 status: active
-as_of: 2026-08-08
+as_of: 2026-08-29
 ---
 
 # Agentic CI/CD 专题深研
@@ -65,6 +65,7 @@ as_of: 2026-08-08
 | [[50_deepdives/llm-era-cicd-infrastructure/README|大模型时代的 CI/CD 基础设施]] | 跨基础设施技术变化 | 代码仓、流水线、构建系统、制品仓，以及身份、证据、审计和成本控制 | 单一产品教程、基础模型能力比较、LLMOps | complete |
 | Skill / Rules / Hooks | 知识与行为资产 | 组织知识封装、发现与加载、版本、测试、供应链和生命周期 | Harness 推理架构、底层 CLI 实现 | proposed |
 | [[50_deepdives/agent-workbench/README|Agent 工作台产品功能与控制边界]] | 工作台、Agent 构建治理与 CI/CD 原生 Agent | WorkBuddy、ChatGPT Work/Codex、Claude Cowork、GitLab Duo、Harness Inc. Worker Agents、GitHub Agentic Workflows 的入口、配置、协作、产物、权限、状态和限制 | 产品事实之外的企业方案、采用效果或采购排名；相关旧假设仅保存在隔离附录 | complete |
+| [[50_deepdives/multica-real-use-cases/README|Multica 与业界真实使用场景]] | 多 Agent 协调平台与使用场景 | Multica 的对象/运行/权限边界、社区真实使用、业界 Issue→PR/CI/Review/多 Agent 案例、场景适配与试点 | 模型能力排名、把社区自述当客户成功、把 Task 完成当质量或发布授权 | complete |
 
 CLI 与 MCP 仅在选型边界发生交叉，统一比较见 [[50_deepdives/cli-vs-mcp-decision-guide|CLI 与 MCP 可替代性决策指南]]，不将两者合并为一个专题。规范案例仍保存在 [[05_case_library/README|案例库]]，可被多个独立专题引用。
 
